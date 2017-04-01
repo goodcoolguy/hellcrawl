@@ -992,10 +992,10 @@ void player_reacts()
     {
         int lava_damage = div_rand_round((int)you.hp_max, 10);
         if (you_worship(GOD_QAZLAL))
-	    mprf("Qazlal prevents you from roasting to death.");
-	else
-	    mprf("The lava roasts you! (%d)", lava_damage);
-	    ouch(lava_damage, KILLED_BY_LAVA);
+            mprf("Qazlal prevents you from roasting to death.");
+        else
+            mprf("The lava roasts you! (%d)", lava_damage);
+            ouch(lava_damage, KILLED_BY_LAVA);
     }
 	
     // Handle starvation before subtracting hunger for this turn (including
