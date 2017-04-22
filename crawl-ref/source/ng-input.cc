@@ -54,6 +54,7 @@ void opening_screen()
     }
 
     msg += "\n";
+    msg += "<lightgreen>Chat about Hellcrawl at http://webchat.freenode.net/?channels=##crawl-forks</lightgreen>\n";
 
     formatted_string::parse_string(msg).display();
     textcolour(LIGHTGREY);
