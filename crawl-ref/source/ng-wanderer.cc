@@ -69,12 +69,12 @@ static stat_type _wanderer_choose_role()
 
     stat_type role;
 
-    if (target < you.strength())
-        role = STAT_STR;
-    else if (target < (you.dex() + you.strength()))
-        role = STAT_DEX;
-    else
-        role = STAT_INT;
+    //if (target < you.strength())
+    //    role = STAT_STR;
+    //else if (target < (you.dex() + you.strength()))
+    //    role = STAT_DEX;
+    //else
+    //    role = STAT_INT;
 
     return role;
 }
@@ -111,31 +111,31 @@ static skill_type _wanderer_role_skill_select(stat_type selected_role,
 {
     skill_type selected_skill = SK_NONE;
 
-    switch (selected_role)
-    {
-    case STAT_DEX:
+    //switch (selected_role)
+    //{
+    //case STAT_DEX:
         // Duplicates are intentional.
-        selected_skill = random_choose(SK_FIGHTING, SK_FIGHTING,
-                                       SK_DODGING,
-                                       SK_STEALTH,
-                                       sk_1, sk_1);
-        break;
+    //    selected_skill = random_choose(SK_FIGHTING, SK_FIGHTING,
+    //                                  SK_DODGING,
+    //                                 SK_STEALTH,
+    //                                 sk_1, sk_1);
+    //  break;
 
-    case STAT_STR:
-        do
-        {
-            selected_skill = random_choose(SK_FIGHTING, sk_1, SK_ARMOUR);
-        }
-        while (is_useless_skill(selected_skill));
-        break;
+    //case STAT_STR:
+    //  do
+    //  {
+    //      selected_skill = random_choose(SK_FIGHTING, sk_1, SK_ARMOUR);
+    //       }
+    //  while (is_useless_skill(selected_skill));
+    //  break;
 
-    case STAT_INT:
-        selected_skill = random_choose(sk_1, sk_2);
-        break;
+    //case STAT_INT:
+    //    selected_skill = random_choose(sk_1, sk_2);
+    //    break;
 
-    default:
-        die("bad skill_type %d", selected_role);
-    }
+    //    default:
+    //  die("bad skill_type %d", selected_role);
+    //}
 
     return selected_skill;
 }
@@ -162,20 +162,20 @@ static skill_type _wanderer_role_weapon_select(stat_type role)
 
     int casting_size = ARRAYSZ(casting_schools);
 
-    switch ((int)role)
-    {
-    case STAT_STR:
-        skill = _apt_weighted_choice(str_weapons, str_size);
-        break;
+    //switch ((int)role)
+    //{
+    //case STAT_STR:
+    //    skill = _apt_weighted_choice(str_weapons, str_size);
+    //    break;
 
-    case STAT_DEX:
-        skill = _apt_weighted_choice(dex_weapons, dex_size);
-        break;
+    //case STAT_DEX:
+    //    skill = _apt_weighted_choice(dex_weapons, dex_size);
+    //    break;
 
-    case STAT_INT:
-        skill = _apt_weighted_choice(casting_schools, casting_size);
-        break;
-    }
+    //case STAT_INT:
+    //    skill = _apt_weighted_choice(casting_schools, casting_size);
+    //    break;
+    //}
 
     return skill;
 }
@@ -185,8 +185,8 @@ static void _wanderer_role_skill(stat_type role, int levels)
     skill_type weapon_type = _wanderer_role_weapon_select(role);
     skill_type spell2 = NUM_SKILLS;
 
-    if (role == STAT_INT)
-       spell2 = _wanderer_role_weapon_select(role);
+    //if (role == STAT_INT)
+    //   spell2 = _wanderer_role_weapon_select(role);
 
     skill_type selected_skill = NUM_SKILLS;
     for (int i = 0; i < levels; ++i)
@@ -675,8 +675,8 @@ void create_wanderer()
     const skill_type sk_1 = _wanderer_role_weapon_select(selected_role);
     skill_type sk_2 = SK_NONE;
 
-    if (selected_role == STAT_INT)
-        sk_2 = _wanderer_role_weapon_select(selected_role);
+    //if (selected_role == STAT_INT)
+    //    sk_2 = _wanderer_role_weapon_select(selected_role);
 
     skill_type decent_1 = _wanderer_role_skill_select(selected_role,
                                                       sk_1, sk_2);

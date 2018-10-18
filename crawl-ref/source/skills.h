@@ -86,7 +86,7 @@ string skill_title_by_rank(
     skill_type best_skill, uint8_t skill_rank,
     // these used for ghosts and hiscores:
     species_type species = you.species,
-    bool dex_better = you.base_stats[STAT_DEX] >= you.base_stats[STAT_STR],
+    // bool dex_better = you.base_stats[STAT_DEX] >= you.base_stats[STAT_STR],
     god_type god = you.religion,
     int piety = you.piety);
 unsigned get_skill_rank(unsigned skill_lev);
@@ -131,8 +131,8 @@ bool check_training_targets();
 static const skill_type skill_display_order[] =
 {
     SK_TITLE,
-    SK_FIGHTING, SK_SHORT_BLADES, SK_AXES,
-    SK_MACES_FLAILS, SK_POLEARMS, SK_UNARMED_COMBAT,
+    SK_FIGHTING, //SK_SHORT_BLADES, SK_AXES,
+    //SK_MACES_FLAILS, SK_POLEARMS, SK_UNARMED_COMBAT,
 
     SK_BLANK_LINE,
 

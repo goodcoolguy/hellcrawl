@@ -1656,9 +1656,9 @@ void scorefile_entry::init(time_t dt)
     turn_damage      = you.turn_damage;
 
     // Use possibly negative stat values.
-    str   = you.stat(STAT_STR, false);
-    intel = you.stat(STAT_INT, false);
-    dex   = you.stat(STAT_DEX, false);
+    str   = 0; //you.stat(STAT_STR, false);
+    intel = 0; //you.stat(STAT_INT, false);
+    dex   = 0; //you.stat(STAT_DEX, false);
 
     ac    = you.armour_class();
     ev    = you.evasion();

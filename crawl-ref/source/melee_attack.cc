@@ -1100,7 +1100,8 @@ public:
         if (you.get_mutation_level(MUT_ANTIMAGIC_BITE))
             return fang_damage + div_rand_round(you.get_hit_dice(), 3);
 
-        const int str_damage = div_rand_round(max(you.strength()-10, 0), 5);
+        const int str_damage = div_rand_round(2*you.stat(STAT_MELEE, true), 3);
+	//div_rand_round(max(you.strength()-10, 0), 5);
 
         if (you.get_mutation_level(MUT_ACIDIC_BITE))
             return fang_damage + str_damage;
@@ -1443,7 +1444,7 @@ void melee_attack::player_warn_miss()
 // armed attacks.
 int melee_attack::player_apply_misc_modifiers(int damage)
 {
-    if (you.duration[DUR_MIGHT] || you.duration[DUR_BERSERK])
+    if (you.duration[DUR_BERSERK])
         damage += 1 + random2(10);
 
     return damage;
@@ -2158,8 +2159,8 @@ int melee_attack::calc_to_hit(bool random)
     if (attacker->is_player() && !weapon)
     {
         // Just trying to touch is easier than trying to damage.
-        if (you.duration[DUR_CONFUSING_TOUCH])
-            mhit += maybe_random2(you.dex(), random);
+        //if (you.duration[DUR_CONFUSING_TOUCH])
+        //    mhit += maybe_random2(you.dex(), random);
 
         // TODO: Review this later (transformations getting extra hit
         // almost across the board seems bad) - Cryp71c
@@ -2620,13 +2621,13 @@ void melee_attack::mons_apply_attack_flavour()
     case AF_DRAIN_STR:
     case AF_DRAIN_INT:
     case AF_DRAIN_DEX:
-        if (one_chance_in(20) || one_chance_in(3))
-        {
-            stat_type drained_stat = (flavour == AF_DRAIN_STR ? STAT_STR :
-                                      flavour == AF_DRAIN_INT ? STAT_INT
-                                                              : STAT_DEX);
-            defender->drain_stat(drained_stat, 1);
-        }
+      //if (one_chance_in(20) || one_chance_in(3)) // lol good one --mps
+      //  {
+      //      stat_type drained_stat = (flavour == AF_DRAIN_STR ? STAT_STR :
+      //                                flavour == AF_DRAIN_INT ? STAT_INT
+      //                                                        : STAT_DEX);
+      //      defender->drain_stat(drained_stat, 1);
+      //  }
         break;
 
     case AF_HUNGER:
@@ -3059,8 +3060,7 @@ void melee_attack::mons_do_tendril_disarm()
 
     if (you.get_mutation_level(MUT_TENDRILS)
         && one_chance_in(5)
-        && (random2(you.dex()) > adj_mon_hd
-            || random2(you.strength()) > adj_mon_hd))
+        && (random2(3*you.stat(STAT_MELEE, true)) > adj_mon_hd))
     {
         item_def* mons_wpn = mon->disarm();
         if (mons_wpn)
@@ -3203,7 +3203,7 @@ void melee_attack::do_minotaur_retaliation()
     // This will usually be 2, but could be 3 if the player mutated more.
     const int mut = you.get_mutation_level(MUT_HORNS);
 
-    if (5 * you.strength() + 7 * you.dex() > random2(600))
+    if (6 * (10 + 3*you.stat(STAT_MELEE, true)) > random2(600))
     {
         // Use the same damage formula as a regular headbutt.
         int dmg = 5 + mut * 3;
@@ -3378,7 +3378,7 @@ void melee_attack::chaos_affect_actor(actor *victim)
 bool melee_attack::_extra_aux_attack(unarmed_attack_type atk)
 {
     if (atk != UNAT_CONSTRICT
-        && you.strength() + you.dex() <= random2(50))
+        && 5 + you.stat(STAT_MELEE, true) * 5 <= random2(50))
     {
         return false;
     }
@@ -3444,7 +3444,7 @@ int melee_attack::calc_your_to_hit_unarmed(int uattack)
     int your_to_hit;
 
     your_to_hit = 1300
-                + you.dex() * 75
+                + 15 * 75
                 + you.skill(SK_FIGHTING, 30);
     your_to_hit /= 100;
 

@@ -1282,8 +1282,8 @@ int player_hunger_rate(bool temp)
  */
 int player_total_spell_levels()
 {
-    return 2 + you.experience_level
-           + (max(0, you.intel()) * you.experience_level) / 27;
+  return 2 + you.experience_level;
+      // + (max(0, you.intel()) * you.experience_level) / 27;
 }
 
 /**
@@ -2117,8 +2117,8 @@ static int _player_evasion_bonuses()
 {
     int evbonus = 0;
 
-    if (you.duration[DUR_AGILITY])
-        evbonus += AGILITY_BONUS;
+    //if (you.duration[DUR_AGILITY])
+    //    evbonus += AGILITY_BONUS;
 
     evbonus += you.wearing(EQ_RINGS_PLUS, RING_EVASION);
 
@@ -2194,7 +2194,7 @@ static int _player_scale_evasion(int prescaled_ev, const int scale)
  */
 static int _player_armour_adjusted_dodge_bonus(int scale)
 {
-    const int ev_dex = stepdown(you.dex(), 24, ROUND_CLOSE, MAX_STAT_VALUE);
+    const int ev_dex = stepdown(15, 24, ROUND_CLOSE, MAX_STAT_VALUE);
 
     const int dodge_bonus =
         (70 + you.skill(SK_DODGING, 10) * ev_dex) * scale
@@ -2204,7 +2204,7 @@ static int _player_armour_adjusted_dodge_bonus(int scale)
     if (armour_dodge_penalty <= 0)
         return dodge_bonus;
 
-    const int str = max(1, you.strength());
+    const int str = 15; // max(1, you.strength());
     if (armour_dodge_penalty >= str)
         return dodge_bonus * str / (armour_dodge_penalty * 2);
     return dodge_bonus - dodge_bonus * armour_dodge_penalty / (str * 2);
@@ -2307,12 +2307,12 @@ int player_shield_class()
                 + min(you.skill(SK_SHIELDS, 38), 3 * 38);
 
             int stat = 0;
-            if (item.sub_type == ARM_BUCKLER)
-                stat = you.dex() * 38;
-            else if (item.sub_type == ARM_LARGE_SHIELD)
-                stat = you.dex() * 12 + you.strength() * 26;
-            else
-                stat = you.dex() * 19 + you.strength() * 19;
+            //if (item.sub_type == ARM_BUCKLER)
+	    //  stat = 15*38; //you.dex() * 38;
+            //else if (item.sub_type == ARM_LARGE_SHIELD)
+	      //stat = you.dex() * 12 + you.strength() * 26;
+            //else
+	    //   stat = you.dex() * 19 + you.strength() * 19;
             stat = stat * (base_shield + 13) / 26;
 
             shield += stat;
@@ -3096,7 +3096,7 @@ int check_stealth()
         return 0;
     }
 
-    int stealth = you.dex() * 3;
+    int stealth = 45; //you.dex() * 3;
 
     stealth += you.skill(SK_STEALTH, 18);
 
@@ -3134,8 +3134,8 @@ int check_stealth()
     if (you.duration[DUR_STEALTH])
         stealth += STEALTH_PIP * 2;
 
-    if (you.duration[DUR_AGILITY])
-        stealth += STEALTH_PIP;
+    //if (you.duration[DUR_AGILITY])
+    //    stealth += STEALTH_PIP;
 	
     if (cloak && get_armour_ego_type(*cloak) == SPARM_STEALTH)
 	    stealth += STEALTH_PIP;
@@ -3398,15 +3398,15 @@ void display_char_status()
     _display_attack_delay();
 
     // Display base attributes, if necessary.
-    if (innate_stat(STAT_STR) != you.strength()
-        || innate_stat(STAT_INT) != you.intel()
-        || innate_stat(STAT_DEX) != you.dex())
-    {
-        mprf("Your base attributes are Str %d, Int %d, Dex %d.",
-             innate_stat(STAT_STR),
-             innate_stat(STAT_INT),
-             innate_stat(STAT_DEX));
-    }
+    //if (innate_stat(STAT_STR) != you.strength()
+    //    || innate_stat(STAT_INT) != you.intel()
+    //    || innate_stat(STAT_DEX) != you.dex())
+    //{
+    //    mprf("Your base attributes are Str %d, Int %d, Dex %d.",
+    //         innate_stat(STAT_STR),
+    //         innate_stat(STAT_INT),
+    //         innate_stat(STAT_DEX));
+    //}
 }
 
 bool player::clarity(bool calc_unid, bool items) const
@@ -3977,38 +3977,38 @@ int get_real_mp(bool include_items, bool frozen)
     // Base formula for Hellcrawl is XL + int*(xl/27)
     // you.intel() * you.experience_level / 27;
     const int scale = 100;
-    int enp = (1 + you.experience_level) * scale
-              + (max(0, you.intel()) * you.experience_level * scale / 27);
+    //int enp = (1 + you.experience_level) * scale
+    //          + (max(0, you.intel()) * you.experience_level * scale / 27);
 
     // Analogous to ROBUST/FRAIL
-    enp *= 100  + (you.get_mutation_level(MUT_HIGH_MAGIC) * 10)
-               + (you.attribute[ATTR_DIVINE_VIGOUR] * 5)
-               - (you.get_mutation_level(MUT_LOW_MAGIC) * 10);
-    enp /= 100 * scale;
+    //enp *= 100  + (you.get_mutation_level(MUT_HIGH_MAGIC) * 10)
+    //         + (you.attribute[ATTR_DIVINE_VIGOUR] * 5)
+    //         - (you.get_mutation_level(MUT_LOW_MAGIC) * 10);
+    //enp /= 100 * scale;
 //    enp = stepdown_value(enp, 9, 18, 45, 100)
-    enp += species_mp_modifier(you.species);
+    //enp += species_mp_modifier(you.species);
 
     // This is our "rotted" base, applied after multipliers
-    enp += you.mp_max_adj;
+    //enp += you.mp_max_adj;
 
     // Now applied after scaling so that power items are more useful -- bwr
-    if (include_items)
-    {
-        if(you.wearing_ego(EQ_CLOAK, SPARM_MAGICAL_POWER))
-            enp += 9;
-        if(you.wearing_ego(EQ_HELMET, SPARM_MAGICAL_POWER))
-            enp += 9;
-        enp +=      you.scan_artefacts(ARTP_MAGICAL_POWER);  
-    }
+    //if (include_items)
+    //{
+    //  if(you.wearing_ego(EQ_CLOAK, SPARM_MAGICAL_POWER))
+    //      enp += 9;
+    //  if(you.wearing_ego(EQ_HELMET, SPARM_MAGICAL_POWER))
+    //      enp += 9;
+    //  enp +=      you.scan_artefacts(ARTP_MAGICAL_POWER);  
+    //}
 
-    if (include_items && you.wearing_ego(EQ_WEAPON, SPWPN_ANTIMAGIC))
-        enp /= 3;
+    //if (include_items && you.wearing_ego(EQ_WEAPON, SPWPN_ANTIMAGIC))
+    //   enp /= 3;
 	
-    if (!frozen)
-        enp -= you.mp_frozen;
-    enp = max(enp, 0);
+    //if (!frozen)
+    //   enp -= you.mp_frozen;
+    //enp = max(enp, 0);
 
-    return enp;
+    return 0;
 }
 
 bool player_regenerates_hp()
@@ -5713,7 +5713,7 @@ int player::adjusted_body_armour_penalty(int scale) const
 
     // New formula for effect of str on aevp: (2/5) * evp^2 / (str+3)
     return 2 * base_ev_penalty * base_ev_penalty * (450 - skill(SK_ARMOUR, 10))
-           * scale / (5 * (strength() + 3)) / 450;
+           * scale / (5 * (15 + 3)) / 450;
 }
 
 /**
@@ -7509,7 +7509,7 @@ bool player::attempt_escape(int attempts)
     escape_attempts += attempts;
 
     // player breaks free if (4+n)d(8+str/4) >= 5d(8+HD/4)
-    if (roll_dice(4 + escape_attempts, 8 + div_rand_round(strength(), 4))
+    if (roll_dice(4 + escape_attempts, 8 + div_rand_round(15, 4))
         >= roll_dice(5, 8 + div_rand_round(themonst->get_hit_dice(), 4)))
     {
         mprf("You escape %s's grasp.", themonst->name(DESC_THE, true).c_str());
@@ -8492,7 +8492,7 @@ void player_end_berserk()
     // duration.
     you.increase_duration(DUR_EXHAUSTED, dur * 2);
 
-    notify_stat_change(STAT_STR, -5, true);
+    //notify_stat_change(STAT_STR, -5, true);
 
     // Don't trigger too many hints mode messages.
     const bool hints_slow = Hints.hints_events[HINT_YOU_ENCHANTED];

@@ -1358,9 +1358,9 @@ static bool _check_ability_possible(const ability_def& abil,
         if (!you.disease && !you.duration[DUR_POISONING]
             && !you.duration[DUR_CONF] && !you.duration[DUR_SLOW]
             && !you.petrifying()
-            && you.strength(false) == you.max_strength()
-            && you.intel(false) == you.max_intel()
-            && you.dex(false) == you.max_dex()
+            //&& you.strength(false) == you.max_strength()
+            //&& you.intel(false) == you.max_intel()
+            //&& you.dex(false) == you.max_dex()
             && !player_rotted()
             && !you.duration[DUR_WEAK])
         {

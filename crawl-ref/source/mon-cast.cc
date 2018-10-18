@@ -5882,14 +5882,14 @@ void mons_cast(monster* mons, bolt pbolt, spell_type spell_cast,
         holy_flames(mons, foe);
         return;
     case SPELL_BRAIN_FEED:
-        if (one_chance_in(3)
-            && lose_stat(STAT_INT, 1 + random2(3)))
-        {
-            mpr("Something feeds on your intellect!");
-            xom_is_stimulated(50);
-        }
-        else
-            mpr("Something tries to feed on your intellect!");
+      //if (one_chance_in(3)
+      //      && lose_stat(STAT_INT, 1 + random2(3)))
+      //  {
+      //      mpr("Something feeds on your intellect!");
+      //      xom_is_stimulated(50);
+      //  }
+      // else
+      //      mpr("Something tries to feed on your intellect!");
         return;
 
     case SPELL_SUMMON_SPECTRAL_ORCS:

@@ -37,20 +37,20 @@ int player::stat(stat_type s, bool nonneg) const
     return nonneg ? max(val, 0) : val;
 }
 
-int player::strength(bool nonneg) const
-{
-    return stat(STAT_STR, nonneg);
-}
+//int player::strength(bool nonneg) const
+//{
+//    return stat(STAT_STR, nonneg);
+//}
 
-int player::intel(bool nonneg) const
-{
-    return stat(STAT_INT, nonneg);
-}
+//int player::intel(bool nonneg) const
+//{
+//    return stat(STAT_INT, nonneg);
+//}
 
-int player::dex(bool nonneg) const
-{
-    return stat(STAT_DEX, nonneg);
-}
+//int player::dex(bool nonneg) const
+//{
+//    return stat(STAT_DEX, nonneg);
+//}
 
 static int _stat_modifier(stat_type stat, bool innate_only);
 
@@ -69,20 +69,20 @@ int player::max_stat(stat_type s, bool innate) const
     return min(base_stats[s] + _stat_modifier(s, innate), MAX_STAT_VALUE);
 }
 
-int player::max_strength() const
-{
-    return max_stat(STAT_STR);
-}
+//int player::max_strength() const
+//{
+//    return max_stat(STAT_STR);
+//}
 
-int player::max_intel() const
-{
-    return max_stat(STAT_INT);
-}
+//int player::max_intel() const
+//{
+//    return max_stat(STAT_INT);
+//}
 
-int player::max_dex() const
-{
-    return max_stat(STAT_DEX);
-}
+//int player::max_dex() const
+//{
+//    return max_stat(STAT_DEX);
+//}
 
 // Base stat including innate mutations (which base_stats does not)
 int innate_stat(stat_type s)
@@ -124,18 +124,18 @@ bool attribute_increase()
 #else
     mprf(MSGCH_INTRINSIC_GAIN, "%s", stat_gain_message.c_str());
     learned_something_new(HINT_CHOOSE_STAT);
-    if (innate_stat(STAT_STR) != you.strength()
-        || innate_stat(STAT_INT) != you.intel()
-        || innate_stat(STAT_DEX) != you.dex())
-    {
-        mprf(MSGCH_PROMPT, "Your base attributes are Str %d, Int %d, Dex %d.",
-             innate_stat(STAT_STR),
-             innate_stat(STAT_INT),
-             innate_stat(STAT_DEX));
-    }
-    mprf(MSGCH_PROMPT, "Increase (S)trength, (I)ntelligence, or (D)exterity? ");
+    //if (innate_stat(STAT_STR) != you.strength()
+    //    || innate_stat(STAT_INT) != you.intel()
+    //    || innate_stat(STAT_DEX) != you.dex())
+    //{
+    //    mprf(MSGCH_PROMPT, "Your base attributes are Str %d, Int %d, Dex %d.",
+    //         innate_stat(STAT_STR),
+    //         innate_stat(STAT_INT),
+    //         innate_stat(STAT_DEX));
+    //}
+    //mprf(MSGCH_PROMPT, "Increase (S)trength, (I)ntelligence, or (D)exterity? ");
 #endif
-    mouse_control mc(MOUSE_MODE_PROMPT);
+    //mouse_control mc(MOUSE_MODE_PROMPT);
 
     const int statgain = (you.species == SP_DEMIGOD || you.species == SP_TITAN) ? 2 : 1;
 
@@ -172,8 +172,8 @@ bool attribute_increase()
             if (crawl_state.seen_hups)
                 return false;
             break;
-
-        case 's':
+	    /*
+	case 's':
         case 'S':
             for (int i = 0; i < statgain; i++)
                 modify_stat(STAT_STR, 1, false);
@@ -190,7 +190,9 @@ bool attribute_increase()
             for (int i = 0; i < statgain; i++)
                 modify_stat(STAT_DEX, 1, false);
             return true;
+	    */
 #ifdef TOUCH_UI
+	    
         default:
             status->text = "Please choose an option below"; // too naggy?
 #endif
@@ -219,9 +221,9 @@ void jiyva_stat_action()
     }
 
     int evp = you.unadjusted_body_armour_penalty();
-    target_stat[STAT_STR] = max(9, evp);
-    target_stat[STAT_INT] = 9;
-    target_stat[STAT_DEX] = 9;
+    //target_stat[STAT_STR] = max(9, evp);
+    //target_stat[STAT_INT] = 9;
+    //target_stat[STAT_DEX] = 9;
     int remaining = stat_total - 18 - target_stat[0];
 
     // Divide up the remaining stat points between Int and either Str or Dex,
@@ -247,7 +249,7 @@ void jiyva_stat_action()
         magic_weights = div_rand_round(remaining * magic_weights,
                                        magic_weights + other_weights);
         other_weights = remaining - magic_weights;
-        target_stat[STAT_INT] += magic_weights;
+        //target_stat[STAT_INT] += magic_weights;
 
         // Heavy armour weights towards Str, Dodging skill towards Dex.
         int str_weight = 10 * evp;
@@ -256,8 +258,8 @@ void jiyva_stat_action()
         // Now apply the Str and Dex weighting.
         const int str_adj = div_rand_round(other_weights * str_weight,
                                            str_weight + dex_weight);
-        target_stat[STAT_STR] += str_adj;
-        target_stat[STAT_DEX] += (other_weights - str_adj);
+        //target_stat[STAT_STR] += str_adj;
+        //target_stat[STAT_DEX] += (other_weights - str_adj);
     }
     // Add a little fuzz to the target.
     for (int x = 0; x < NUM_STATS; ++x)
@@ -371,8 +373,8 @@ static int _strength_modifier(bool innate_only)
 
     if (!innate_only)
     {
-        if (you.duration[DUR_MIGHT] || you.duration[DUR_BERSERK])
-            result += 5;
+      //if (you.duration[DUR_MIGHT] || you.duration[DUR_BERSERK])
+      //    result += 5;
 
         if (you.duration[DUR_DIVINE_STAMINA])
             result += you.attribute[ATTR_DIVINE_STAMINA];
@@ -409,8 +411,8 @@ static int _int_modifier(bool innate_only)
 
     if (!innate_only)
     {
-        if (you.duration[DUR_BRILLIANCE])
-            result += 5;
+      // if (you.duration[DUR_BRILLIANCE])
+      //     result += 5;
 
         if (you.duration[DUR_DIVINE_STAMINA])
             result += you.attribute[ATTR_DIVINE_STAMINA];
@@ -440,8 +442,8 @@ static int _dex_modifier(bool innate_only)
 
     if (!innate_only)
     {
-        if (you.duration[DUR_AGILITY])
-            result += 5;
+      //if (you.duration[DUR_AGILITY])
+      //    result += 5;
 
         if (you.duration[DUR_DIVINE_STAMINA])
             result += you.attribute[ATTR_DIVINE_STAMINA];
@@ -476,11 +478,12 @@ static int _dex_modifier(bool innate_only)
 
 static int _stat_modifier(stat_type stat, bool innate_only)
 {
+  return 0;
     switch (stat)
     {
-    case STAT_STR: return _strength_modifier(innate_only);
-    case STAT_INT: return _int_modifier(innate_only);
-    case STAT_DEX: return _dex_modifier(innate_only);
+      //case STAT_STR: return _strength_modifier(innate_only);
+      //case STAT_INT: return _int_modifier(innate_only);
+      //case STAT_DEX: return _dex_modifier(innate_only);
     default:
         mprf(MSGCH_ERROR, "Bad stat: %d", stat);
         return 0;
@@ -489,14 +492,15 @@ static int _stat_modifier(stat_type stat, bool innate_only)
 
 static string _stat_name(stat_type stat)
 {
+  return "no_stat";
     switch (stat)
     {
-    case STAT_STR:
-        return "strength";
-    case STAT_INT:
-        return "intelligence";
-    case STAT_DEX:
-        return "dexterity";
+      //case STAT_STR:
+      //  return "strength";
+      //case STAT_INT:
+      // return "intelligence";
+      //case STAT_DEX:
+      // return "dexterity";
     default:
         die("invalid stat");
     }
@@ -609,7 +613,7 @@ static void _handle_stat_change(stat_type stat)
 
     you.redraw_stats[stat] = true;
     _normalize_stat(stat);
-
+    /*
     switch (stat)
     {
     case STAT_STR:
@@ -627,5 +631,5 @@ static void _handle_stat_change(stat_type stat)
 
     default:
         break;
-    }
+	} */
 }

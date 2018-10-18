@@ -292,8 +292,8 @@ static int _apply_spellcasting_success_boosts(spell_type spell, int chance)
     if (wizardry > 0)
       fail_reduce = fail_reduce * 6 / (7 + wizardry);
 
-    if (you.duration[DUR_BRILLIANCE])
-        fail_reduce = fail_reduce / 2;
+    //if (you.duration[DUR_BRILLIANCE])
+    //   fail_reduce = fail_reduce / 2;
 
     // Hard cap on fail rate reduction.
     if (fail_reduce < 50)
@@ -318,7 +318,7 @@ int raw_spell_fail(spell_type spell)
     // scale by 6, which I guess was chosen because it seems to work.
     // realistic range for spellpower: -6 to -366 (before scale -1 to -61)
     chance -= calc_spell_power(spell, false, true, false, 6);
-    chance -= (you.intel() * 2); // realistic range: -2 to -70
+    chance -= 30; // (you.intel() * 2); // realistic range: -2 to -70
 
     const int armour_shield_penalty = player_armour_shield_spell_penalty();
     dprf("Armour+Shield spell failure penalty: %d", armour_shield_penalty);
@@ -441,11 +441,11 @@ int calc_spell_power(spell_type spell, bool apply_intel, bool fail_rate_check,
 
     // Brilliance boosts spell power a bit (equivalent to three
     // spell school levels).
-    if (!fail_rate_check && you.duration[DUR_BRILLIANCE])
-        power += 600;
+    //if (!fail_rate_check && you.duration[DUR_BRILLIANCE])
+    //    power += 600;
 
     if (apply_intel)
-        power = (power * you.intel()) / 10;
+      power =  (power * 15) / 10; //(power * you.intel()) / 10;
  
     if (fail_rate_check)
     {
@@ -458,8 +458,8 @@ int calc_spell_power(spell_type spell, bool apply_intel, bool fail_rate_check,
     {
         // Brilliance boosts spell power a bit (equivalent to three
         // spell school levels).
-        if (you.duration[DUR_BRILLIANCE])
-            power += 600;
+        //if (you.duration[DUR_BRILLIANCE])
+        //    power += 600;
 
         // [dshaligram] Enhancers don't affect fail rates any more, only spell
         // power. Note that this does not affect Vehumet's boost in castability.

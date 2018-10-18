@@ -104,9 +104,9 @@ LUARET1(you_poison_survival, number, poison_survival())
 LUARET1(you_corrosion, number, you.props["corrosion_amount"].get_int())
 LUARET1(you_hunger, number, you.hunger_state - 1)
 LUARET1(you_hunger_name, string, hunger_level())
-LUARET2(you_strength, number, you.strength(false), you.max_strength())
-LUARET2(you_intelligence, number, you.intel(false), you.max_intel())
-LUARET2(you_dexterity, number, you.dex(false), you.max_dex())
+//LUARET2(you_strength, number, you.strength(false), you.max_strength())
+//LUARET2(you_intelligence, number, you.intel(false), you.max_intel())
+//LUARET2(you_dexterity, number, you.dex(false), you.max_dex())
 LUARET1(you_xl, number, you.experience_level)
 LUARET1(you_xl_progress, number, get_exp_progress())
 LUARET1(you_skill_progress, number,
@@ -157,9 +157,9 @@ LUARET1(you_regenerating, boolean, you.duration[DUR_REGENERATION]
                                    || you.attribute[ATTR_SPELL_REGEN])
 LUARET1(you_breath_timeout, boolean, you.duration[DUR_BREATH_WEAPON])
 LUARET1(you_extra_resistant, boolean, you.duration[DUR_RESISTANCE])
-LUARET1(you_mighty, boolean, you.duration[DUR_MIGHT])
-LUARET1(you_agile, boolean, you.duration[DUR_AGILITY])
-LUARET1(you_brilliant, boolean, you.duration[DUR_BRILLIANCE])
+//LUARET1(you_mighty, boolean, you.duration[DUR_MIGHT])
+//LUARET1(you_agile, boolean, you.duration[DUR_AGILITY])
+//LUARET1(you_brilliant, boolean, you.duration[DUR_BRILLIANCE])
 LUARET1(you_silenced, boolean, silenced(you.pos()))
 LUARET1(you_sick, boolean, you.disease)
 LUARET1(you_contaminated, number, get_contamination_level())
@@ -608,9 +608,9 @@ static const struct luaL_reg you_clib[] =
     { "rot"         , you_rot },
     { "hunger"      , you_hunger },
     { "hunger_name" , you_hunger_name },
-    { "strength"    , you_strength },
-    { "intelligence", you_intelligence },
-    { "dexterity"   , you_dexterity },
+    //{ "strength"    , you_strength },
+    // { "intelligence", you_intelligence },
+    //{ "dexterity"   , you_dexterity },
     { "skill"       , you_skill },
     { "base_skill"  , you_base_skill },
     { "skill_progress", you_skill_progress },
@@ -660,9 +660,9 @@ static const struct luaL_reg you_clib[] =
     { "regenerating", you_regenerating },
     { "breath_timeout", you_breath_timeout },
     { "extra_resistant", you_extra_resistant },
-    { "mighty",       you_mighty },
-    { "agile",        you_agile },
-    { "brilliant",    you_brilliant },
+    //{ "mighty",       you_mighty },
+    //{ "agile",        you_agile },
+    //{ "brilliant",    you_brilliant },
     { "silenced",     you_silenced },
     { "sick",         you_sick },
     { "contaminated", you_contaminated },

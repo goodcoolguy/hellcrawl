@@ -1302,31 +1302,34 @@ bool physiology_mutation_conflict(mutation_type mutat)
 
 static const char* _stat_mut_desc(mutation_type mut, bool gain)
 {
-    stat_type stat = STAT_STR;
+    stat_type stat = STAT_MELEE;
     bool positive = gain;
-    switch (mut)
-    {
-    case MUT_WEAK:
-        positive = !positive;
-    case MUT_STRONG:
-        stat = STAT_STR;
-        break;
 
-    case MUT_DOPEY:
-        positive = !positive;
-    case MUT_CLEVER:
-        stat = STAT_INT;
-        break;
+    //commenting out for now, will want to fix this later
+    
+    //switch (mut)
+    //{
+    //case MUT_WEAK:
+    //    positive = !positive;
+    //case MUT_STRONG:
+    //    stat = STAT_STR;
+    //    break;
 
-    case MUT_CLUMSY:
-        positive = !positive;
-    case MUT_AGILE:
-        stat = STAT_DEX;
-        break;
+    //case MUT_DOPEY:
+    //    positive = !positive;
+    //case MUT_CLEVER:
+    //    stat = STAT_INT;
+    //    break;
 
-    default:
-        die("invalid stat mutation: %d", mut);
-    }
+    //case MUT_CLUMSY:
+    //    positive = !positive;
+    //case MUT_AGILE:
+    //    stat = STAT_DEX;
+    //    break;
+
+    //default:
+    //    die("invalid stat mutation: %d", mut);
+    //}
     return stat_desc(stat, positive ? SD_INCREASE : SD_DECREASE);
 }
 

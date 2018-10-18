@@ -1275,9 +1275,9 @@ bool zin_vitalisation()
     you.attribute[ATTR_DIVINE_STAMINA] = stamina_amt;
     you.set_duration(DUR_DIVINE_STAMINA, 60 + roll_dice(2, 10));
 
-    notify_stat_change(STAT_STR, stamina_amt, true);
-    notify_stat_change(STAT_INT, stamina_amt, true);
-    notify_stat_change(STAT_DEX, stamina_amt, true);
+    //notify_stat_change(STAT_STR, stamina_amt, true);
+    //notify_stat_change(STAT_INT, stamina_amt, true);
+    //notify_stat_change(STAT_DEX, stamina_amt, true);
 
     return true;
 }
@@ -1285,9 +1285,9 @@ bool zin_vitalisation()
 void zin_remove_divine_stamina()
 {
     mprf(MSGCH_DURATION, "Your divine stamina fades away.");
-    notify_stat_change(STAT_STR, -you.attribute[ATTR_DIVINE_STAMINA], true);
-    notify_stat_change(STAT_INT, -you.attribute[ATTR_DIVINE_STAMINA], true);
-    notify_stat_change(STAT_DEX, -you.attribute[ATTR_DIVINE_STAMINA], true);
+    //notify_stat_change(STAT_STR, -you.attribute[ATTR_DIVINE_STAMINA], true);
+    //notify_stat_change(STAT_INT, -you.attribute[ATTR_DIVINE_STAMINA], true);
+    //notify_stat_change(STAT_DEX, -you.attribute[ATTR_DIVINE_STAMINA], true);
     you.duration[DUR_DIVINE_STAMINA] = 0;
     you.attribute[ATTR_DIVINE_STAMINA] = 0;
 }
@@ -5279,12 +5279,12 @@ static int _piety_for_skill_by_sacrifice(ability_type sacrifice)
 static int _get_stat_piety(stat_type input_stat, int multiplier)
 {
     int stat_val = 3; // If this is your highest stat.
-    if (you.base_stats[STAT_INT] > you.base_stats[input_stat])
-            stat_val -= 1;
-    if (you.base_stats[STAT_STR] > you.base_stats[input_stat])
-            stat_val -= 1;
-    if (you.base_stats[STAT_DEX] > you.base_stats[input_stat])
-            stat_val -= 1;
+    //if (you.base_stats[STAT_INT] > you.base_stats[input_stat])
+    //        stat_val -= 1;
+    //if (you.base_stats[STAT_STR] > you.base_stats[input_stat])
+    //        stat_val -= 1;
+    //if (you.base_stats[STAT_DEX] > you.base_stats[input_stat])
+    //        stat_val -= 1;
     return stat_val * multiplier;
 }
 
@@ -5338,17 +5338,18 @@ int get_sacrifice_piety(ability_type sac, bool include_skill)
             else if (mut == MUT_MAGICAL_VULNERABILITY)
                 piety_gain += 28;
             else
-                piety_gain += 2 + _get_stat_piety(STAT_INT, 6);
+	        piety_gain += 2; //_get_stat_piety(STAT_INT, 6);
             break;
         case ABIL_RU_SACRIFICE_PURITY:
-            if (mut == MUT_WEAK || mut == MUT_DOPEY || mut == MUT_CLUMSY)
-            {
-                const stat_type stat = mut == MUT_WEAK   ? STAT_STR
-                                     : mut == MUT_CLUMSY ? STAT_DEX
-                                     : mut == MUT_DOPEY  ? STAT_INT
-                                                         : NUM_STATS;
-                piety_gain += 8 + _get_stat_piety(stat, 8);
-            }
+	  if (mut == MUT_WEAK || mut == MUT_DOPEY || mut == MUT_CLUMSY)
+	    {}
+          //  {
+          //      const stat_type stat = mut == MUT_WEAK   ? STAT_STR
+          //                           : mut == MUT_CLUMSY ? STAT_DEX
+          //                           : mut == MUT_DOPEY  ? STAT_INT
+          //                                               : NUM_STATS;
+          //      piety_gain += 8 + _get_stat_piety(stat, 8);
+          //  }
             // the other sacrifices get sharply worse if you already
             // have levels of them.
             else if (you.get_mutation_level(mut) == 2)

@@ -170,21 +170,22 @@ size_type species_size(species_type species, size_part_type psize)
 
 bool species_recommends_job(species_type species, job_type job)
 {
-    return find(_species_def(species).recommended_jobs.begin(),
-                _species_def(species).recommended_jobs.end(),
-                job) != _species_def(species).recommended_jobs.end();
+  return false; //find(_species_def(species).recommended_jobs.begin(),
+                //_species_def(species).recommended_jobs.end(),
+                //job) != _species_def(species).recommended_jobs.end();
 }
 
 bool species_recommends_weapon(species_type species, weapon_type wpn)
 {
-    const skill_type sk =
-          wpn == WPN_THROWN  ? SK_THROWING :
-          wpn == WPN_UNARMED ? SK_UNARMED_COMBAT :
-                               item_attack_skill(OBJ_WEAPONS, wpn);
+  return false; 
+  //  const skill_type sk =
+  //        wpn == WPN_THROWN  ? SK_THROWING :
+  //        wpn == WPN_UNARMED ? SK_UNARMED_COMBAT :
+  //                             item_attack_skill(OBJ_WEAPONS, wpn);
 
-    return find(_species_def(species).recommended_weapons.begin(),
-                _species_def(species).recommended_weapons.end(),
-                sk) != _species_def(species).recommended_weapons.end();
+  //  return find(_species_def(species).recommended_weapons.begin(),
+  //              _species_def(species).recommended_weapons.end(),
+  //              sk) != _species_def(species).recommended_weapons.end();
 }
 
 monster_type player_species_to_mons_species(species_type species)
@@ -351,19 +352,24 @@ int species_mr_modifier(species_type species)
  */
 bool species_has_low_str(species_type species)
 {
-    return _species_def(species).d >= _species_def(species).s;
+  return false;
+  //  return _species_def(species).d >= _species_def(species).s;
 }
 
 void species_stat_init(species_type species)
 {
-    you.base_stats[STAT_STR] = _species_def(species).s;
-    you.base_stats[STAT_INT] = _species_def(species).i;
-    you.base_stats[STAT_DEX] = _species_def(species).d;
+  return;  
+  //  you.base_stats[STAT_STR] = _species_def(species).s;
+  //  you.base_stats[STAT_INT] = _species_def(species).i;
+  //  you.base_stats[STAT_DEX] = _species_def(species).d;
 }
 
 void species_stat_gain(species_type species)
 {
-    const species_def& sd = _species_def(species);
-    if (you.experience_level % sd.how_often == 0)
-        modify_stat(*random_iterator(sd.level_stats), 1, false);
+  // bde fix -- rewrite/replace this function
+  return;
+  
+  //const species_def& sd = _species_def(species);
+  //  if (you.experience_level % sd.how_often == 0)
+  //      modify_stat(*random_iterator(sd.level_stats), 1, false);
 }

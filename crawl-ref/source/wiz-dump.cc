@@ -355,7 +355,7 @@ bool chardump_parser::_check_stats1(const vector<string> &tokens)
     {
         if (tokens[k] == "Str:" || tokens[k] == "Str")
         {
-            you.base_stats[STAT_STR] = debug_cap_stat(atoi(tokens[k+1].c_str()));
+	  //you.base_stats[STAT_STR] = debug_cap_stat(atoi(tokens[k+1].c_str()));
             you.redraw_stats.init(true);
             you.redraw_evasion = true;
             found = true;
@@ -382,7 +382,7 @@ bool chardump_parser::_check_stats2(const vector<string> &tokens)
     {
         if (tokens[k] == "Int:" || tokens[k] == "Int")
         {
-            you.base_stats[STAT_INT] = debug_cap_stat(atoi(tokens[k+1].c_str()));
+	  //you.base_stats[STAT_INT] = debug_cap_stat(atoi(tokens[k+1].c_str()));
             you.redraw_stats.init(true);
             you.redraw_evasion = true;
             found = true;
@@ -424,7 +424,7 @@ bool chardump_parser::_check_stats3(const vector<string> &tokens)
     {
         if (tokens[k] == "Dex:" || tokens[k] == "Dex")
         {
-            you.base_stats[STAT_DEX] = debug_cap_stat(atoi(tokens[k+1].c_str()));
+	  //you.base_stats[STAT_DEX] = debug_cap_stat(atoi(tokens[k+1].c_str()));
             you.redraw_stats.init(true);
             you.redraw_evasion = true;
             found = true;

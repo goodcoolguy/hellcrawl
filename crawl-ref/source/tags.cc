@@ -1374,7 +1374,7 @@ static void tag_construct_you(writer &th)
     marshallUByte(th, you.magic_points);
     marshallByte(th, you.max_magic_points);
 
-    COMPILE_CHECK(NUM_STATS == 3);
+    COMPILE_CHECK(NUM_STATS == 7);
     for (int i = 0; i < NUM_STATS; ++i)
         marshallByte(th, you.base_stats[i]);
     for (int i = 0; i < NUM_STATS; ++i)
@@ -2836,7 +2836,14 @@ static void tag_read_you(reader &th)
     {
         // Convert excess mutational stats into base stats.
         mutation_type stat_mutations[] = { MUT_STRONG, MUT_CLEVER, MUT_AGILE };
-        stat_type stat_types[] = { STAT_STR, STAT_INT, STAT_DEX };
+        stat_type stat_types[] = {     STAT_MELEE,
+				       STAT_RANGED,
+				       STAT_SNEAK,
+				       STAT_DEFENSE,
+				       STAT_BLACK_MAGIC,
+				       STAT_ELEMENTAL,
+				       STAT_THAUMATURGY};
+
         for (int j = 0; j < 3; ++j)
         {
             mutation_type mut = stat_mutations[j];

@@ -146,7 +146,7 @@ bool attack::handle_phase_end()
 int attack::calc_to_hit(bool random)
 {
     int mhit = attacker->is_player() ?
-                15 + (you.dex() / 2)
+                15 + (15 / 2)
               : calc_mon_to_hit_base();
 
 #ifdef DEBUG_DIAGNOSTICS
@@ -1194,7 +1194,7 @@ int attack::player_stat_modify_damage(int damage)
 {
     int dammod = 29;
 
-    dammod += (random2(you.strength() + 1) * 2);
+    //dammod += (random2(you.strength() + 1) * 2);
 
     damage *= dammod;
     damage /= 39;
@@ -1876,7 +1876,7 @@ int attack::player_stab_weapon_bonus(int damage)
     {
         // We might be unarmed if we're using the boots of the Assassin.
         const bool extra_good = using_weapon() && weapon->sub_type == WPN_DAGGER;
-        int bonus = you.dex() * (stab_skill + 100) / (extra_good ? 500 : 1000);
+        int bonus = 15 * (stab_skill + 100) / (extra_good ? 500 : 1000);
 
         bonus   = stepdown_value(bonus, 10, 10, 30, 30);
         damage += bonus;
@@ -1944,7 +1944,7 @@ void attack::player_stab_check()
     {
         stab_attempt = x_chance_in_y(you.skill_rdiv(wpn_skill, 1, 2)
                                      + you.skill_rdiv(SK_STEALTH, 1, 2)
-                                     + you.dex() + 1,
+                                     + 15 + 1,
                                      100);
     }
 

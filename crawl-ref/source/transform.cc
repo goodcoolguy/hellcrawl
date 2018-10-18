@@ -1493,8 +1493,8 @@ bool check_form_stat_safety(transformation_type new_form)
     const int str_mod = get_form(new_form)->str_mod - get_form()->str_mod;
     const int dex_mod = get_form(new_form)->dex_mod - get_form()->dex_mod;
 
-    const bool bad_str = you.strength() > 0 && str_mod + you.strength() <= 0;
-    const bool bad_dex = you.dex() > 0 && dex_mod + you.dex() <= 0;
+    const bool bad_str = false; //you.strength() > 0 && str_mod + you.strength() <= 0;
+    const bool bad_dex = false; //you.dex() > 0 && dex_mod + you.dex() <= 0;
     if (!bad_str && !bad_dex)
         return true;
 
@@ -1772,14 +1772,14 @@ bool transform(int pow, transformation_type which_trans, bool involuntary,
 
     you.props[TRANSFORM_POW_KEY] = pow;
 
-    const int str_mod = get_form(which_trans)->str_mod;
-    const int dex_mod = get_form(which_trans)->dex_mod;
+    //const int str_mod = get_form(which_trans)->str_mod;
+    // const int dex_mod = get_form(which_trans)->dex_mod;
 
-    if (str_mod)
-        notify_stat_change(STAT_STR, str_mod, true);
+    //if (str_mod)
+    //    notify_stat_change(STAT_STR, str_mod, true);
 
-    if (dex_mod)
-        notify_stat_change(STAT_DEX, dex_mod, true);
+    //if (dex_mod)
+    //    notify_stat_change(STAT_DEX, dex_mod, true);
 
     _extra_hp(form_hp_mod());
 
@@ -1984,14 +1984,14 @@ void untransform(bool skip_move)
     if (message != "")
         mprf(MSGCH_DURATION, "%s", message.c_str());
 
-    const int str_mod = get_form(old_form)->str_mod;
-    const int dex_mod = get_form(old_form)->dex_mod;
+    //const int str_mod = get_form(old_form)->str_mod;
+    //const int dex_mod = get_form(old_form)->dex_mod;
 
-    if (str_mod)
-        notify_stat_change(STAT_STR, -str_mod, true);
+    //if (str_mod)
+    //    notify_stat_change(STAT_STR, -str_mod, true);
 
-    if (dex_mod)
-        notify_stat_change(STAT_DEX, -dex_mod, true);
+    //if (dex_mod)
+    //    notify_stat_change(STAT_DEX, -dex_mod, true);
 
     _unmeld_equipment(melded);
 

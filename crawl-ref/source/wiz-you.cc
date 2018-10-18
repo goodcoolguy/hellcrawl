@@ -675,16 +675,16 @@ void wizard_set_stats()
         return;
     }
 
-    int sstr = you.strength(false),
-        sdex = you.dex(false),
-        sint = you.intel(false);
+    //int sstr = you.strength(false),
+    //    sdex = you.dex(false),
+    //    sint = you.intel(false);
 
-    sscanf(buf, "%d %d %d", &sstr, &sint, &sdex);
+    //sscanf(buf, "%d %d %d", &sstr, &sint, &sdex);
 
-    mprf("Setting attributes (Str, Int, Dex) to: %i, %i, %i", sstr, sint, sdex);
-    you.base_stats[STAT_STR] = debug_cap_stat(sstr);
-    you.base_stats[STAT_INT] = debug_cap_stat(sint);
-    you.base_stats[STAT_DEX] = debug_cap_stat(sdex);
+    //mprf("Setting attributes (Str, Int, Dex) to: %i, %i, %i", sstr, sint, sdex);
+    //you.base_stats[STAT_STR] = debug_cap_stat(sstr);
+    //you.base_stats[STAT_INT] = debug_cap_stat(sint);
+    //you.base_stats[STAT_DEX] = debug_cap_stat(sdex);
     you.stat_loss.init(0);
     you.attribute[ATTR_STAT_LOSS_XP] = 0;
     you.redraw_stats.init(true);

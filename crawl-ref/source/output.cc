@@ -529,8 +529,8 @@ static bool _boosted_ac()
 
 static bool _boosted_ev()
 {
-    return you.duration[DUR_AGILITY]
-           || you.props.exists(WALL_JUMP_EV_KEY)
+  return //you.duration[DUR_AGILITY]
+           you.props.exists(WALL_JUMP_EV_KEY)
                && you.props[WALL_JUMP_EV_KEY].get_int() > 0;
 }
 
@@ -925,14 +925,14 @@ static short _get_stat_colour(stat_type stat)
             return entry.second;
 
     // Stat is magically increased.
-    if (you.duration[DUR_DIVINE_STAMINA]
-        || stat == STAT_STR && you.duration[DUR_MIGHT]
-        || stat == STAT_STR && you.duration[DUR_BERSERK]
-        || stat == STAT_INT && you.duration[DUR_BRILLIANCE]
-        || stat == STAT_DEX && you.duration[DUR_AGILITY])
-    {
-        return LIGHTBLUE;  // no end of effect warning
-    }
+    //if (you.duration[DUR_DIVINE_STAMINA]
+    //    || stat == STAT_STR && you.duration[DUR_MIGHT]
+    //    || stat == STAT_STR && you.duration[DUR_BERSERK]
+    //    || stat == STAT_INT && you.duration[DUR_BRILLIANCE]
+    //    || stat == STAT_DEX && you.duration[DUR_AGILITY])
+    //{
+    //    return LIGHTBLUE;  // no end of effect warning
+    //}
 
     // Stat is degenerated.
     if (you.stat_loss[stat] > 0)
@@ -948,10 +948,10 @@ static void _print_stat(stat_type stat, int x, int y)
     textcolour(_get_stat_colour(stat));
     CPRINTF("%d", you.stat(stat, false));
 
-    if (you.stat_loss[stat] > 0)
-        CPRINTF(" (%d)  ", you.max_stat(stat));
-    else
-        CPRINTF("       ");
+    //if (you.stat_loss[stat] > 0)
+    //    CPRINTF(" (%d)  ", you.max_stat(stat));
+    //else
+    //    CPRINTF("       ");
 }
 
 static void _print_stats_ac(int x, int y)
@@ -1272,9 +1272,9 @@ static bool _need_stats_printed()
            || you.redraw_magic_points
            || you.redraw_armour_class
            || you.redraw_evasion
-           || you.redraw_stats[STAT_STR]
-           || you.redraw_stats[STAT_INT]
-           || you.redraw_stats[STAT_DEX]
+      //   || you.redraw_stats[STAT_STR]
+      //   || you.redraw_stats[STAT_INT]
+      //   || you.redraw_stats[STAT_DEX]
            || you.redraw_experience
            || you.wield_change
            || you.redraw_quiver;
@@ -1402,11 +1402,11 @@ void print_stats()
     textcolour(LIGHTGREY);
 
     // Displayed evasion is tied to dex/str.
-    if (you.redraw_stats[STAT_DEX]
-        || you.redraw_stats[STAT_STR])
-    {
-        you.redraw_evasion = true;
-    }
+    //if (you.redraw_stats[STAT_DEX]
+    //    || you.redraw_stats[STAT_STR])
+    //{
+    //    you.redraw_evasion = true;
+    //}
 
     if (HP_Bar.wants_redraw())
         you.redraw_hit_points = true;
@@ -1608,9 +1608,10 @@ void draw_border()
     int ev_pos = 6;
     int sh_pos = 7;
 #endif
-    int str_pos = ac_pos;
-    int int_pos = ev_pos;
-    int dex_pos = sh_pos;
+    int one_pos = ac_pos;
+    int two_pos = ev_pos;
+    int three_pos = sh_pos;
+    int four_pos = three_pos + 1;
 
     //CGOTOXY(1, 3, GOTO_STAT); CPRINTF("Hp:");
     CGOTOXY(1, mp_pos, GOTO_STAT);
@@ -1623,9 +1624,10 @@ void draw_border()
     CGOTOXY(1, ev_pos, GOTO_STAT); CPRINTF("EV:");
     CGOTOXY(1, sh_pos, GOTO_STAT); CPRINTF("SH:");
 
-    CGOTOXY(19, str_pos, GOTO_STAT); CPRINTF("Str:");
-    CGOTOXY(19, int_pos, GOTO_STAT); CPRINTF("Int:");
-    CGOTOXY(19, dex_pos, GOTO_STAT); CPRINTF("Dex:");
+    CGOTOXY(19, one_pos, GOTO_STAT); CPRINTF("One:");
+    CGOTOXY(19, two_pos, GOTO_STAT); CPRINTF("Two:");
+    CGOTOXY(19, three_pos, GOTO_STAT); CPRINTF("Thr:");
+    CGOTOXY(19, four_pos, GOTO_STAT); CPRINTF("For:");
 
 #if TAG_MAJOR_VERSION == 34
     int yhack = temp;
@@ -2262,9 +2264,10 @@ static int _god_status_colour(int default_colour)
 
 static bool _player_statrotted()
 {
-    return you.strength(false) != you.max_strength()
-        || you.intel(false) != you.max_intel()
-        || you.dex(false) != you.max_dex();
+  return false;
+  //  return you.strength(false) != you.max_strength()
+  //      || you.intel(false) != you.max_intel()
+  //      || you.dex(false) != you.max_dex();
 }
 
 static vector<formatted_string> _get_overview_stats()
@@ -2373,11 +2376,11 @@ static vector<formatted_string> _get_overview_stats()
     entry.textcolour(HUD_CAPTION_COLOUR);
     entry.cprintf("Str: ");
 
-    entry.textcolour(_get_stat_colour(STAT_STR));
+    //entry.textcolour(_get_stat_colour(STAT_STR));
 
-    entry.cprintf("%2d", you.strength(false));
-    if (you.strength(false) != you.max_strength())
-        entry.cprintf(" (%d)", you.max_strength());
+    //entry.cprintf("%2d", you.strength(false));
+    //if (you.strength(false) != you.max_strength())
+    //    entry.cprintf(" (%d)", you.max_strength());
 
     cols.add_formatted(2, entry.to_colour_string(), false);
     entry.clear();
@@ -2385,11 +2388,11 @@ static vector<formatted_string> _get_overview_stats()
     entry.textcolour(HUD_CAPTION_COLOUR);
     entry.cprintf("Int: ");
 
-    entry.textcolour(_get_stat_colour(STAT_INT));
+    //entry.textcolour(_get_stat_colour(STAT_INT));
 
-    entry.cprintf("%2d", you.intel(false));
-    if (you.intel(false) != you.max_intel())
-        entry.cprintf(" (%d)", you.max_intel());
+    //entry.cprintf("%2d", you.intel(false));
+    //if (you.intel(false) != you.max_intel())
+    //    entry.cprintf(" (%d)", you.max_intel());
 
     cols.add_formatted(2, entry.to_colour_string(), false);
     entry.clear();
@@ -2397,11 +2400,11 @@ static vector<formatted_string> _get_overview_stats()
     entry.textcolour(HUD_CAPTION_COLOUR);
     entry.cprintf("Dex: ");
 
-    entry.textcolour(_get_stat_colour(STAT_DEX));
+    //entry.textcolour(_get_stat_colour(STAT_DEX));
 
-    entry.cprintf("%2d", you.dex(false));
-    if (you.dex(false) != you.max_dex())
-        entry.cprintf(" (%d)", you.max_dex());
+    //entry.cprintf("%2d", you.dex(false));
+    //if (you.dex(false) != you.max_dex())
+    //    entry.cprintf(" (%d)", you.max_dex());
 
     cols.add_formatted(2, entry.to_colour_string(), false);
     entry.clear();

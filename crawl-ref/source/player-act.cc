@@ -763,8 +763,8 @@ bool player::go_berserk(bool intentional, bool potion)
 
     deflate_hp(you.hp_max, false);
 
-    if (!you.duration[DUR_MIGHT])
-        notify_stat_change(STAT_STR, 5, true);
+    //if (!you.duration[DUR_MIGHT])
+    //    notify_stat_change(STAT_STR, 5, true);
 
     if (you.berserk_penalty != NO_BERSERK_PENALTY)
         you.berserk_penalty = 0;
@@ -875,7 +875,7 @@ bool player::shove(const char* feat_name)
 
 int player::constriction_damage() const
 {
-    return roll_dice(2, div_rand_round(strength(), 5));
+  return  1; //roll_dice(2, div_rand_round(strength(), 5));
 }
 
 /**

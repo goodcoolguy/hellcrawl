@@ -1816,9 +1816,9 @@ enum duration_type
     DUR_SLOW,
     DUR_MESMERISED,
     DUR_HASTE,
-    DUR_MIGHT,
-    DUR_BRILLIANCE,
-    DUR_AGILITY,
+    //DUR_MIGHT,
+    //DUR_BRILLIANCE,
+    //DUR_AGILITY,
     DUR_FLIGHT,
     DUR_BERSERK,
     DUR_POISONING,
@@ -4921,12 +4921,22 @@ enum slot_select_mode
 
 enum stat_type
 {
-    STAT_STR,
-    STAT_INT,
-    STAT_DEX,
+    STAT_MELEE,
+    STAT_RANGED,
+    STAT_SNEAK,
+    STAT_DEFENSE,
+    STAT_BLACK_MAGIC,
+    STAT_ELEMENTAL,
+    STAT_THAUMATURGY,
     NUM_STATS,
-    STAT_ALL, // must remain after NUM_STATS
     STAT_RANDOM,
+    STAT_ALL, // must remain after NUM_STATS
+    CLASS_STATS,
+    STAT_CLASS_A, // class main stat
+    STAT_CLASS_B, // class secondary stat
+    STAT_CLASS_C, // class tertiary stat
+    STAT_NO_STAT, // no skill growth in species schedule
+    STAT_SPECIAL, // special species schedule code
 };
 
 enum targeting_type

@@ -136,10 +136,10 @@ static void _write_you(FILE * o)
     fprintf(o, "%s %s: XL %d   Str %d   Int %d   Dex %d\n",
             species_name(you.species).c_str(),
             get_job_name(you.char_class),
-            you.experience_level,
-            you.strength(),
-            you.intel(),
-            you.dex());
+            you.experience_level);
+    //you.strength(),
+    //      you.intel(),
+    //      you.dex());
 }
 
 static void _write_weapon(FILE * o)

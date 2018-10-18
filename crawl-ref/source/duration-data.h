@@ -127,13 +127,13 @@ struct duration_def
 
 static const duration_def duration_data[] =
 {
-    { DUR_AGILITY,
+  /*{ DUR_AGILITY,
       LIGHTBLUE, "Agi",
       "agile", "agility",
       "You are agile.", D_DISPELLABLE,
       {{ "You feel a little less agile now.", []() {
           notify_stat_change(STAT_DEX, -5, true);
-      }}}},
+	  }}}},*/
     { DUR_BERSERK,
       BLUE, "Berserk",
       "berserking", "berserker",
@@ -144,13 +144,13 @@ static const duration_def duration_data[] =
       "short of breath", "breath weapon",
       "You are short of breath.", D_NO_FLAGS,
       { { "You have got your breath back." }, {}, true }},
-    { DUR_BRILLIANCE,
+    /*{ DUR_BRILLIANCE,
       LIGHTBLUE, "Brill",
       "brilliant", "brilliance",
       "You are brilliant.", D_DISPELLABLE,
       {{ "You feel a little less clever now.", []() {
           notify_stat_change(STAT_INT, -5, true);
-      }}}},
+	  }}}},*/
     { DUR_CONF,
       RED, "Conf",
       "confused", "conf",
@@ -217,13 +217,13 @@ static const duration_def duration_data[] =
       "vulnerable", "lowered mr",
       "", D_DISPELLABLE,
       {{ "You feel less vulnerable to hostile enchantments." }}},
-    { DUR_MIGHT,
+    /*{ DUR_MIGHT,
       LIGHTBLUE, "Might",
       "mighty", "might",
       "You are mighty.", D_DISPELLABLE,
       {{ "You feel a little less mighty now.", []() {
           notify_stat_change(STAT_STR, -5, true);
-      }}}},
+	  }}}},*/
     { DUR_PARALYSIS,
       RED, "Para",
       "paralysed", "paralysis",

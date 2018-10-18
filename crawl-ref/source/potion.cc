@@ -315,19 +315,19 @@ public:
 
     bool effect(bool=true, int pow = 40, bool=true) const override
     {
-        const bool were_mighty = you.duration[DUR_MIGHT] > 0;
-        const bool were_brilliant = you.duration[DUR_BRILLIANCE] > 0;
+      //const bool were_mighty = you.duration[DUR_MIGHT] > 0;
+      //const bool were_brilliant = you.duration[DUR_BRILLIANCE] > 0;
 
-        mprf(MSGCH_DURATION, "You feel %s all of a sudden.",
-             were_mighty ? "mightier" : "very mighty");
-        mprf(MSGCH_DURATION, "You feel %s all of a sudden.",
-             were_brilliant ? "more clever" : "clever");
-        you.increase_duration(DUR_MIGHT, 35 + random2(pow), 80);
-        you.increase_duration(DUR_BRILLIANCE, 35 + random2(pow), 80);
-        if (!were_mighty)
-            notify_stat_change(STAT_STR, 5, true);
-        if (!were_brilliant)
-            notify_stat_change(STAT_INT, 5, true);
+      //mprf(MSGCH_DURATION, "You feel %s all of a sudden.",
+      //     were_mighty ? "mightier" : "very mighty");
+      //mprf(MSGCH_DURATION, "You feel %s all of a sudden.",
+      //     were_brilliant ? "more clever" : "clever");
+      // you.increase_duration(DUR_MIGHT, 35 + random2(pow), 80);
+      //you.increase_duration(DUR_BRILLIANCE, 35 + random2(pow), 80);
+        //if (!were_mighty)
+        //    notify_stat_change(STAT_STR, 5, true);
+        //if (!were_brilliant)
+        //    notify_stat_change(STAT_INT, 5, true);
         return true;
     }
 };
@@ -345,13 +345,13 @@ public:
 
     bool effect(bool=true, int pow = 40, bool=true) const override
     {
-        const bool were_brilliant = you.duration[DUR_BRILLIANCE] > 0;
+      //const bool were_brilliant = you.duration[DUR_BRILLIANCE] > 0;
 
-        mprf(MSGCH_DURATION, "You feel %s all of a sudden.",
-             were_brilliant ? "more clever" : "clever");
-        you.increase_duration(DUR_BRILLIANCE, 35 + random2(pow), 80);
-        if (!were_brilliant)
-            notify_stat_change(STAT_INT, 5, true);
+      //mprf(MSGCH_DURATION, "You feel %s all of a sudden.",
+      //         were_brilliant ? "more clever" : "clever");
+  //you.increase_duration(DUR_BRILLIANCE, 35 + random2(pow), 80);
+        //if (!were_brilliant)
+        //    notify_stat_change(STAT_INT, 5, true);
         return true;
     }
 };
@@ -369,15 +369,15 @@ public:
 
     bool effect(bool=true, int pow = 40, bool=true) const override
     {
-        const bool were_agile = you.duration[DUR_AGILITY] > 0;
+      //const bool were_agile = you.duration[DUR_AGILITY] > 0;
 
-        mprf(MSGCH_DURATION, "You feel %s all of a sudden.",
-             were_agile ? "more agile" : "agile");
+      //mprf(MSGCH_DURATION, "You feel %s all of a sudden.",
+      //were_agile ? "more agile" : "agile");
 
-        you.increase_duration(DUR_AGILITY, 35 + random2(pow), 80);
+  //you.increase_duration(DUR_AGILITY, 35 + random2(pow), 80);
 
-        if (!were_agile)
-            notify_stat_change(STAT_DEX, 5, true);
+        //if (!were_agile)
+        //    notify_stat_change(STAT_DEX, 5, true);
         return true;
     }
 };
