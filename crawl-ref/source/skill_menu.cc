@@ -344,7 +344,7 @@ void SkillMenuEntry::set_aptitude()
     string text = "<white>";
 
     const bool manual = skill_has_manual(m_sk);
-    const int apt = species_apt(m_sk, you.species);
+    const int apt = 0;
 
     // Manuals aptitude bonus.
     int manual_bonus = manual ? 4 : 0;

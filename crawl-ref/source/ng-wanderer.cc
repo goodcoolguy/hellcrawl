@@ -65,8 +65,6 @@ static stat_type _wanderer_choose_role()
     for (int i = 0; i < NUM_STATS; ++i)
         total_stats += you.stat(static_cast<stat_type>(i));
 
-    int target = random2(total_stats);
-
     stat_type role;
 
     //if (target < you.strength())
@@ -146,21 +144,15 @@ static skill_type _wanderer_role_weapon_select(stat_type role)
     const skill_type str_weapons[] =
         { SK_AXES, SK_MACES_FLAILS, SK_BOWS};
 
-    int str_size = ARRAYSZ(str_weapons);
-
     const skill_type dex_weapons[] =
         { SK_SHORT_BLADES, SK_UNARMED_COMBAT,
           SK_POLEARMS };
-
-    int dex_size = ARRAYSZ(dex_weapons);
 
     const skill_type casting_schools[] =
         { SK_SUMMONINGS, SK_NECROMANCY, SK_TRANSLOCATIONS,
           SK_TRANSMUTATIONS, SK_CONJURATIONS,
           SK_HEXES, SK_CHARMS, SK_FIRE_MAGIC, SK_ICE_MAGIC,
           SK_AIR_MAGIC, SK_EARTH_MAGIC };
-
-    int casting_size = ARRAYSZ(casting_schools);
 
     //switch ((int)role)
     //{

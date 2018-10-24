@@ -250,10 +250,7 @@ static void _give_items_skills(const newgame_def& ng)
         you.religion = GOD_CHEIBRIADOS;
         you.piety = 35;
 
-        if (species_apt(SK_ARMOUR) < species_apt(SK_DODGING))
-            you.skills[SK_DODGING]++;
-        else
-            you.skills[SK_ARMOUR]++;
+        you.skills[SK_ARMOUR]++;
         break;
 
     case JOB_CHAOS_KNIGHT:
@@ -261,10 +258,7 @@ static void _give_items_skills(const newgame_def& ng)
         you.piety = 100;
         you.gift_timeout = max(5, random2(40) + random2(40));
 
-        if (species_apt(SK_ARMOUR) < species_apt(SK_DODGING))
-            you.skills[SK_DODGING]++;
-        else
-            you.skills[SK_ARMOUR]++;
+        you.skills[SK_ARMOUR]++;
         break;
 
     case JOB_WANDERER:

@@ -38,7 +38,7 @@ void SkillRegion::draw_tag()
         return;
 
     const skill_type skill = (skill_type) idx;
-    const int apt          = species_apt(skill, you.species);
+    const int apt          = 0;
 
     string progress = "";
 
@@ -208,7 +208,7 @@ void SkillRegion::pack_buffers()
             if (item.quantity > 0)
                 draw_number(x, y, item.quantity);
 
-            const int apt = species_apt(skill, you.species);
+            const int apt = 0;
             m_buf.add_icons_tile(_get_aptitude_tile(apt), x, y);
 
             if (item.tile)

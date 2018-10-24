@@ -89,21 +89,6 @@ vector<string> playable_combo_names()
                      [](combo_type c) { return c.abbr(); });
 }
 
-// JSON output:
-
-static JsonNode *_species_apts(species_type sp)
-{
-    JsonNode *apts(json_mkobject());
-    for (int i = SK_FIRST_SKILL; i < NUM_SKILLS; ++i)
-    {
-        const skill_type sk(static_cast<skill_type>(i));
-        const int apt(species_apt(sk, sp));
-        if (apt != UNUSABLE_SKILL)
-            json_append_member(apts, skill_name(sk), json_mknumber(apt));
-    }
-    return apts;
-}
-
 static JsonNode *_species_modifiers(species_type sp)
 {
     JsonNode *modifiers(json_mkobject());
@@ -125,7 +110,6 @@ static JsonNode *_species_metadata(species_type sp,
         json_append_member(species, "derives",
                            json_mkstring(species_name(derives).c_str()));
     }
-    json_append_member(species, "apts", _species_apts(sp));
     json_append_member(species, "modifiers", _species_modifiers(sp));
     return species;
 }

@@ -129,8 +129,6 @@ struct species_skill_aptitude
     }
 };
 
-#include "aptitudes.h"
-
 // Traditionally, Spellcasting and In/Evocations formed the exceptions here:
 // Spellcasting skill was more expensive with about 130%, the other two got
 // a discount with about 75%.
@@ -1548,42 +1546,7 @@ void init_skill_order()
 
 bool is_useless_skill(skill_type skill)
 {
-#if TAG_MAJOR_VERSION == 34
-    if (skill == SK_STABBING || skill == SK_TRAPS
-        || skill == SK_POISON_MAGIC || skill == SK_SPELLCASTING)
-    {
-        return true;
-    }
-#endif
-
-    if ((skill == SK_AIR_MAGIC && you.get_mutation_level(MUT_NO_AIR_MAGIC))
-        || (skill == SK_CHARMS && you.get_mutation_level(MUT_NO_CHARM_MAGIC))
-        || (skill == SK_CONJURATIONS
-            && you.get_mutation_level(MUT_NO_CONJURATION_MAGIC))
-        || (skill == SK_EARTH_MAGIC
-            && you.get_mutation_level(MUT_NO_EARTH_MAGIC))
-        || (skill == SK_FIRE_MAGIC && you.get_mutation_level(MUT_NO_FIRE_MAGIC))
-        || (skill == SK_HEXES && you.get_mutation_level(MUT_NO_HEXES_MAGIC))
-        || (skill == SK_ICE_MAGIC && you.get_mutation_level(MUT_NO_ICE_MAGIC))
-        || (skill == SK_NECROMANCY
-            && you.get_mutation_level(MUT_NO_NECROMANCY_MAGIC))
-        || (skill == SK_SUMMONINGS
-            && you.get_mutation_level(MUT_NO_SUMMONING_MAGIC))
-        || (skill == SK_TRANSLOCATIONS
-            && you.get_mutation_level(MUT_NO_TRANSLOCATION_MAGIC))
-        || (skill == SK_TRANSMUTATIONS
-            && you.get_mutation_level(MUT_NO_TRANSMUTATION_MAGIC))
-        || (skill == SK_DODGING && you.get_mutation_level(MUT_NO_DODGING))
-        || (skill == SK_ARMOUR && you.get_mutation_level(MUT_NO_ARMOUR))
-        || (skill == SK_SHIELDS && you.get_mutation_level(MUT_MISSING_HAND))
-        || (skill == SK_EVOCATIONS && you.get_mutation_level(MUT_NO_ARTIFICE))
-        || (skill == SK_STEALTH && you.get_mutation_level(MUT_NO_STEALTH))
-    )
-    {
-        return true;
-    }
-
-    return species_apt(skill) == UNUSABLE_SKILL;
+	return false;
 }
 
 bool is_harmful_skill(skill_type skill)
@@ -1639,31 +1602,9 @@ unsigned int skill_exp_needed(int lev, skill_type sk, species_type sp)
     return exp[lev] * species_apt_factor(sk, sp);
 }
 
-int species_apt(skill_type skill, species_type species)
-{
-    static bool spec_skills_initialised = false;
-    if (!spec_skills_initialised)
-    {
-        // Setup sentinel values to find errors more easily.
-        const int sentinel = -20; // this gives cost 3200
-        for (int sp = 0; sp < NUM_SPECIES; ++sp)
-            for (int sk = 0; sk < NUM_SKILLS; ++sk)
-                _spec_skills[sp][sk] = sentinel;
-        for (const species_skill_aptitude &ssa : species_skill_aptitudes)
-        {
-            ASSERT(_spec_skills[ssa.species][ssa.skill] == sentinel);
-            _spec_skills[ssa.species][ssa.skill] = ssa.aptitude;
-        }
-        spec_skills_initialised = true;
-    }
-
-    return max(UNUSABLE_SKILL, _spec_skills[species][skill]
-                               - you.get_mutation_level(MUT_UNSKILLED));
-}
-
 float species_apt_factor(skill_type sk, species_type sp)
 {
-    return apt_to_factor(species_apt(sk, sp));
+    return 1;
 }
 
 vector<skill_type> get_crosstrain_skills(skill_type sk)

@@ -137,8 +137,6 @@ bool attribute_increase()
 #endif
     //mouse_control mc(MOUSE_MODE_PROMPT);
 
-    const int statgain = (you.species == SP_DEMIGOD || you.species == SP_TITAN) ? 2 : 1;
-
     bool tried_lua = false;
     int keyin;
     while (true)
@@ -224,7 +222,7 @@ void jiyva_stat_action()
     //target_stat[STAT_STR] = max(9, evp);
     //target_stat[STAT_INT] = 9;
     //target_stat[STAT_DEX] = 9;
-    int remaining = stat_total - 18 - target_stat[0];
+    int remaining = stat_total - 18;
 
     // Divide up the remaining stat points between Int and either Str or Dex,
     // based on skills.
@@ -255,9 +253,6 @@ void jiyva_stat_action()
         int str_weight = 10 * evp;
         int dex_weight = 10 + you.skill(SK_DODGING, 10);
 
-        // Now apply the Str and Dex weighting.
-        const int str_adj = div_rand_round(other_weights * str_weight,
-                                           str_weight + dex_weight);
         //target_stat[STAT_STR] += str_adj;
         //target_stat[STAT_DEX] += (other_weights - str_adj);
     }
@@ -365,115 +360,6 @@ void notify_stat_change()
 static int _mut_level(mutation_type mut, bool innate_only)
 {
     return you.get_base_mutation_level(mut, true, !innate_only, !innate_only);
-}
-
-static int _strength_modifier(bool innate_only)
-{
-    int result = 0;
-
-    if (!innate_only)
-    {
-      //if (you.duration[DUR_MIGHT] || you.duration[DUR_BERSERK])
-      //    result += 5;
-
-        if (you.duration[DUR_DIVINE_STAMINA])
-            result += you.attribute[ATTR_DIVINE_STAMINA];
-
-        result += chei_stat_boost();
-
-        // ego items of strength
-        result += 3 * count_worn_ego(SPARM_STRENGTH);
-
-        // rings of strength
-        result += you.wearing(EQ_RINGS_PLUS, RING_STRENGTH);
-
-        // randarts of strength
-        result += you.scan_artefacts(ARTP_STRENGTH);
-
-        // form
-        result += get_form()->str_mod;
-    }
-
-    // mutations
-    result += 5 * (_mut_level(MUT_STRONG, innate_only)
-                   - _mut_level(MUT_WEAK, innate_only));
-#if TAG_MAJOR_VERSION == 34
-    result += _mut_level(MUT_STRONG_STIFF, innate_only)
-              - _mut_level(MUT_FLEXIBLE_WEAK, innate_only);
-#endif
-
-    return result;
-}
-
-static int _int_modifier(bool innate_only)
-{
-    int result = 0;
-
-    if (!innate_only)
-    {
-      // if (you.duration[DUR_BRILLIANCE])
-      //     result += 5;
-
-        if (you.duration[DUR_DIVINE_STAMINA])
-            result += you.attribute[ATTR_DIVINE_STAMINA];
-
-        result += chei_stat_boost();
-
-        // ego items of intelligence
-        result += 3 * count_worn_ego(SPARM_INTELLIGENCE);
-
-        // rings of intelligence
-        result += you.wearing(EQ_RINGS_PLUS, RING_INTELLIGENCE);
-
-        // randarts of intelligence
-        result += you.scan_artefacts(ARTP_INTELLIGENCE);
-    }
-
-    // mutations
-    result += 5 * (_mut_level(MUT_CLEVER, innate_only)
-                   - _mut_level(MUT_DOPEY, innate_only));
-
-    return result;
-}
-
-static int _dex_modifier(bool innate_only)
-{
-    int result = 0;
-
-    if (!innate_only)
-    {
-      //if (you.duration[DUR_AGILITY])
-      //    result += 5;
-
-        if (you.duration[DUR_DIVINE_STAMINA])
-            result += you.attribute[ATTR_DIVINE_STAMINA];
-
-        result += chei_stat_boost();
-
-        // ego items of dexterity
-        result += 3 * count_worn_ego(SPARM_DEXTERITY);
-
-        // rings of dexterity
-        result += you.wearing(EQ_RINGS_PLUS, RING_DEXTERITY);
-
-        // randarts of dexterity
-        result += you.scan_artefacts(ARTP_DEXTERITY);
-
-        // form
-        result += get_form()->dex_mod;
-    }
-
-    // mutations
-    result += 5 * (_mut_level(MUT_AGILE, innate_only)
-                  - _mut_level(MUT_CLUMSY, innate_only));
-#if TAG_MAJOR_VERSION == 34
-    result += _mut_level(MUT_FLEXIBLE_WEAK, innate_only)
-              - _mut_level(MUT_STRONG_STIFF, innate_only);
-    result -= _mut_level(MUT_ROUGH_BLACK_SCALES, innate_only);
-#endif
-    result += 2 * _mut_level(MUT_THIN_SKELETAL_STRUCTURE, innate_only);
-
-    return result;
 }
 
 static int _stat_modifier(stat_type stat, bool innate_only)

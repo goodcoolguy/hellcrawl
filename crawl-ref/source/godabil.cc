@@ -5268,26 +5268,6 @@ static int _piety_for_skill_by_sacrifice(ability_type sacrifice)
 
 #define AS_MUT(csv) (static_cast<mutation_type>((csv).get_int()))
 
-/**
- * Adjust piety based on stat ranking. You get less piety if you're looking at
- * your lower stats.
- *
- * @param stat_type input_stat The stat we're checking.
- * @param int       multiplier How much piety for each rank position off.
- * @return          The piety to add.
- */
-static int _get_stat_piety(stat_type input_stat, int multiplier)
-{
-    int stat_val = 3; // If this is your highest stat.
-    //if (you.base_stats[STAT_INT] > you.base_stats[input_stat])
-    //        stat_val -= 1;
-    //if (you.base_stats[STAT_STR] > you.base_stats[input_stat])
-    //        stat_val -= 1;
-    //if (you.base_stats[STAT_DEX] > you.base_stats[input_stat])
-    //        stat_val -= 1;
-    return stat_val * multiplier;
-}
-
 int get_sacrifice_piety(ability_type sac, bool include_skill)
 {
     if (sac == ABIL_RU_REJECT_SACRIFICES)
@@ -5366,8 +5346,6 @@ int get_sacrifice_piety(ability_type sac, bool include_skill)
         case ABIL_RU_SACRIFICE_NIMBLENESS:
             if (you.get_mutation_level(MUT_NO_ARMOUR))
                 piety_gain += 20;
-            else if (species_apt(SK_ARMOUR) == UNUSABLE_SKILL)
-                piety_gain += 28; // this sacrifice is worse for these races
             break;
         case ABIL_RU_SACRIFICE_DURABILITY:
             if (you.get_mutation_level(MUT_NO_DODGING))

@@ -141,13 +141,6 @@ void wizard_change_species_to(species_type sp)
         return;
     }
 
-    // Re-scale skill-points.
-    for (skill_type sk = SK_FIRST_SKILL; sk < NUM_SKILLS; ++sk)
-    {
-        you.skill_points[sk] *= species_apt_factor(sk, sp)
-                                / species_apt_factor(sk);
-    }
-
     species_type old_sp = you.species;
     you.species = sp;
     you.chr_species_name = species_name(sp);
