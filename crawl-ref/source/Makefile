@@ -1341,9 +1341,6 @@ version.o: build.h compflag.h
 ##########################################################################
 # Documentation
 #
-#$(DOC_BASE)/aptitudes.txt: $(DOC_TEMPLATES)/apt-tmpl.txt species-data.h aptitudes.h \
-						   #util/gen-apt.pl
-	#$(QUIET_GEN)./util/gen-apt.pl $@ $^
 
 $(DOC_BASE)/FAQ.html: dat/database/FAQ.txt util/FAQ2html.pl
 	$(QUIET_GEN)./util/FAQ2html.pl $< $@

@@ -134,10 +134,10 @@ install: build
 binary-indep: install
 	dh_testdir
 	dh_testroot
-	dh_installdocs -pcrawl-common -Xcrawl_manual.txt -Xaptitudes.txt -Xquickstart.txt -Xmacros_guide.txt -Xoptions_guide.txt -Xtiles_help.txt
+	dh_installdocs -pcrawl-common -Xcrawl_manual.txt -Xquickstart.txt -Xmacros_guide.txt -Xoptions_guide.txt -Xtiles_help.txt
 	dh_installchangelogs -pcrawl-common docs/changelog.txt
 	dh_link -i
-	dh_compress -i -Xaptitudes.txt
+	dh_compress -i
 	dh_fixperms -i
 	dh_installdeb -i
 	dh_gencontrol -i
@@ -150,7 +150,7 @@ binary-arch: install
 	dh_testroot
 	dh_installmenu -a
 	dh_link -a
-	dh_compress -a -Xaptitudes.txt
+	dh_compress -a
 	dh_strip -a
 	dh_fixperms -a
 	dh_installdeb -a

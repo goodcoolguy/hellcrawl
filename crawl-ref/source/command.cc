@@ -413,7 +413,6 @@ struct help_file
 static help_file help_files[] =
 {
     { "crawl_manual.txt",  '*', true },
-    { "aptitudes.txt",     '%', false },
     { "quickstart.txt",    '^', false },
     { "macros_guide.txt",  '~', false },
     { "options_guide.txt", '&', false },
