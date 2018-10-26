@@ -89,6 +89,8 @@ vector<string> playable_combo_names()
                      [](combo_type c) { return c.abbr(); });
 }
 
+// JSON output:
+
 static JsonNode *_species_modifiers(species_type sp)
 {
     JsonNode *modifiers(json_mkobject());

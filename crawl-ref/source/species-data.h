@@ -71,26 +71,7 @@ static const map<species_type, species_def> species_data =
         {},
        {},
        {},
-    } }};/*,
-
-
-  /*
-
-{ SP_HALFLING, {
-    "Ha",
-    "Halfling", nullptr, nullptr,
-    SPF_NONE,
-    1, -1, 0, 3,
-    MONS_HALFLING,
-    HT_LAND, US_ALIVE, SIZE_SMALL,
-    9, 6, 9, // 24
-    { STAT_DEX }, 5,
-    { { MUT_MUTATION_RESISTANCE, 1, 1 }, },
-    {},
-    {},
-    { JOB_FIGHTER, JOB_BERSERKER, JOB_SKALD },
-    { SK_SHORT_BLADES, SK_AXES },
-} },
+    } },
 
 // Ideally this wouldn't be necessary...
 { SP_UNKNOWN, { // Line 1: enum
@@ -108,4 +89,4 @@ static const map<species_type, species_def> species_data =
       //{}, // Line 13: Recommended jobs
       //{}, // Line 14: Recommended weapons
 } }
-};*/
+};
