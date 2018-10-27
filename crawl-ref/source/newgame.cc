@@ -181,27 +181,7 @@ void choose_tutorial_character(newgame_def& ng_choice)
 static const species_type species_order[] =
 {
     // comparatively human-like looks
-    SP_HUMAN,          SP_DEEP_ELF,
-    SP_MOUNTAIN_DWARF,
-    // small species
-    SP_KOBOLD,		   SP_SPRIGGAN,
-    // large species
-    SP_TROLL,
-    // significantly different body type from human ("monstrous")
-    SP_NAGA,           
-    SP_MERFOLK,        SP_MINOTAUR,
-    SP_TENGU,          SP_BASE_DRACONIAN,
-    SP_GARGOYLE,       SP_FORMICID,
-    // mostly human shape but made of a strange substance
-    SP_VINE_STALKER,
-    // celestial species
-    SP_TITAN,        SP_DEMONSPAWN,
-    // undead species
-    SP_MUMMY,
-    SP_VAMPIRE,        SP_SKELETON,
-    // not humanoid at all
-    SP_OCTOPODE,
-    SP_GNOLL,
+    SP_HUMAN,
 };
 COMPILE_CHECK(ARRAYSZ(species_order) <= NUM_SPECIES);
 
@@ -965,13 +945,6 @@ static species_group species_groups[] =
         coord_def(0, 0),
         20,
         {
-            SP_MOUNTAIN_DWARF,
-            SP_MINOTAUR,
-            SP_MERFOLK,
-            SP_GARGOYLE,
-            SP_BASE_DRACONIAN,
-            SP_TROLL,
-            SP_SPRIGGAN,
         }
     },
     {
@@ -980,12 +953,6 @@ static species_group species_groups[] =
         20,
         {
             SP_HUMAN,
-            SP_KOBOLD,
-            SP_DEMONSPAWN,
-            SP_VINE_STALKER,
-            SP_FORMICID,
-	        SP_GNOLL,
-            SP_TITAN,
         }
     },
     {
@@ -993,13 +960,6 @@ static species_group species_groups[] =
         coord_def(50, 0),
         20,
         {
-            SP_VAMPIRE,
-            SP_NAGA,
-            SP_TENGU,
-            SP_OCTOPODE,
-            SP_DEEP_ELF,
-            SP_MUMMY,
-            SP_SKELETON,
         }
     },
 };
