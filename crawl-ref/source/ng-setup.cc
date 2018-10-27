@@ -502,7 +502,6 @@ static void _setup_generic(const newgame_def& ng)
     init_skill_order();
     init_can_train();
     init_train();
-    init_training();
 
     // Apply autoinscribe rules to inventory.
     request_autoinscribe();

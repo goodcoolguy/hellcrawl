@@ -844,11 +844,6 @@ static void reset_ds_muts_from_schedule(int xl)
 
 static void debug_uptick_xl(int newxl, bool train)
 {
-    if (train)
-    {
-        you.exp_available += exp_needed(newxl) - you.experience;
-        train_skills();
-    }
     you.experience = exp_needed(newxl);
     if (you.experience_level < you.max_level)
     {

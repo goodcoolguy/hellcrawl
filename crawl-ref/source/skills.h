@@ -58,7 +58,6 @@ void reassess_starting_skills();
 bool check_selected_skills();
 void init_train();
 void init_can_train();
-void init_training();
 void update_can_train();
 void reset_training();
 int calc_skill_level_change(skill_type sk, int starting_level, int sk_points);
@@ -69,7 +68,6 @@ void change_skill_points(skill_type sk, int points, bool do_level_up);
 bool is_magic_skill(skill_type sk);
 
 void exercise(skill_type exsk, int deg);
-void train_skills(bool simu = false);
 bool skill_trained(int i);
 static inline bool skill_trained(skill_type sk) { return skill_trained((int) sk); }
 void redraw_skill(skill_type exsk, skill_type old_best_skill = SK_NONE);

@@ -1041,7 +1041,6 @@ bool SkillMenu::exit()
     if (is_set(SKMF_EXPERIENCE))
     {
         redraw_screen();
-        train_skills();
         m_skill_backup.restore_training();
     }
 
@@ -1402,8 +1401,6 @@ void SkillMenu::init_switches()
 
 void SkillMenu::refresh_display()
 {
-    if (is_set(SKMF_EXPERIENCE))
-        train_skills(true);
 
     for (int ln = 0; ln < SK_ARR_LN; ++ln)
         for (int col = 0; col < SK_ARR_COL; ++col)

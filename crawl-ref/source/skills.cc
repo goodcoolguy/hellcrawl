@@ -545,30 +545,6 @@ static void _scale_array(FixedVector<T, SIZE> &array, int scale, bool exact)
     ASSERT(scaled_total == scale);
 }
 
-/*
- * Init the training array by scaling down the skill_points array to 100.
- * Used at game setup, when upgrading saves and when loading dump files.
- */
-void init_training()
-{
-    FixedVector<unsigned int, NUM_SKILLS> skills;
-    skills.init(0);
-    for (int i = 0; i < NUM_SKILLS; ++i)
-        if (skill_trained(i))
-            skills[i] = sqr(you.skill_points[i]);
-
-    _scale_array(skills, EXERCISE_QUEUE_SIZE, true);
-    _init_queue(you.exercises, skills);
-
-    for (int i = 0; i < NUM_SKILLS; ++i)
-        skills[i] = sqr(you.skill_points[i]);
-
-    _scale_array(skills, EXERCISE_QUEUE_SIZE, true);
-    _init_queue(you.exercises_all, skills);
-
-    reset_training();
-}
-
 // Make sure at least one skill is selected.
 // If not, go to the skill menu and return true.
 bool check_selected_skills()
@@ -726,38 +702,6 @@ static bool _level_up_check(skill_type sk, bool simu)
 bool is_magic_skill(skill_type sk)
 {
     return sk > SK_LAST_MUNDANE && sk <= SK_LAST_MAGIC;
-}
-
-void train_skills(bool simu)
-{
-    int cost, exp;
-    if (you.species == SP_GNOLL || you.species == SP_KOBOLD)
-    {
-       you.exp_available = 0; // need this to avoid skill allocation prompt on loading saves...
-       return;
-    }
-    do
-    {
-        cost = calc_skill_cost(you.skill_cost_level);
-        exp = you.exp_available;
-        if (you.skill_cost_level == MAX_SKILL_COST_LEVEL)
-            _train_skills(exp, cost, simu);
-        else
-        {
-            // Amount of experience points needed to reach the next skill cost level
-            const int next_level = skill_cost_needed(you.skill_cost_level + 1)
-                                   - you.total_experience;
-            ASSERT(next_level > 0);
-            _train_skills(min(exp, next_level + cost - 1), cost, simu);
-        }
-    }
-    while (you.exp_available >= cost && exp != you.exp_available);
-
-    for (int i = 0; i < NUM_SKILLS; ++i)
-        check_skill_level_change(static_cast<skill_type>(i), !simu);
-
-    // We might have disabled some skills on level up.
-    reset_training();
 }
 
 //#define DEBUG_TRAINING_COST
