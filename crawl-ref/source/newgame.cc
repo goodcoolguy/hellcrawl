@@ -1082,8 +1082,8 @@ static job_group jobs_order[] =
     {
         "Warrior",
         coord_def(0, 0), 15,
-        { JOB_FIGHTER, JOB_GLADIATOR, JOB_MONK }
-    },
+        { JOB_FIGHTER,}// JOB_GLADIATOR, JOB_MONK }
+    },/*
     {
         "Adventurer",
         coord_def(0, 7), 15,
@@ -1106,7 +1106,7 @@ static job_group jobs_order[] =
         { JOB_WIZARD, JOB_SUMMONER, JOB_NECROMANCER,
           JOB_FIRE_ELEMENTALIST, JOB_ICE_ELEMENTALIST,
           JOB_AIR_ELEMENTALIST, JOB_EARTH_ELEMENTALIST}
-    }
+	  } */
 };
 
 bool is_starting_job(job_type job)

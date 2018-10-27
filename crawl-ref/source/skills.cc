@@ -249,11 +249,11 @@ void reassess_starting_skills()
         }
 
         // Wanderers get at least 1 level in their skills.
-        if (you.char_class == JOB_WANDERER && you.skills[sk] < 1)
+        /*if (you.char_class == JOB_WANDERER && you.skills[sk] < 1)
         {
             you.skill_points[sk] = skill_exp_needed(1, sk);
             you.skills[sk] = 1;
-        }
+	    }*/
     }
 }
 

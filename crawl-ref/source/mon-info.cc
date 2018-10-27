@@ -357,7 +357,7 @@ monster_info::monster_info(monster_type p_type, monster_type p_base_type)
     if (mons_is_pghost(type))
     {
         i_ghost.species = SP_HUMAN;
-        i_ghost.job = JOB_WANDERER;
+        i_ghost.job = JOB_FIGHTER;
         i_ghost.religion = GOD_NO_GOD;
         i_ghost.best_skill = SK_FIGHTING;
         i_ghost.best_skill_rank = 2;

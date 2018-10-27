@@ -1372,7 +1372,7 @@ static void _redraw_title()
                               _god_status_colour(god_colour(you.religion)));
         }
     }
-    else if (you.char_class == JOB_MONK && you.species != SP_DEMIGOD && you.species != SP_TITAN
+    /*else if (you.char_class == JOB_MONK && you.species != SP_DEMIGOD && you.species != SP_TITAN
              && !had_gods())
     {
         string godpiety = "2*";
@@ -1380,7 +1380,7 @@ static void _redraw_title()
         if ((unsigned int)(strwidth(species) + strwidth(godpiety) + 1) <= WIDTH)
             NOWRAP_EOL_CPRINTF(" %s", godpiety.c_str());
         clear_to_end_of_line();
-    }
+	}*/
 
 
     textcolour(LIGHTGREY);

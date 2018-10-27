@@ -199,8 +199,7 @@ again:
             choice.species  = _get_hints_species(Hints.hints_type);
             choice.job = _get_hints_job(Hints.hints_type);
             // easiest choice for fighters
-            choice.weapon = choice.job == JOB_GLADIATOR ? WPN_SHORTBOW
-                                                     : WPN_HAND_AXE;
+            choice.weapon = WPN_HAND_AXE;
 
             return;
         }
@@ -254,7 +253,8 @@ static species_type _get_hints_species(unsigned int type)
 
 static job_type _get_hints_job(unsigned int type)
 {
-    switch (type)
+  return JOB_FIGHTER;
+  /*    switch (type)
     {
     case HINT_BERSERK_CHAR:
         return JOB_BERSERKER;
@@ -265,7 +265,7 @@ static job_type _get_hints_job(unsigned int type)
     default:
         // Use something fancy for debugging.
         return JOB_NECROMANCER;
-    }
+	} */
 }
 
 static void _replace_static_tags(string &text)

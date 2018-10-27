@@ -456,8 +456,8 @@ NORETURN static void _launch_game()
     viewwindow();
 #endif
 
-    if (game_start && you.char_class == JOB_WANDERER)
-        _wanderer_startup_message();
+    //if (game_start && you.char_class == JOB_WANDERER)
+    //   _wanderer_startup_message();
 
     if (game_start)
        _announce_goal_message();
@@ -686,8 +686,8 @@ static void _take_starting_note()
     }
 #endif
 
-    if (you.char_class == JOB_WANDERER)
-        _wanderer_note_items();
+    //if (you.char_class == JOB_WANDERER)
+    //    _wanderer_note_items();
 
     notestr << "HP: " << you.hp << "/" << you.hp_max
             << " MP: " << you.magic_points << "/" << you.max_magic_points;

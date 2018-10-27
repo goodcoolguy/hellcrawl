@@ -2982,8 +2982,8 @@ static bool _transformed_player_can_join_god(god_type which_god)
 
 int gozag_service_fee()
 {
-    if (you.char_class == JOB_MONK && had_gods() == 0)
-        return 0;
+  //    if (you.char_class == JOB_MONK && had_gods() == 0)
+  //     return 0;
 
     if (crawl_state.game_is_sprint())
         return 0;
@@ -3169,8 +3169,8 @@ void set_god_ability_slots()
 /// Check if the monk's joining bonus should be given. (Except Gozag's.)
 static void _apply_monk_bonus()
 {
-    if (you.char_class != JOB_MONK || had_gods() > 0)
-        return;
+  //    if (you.char_class != JOB_MONK || had_gods() > 0)
+  //      return;
 
     // monks get bonus piety for first god
     if (you_worship(GOD_RU))

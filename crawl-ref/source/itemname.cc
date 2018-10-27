@@ -3411,10 +3411,10 @@ bool is_useless_item(const item_def &item, bool temp)
 
     case OBJ_MISSILES:
         if ((you.has_spell(SPELL_STICKS_TO_SNAKES)
-                || !you.num_turns && you.char_class == JOB_TRANSMUTER)
+                || !you.num_turns)
                 && item.sub_type == MI_ARROW
             || (you.has_spell(SPELL_SANDBLAST)
-                || !you.num_turns && you.char_class == JOB_EARTH_ELEMENTALIST)
+                || !you.num_turns)
                 && item.sub_type == MI_STONE)
         {
             return false;

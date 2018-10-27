@@ -10,18 +10,27 @@ struct job_def
 {
     const char* abbrev; ///< Two-letter abbreviation
     const char* name; ///< Long name
-    int s, i, d; ///< Starting Str, Dex, and Int
+    stat_type a, b, c;
     vector<species_type> recommended_species; ///< Which species are good at it
     /// Guaranteed starting equipment. Uses vault spec syntax, with the plus:,
     /// charges:, q:, and ego: tags supported.
     vector<string> equipment;
     weapon_choice wchoice; ///< how the weapon is chosen, if any
-    vector<pair<skill_type, int>> skills; ///< starting skills
+  //vector<pair<skill_type, int>> skills; ///< starting skills
 };
 
 static const map<job_type, job_def> job_data =
 {
+  { JOB_FIGHTER, {
+      "Fi", "Fighter",
+      STAT_MELEE, STAT_DEFENSE, STAT_SNEAK,
+      {SP_HUMAN, },
+      {"shield", "scale mail" },
+      WCHOICE_GOOD,
+    } },
 
+  
+  /*
 { JOB_AIR_ELEMENTALIST, {
     "AE", "Air Elementalist",
     0, 7, 5,
@@ -324,4 +333,5 @@ static const map<job_type, job_def> job_data =
     { },
 } },
 #endif
+     */
 };

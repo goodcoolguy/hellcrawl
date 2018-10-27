@@ -68,7 +68,8 @@ job_type get_job_by_name(const char *name)
 // Must be called after species_stat_init for the wanderer formula to work.
 void job_stat_init(job_type job)
 {
-    you.hp_max_adj_perm = 0;
+  return;
+  /*    you.hp_max_adj_perm = 0;
 
     //you.base_stats[STAT_STR] += _job_def(job).s;
     //you.base_stats[STAT_INT] += _job_def(job).i;
@@ -88,7 +89,7 @@ void job_stat_init(job_type job)
 
             you.base_stats[stat]++;
         }
-    }
+	}*/
 }
 
 bool job_has_weapon_choice(job_type job)
@@ -127,7 +128,8 @@ void give_job_equipment(job_type job)
 // Must be called after equipment is given for weapon skill to be given.
 void give_job_skills(job_type job)
 {
-    for (const pair<skill_type, int>& entry : _job_def(job).skills)
+  return;
+  /*  for (const pair<skill_type, int>& entry : _job_def(job).skills)
     {
         skill_type skill = entry.first;
         int amount = entry.second;
@@ -140,7 +142,7 @@ void give_job_skills(job_type job)
                 skill = SK_THROWING;
         }
         you.skills[skill] += amount;
-    }
+	}*/
 }
 
 void debug_jobdata()

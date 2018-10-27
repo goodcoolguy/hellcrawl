@@ -180,15 +180,15 @@ item_def* newgame_make_item(object_class_type base,
     // Wanderers may or may not already have a spell. - bwr
     // Also, when this function gets called their possible randbook
     // has not been initialised and will trigger an ASSERT.
-    if (item.base_type == OBJ_BOOKS && you.char_class != JOB_WANDERER)
-    {
-        spell_type which_spell = spells_in_book(item)[0];
-        if (!spell_is_useless(which_spell, false, true)
-            && spell_difficulty(which_spell) <= 1)
-        {
-            add_spell_to_memory(which_spell);
-        }
-    }
+    //if (item.base_type == OBJ_BOOKS && you.char_class != JOB_WANDERER)
+    //{
+    //    spell_type which_spell = spells_in_book(item)[0];
+    //    if (!spell_is_useless(which_spell, false, true)
+    //        && spell_difficulty(which_spell) <= 1)
+    //    {
+    //        add_spell_to_memory(which_spell);
+    //    }
+    //}
 
     return &item;
 }
@@ -230,6 +230,7 @@ static void _give_ammo(weapon_type weapon, int plus)
 
 static void _give_items_skills(const newgame_def& ng)
 {
+  /*
     switch (you.char_class)
     {
     case JOB_BERSERKER:
@@ -267,13 +268,13 @@ static void _give_items_skills(const newgame_def& ng)
 
     default:
         break;
-    }
+    } */
 
-    if (you.char_class == JOB_CHAOS_KNIGHT)
-        newgame_make_item(OBJ_WEAPONS, ng.weapon, 1, 0, SPWPN_CHAOS);
-    else if (job_gets_ranged_weapons(you.char_class))
-        _give_ranged_weapon(ng.weapon, you.char_class == JOB_ARCANE_MARKSMAN ? 1 : 0);
-    else if (job_has_weapon_choice(you.char_class))
+  //if (you.char_class == JOB_CHAOS_KNIGHT)
+  //    newgame_make_item(OBJ_WEAPONS, ng.weapon, 1, 0, SPWPN_CHAOS);
+  // else if (job_gets_ranged_weapons(you.char_class))
+  //    _give_ranged_weapon(ng.weapon, you.char_class == JOB_ARCANE_MARKSMAN ? 1 : 0);
+    if (job_has_weapon_choice(you.char_class))
         newgame_make_item(OBJ_WEAPONS, ng.weapon);
 
     give_job_equipment(you.char_class);
@@ -460,10 +461,10 @@ static void _setup_generic(const newgame_def& ng)
 
     // Leave the a/b slots open so if the first thing you pick up is a weapon,
     // you can use ' to swap between your items.
-    if (you.char_class == JOB_EARTH_ELEMENTALIST)
-        _free_up_slot('a');
-    if (you.char_class == JOB_ARCANE_MARKSMAN && ng.weapon != WPN_THROWN)
-        _free_up_slot('b');
+    //if (you.char_class == JOB_EARTH_ELEMENTALIST)
+    //    _free_up_slot('a');
+    //if (you.char_class == JOB_ARCANE_MARKSMAN && ng.weapon != WPN_THROWN)
+    //   _free_up_slot('b');
 
     // Give tutorial skills etc
     if (crawl_state.game_is_tutorial())
