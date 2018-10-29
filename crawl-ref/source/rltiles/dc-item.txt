@@ -537,50 +537,6 @@ i-disintegration WAND_DISINTEGRATION
 i-clouds WAND_CLOUDS
 i-scattershot WAND_SCATTERSHOT WAND_ID_LAST
 
-#################OBJ_FOOD
-%sdir item/food
-meat_ration FOOD_MEAT_RATION UNSEEN_FOOD
-bread_ration FOOD_BREAD_RATION
-
-apple FOOD_FRUIT_FIRST
-apricot
-banana
-choko
-grape
-lemon
-lychee
-orange
-pear
-rambutan
-snozzcumber
-strawberry FOOD_FRUIT_LAST
-fruit FOOD_FRUIT_INVENTORY
-
-beef_jerky FOOD_BEEF_JERKY
-lump_of_royal_jelly FOOD_ROYAL_JELLY
-pizza FOOD_PIZZA
-%rim 0
-bone_humanoid1 FOOD_BONE_HUMANOID
-bone_humanoid2
-bone_humanoid3
-bone_humanoid4
-bone1 FOOD_BONE
-bone2
-bone3
-bone4
-%rim 1
-chunk FOOD_CHUNK
-%back chunk
-chunk_brands/i-mutation FOOD_CHUNK_MUTAGENIC
-chunk_brands/i-decay FOOD_CHUNK_ROTTING
-chunk_brands/i-forbidden FOOD_CHUNK_FORBIDDEN
-chunk_brands/i-inedible FOOD_CHUNK_INEDIBLE
-%back none
-chunk_brands/i-mutation FOOD_MUTAGENIC
-chunk_brands/i-decay FOOD_ROTTING
-chunk_brands/i-forbidden FOOD_FORBIDDEN
-chunk_brands/i-inedible FOOD_INEDIBLE
-
 #################OBJ_UNKNOWN_I
 ##################OBJ_SCROLLS
 %sdir item/scroll

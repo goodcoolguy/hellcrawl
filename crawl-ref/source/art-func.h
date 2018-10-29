@@ -25,7 +25,6 @@
 #include "english.h"       // For apostrophise
 #include "exercise.h"      // For practise_evoking
 #include "fight.h"
-#include "food.h"          // For evokes
 #include "ghost.h"         // For is_dragonkind ghost_demon datas
 #include "godconduct.h"    // did_god_conduct
 #include "godpassive.h"    // passive_t::want_curses
@@ -108,7 +107,6 @@ static bool _ASMODEUS_evoke(item_def *item, bool* did_work, bool* unevokable)
 {
     if (_evoke_sceptre_of_asmodeus())
     {
-        make_hungry(200, false, true);
         *did_work = true;
         practise_evoking(1);
     }
@@ -206,7 +204,6 @@ static bool _DISPATER_evoke(item_def *item, bool* did_work, bool* unevokable)
     mpr("You feel the staff feeding on your energy!");
     dec_hp(14, false);
     dec_mp(4);
-    make_hungry(100, false, true);
     practise_evoking(coinflip() ? 2 : 1);
 
     return false;
@@ -259,7 +256,6 @@ static bool _OLGREB_evoke(item_def *item, bool* did_work, bool* unevokable)
         your_spells(SPELL_VENOM_BOLT, power, false);
 
     dec_mp(4);
-    make_hungry(50, false, true);
     practise_evoking(1);
 
     return false;
@@ -472,7 +468,6 @@ static bool _WUCAD_MU_evoke(item_def *item, bool* did_work, bool* unevokable)
     mpr("Magical energy flows into your mind!");
 
     inc_mp(3 + random2(5) + you.skill_rdiv(SK_EVOCATIONS, 1, 3));
-    make_hungry(50, false, true);
 
     *did_work = true;
     practise_evoking(1);

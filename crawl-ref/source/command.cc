@@ -896,9 +896,6 @@ static void _add_formatted_keyhelp(column_composer &cols)
                          CMD_CYCLE_QUIVER_BACKWARD, 0);
     _add_insert_commands(cols, 0, "<cyan>[</cyan> : armour (<w>%</w>ear and <w>%</w>ake off)",
                          CMD_WEAR_ARMOUR, CMD_REMOVE_ARMOUR, 0);
-    _add_insert_commands(cols, 0, "<brown>percent</brown> : corpses and food "
-                                  "(<w>%</w>hop up and <w>%</w>at)",
-                         CMD_BUTCHER, CMD_EAT, 0);
     _add_insert_commands(cols, 0, "<w>?</w> : scrolls (<w>%</w>ead)",
                          CMD_READ, 0);
     _add_insert_commands(cols, 0, "<magenta>!</magenta> : potions (<w>%</w>uaff)",
@@ -1036,13 +1033,6 @@ static void _add_formatted_keyhelp(column_composer &cols)
     _add_command(cols, 1, CMD_THROW_ITEM_NO_QUIVER, "select an item and Fire it", 2);
     _add_command(cols, 1, CMD_QUIVER_ITEM, "select item slot to be quivered", 2);
 
-    {
-        string interact = (you.species == SP_VAMPIRE ? "Drain corpses"
-                                                     : "Eat food");
-        interact += " (tries floor first)\n";
-        _add_command(cols, 1, CMD_EAT, interact, 2);
-    }
-
     _add_command(cols, 1, CMD_QUAFF, "Quaff a potion", 2);
     _add_command(cols, 1, CMD_READ, "Read a scroll or book", 2);
     _add_command(cols, 1, CMD_MEMORISE_SPELL, "Memorise a spell from a book", 2);
@@ -1074,17 +1064,6 @@ static void _add_formatted_keyhelp(column_composer &cols)
     _add_insert_commands(cols, 1, "<w>%#</w>: Drop exact number of items",
                          CMD_DROP, 0);
     _add_command(cols, 1, CMD_DROP_LAST, "Drop the last item(s) you picked up", 2);
-    {
-        const bool vampire = you.species == SP_VAMPIRE;
-        string butcher = vampire ? "Bottle blood from"
-                                 : "Chop up";
-        _add_command(cols, 1, CMD_BUTCHER, butcher + " a corpse", 2);
-
-        string eat = vampire ? "Drain corpses on"
-                             : "Eat food from";
-        eat += " floor\n";
-        _add_command(cols, 1, CMD_EAT, eat, 2);
-    }
 
     cols.add_formatted(
             1,
@@ -1189,10 +1168,6 @@ static void _add_formatted_hints_help(column_composer &cols)
                          "<console><cyan>[</cyan> : </console>"
                          "armour (<w>%</w>ear and <w>%</w>ake off)",
                          CMD_WEAR_ARMOUR, CMD_REMOVE_ARMOUR, 0);
-    _add_insert_commands(cols, 1,
-                         "<console><brown>percent</brown> : </console>"
-                         "corpses and food (<w>%</w>hop up and <w>%</w>at)",
-                         CMD_BUTCHER, CMD_EAT, 0);
     _add_insert_commands(cols, 1,
                          "<console><w>?</w> : </console>"
                          "scrolls (<w>%</w>ead)",
@@ -1342,7 +1317,6 @@ int list_wizard_commands(bool do_redraw_screen)
                        "<w>Ctrl-G</w> save/load ghost (bones file)\n"
 #endif
                        "<w>h</w>/<w>H</w>    heal yourself (super-Heal)\n"
-                       "<w>e</w>      set hunger state\n"
                        "<w>X</w>      make Xom do something now\n"
                        "<w>z</w>      cast spell by number/name\n"
                        "<w>!</w>      memorise spell\n"

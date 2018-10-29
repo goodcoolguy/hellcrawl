@@ -41,18 +41,6 @@ death conjurer melee
 Som fremmaner bør dit vigtigste våben være angrebsmagi. Kast besværgelser
 oftere! Husk at hvile når din magi er lav.
 %%%%
-death berserker unberserked
-
-Glem ikke at gå bersærk, når du kæmper mod særligt vanskelige fjender. Det er
-risikabelt, men det gør dig hurtigere og stærkere.
-{{
-    if you.hunger() < 3 then
-        return "Du kan ikke gå bersærk, mens du er meget sulten eller " ..
-               "værre, så sørg for at spise dig mæt hele tiden, hvis du nu " ..
-               "skulle få brug for at gå bersærk."
-    end
-}}
-%%%%
 death ranger melee
 
 Din bue og dine pile er ekstremt kraftfulde mod fjerne monstre. Sørg for at

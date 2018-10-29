@@ -684,7 +684,7 @@ static void _xom_acquirement(int /*sever*/)
     const object_class_type types[] =
     {
         OBJ_WEAPONS, OBJ_ARMOUR, OBJ_JEWELLERY,  OBJ_BOOKS,
-        OBJ_STAVES,  OBJ_WANDS,  OBJ_MISCELLANY, OBJ_FOOD,  OBJ_GOLD,
+        OBJ_STAVES,  OBJ_WANDS,  OBJ_MISCELLANY, OBJ_GOLD,
         OBJ_MISSILES
     };
     const object_class_type force_class = RANDOM_ELEMENT(types);
@@ -737,11 +737,7 @@ static bool _is_chaos_upgradeable(const item_def &item,
 
     // Staves can't be changed either, since they don't have brands in the way
     // other weapons do.
-    if (item.base_type == OBJ_STAVES
-#if TAG_MAJOR_VERSION == 34
-        || item.base_type == OBJ_RODS
-#endif
-       )
+    if (item.base_type == OBJ_STAVES)
 {
         return false;
 }

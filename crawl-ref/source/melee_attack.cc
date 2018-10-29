@@ -25,7 +25,6 @@
 #include "env.h"
 #include "exercise.h"
 #include "fineff.h"
-#include "food.h"
 #include "godconduct.h"
 #include "goditem.h"
 #include "godpassive.h" // passive_t::convert_orcs
@@ -197,9 +196,6 @@ bool melee_attack::handle_phase_attempted()
 
         check_autoberserk();
     }
-
-    // The attacker loses nutrition.
-    attacker->make_hungry(3, true);
 
     // Xom thinks fumbles are funny...
     if (attacker->fumbles_attack())
@@ -576,18 +572,9 @@ bool melee_attack::handle_phase_aux()
  */
 static void _hydra_devour(monster &victim)
 {
-    // what's the highest hunger level this lets the player get to?
-    const hunger_state_t max_hunger =
-        static_cast<hunger_state_t>(HS_SATIATED + player_likes_chunks());
+    
 
-    // will eating this actually fill the player up?
-    const bool filling = !have_passive(passive_t::goldify_corpses)
-                          && you.get_mutation_level(MUT_HERBIVOROUS, false) < 3
-                          && you.hunger_state <= max_hunger
-                          && you.hunger_state < HS_ENGORGED;
-
-    mprf("You %sdevour %s!",
-         filling ? "hungrily " : "",
+    mprf("You devour %s!",
          victim.name(DESC_THE).c_str());
 
     // give a clearer message for eating invisible things
@@ -638,14 +625,6 @@ static void _hydra_consider_devouring(monster &defender)
              defender.pronoun(PRONOUN_SUBJECTIVE).c_str());
         return;
     }
-
-    dprf("shifter ok");
-
-    // or food that would incur divine penance...
-    if (god_hates_eating(you.religion, defender.type))
-        return;
-
-    dprf("god ok");
 
     // can't eat enemies that leave no corpses...
     if (!mons_class_can_leave_corpse(mons_species(defender.type))
@@ -2630,13 +2609,6 @@ void melee_attack::mons_apply_attack_flavour()
       //  }
         break;
 
-    case AF_HUNGER:
-        if (defender->holiness() & MH_UNDEAD)
-            break;
-
-        defender->make_hungry(you.hunger / 4, false);
-        break;
-
     case AF_BLINK:
         // blinking can kill, delay the call
         if (one_chance_in(3))
@@ -3453,9 +3425,6 @@ int melee_attack::calc_your_to_hit_unarmed(int uattack)
     if (you.get_mutation_level(MUT_EYEBALLS))
         your_to_hit += 2 * you.get_mutation_level(MUT_EYEBALLS) + 1;
 
-    if (you.species != SP_VAMPIRE && you.hunger_state <= HS_STARVING)
-        your_to_hit -= 3;
-
     your_to_hit += slaying_bonus();
 
     return your_to_hit;
@@ -3580,9 +3549,5 @@ bool melee_attack::_player_vampire_draws_blood(const monster* mon, const int dam
 
 bool melee_attack::_vamp_wants_blood_from_monster(const monster* mon)
 {
-    return you.species == SP_VAMPIRE
-           && you.hunger_state < HS_SATIATED
-           && !mon->is_summoned()
-           && mons_has_blood(mon->type)
-           && !testbits(mon->flags, MF_SPECTRALISED);
+    return false;
 }

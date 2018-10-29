@@ -1972,15 +1972,6 @@ static bool _animate_dead_okay(spell_type spell)
     if (crawl_state.game_is_arena())
         return true;
 
-    if (you_are_delayed() && current_delay()->is_butcher()
-        || is_vampire_feeding())
-    {
-        return false;
-    }
-
-    if (you.hunger_state < HS_SATIATED && you.get_base_mutation_level(MUT_HERBIVOROUS) < 3)
-        return false;
-
     if (god_hates_spell(spell, you.religion))
         return false;
 

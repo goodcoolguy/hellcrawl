@@ -26,7 +26,6 @@
 #include "env.h"
 #include "evoke.h"
 #include "exercise.h"
-#include "food.h"
 #include "godabil.h"
 #include "godconduct.h"
 #include "goditem.h"
@@ -2040,7 +2039,7 @@ static void _vampire_corpse_help()
 
 void drink(item_def* potion)
 {
-    if (you_foodless(true))
+    if (you_potionless())
     {
         mpr("You can't drink.");
         return;
@@ -2104,11 +2103,6 @@ void drink(item_def* potion)
         // Xom loves it when you drink an unknown potion and there is
         // a dangerous monster nearby...
         xom_is_stimulated(200);
-    }
-    if (is_blood_potion(*potion))
-    {
-        // Always drink oldest potion.
-        remove_oldest_perishable_item(*potion);
     }
     if (in_inventory(*potion))
     {
@@ -3154,19 +3148,6 @@ void tile_item_drop(int idx, bool partdrop)
     drop_item(idx, quantity);
 }
 
-void tile_item_eat_floor(int idx)
-{
-    // XXX: refactor this
-    if (mitm[idx].base_type == OBJ_CORPSES
-            && you.species == SP_VAMPIRE
-        || mitm[idx].base_type == OBJ_FOOD
-            && you.undead_state() != US_UNDEAD && you.species != SP_VAMPIRE)
-    {
-        if (can_eat(mitm[idx], false))
-            eat_item(mitm[idx]);
-    }
-}
-
 void tile_item_use_secondary(int idx)
 {
     const item_def item = you.inv[idx];
@@ -3267,10 +3248,6 @@ void tile_item_use(int idx)
             {
                 break;
             }
-            // intentional fall-through for Vampires
-        case OBJ_FOOD:
-            if (check_warning_inscriptions(item, OPER_EAT))
-                eat_food(idx);
             return;
 
         case OBJ_BOOKS:

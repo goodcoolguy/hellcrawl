@@ -513,7 +513,6 @@ enum activity_interrupt_type
     AI_KEYPRESS,
     AI_FULL_HP,                     // Player is fully healed
     AI_FULL_MP,                     // Player has recovered all mp
-    AI_HUNGRY,                      // Hunger increased
     AI_MESSAGE,                     // Message was displayed
     AI_HP_LOSS,
     AI_STAT_CHANGE,
@@ -914,7 +913,6 @@ enum caction_type    // Primary categorization of counted actions.
                      //   auxtype = item basetype, subtype = item subtype
     CACT_USE,        // object_class_type
     CACT_STAB,       // stab_type
-    CACT_EAT,        // food_type, or subtype = -1 for corpse
     CACT_ARMOUR,     // armour subtype or subtype = -1 for unarmoured
     CACT_DODGE,      // dodge_type
     CACT_BLOCK,      // armour subtype or subtype = -1 and
@@ -1503,7 +1501,6 @@ enum dungeon_char_type
     DCHAR_ITEM_WEAPON,
     DCHAR_ITEM_ARMOUR,
     DCHAR_ITEM_WAND,
-    DCHAR_ITEM_FOOD,
     DCHAR_ITEM_SCROLL,
     DCHAR_ITEM_RING,
     DCHAR_ITEM_POTION,
@@ -2331,19 +2328,6 @@ enum holy_word_source_type
     HOLY_WORD_ZIN,     // sanctuary
     HOLY_WORD_TSO,     // weapon blessing
     HOLY_WORD_CARD,    // Nemelex wrath
-};
-
-enum hunger_state_t                    // you.hunger_state
-{
-    HS_FAINTING,
-    HS_STARVING,
-    HS_NEAR_STARVING,
-    HS_VERY_HUNGRY,
-    HS_HUNGRY,
-    HS_SATIATED,                       // "not hungry" state
-    HS_FULL,
-    HS_VERY_FULL,
-    HS_ENGORGED,
 };
 
 enum item_status_flag_type  // per item flags: ie. ident status, cursed status
@@ -3913,9 +3897,6 @@ enum mutation_type
     MUT_UNBREATHING,
     MUT_ACIDIC_BITE,
     MUT_EYEBALLS,
-#if TAG_MAJOR_VERSION == 34
-    MUT_FOOD_JELLY,
-#endif
     MUT_GELATINOUS_BODY,
     MUT_PSEUDOPODS,
     MUT_TRANSLUCENT_SKIN,
@@ -4035,7 +4016,6 @@ enum object_class_type : uint8_t           // mitm[].base_type
     OBJ_MISSILES,
     OBJ_ARMOUR,
     OBJ_WANDS,
-    OBJ_FOOD,
     OBJ_SCROLLS,
     OBJ_JEWELLERY,
     OBJ_POTIONS,
@@ -4045,9 +4025,6 @@ enum object_class_type : uint8_t           // mitm[].base_type
     OBJ_MISCELLANY,
     OBJ_CORPSES,
     OBJ_GOLD,
-#if TAG_MAJOR_VERSION == 34
-    OBJ_RODS,
-#endif
     OBJ_RUNES,
     NUM_OBJECT_CLASSES,
     OBJ_UNASSIGNED = 100,
@@ -4265,9 +4242,6 @@ enum shop_type
     SHOP_JEWELLERY,
     SHOP_EVOKABLES, // wands, rods, and misc items
     SHOP_BOOK,
-#if TAG_MAJOR_VERSION == 34
-	SHOP_FOOD,
-#endif
     SHOP_DISTILLERY,
     SHOP_SCROLL,
     SHOP_GENERAL,
@@ -5183,7 +5157,6 @@ enum disable_type
     DIS_MON_ACT,
     DIS_MON_REGEN,
     DIS_PLAYER_REGEN,
-    DIS_HUNGER,
     DIS_DEATH,
     DIS_DELAY,
     DIS_CONFIRMATIONS,
@@ -5496,7 +5469,6 @@ enum timed_effect_type
 #if TAG_MAJOR_VERSION == 34
     TIMER_SCREAM,
 #endif
-    TIMER_FOOD_ROT,
     TIMER_PRACTICE,
     TIMER_LABYRINTH,
     TIMER_ABYSS_SPEED,

@@ -28,7 +28,6 @@
 #include "env.h"
 #include "errors.h"
 #include "fight.h"
-#include "food.h"
 #include "fprop.h"
 #include "ghost.h"
 #include "godabil.h"
@@ -2073,7 +2072,6 @@ bool flavour_triggers_damageless(attack_flavour flavour)
         || flavour == AF_SHADOWSTAB
         || flavour == AF_DROWN
         || flavour == AF_CORRODE
-        || flavour == AF_HUNGER
 		|| flavour == AF_CLEAVE
 		|| flavour == AF_CONTAM;
 }
@@ -4095,9 +4093,6 @@ mon_inv_type item_to_mslot(const item_def &item)
     {
     case OBJ_WEAPONS:
     case OBJ_STAVES:
-#if TAG_MAJOR_VERSION == 34
-    case OBJ_RODS:
-#endif
         return MSLOT_WEAPON;
     case OBJ_MISSILES:
         return MSLOT_MISSILE;

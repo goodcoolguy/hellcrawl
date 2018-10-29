@@ -30,7 +30,6 @@
 #include "english.h"
 #include "fight.h"
 #include "files.h"
-#include "food.h"
 #include "format.h" // formatted_string
 #include "godblessing.h"
 #include "godcompanions.h"
@@ -2902,141 +2901,13 @@ static bool _prompt_amount(int max, int& selected, const string& prompt)
     return false;
 }
 
-static int _collect_fruit(vector<pair<int,int> >& available_fruit)
-{
-    int total = 0;
-
-    for (int i = 0; i < ENDOFPACK; i++)
-    {
-        if (you.inv[i].defined() && is_fruit(you.inv[i]))
-        {
-            total += you.inv[i].quantity;
-            available_fruit.emplace_back(you.inv[i].quantity, i);
-        }
-    }
-    sort(available_fruit.begin(), available_fruit.end());
-
-    return total;
-}
-
-static void _decrease_amount(vector<pair<int, int> >& available, int amount)
-{
-    const int total_decrease = amount;
-    for (const auto &avail : available)
-    {
-        const int decrease_amount = min(avail.first, amount);
-        amount -= decrease_amount;
-        dec_inv_item_quantity(avail.second, decrease_amount);
-    }
-    if (total_decrease > 1)
-        mprf("%d pieces of fruit are consumed!", total_decrease);
-    else
-        mpr("A piece of fruit is consumed!");
-}
-
 // Create a ring or partial ring around the caster. The user is
 // prompted to select a stack of fruit, and then plants are placed on open
 // squares adjacent to the user. Of course, one piece of fruit is
 // consumed per plant, so a complete ring may not be formed.
 bool fedhas_plant_ring_from_fruit()
 {
-    // How much fruit is available?
-    vector<pair<int, int> > collected_fruit;
-    int total_fruit = _collect_fruit(collected_fruit);
-
-    // How many adjacent open spaces are there?
-    vector<coord_def> adjacent;
-    for (adjacent_iterator adj_it(you.pos()); adj_it; ++adj_it)
-    {
-        if (monster_habitable_grid(MONS_PLANT, env.grid(*adj_it))
-            && !actor_at(*adj_it))
-        {
-            adjacent.push_back(*adj_it);
-        }
-    }
-
-    const int max_use = min(total_fruit, static_cast<int>(adjacent.size()));
-
-    // Don't prompt if we can't do anything (due to having no fruit or
-    // no squares to place plants on).
-    if (max_use == 0)
-    {
-        if (adjacent.empty())
-            mpr("No empty adjacent squares.");
-        else
-            mpr("No fruit available.");
-
-        return false;
-    }
-
-    prioritise_adjacent(you.pos(), adjacent);
-
-    // Screwing around with display code I don't really understand. -cao
-    targetter_smite range(&you, 1);
-    range_view_annotator show_range(&range);
-
-    for (int i = 0; i < max_use; ++i)
-    {
-#ifndef USE_TILE_LOCAL
-        coord_def temp = grid2view(adjacent[i]);
-        cgotoxy(temp.x, temp.y, GOTO_DNGN);
-        put_colour_ch(GREEN, '1' + i);
-#endif
-#ifdef USE_TILE
-        tiles.add_overlay(adjacent[i], TILE_INDICATOR + i);
-#endif
-    }
-
-    // And how many plants does the user want to create?
-    int target_count;
-    if (!_prompt_amount(max_use, target_count,
-                        "How many plants will you create?"))
-    {
-        // User cancelled at the prompt.
-        return false;
-    }
-
-    const int hp_adjust = you.skill(SK_INVOCATIONS, 10);
-
-    // The user entered a number, remove all number overlays which
-    // are higher than that number.
-#ifndef USE_TILE_LOCAL
-    unsigned not_used = adjacent.size() - unsigned(target_count);
-    for (unsigned i = adjacent.size() - not_used; i < adjacent.size(); i++)
-        view_update_at(adjacent[i]);
-#endif
-#ifdef USE_TILE
-    // For tiles we have to clear all overlays and redraw the ones
-    // we want.
-    tiles.clear_overlays();
-    for (int i = 0; i < target_count; ++i)
-        tiles.add_overlay(adjacent[i], TILE_INDICATOR + i);
-#endif
-
-    int created_count = 0;
-    for (int i = 0; i < target_count; ++i)
-    {
-        if (_create_plant(adjacent[i], hp_adjust))
-            created_count++;
-
-        // Clear the overlay and draw the plant we just placed.
-        // This is somewhat more complicated in tiles.
-        view_update_at(adjacent[i]);
-#ifdef USE_TILE
-        tiles.clear_overlays();
-        for (int j = i + 1; j < target_count; ++j)
-            tiles.add_overlay(adjacent[j], TILE_INDICATOR + j);
-        viewwindow(false);
-#endif
-        scaled_delay(200);
-    }
-
-    if (created_count)
-        _decrease_amount(collected_fruit, created_count);
-    else
-        canned_msg(MSG_NOTHING_HAPPENS);
-
-    return created_count;
+    return false;
 }
 
 // Create a circle of water around the target, with a radius of
@@ -3294,154 +3165,7 @@ static vector<string> _evolution_name(const monster_info& mon)
 
 spret_type fedhas_evolve_flora(bool fail)
 {
-    dist spelld;
-
-    direction_chooser_args args;
-    args.restricts = DIR_TARGET;
-    args.mode = TARG_EVOLVABLE_PLANTS;
-    args.range = LOS_RADIUS;
-    args.needs_path = false;
-    args.self = CONFIRM_CANCEL;
-    args.show_floor_desc = true;
-    args.top_prompt = "Select plant or fungus to evolve.";
-    args.get_desc_func = _evolution_name;
-
-    direction(spelld, args);
-
-    if (!spelld.isValid)
-    {
-        // Check for user cancel.
-        canned_msg(MSG_OK);
-        return SPRET_ABORT;
-    }
-
-    monster* const plant = monster_at(spelld.target);
-
-    if (!plant)
-    {
-        if (feat_is_tree(env.grid(spelld.target)))
-            mpr("The tree has already reached the pinnacle of evolution.");
-        else
-            mpr("You must target a plant or fungus.");
-        return SPRET_ABORT;
-    }
-
-    if (!mons_is_evolvable(plant))
-    {
-        if (plant->type == MONS_BALLISTOMYCETE_SPORE)
-            mpr("You can evolve only complete plants, not seeds.");
-        else if (!mons_is_plant(*plant))
-            mpr("Only plants or fungi may be evolved.");
-        else if (plant->has_ench(ENCH_PETRIFIED))
-            mpr("Stone cannot grow or evolve.");
-        else
-        {
-            simple_monster_message(*plant, " has already reached the pinnacle"
-                                   " of evolution.");
-        }
-
-        return SPRET_ABORT;
-    }
-
-    monster_conversion upgrade = *map_find(conversions, plant->type);
-
-    vector<pair<int, int> > collected_fruit;
-    if (upgrade.fruit_cost)
-    {
-        const int total_fruit = _collect_fruit(collected_fruit);
-
-        if (total_fruit < upgrade.fruit_cost)
-        {
-            mpr("Not enough fruit available.");
-            return SPRET_ABORT;
-        }
-    }
-
-    if (upgrade.piety_cost && upgrade.piety_cost > you.piety)
-    {
-        mpr("Not enough piety available.");
-        return SPRET_ABORT;
-    }
-
-    fail_check();
-
-    switch (upgrade.new_type)
-    {
-    case MONS_OKLOB_PLANT:
-    {
-        if (plant->type == MONS_OKLOB_SAPLING)
-            simple_monster_message(*plant, " appears stronger.");
-        else
-        {
-            string evolve_desc = " can now spit acid";
-            const int skill = you.skill(SK_INVOCATIONS);
-            if (skill >= 20)
-                evolve_desc += " continuously";
-            else if (skill >= 15)
-                evolve_desc += " quickly";
-            else if (skill >= 10)
-                evolve_desc += " rather quickly";
-            else if (skill >= 5)
-                evolve_desc += " somewhat quickly";
-            evolve_desc += ".";
-
-            simple_monster_message(*plant, evolve_desc.c_str());
-        }
-        break;
-    }
-
-    case MONS_WANDERING_MUSHROOM:
-        simple_monster_message(*plant, " can now pick up its mycelia and move.");
-        break;
-
-    case MONS_HYPERACTIVE_BALLISTOMYCETE:
-        simple_monster_message(*plant, " appears agitated.");
-        env.level_state |= LSTATE_GLOW_MOLD;
-        break;
-
-    default:
-        break;
-    }
-
-    plant->upgrade_type(upgrade.new_type, true, true);
-
-    plant->flags |= MF_NO_REWARD;
-    plant->flags |= MF_ATT_CHANGE_ATTEMPT;
-
-    mons_make_god_gift(*plant, GOD_FEDHAS);
-
-    plant->attitude = ATT_FRIENDLY;
-
-    behaviour_event(plant, ME_ALERT);
-    mons_att_changed(plant);
-
-    // Try to remove slowly dying in case we are upgrading a
-    // toadstool, and spore production in case we are upgrading a
-    // ballistomycete.
-    plant->del_ench(ENCH_SLOWLY_DYING);
-    plant->del_ench(ENCH_SPORE_PRODUCTION);
-
-    if (plant->type == MONS_HYPERACTIVE_BALLISTOMYCETE)
-        plant->add_ench(ENCH_EXPLODING);
-    else if (plant->type == MONS_OKLOB_PLANT)
-    {
-        // frequency will be set by set_hit_dice below
-        plant->spells = { { SPELL_SPIT_ACID, 0, MON_SPELL_NATURAL } };
-    }
-
-    plant->set_hit_dice(plant->get_experience_level()
-                        + you.skill_rdiv(SK_INVOCATIONS));
-
-    if (upgrade.fruit_cost)
-        _decrease_amount(collected_fruit, upgrade.fruit_cost);
-
-    if (upgrade.piety_cost)
-    {
-        lose_piety(upgrade.piety_cost);
-        mpr("Your piety has decreased.");
-    }
-
-    return SPRET_SUCCESS;
+    return SPRET_ABORT;
 }
 
 static bool _lugonu_warp_monster(monster& mon, int pow)
@@ -4119,8 +3843,8 @@ bool gozag_potion_petition()
  */
 static int _gozag_max_shops()
 {
-    const int max_non_food_shops = 3;
-    return max_non_food_shops;
+    const int max_shops = 3;
+    return max_shops;
 }
 
 /**
@@ -4385,8 +4109,6 @@ bool gozag_call_merchant()
     for (int i = 0; i < NUM_SHOPS; i++)
     {
         shop_type type = static_cast<shop_type>(i);
-        if (type == SHOP_FOOD)
-			continue;
         if (type == SHOP_DISTILLERY && you.species == SP_MUMMY)
             continue;
         if (type == SHOP_EVOKABLES && you.get_mutation_level(MUT_NO_ARTIFICE))

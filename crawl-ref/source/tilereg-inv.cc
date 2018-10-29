@@ -250,7 +250,7 @@ static bool _can_use_item(const item_def &item, bool equipped)
 
     // Mummies can't do anything with food or potions.
     if (you.species == SP_MUMMY)
-        return item.base_type != OBJ_POTIONS && item.base_type != OBJ_FOOD;
+        return item.base_type != OBJ_POTIONS;
 
     // In all other cases you can use the item in some way.
     return true;
@@ -343,27 +343,6 @@ bool InventoryRegion::update_tip_text(string& tip)
                 tip += "\n[Ctrl + L-Click] Partial pick up (%)";
                 cmd.push_back(CMD_PICKUP_QUANTITY);
             }
-        }
-        if (item.base_type == OBJ_CORPSES
-            && item.sub_type != CORPSE_SKELETON)
-        {
-            tip += "\n[Shift + L-Click] ";
-            tip += "Chop up";
-            tip += " (%)";
-            cmd.push_back(CMD_BUTCHER);
-
-            if (you.species == SP_VAMPIRE)
-            {
-                tip += "\n\n[Shift + R-Click] Drink blood (e)";
-                cmd.push_back(CMD_EAT);
-            }
-        }
-        else if (item.base_type == OBJ_FOOD
-                 && you.undead_state() != US_UNDEAD
-                 && you.species != SP_VAMPIRE)
-        {
-            tip += "\n[Shift + R-Click] Eat (e)";
-            cmd.push_back(CMD_EAT);
         }
     }
     else
@@ -496,12 +475,6 @@ bool InventoryRegion::update_tip_text(string& tip)
             case OBJ_POTIONS:
                 tmp += "Quaff (%)";
                 cmd.push_back(CMD_QUAFF);
-                if (wielded)
-                    _handle_wield_tip(tmp, cmd, "\n[Ctrl + L-Click] ", true);
-                break;
-            case OBJ_FOOD:
-                tmp += "Eat (%)";
-                cmd.push_back(CMD_EAT);
                 if (wielded)
                     _handle_wield_tip(tmp, cmd, "\n[Ctrl + L-Click] ", true);
                 break;

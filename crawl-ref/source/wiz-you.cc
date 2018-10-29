@@ -12,7 +12,6 @@
 
 #include "abyss.h"
 #include "dbg-util.h"
-#include "food.h"
 #include "godabil.h"
 #include "godwrath.h"
 #include "item_use.h"
@@ -342,15 +341,9 @@ void wizard_heal(bool super_heal)
     you.duration[DUR_EXHAUSTED] = 0;
     set_hp(you.hp_max);
     set_mp(you.max_magic_points);
-    set_hunger(HUNGER_VERY_FULL + 100, true);
     you.redraw_hit_points = true;
     you.redraw_armour_class = true;
     you.redraw_evasion = true;
-}
-
-void wizard_set_hunger_state()
-{
-    mpr("Food is removed, genius!");
 }
 
 void wizard_set_piety_to(int newpiety, bool force)

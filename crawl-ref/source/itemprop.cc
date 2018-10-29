@@ -646,52 +646,6 @@ static const missile_def Missile_prop[] =
     { MI_DART_FRENZY,   "frenzy dart",   0, 8, 8, true  },
 };
 
-struct food_def
-{
-    int         id;
-    const char *name;
-    int         value;
-    int         carn_mod;
-    int         herb_mod;
-    int         turns;
-};
-
-static int Food_index[NUM_FOODS];
-static const food_def Food_prop[] =
-{
-    { FOOD_MEAT_RATION,  "meat ration",  5000,   500, -1500,  3 },
-    { FOOD_CHUNK,        "chunk",        1000,   100,  -500,  3 },
-    { FOOD_BEEF_JERKY,   "beef jerky",   1500,   200,  -200,  1 },
-
-    { FOOD_BREAD_RATION, "bread ration", 4400, -1000,   500,  3 },
-
-    { FOOD_FRUIT,        "fruit",         850,  -100,    50,  1 },
-
-    { FOOD_ROYAL_JELLY,  "royal jelly",  2000,     0,     0,  3 },
-    { FOOD_PIZZA,        "pizza",        1500,     0,     0,  1 },
-
-#if TAG_MAJOR_VERSION == 34
-    // is_real_food assumes we list FOOD_UNUSED as the first removed
-    // food here, after all the unremoved foods.
-    { FOOD_UNUSED,       "buggy",           0,     0,     0,  1 },
-    { FOOD_AMBROSIA,     "buggy",           0,     0,     0,  1 },
-    { FOOD_ORANGE,       "buggy",        1000,  -300,   300,  1 },
-    { FOOD_BANANA,       "buggy",        1000,  -300,   300,  1 },
-    { FOOD_LEMON,        "buggy",        1000,  -300,   300,  1 },
-    { FOOD_PEAR,         "buggy",         700,  -200,   200,  1 },
-    { FOOD_APPLE,        "buggy",         700,  -200,   200,  1 },
-    { FOOD_APRICOT,      "buggy",         700,  -200,   200,  1 },
-    { FOOD_CHOKO,        "buggy",         600,  -200,   200,  1 },
-    { FOOD_RAMBUTAN,     "buggy",         600,  -200,   200,  1 },
-    { FOOD_LYCHEE,       "buggy",         600,  -200,   200,  1 },
-    { FOOD_STRAWBERRY,   "buggy",         200,   -50,    50,  1 },
-    { FOOD_GRAPE,        "buggy",         100,   -20,    20,  1 },
-    { FOOD_SULTANA,      "buggy",          70,   -20,    20,  1 },
-    { FOOD_CHEESE,       "buggy",        1200,     0,     0,  1 },
-    { FOOD_SAUSAGE,      "buggy",        1200,   150,  -400,  1 },
-#endif
-};
-
 // Must call this functions early on so that the above tables can
 // be accessed correctly.
 void init_properties()
@@ -701,7 +655,6 @@ void init_properties()
     COMPILE_CHECK(NUM_ARMOURS  == ARRAYSZ(Armour_prop));
     COMPILE_CHECK(NUM_WEAPONS  == ARRAYSZ(Weapon_prop));
     COMPILE_CHECK(NUM_MISSILES == ARRAYSZ(Missile_prop));
-    COMPILE_CHECK(NUM_FOODS    == ARRAYSZ(Food_prop));
 
     for (int i = 0; i < NUM_ARMOURS; i++)
         Armour_index[ Armour_prop[i].id ] = i;
@@ -711,9 +664,6 @@ void init_properties()
 
     for (int i = 0; i < NUM_MISSILES; i++)
         Missile_index[ Missile_prop[i].id ] = i;
-
-    for (int i = 0; i < NUM_FOODS; i++)
-        Food_index[ Food_prop[i].id ] = i;
 }
 
 const set<pair<object_class_type, int> > removed_items =
@@ -769,16 +719,6 @@ const set<pair<object_class_type, int> > removed_items =
     { OBJ_BOOKS,     BOOK_BUGGY_DESTRUCTION },
     { OBJ_BOOKS,     BOOK_ENVENOMATIONS },
     { OBJ_BOOKS,     BOOK_AKASHIC_RECORD },
-    { OBJ_RODS,      ROD_VENOM },
-    { OBJ_RODS,      ROD_WARDING },
-    { OBJ_RODS,      ROD_DESTRUCTION },
-    { OBJ_RODS,      ROD_SWARM },
-    { OBJ_RODS,      ROD_LIGHTNING },
-    { OBJ_RODS,      ROD_IGNITION },
-    { OBJ_RODS,      ROD_CLOUDS },
-    { OBJ_RODS,      ROD_INACCURACY },
-    { OBJ_RODS,      ROD_SHADOWS },
-    { OBJ_RODS,      ROD_IRON },
     { OBJ_SCROLLS,   SCR_ENCHANT_WEAPON_II },
     { OBJ_SCROLLS,   SCR_ENCHANT_WEAPON_III },
     { OBJ_WANDS,     WAND_MAGIC_DARTS_REMOVED },
@@ -1130,15 +1070,11 @@ static iflags_t _full_ident_mask(const item_def& item)
     iflags_t flagset = ISFLAG_IDENT_MASK & ~ISFLAG_KNOW_PROPERTIES;
     switch (item.base_type)
     {
-    case OBJ_FOOD:
     case OBJ_CORPSES:
     case OBJ_MISSILES:
     case OBJ_ORBS:
     case OBJ_RUNES:
     case OBJ_GOLD:
-#if TAG_MAJOR_VERSION == 34
-    case OBJ_RODS:
-#endif
         flagset = 0;
         break;
     case OBJ_BOOKS:
@@ -2264,88 +2200,6 @@ bool ring_has_stackable_effect(const item_def &item)
 }
 
 //
-// Food functions:
-//
-#if TAG_MAJOR_VERSION == 34
-bool is_real_food(food_type food)
-{
-    return food < NUM_FOODS && Food_index[food] < Food_index[FOOD_UNUSED];
-}
-bool is_blood_potion(const item_def &item)
-{
-    if (item.base_type != OBJ_POTIONS)
-        return false;
-
-    return item.sub_type == POT_BLOOD
-           || item.sub_type == POT_BLOOD_COAGULATED
-
-            ;
-}
-#endif
-
-bool food_is_meaty(int food_type)
-{
-    ASSERTM(food_type >= 0 && food_type < NUM_FOODS,
-            "Bad food type %d (NUM_FOODS = %d)",
-            food_type, NUM_FOODS);
-
-    return Food_prop[Food_index[food_type]].carn_mod > 0;
-}
-
-bool food_is_meaty(const item_def &item)
-{
-    if (item.base_type != OBJ_FOOD)
-        return false;
-
-    return food_is_meaty(item.sub_type);
-}
-
-bool food_is_veggie(int food_type)
-{
-    ASSERTM(food_type >= 0 && food_type < NUM_FOODS,
-            "Bad food type %d (NUM_FOODS = %d)",
-            food_type, NUM_FOODS);
-
-    return Food_prop[Food_index[food_type]].herb_mod > 0;
-}
-
-bool food_is_veggie(const item_def &item)
-{
-    if (item.base_type != OBJ_FOOD)
-        return false;
-
-    return food_is_veggie(item.sub_type);
-}
-
-int food_value(const item_def &item)
-{
-    ASSERT(item.defined() && item.base_type == OBJ_FOOD);
-
-    const int herb = you.get_mutation_level(MUT_HERBIVOROUS);
-    const int carn = you.get_mutation_level(MUT_CARNIVOROUS);
-
-    const food_def &food = Food_prop[Food_index[item.sub_type]];
-
-    int ret = food.value;
-
-    ret += carn * food.carn_mod;
-    ret += herb * food.herb_mod;
-
-    return ret;
-}
-
-int food_turns(const item_def &item)
-{
-    ASSERT(item.defined() && item.base_type == OBJ_FOOD);
-    return Food_prop[Food_index[item.sub_type]].turns;
-}
-
-bool is_fruit(const item_def & item)
-{
-    return item.is_type(OBJ_FOOD, FOOD_FRUIT);
-}
-
-//
 // Generic item functions:
 //
 int get_armour_res_fire(const item_def &arm, bool check_artp)
@@ -2830,9 +2684,6 @@ equipment_type get_item_slot(object_class_type type, int sub_type)
     switch (type)
     {
     case OBJ_WEAPONS:
-#if TAG_MAJOR_VERSION == 34
-    case OBJ_RODS:
-#endif
     case OBJ_MISCELLANY:
         return EQ_WEAPON;
 
@@ -2906,11 +2757,6 @@ string item_base_name(object_class_type type, int sub_type)
     default:
         return "";
     }
-}
-
-string food_type_name(int sub_type)
-{
-    return Food_prop[Food_index[sub_type]].name;
 }
 
 const char* weapon_base_name(weapon_type subtype)

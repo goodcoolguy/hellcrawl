@@ -202,16 +202,12 @@ static show_item_type _item_to_show_code(const item_def &item)
     case OBJ_MISSILES:   return SHOW_ITEM_MISSILE;
     case OBJ_ARMOUR:     return SHOW_ITEM_ARMOUR;
     case OBJ_WANDS:      return SHOW_ITEM_WAND;
-    case OBJ_FOOD:       return SHOW_ITEM_FOOD;
     case OBJ_SCROLLS:    return SHOW_ITEM_SCROLL;
     case OBJ_JEWELLERY:
         return jewellery_is_amulet(item) ? SHOW_ITEM_AMULET : SHOW_ITEM_RING;
     case OBJ_POTIONS:    return SHOW_ITEM_POTION;
     case OBJ_BOOKS:      return SHOW_ITEM_BOOK;
     case OBJ_STAVES:     return SHOW_ITEM_STAFF;
-#if TAG_MAJOR_VERSION == 34
-    case OBJ_RODS:       return SHOW_ITEM_ROD;
-#endif
     case OBJ_MISCELLANY: return SHOW_ITEM_MISCELLANY;
     case OBJ_CORPSES:
         if (item.sub_type == CORPSE_SKELETON)

@@ -64,38 +64,6 @@ static const mutation_def mut_data[] =
   {"You feel less resistant to poisons.", "", ""},
 },
 
-{ MUT_CARNIVOROUS, 0, 3, mutflag::GOOD, false,
-  "carnivore",
-
-  {"Your digestive system is specialised to digest meat.",
-   "Your digestive system is highly specialised to digest meat.",
-   "You are carnivorous and can eat meat at any time."},
-
-  {"You hunger for flesh.",
-   "You hunger for flesh.",
-   "You hunger for flesh."},
-
-  {"You feel able to eat a more balanced diet.",
-   "You feel able to eat a more balanced diet.",
-   "You feel able to eat a more balanced diet."},
-},
-
-{ MUT_HERBIVOROUS, 0, 3, mutflag::BAD, false,
-  "herbivore",
-
-  {"You digest meat inefficiently.",
-   "You digest meat very inefficiently.",
-   "You are a herbivore."},
-
-  {"You hunger for vegetation.",
-   "You hunger for vegetation.",
-   "You hunger for vegetation."},
-
-  {"You feel able to eat a more balanced diet.",
-   "You feel able to eat a more balanced diet.",
-   "You feel able to eat a more balanced diet."},
-},
-
 { MUT_HEAT_RESISTANCE, 4, 3, mutflag::GOOD, true,
   "fire resistance",
 
@@ -219,38 +187,6 @@ static const mutation_def mut_data[] =
   {"Your regeneration stops near monsters.", "", ""},
 
   {"You begin to regenerate regardless of the presence of monsters.", "", ""},
-},
-
-{ MUT_FAST_METABOLISM, 0, 3, mutflag::BAD, false,
-  "fast metabolism",
-
-  {"You have a fast metabolism.",
-   "You have a very fast metabolism.",
-   "Your metabolism is lightning-fast."},
-
-  {"You feel a little hungry.",
-   "You feel a little hungry.",
-   "You feel a little hungry."},
-
-  {"Your metabolism slows.",
-   "Your metabolism slows.",
-   "Your metabolism slows."},
-},
-
-{ MUT_SLOW_METABOLISM, 0, 2, mutflag::GOOD, false,
-  "slow metabolism",
-
-  {"You have a slow metabolism.",
-   "You need consume almost no food.",
-   ""},
-
-  {"Your metabolism slows.",
-   "Your metabolism slows.",
-   ""},
-
-  {"You feel a little hungry.",
-   "You feel a little hungry.",
-   ""},
 },
 
 { MUT_WEAK, 8, 1, mutflag::BAD | mutflag::XOM, false,
@@ -916,22 +852,6 @@ static const mutation_def mut_data[] =
   {"Your wings shrivel and weaken.", "", ""},
 },
 
-#if TAG_MAJOR_VERSION == 34
-{ MUT_SAPROVOROUS, 0, 3, mutflag::GOOD, false,
-  "saprovore",
-
-  {"You can tolerate rotten meat.",
-   "You can eat rotten meat.",
-   "You thrive on rotten meat."},
-
-  {"You hunger for rotting flesh.",
-   "You hunger for rotting flesh.",
-   "You hunger for rotting flesh."},
-
-  {"", "", ""},
-},
-
-#endif
 // species-dependent innate mutations
 { MUT_ROT_IMMUNITY, 0, 1, mutflag::GOOD, false,
   "rot immunity",
@@ -1297,16 +1217,6 @@ static const mutation_def mut_data[] =
 
   {"Your pseudopods retract into your body.", "", ""},
 },
-
-#if TAG_MAJOR_VERSION == 34
-{ MUT_FOOD_JELLY, 0, 1, mutflag::GOOD, false,
-  "spawn jellies when eating",
-
-  {"You occasionally spawn a jelly by eating.", "", ""},
-  {"You feel more connected to the slimes.", "", ""},
-  {"Your connection to the slimes vanishes.", "", ""},
-},
-#endif
 
 { MUT_ACIDIC_BITE, 0, 1, mutflag::GOOD | mutflag::JIYVA, true,
   "acidic bite",

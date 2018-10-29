@@ -17,8 +17,6 @@ local ATT_NEUTRAL = 1
 local LOS_RADIUS = 8
 
 AUTOFIGHT_STOP = 50
-AUTOFIGHT_HUNGER_STOP = 0
-AUTOFIGHT_HUNGER_STOP_UNDEAD = false
 AUTOFIGHT_CAUGHT = false
 AUTOFIGHT_THROW = false
 AUTOFIGHT_THROW_NOMOVE = true
@@ -296,14 +294,6 @@ local function set_stop_level(key, value, mode)
   AUTOFIGHT_STOP = tonumber(value)
 end
 
-local function set_hunger_stop_level(key, value, mode)
-  AUTOFIGHT_HUNGER_STOP = tonumber(value)
-end
-
-local function set_hunger_stop_undead(key, value, mode)
-  AUTOFIGHT_HUNGER_STOP_UNDEAD = string.lower(value) ~= "false"
-end
-
 local function set_af_caught(key, value, mode)
   AUTOFIGHT_CAUGHT = string.lower(value) ~= "false"
 end
@@ -335,18 +325,6 @@ end
 function af_hp_is_low()
   local hp, mhp = you.hp()
   return (100*hp <= AUTOFIGHT_STOP*mhp)
-end
-
-function af_food_is_low()
-  if you.race() == "Mummy" or you.transform() == "lich" then
-      return false
-  elseif (not AUTOFIGHT_HUNGER_STOP_UNDEAD)
-         and (you.race() == "Jiangshi" or you.race() == "Ghoul") then
-      return false
-  else
-      return (AUTOFIGHT_HUNGER_STOP ~= nil
-              and you.hunger() <= AUTOFIGHT_HUNGER_STOP)
-  end
 end
 
 function attack(allow_movement)
@@ -437,8 +415,6 @@ function toggle_autothrow()
 end
 
 chk_lua_option.autofight_stop = set_stop_level
-chk_lua_option.autofight_hunger_stop = set_hunger_stop_level
-chk_lua_option.autofight_hunger_stop_undead = set_hunger_stop_undead
 chk_lua_option.autofight_caught = set_af_caught
 chk_lua_option.autofight_throw = set_af_throw
 chk_lua_option.autofight_throw_nomove = set_af_throw_nomove

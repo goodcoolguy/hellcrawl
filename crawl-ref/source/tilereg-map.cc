@@ -6,7 +6,6 @@
 
 #include "cio.h"
 #include "command.h"
-#include "food.h"
 #include "libutil.h"
 #include "nearby-danger.h"
 #include "player.h"

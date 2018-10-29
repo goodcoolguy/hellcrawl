@@ -28,7 +28,6 @@
 #include "env.h" // LSTATE_STILL_WINDS
 #include "errors.h" // sysfail
 #include "evoke.h"
-#include "food.h"
 #include "goditem.h"
 #include "godpassive.h" // passive_t::want_curses, no_haste
 #include "invent.h"
@@ -1176,15 +1175,11 @@ const char *base_type_string(object_class_type type)
     case OBJ_MISSILES: return "missile";
     case OBJ_ARMOUR: return "armour";
     case OBJ_WANDS: return "wand";
-    case OBJ_FOOD: return "food";
     case OBJ_SCROLLS: return "scroll";
     case OBJ_JEWELLERY: return "jewellery";
     case OBJ_POTIONS: return "potion";
     case OBJ_BOOKS: return "book";
     case OBJ_STAVES: return "staff";
-#if TAG_MAJOR_VERSION == 34
-    case OBJ_RODS: return "removed rod";
-#endif
     case OBJ_ORBS: return "orb";
     case OBJ_MISCELLANY: return "miscellaneous";
     case OBJ_CORPSES: return "corpse";
@@ -1206,7 +1201,6 @@ string sub_type_string(const item_def &item, bool known)
     case OBJ_ARMOUR:
         return item_base_name(type, sub_type);
     case OBJ_WANDS: return _wand_type_name(sub_type);
-    case OBJ_FOOD: return food_type_name(sub_type);
     case OBJ_SCROLLS: return scroll_type_name(sub_type);
     case OBJ_JEWELLERY: return jewellery_type_name(sub_type);
     case OBJ_POTIONS: return potion_type_name(sub_type);
@@ -1240,9 +1234,6 @@ string sub_type_string(const item_def &item, bool known)
         return string("book of ") + _book_type_name(sub_type);
     }
     case OBJ_STAVES: return staff_type_name(static_cast<stave_type>(sub_type));
-#if TAG_MAJOR_VERSION == 34
-    case OBJ_RODS:   return "removed rod";
-#endif
     case OBJ_MISCELLANY: return misc_type_name(sub_type, known);
     // these repeat as base_type_string
     case OBJ_ORBS: return "orb of Zot";
@@ -1869,23 +1860,6 @@ string item_def::name_aux(description_level_type desc, bool terse, bool ident,
         }
         break;
 
-    case OBJ_FOOD:
-        switch (item_typ)
-        {
-        case FOOD_MEAT_RATION: buff << "meat ration"; break;
-        case FOOD_BREAD_RATION: buff << "bread ration"; break;
-        case FOOD_ROYAL_JELLY: buff << "royal jelly"; break;
-        case FOOD_FRUIT: buff << "fruit"; break;
-        case FOOD_PIZZA: buff << "slice of pizza"; break;
-        case FOOD_BEEF_JERKY: buff << "beef jerky"; break;
-        case FOOD_CHUNK: buff << "chunk of flesh"; break;
-#if TAG_MAJOR_VERSION == 34
-        default: buff << "removed food"; break;
-#endif
-        }
-
-        break;
-
     case OBJ_SCROLLS:
         buff << "scroll";
         if (basename)
@@ -1993,12 +1967,6 @@ string item_def::name_aux(description_level_type desc, bool terse, bool ident,
         else
             buff << sub_type_string(*this, !dbname);
         break;
-
-#if TAG_MAJOR_VERSION == 34
-    case OBJ_RODS:
-        buff << "removed rod";
-        break;
-#endif
 
     case OBJ_STAVES:
         if (know_curse && !terse)
@@ -2114,7 +2082,6 @@ bool item_type_has_ids(object_class_type base_type)
     COMPILE_CHECK(NUM_MISSILES   < MAX_SUBTYPES);
     COMPILE_CHECK(NUM_ARMOURS    < MAX_SUBTYPES);
     COMPILE_CHECK(NUM_WANDS      < MAX_SUBTYPES);
-    COMPILE_CHECK(NUM_FOODS      < MAX_SUBTYPES);
     COMPILE_CHECK(NUM_SCROLLS    < MAX_SUBTYPES);
     COMPILE_CHECK(NUM_JEWELLERY  < MAX_SUBTYPES);
     COMPILE_CHECK(NUM_POTIONS    < MAX_SUBTYPES);
@@ -2360,37 +2327,7 @@ public:
 
         string name;
 
-        if (item->base_type == OBJ_FOOD)
-        {
-            switch (item->sub_type)
-            {
-            case FOOD_CHUNK:
-                name = "chunks";
-                break;
-            case FOOD_MEAT_RATION:
-                name = "meat rations";
-                break;
-            case FOOD_BEEF_JERKY:
-                name = "beef jerky";
-                break;
-            case FOOD_BREAD_RATION:
-                name = "bread rations";
-                break;
-#if TAG_MAJOR_VERSION == 34
-            default:
-#endif
-            case FOOD_FRUIT:
-                name = "fruit";
-                break;
-            case FOOD_PIZZA:
-                name = "pizza";
-                break;
-            case FOOD_ROYAL_JELLY:
-                name = "royal jellies";
-                break;
-            }
-        }
-        else if (item->base_type == OBJ_MISCELLANY)
+        if (item->base_type == OBJ_MISCELLANY)
         {
             if (item->sub_type == MISC_PHANTOM_MIRROR)
                 name = pluralise(item->name(DESC_PLAIN));
@@ -2517,11 +2454,6 @@ static void _add_fake_item(object_class_type base, int sub,
         ptmp->charges = wand_max_charges(*ptmp);
     else if (base == OBJ_GOLD)
         ptmp->quantity = 18;
-    else if (ptmp->is_type(OBJ_FOOD, FOOD_CHUNK))
-    {
-        ptmp->freshness = 100;
-        ptmp->mon_type = MONS_RAT;
-    }
     else if (is_deck(*ptmp, true)) // stupid fake decks
         ptmp->deck_rarity = DECK_RARITY_COMMON;
 
@@ -3532,8 +3464,7 @@ bool is_useless_item(const item_def &item, bool temp)
         {
         case POT_BERSERK_RAGE:
             return you.undead_state(temp)
-                   && (you.species != SP_VAMPIRE
-                       || temp && you.hunger_state < HS_SATIATED)
+                   && (you.species != SP_VAMPIRE)
                    || you.species == SP_FORMICID;
         case POT_HASTE:
             return you.species == SP_FORMICID;
@@ -3550,8 +3481,7 @@ bool is_useless_item(const item_def &item, bool temp)
 
         case POT_LIGNIFY:
             return you.undead_state(temp)
-                   && (you.species != SP_VAMPIRE
-                       || temp && you.hunger_state < HS_SATIATED);
+                   && (you.species != SP_VAMPIRE);
 
         case POT_FLIGHT:
             return you.permanent_flight()
@@ -3599,8 +3529,7 @@ bool is_useless_item(const item_def &item, bool temp)
         {
         case AMU_RAGE:
             return you.undead_state(temp)
-                   && (you.species != SP_VAMPIRE
-                       || temp && you.hunger_state < HS_SATIATED)
+                   && (you.species != SP_VAMPIRE)
                    || you.species == SP_FORMICID
                    || you.get_mutation_level(MUT_NO_ARTIFICE);
 
@@ -3629,8 +3558,7 @@ bool is_useless_item(const item_def &item, bool temp)
                    || (temp
                        && you.get_mutation_level(MUT_INHIBITED_REGENERATION) > 0
                        && regeneration_is_inhibited())
-                   || (temp && you.species == SP_VAMPIRE
-                      && you.hunger_state <= HS_STARVING);
+                   || (temp && you.species == SP_VAMPIRE);
 
         case AMU_MANA_REGENERATION:
             return you_worship(GOD_PAKELLAS);
@@ -3664,11 +3592,6 @@ bool is_useless_item(const item_def &item, bool temp)
             return false;
         }
 
-#if TAG_MAJOR_VERSION == 34
-    case OBJ_RODS:
-            return true;
-#endif
-
     case OBJ_STAVES:
         if (you.get_mutation_level(MUT_MISSING_HAND))
             return true;
@@ -3684,27 +3607,6 @@ bool is_useless_item(const item_def &item, bool temp)
         }
 
         return false;
-
-    case OBJ_FOOD:
-        if (item.sub_type == NUM_FOODS)
-            break;
-
-        if (!is_inedible(item))
-            return false;
-
-        if (!temp && you.form == TRAN_LICH)
-        {
-            // See what would happen if we were in our normal state.
-            unwind_var<transformation_type> formsim(you.form, TRAN_NONE);
-
-            if (!is_inedible(item))
-                return false;
-        }
-
-        if (is_fruit(item) && you_worship(GOD_FEDHAS))
-            return false;
-
-        return true;
 
     case OBJ_CORPSES:
         if (you_worship(GOD_YREDELEMNUL) && !you.penance[GOD_YREDELEMNUL]
@@ -3816,38 +3718,6 @@ string item_prefix(const item_def &item, bool temp)
 
     switch (item.base_type)
     {
-    case OBJ_CORPSES:
-        // Skeletons cannot be eaten.
-        if (item.sub_type == CORPSE_SKELETON)
-        {
-            prefixes.push_back("inedible");
-            break;
-        }
-        // intentional fall-through
-    case OBJ_FOOD:
-        // this seems like a big horrible gotcha waiting to happen
-        if (item.sub_type == NUM_FOODS)
-            break;
-
-        if (is_inedible(item))
-            prefixes.push_back("inedible");
-        else if (is_preferred_food(item))
-            prefixes.push_back("preferred");
-        break;
-
-    case OBJ_POTIONS:
-        if (is_good_god(you.religion) && item_type_known(item)
-            && is_blood_potion(item))
-        {
-            prefixes.push_back("evil_eating");
-            prefixes.push_back("forbidden");
-        }
-        if (is_preferred_food(item))
-        {
-            prefixes.push_back("preferred");
-            prefixes.push_back("food");
-        }
-        break;
 
     case OBJ_STAVES:
     case OBJ_WEAPONS:

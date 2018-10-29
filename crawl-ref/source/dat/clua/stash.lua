@@ -50,10 +50,6 @@ function ch_stash_search_annotate_item(it)
     annot = annot .. "{god gift} "
   end
 
-  if food.isfruit(it) then
-    annot = annot .. "{fruit} "
-  end
-
   local skill = it.weap_skill
   if skill and not it.class(true) == "magical staff" then
     annot = annot .. "{" .. skill .. "} "
@@ -115,10 +111,6 @@ function ch_stash_search_annotate_item(it)
     if props[t] then
       annot = annot .. "{" .. props[t] .. "} "
     end
-  end
-
-  if it.class(true) == "potion" and it.is_preferred_food then
-    annot = annot .. "{food} "
   end
 
   if it.class(true) == "armour" then

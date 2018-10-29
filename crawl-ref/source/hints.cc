@@ -547,10 +547,6 @@ void hints_dissection_reminder()
 
     if (Hints.hints_just_triggered)
         return;
-
-    // When hungry, give appropriate message
-    if (you.hunger_state < HS_SATIATED)
-        learned_something_new(HINT_MAKE_CHUNKS);
 }
 
 static bool _advise_use_healing_potion()
@@ -1026,8 +1022,6 @@ static bool _rare_hints_event(hints_event_type event)
     case HINT_YOU_POISON:
     case HINT_YOU_ROTTING:
     case HINT_YOU_CURSED:
-    case HINT_YOU_HUNGRY:
-    case HINT_YOU_STARVING:
     case HINT_GLOWING:
     case HINT_CAUGHT_IN_NET:
     case HINT_YOU_SILENCE:
@@ -1274,17 +1268,6 @@ void learned_something_new(hints_event_type seen_what, coord_def gc)
         text << "Weapons and armour that have unusual descriptions like this "
                 "are much more likely to be of higher enchantment or have "
                 "special properties, good or bad.";
-        break;
-
-    case HINT_SEEN_FOOD:
-        text << "You have picked up some food"
-                "<console> ('<w>"
-             << stringize_glyph(get_item_symbol(SHOW_ITEM_FOOD))
-             << "</w>')</console>"
-                ". You can eat it by typing <w>e</w>"
-                "<tiles> or by clicking on it with your <w>left mouse button</w></tiles>"
-                ". However, it is usually best to conserve rations and fruit, "
-                "since raw meat from corpses is generally plentiful.";
         break;
 
     case HINT_SEEN_CARRION:
@@ -1780,8 +1763,7 @@ void learned_something_new(hints_event_type seen_what, coord_def gc)
                 "Strength, intelligence, or dexterity. "
                 "<w>Strength</w> affects your effectiveness in combat "
                 "and makes it easier to wear heavy armour. "
-                "<w>Intelligence</w> makes it easier to cast spells and "
-                "reduces the amount by which you hunger when you do so. "
+                "<w>Intelligence</w> makes it easier to cast spells."
                 "<w>Dexterity</w> increases your evasion "
                 "and stealth.\n";
         break;
@@ -1833,29 +1815,6 @@ void learned_something_new(hints_event_type seen_what, coord_def gc)
     case HINT_REMOVED_CURSE:
         text << "The curses on your worn equipment have been removed, so you "
                 "can now unequip any previously cursed items.";
-        break;
-
-    case HINT_YOU_HUNGRY:
-        text << "There are two ways to overcome hunger: food you started "
-                "with or found, and self-made chunks from corpses. To get the "
-                "latter, all you need to do is <w>%</w>hop up a corpse. "
-                "Luckily, all adventurers carry a pocket knife with them "
-                "which is perfect for butchering. Try to dine on chunks in "
-                "order to save permanent food.";
-        if (Hints.hints_type == HINT_BERSERK_CHAR)
-            text << "\nNote that you cannot Berserk while very hungry or worse.";
-        cmd.push_back(CMD_BUTCHER);
-        break;
-
-    case HINT_YOU_STARVING:
-        text << "You are now suffering from terrible hunger. You'll need to "
-                "<w>%</w>at something quickly, or you'll die. The safest "
-                "way to deal with this is to simply eat something from your "
-                "inventory, rather than wait for a monster to leave a corpse.";
-        cmd.push_back(CMD_EAT);
-
-        if (Hints.hints_type == HINT_MAGIC_CHAR)
-            text << "\nNote that you cannot cast spells while starving.";
         break;
 
     case HINT_MULTI_PICKUP:
@@ -2577,20 +2536,6 @@ void learned_something_new(hints_event_type seen_what, coord_def gc)
                 "of MP and nutrition that a successfully cast spell would.";
         break;
     }
-    case HINT_SPELL_HUNGER:
-        text << "The spell you just cast made you hungrier; you can see how "
-                "hungry spells make you by "
-#ifdef USE_TILE
-                "examining your spells in the spell display, or by "
-#endif
-                "entering <w>%\?!</w> or <w>%I</w>. "
-                "The amount of nutrition consumed increases with the level of "
-                "the spell and decreases depending on your intelligence stat "
-                "and your Spellcasting skill. If both of these are high "
-                "enough a spell might even not cost you any nutrition at all.";
-        cmd.push_back(CMD_CAST_SPELL);
-        cmd.push_back(CMD_DISPLAY_SPELLS);
-        break;
 
     case HINT_GLOWING:
         text << "You've accumulated so much magical contamination that you're "
@@ -2722,7 +2667,7 @@ void learned_something_new(hints_event_type seen_what, coord_def gc)
         break;
     case HINT_GAINED_SPELLCASTING:
         text << "As your Spellcasting skill increases, you will be able to "
-             << "memorise more spells, and will suffer less hunger and "
+             << "memorise more spells, and will suffer "
              << "somewhat fewer failures when you cast them.\n"
              << "Press <w>%</w> "
 #ifdef USE_TILE
@@ -3231,23 +3176,6 @@ string hints_describe_item(const item_def &item)
             Hints.hints_events[HINT_SEEN_WAND] = false;
             break;
 
-        case OBJ_FOOD:
-            ostr << "Food can simply be <w>%</w>aten"
-#ifdef USE_TILE
-                    ", something you can also do by <w>left clicking</w> "
-                    "on it"
-#endif
-                    ". ";
-            cmd.push_back(CMD_EAT);
-
-            if (item.sub_type == FOOD_CHUNK)
-            {
-                ostr << "Note that most species refuse to eat raw meat "
-                        "unless hungry. ";
-            }
-            Hints.hints_events[HINT_SEEN_FOOD] = false;
-            break;
-
         case OBJ_SCROLLS:
             ostr << "Type <w>%</w> to read this scroll"
 #ifdef USE_TILE
@@ -3409,10 +3337,6 @@ string hints_describe_item(const item_def &item)
                         "largely useless.";
                 break;
             }
-
-            ostr << "Corpses lying on the floor can be <w>%</w>hopped up to "
-                    "produce chunks for food (though they may be unhealthy)";
-            cmd.push_back(CMD_BUTCHER);
 
             ostr << ". ";
 

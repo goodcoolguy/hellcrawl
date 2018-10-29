@@ -1579,11 +1579,7 @@ undead_form_reason lifeless_prevents_form(transformation_type which_trans)
     if (which_trans == TRAN_LICH)
         return UFR_TOO_DEAD; // vampires can never lichform
 
-    if (which_trans == TRAN_BAT) // can batform on satiated or below
-        return you.hunger_state <= HS_SATIATED ? UFR_GOOD : UFR_TOO_ALIVE;
-
-    // other forms can only be entered when satiated or above.
-    return you.hunger_state >= HS_SATIATED ? UFR_GOOD : UFR_TOO_DEAD;
+    return UFR_GOOD;
 }
 
 /**
@@ -1841,8 +1837,6 @@ bool transform(int pow, transformation_type which_trans, bool involuntary,
             mprf(MSGCH_DURATION, "You stop regenerating.");
             you.duration[DUR_REGENERATION] = 0;
         }
-
-        you.hunger_state = HS_SATIATED;  // no hunger effects while transformed
         you.redraw_status_lights = true;
         break;
 

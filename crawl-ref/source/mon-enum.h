@@ -82,7 +82,6 @@ enum attack_flavour
     AF_DRAIN_XP,
     AF_ELEC,
     AF_FIRE,
-    AF_HUNGER,
     AF_MUTATE,
     AF_PARALYSE,
     AF_POISON,
@@ -105,9 +104,6 @@ enum attack_flavour
     AF_STICKY_FLAME,
     AF_CHAOTIC,
     AF_STEAL,
-#if TAG_MAJOR_VERSION == 34
-    AF_STEAL_FOOD,
-#endif
     AF_CRUSH,
     AF_REACH,
     AF_HOLY,

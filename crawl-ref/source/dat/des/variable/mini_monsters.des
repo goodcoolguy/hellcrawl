@@ -1356,7 +1356,7 @@ NAME:   corexii_shack
 TAGS:   no_monster_gen no_item_gen allow_dup extra
 DEPTH:  D:2-6
 NSUBST: + = 1:+ / *:x, m = 1:m / *:x, - = 1:1 / *:d
-ITEM:   w:20 any food / any weapon / any armour / w:5 any potion / w:20 nothing
+ITEM:   w:20 any weapon / any armour / w:5 any potion / w:20 nothing
 MONS:   goblin / hobgoblin / kobold / orc, plant / w:100 nothing
 MAP
 ........
@@ -1645,7 +1645,7 @@ NAME:  guppyfry_early_elven_hall
 DEPTH: D:6-9
 TAGS:  patrolling no_monster_gen transparent
 MONS:  deep elf mage, plant
-ITEM:  any scroll / any food / any book
+ITEM:  any scroll / any book
 SUBST: - = 2....GTd$%
 MARKER: H = lua:props_marker { stop_explore = "statue" }
 SUBST: HI = G
@@ -1818,7 +1818,7 @@ ENDMAP
 NAME: sigmund_edmund_badplayer
 TAGS: no_item_gen no_monster_gen no_pool_fixup no_trap_gen
 DEPTH: D:4-7
-ITEM: any food
+ITEM: any scroll
 KITEM: ( = flail / any armour
 KITEM: s = trident / robe
 KMONS: S = Sigmund
@@ -3250,7 +3250,7 @@ ENDMAP
 
 NAME:   nooodl_food_tri
 TAGS:   no_rotate
-ITEM:   any food
+ITEM:   any scroll
 NSUBST: R = 1:0 / 1:d / * = 0d$...
 MAP
        x

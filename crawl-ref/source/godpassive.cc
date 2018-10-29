@@ -17,7 +17,6 @@
 #include "enum.h"
 #include "fight.h"
 #include "files.h"
-#include "food.h"
 #include "fprop.h"
 #include "godabil.h"
 #include "goditem.h"

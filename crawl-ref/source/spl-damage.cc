@@ -18,7 +18,6 @@
 #include "english.h"
 #include "env.h"
 #include "fight.h"
-#include "food.h"
 #include "fprop.h"
 #include "godabil.h"
 #include "godconduct.h"

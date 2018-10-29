@@ -18,7 +18,6 @@
 #include "artefact.h"
 #include "art-enum.h"
 #include "dungeon.h"
-#include "food.h"
 #include "goditem.h"
 #include "godpassive.h"
 #include "itemname.h"
@@ -384,36 +383,6 @@ static armour_type _pick_unseen_armour()
     return picked;
 }
 
-static int _acquirement_food_subtype(bool /*divine*/, int& quantity)
-{
-    int type_wanted;
-    // Food is a little less predictable now. - bwr
-    if (you.species == SP_GHOUL)
-        type_wanted = FOOD_CHUNK;
-    else if (you_worship(GOD_FEDHAS))
-    {
-        // Fedhas worshippers get fruit to use for growth and evolution
-        type_wanted = FOOD_FRUIT;
-    }
-    else
-    {
-        type_wanted = coinflip()
-            ? FOOD_ROYAL_JELLY
-            : you.get_mutation_level(MUT_HERBIVOROUS) ? FOOD_BREAD_RATION
-                                                      : FOOD_MEAT_RATION;
-    }
-
-    quantity = 3 + random2(5);
-
-    // giving more of the lower food value items
-    if (type_wanted == FOOD_FRUIT)
-        quantity = 8 + random2avg(15, 2);
-    else if (type_wanted == FOOD_ROYAL_JELLY || type_wanted == FOOD_CHUNK)
-        quantity += 2 + random2avg(10, 2);
-
-    return type_wanted;
-}
-
 /**
  * Randomly choose a class of weapons (those using a specific weapon skill)
  * for acquirement to give the player. Weight toward the player's skills.
@@ -712,19 +681,14 @@ static const acquirement_subtype_finder _subtype_finders[] =
     _acquirement_missile_subtype,
     _acquirement_armour_subtype,
     _acquirement_wand_subtype,
-    _acquirement_food_subtype,
     0, // no scrolls
     _acquirement_jewellery_subtype,
-    _acquirement_food_subtype, // potion acquirement = food for vampires
     _acquirement_book_subtype,
     _acquirement_staff_subtype,
     0, // no, you can't acquire the orb
     _acquirement_misc_subtype,
     0, // no corpses
     0, // gold handled elsewhere, and doesn't have subtypes anyway
-#if TAG_MAJOR_VERSION == 34
-    0, // no rods
-#endif
     0, // no runes either
 };
 
@@ -732,7 +696,6 @@ static int _find_acquirement_subtype(object_class_type &class_wanted,
                                      int &quantity, bool divine,
                                      int agent)
 {
-    COMPILE_CHECK(ARRAYSZ(_subtype_finders) == NUM_OBJECT_CLASSES);
     ASSERT(class_wanted != OBJ_RANDOM);
 
     int type_wanted = OBJ_RANDOM;
@@ -744,10 +707,6 @@ static int _find_acquirement_subtype(object_class_type &class_wanted,
         // Misc items
         if (class_wanted == OBJ_MISCELLANY)
             class_wanted = OBJ_MISCELLANY;
-
-        // Vampires acquire blood, not food.
-        if (class_wanted == OBJ_FOOD && you.species == SP_VAMPIRE)
-            class_wanted = OBJ_POTIONS;
 
         if (_subtype_finders[class_wanted])
             type_wanted = (*_subtype_finders[class_wanted])(divine, quantity);

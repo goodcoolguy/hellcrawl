@@ -31,7 +31,6 @@
 #include "evoke.h"
 #include "exercise.h"
 #include "fight.h"
-#include "food.h"
 #include "godabil.h"
 #include "godcompanions.h"
 #include "godconduct.h"
@@ -1254,24 +1253,6 @@ static bool _check_ability_possible(const ability_def& abil,
                      you.duration[DUR_WATER_HOLD] ? "unable to breathe"
                                                   : "silenced");
             }
-            return false;
-        }
-    }
-    // Don't insta-starve the player.
-    // (Losing consciousness possible from 400 downward.)
-    if (hungerCheck && !you.undead_state())
-    {
-        const int expected_hunger = you.hunger - abil.food_cost * 2;
-        if (!quiet)
-        {
-            dprf("hunger: %d, max. food_cost: %d, expected hunger: %d",
-                 you.hunger, abil.food_cost * 2, expected_hunger);
-        }
-        // Safety margin for natural hunger, mutations etc.
-        if (expected_hunger <= 50)
-        {
-            if (!quiet)
-                canned_msg(MSG_TOO_HUNGRY);
             return false;
         }
     }
@@ -3220,12 +3201,11 @@ static void _pay_ability_costs(const ability_def& abil)
     else if (abil.ability != ABIL_WU_JIAN_WALLJUMP)
         you.turn_is_over = true;
 
-    const int food_cost  = abil.food_cost + random2avg(abil.food_cost, 2);
     const int piety_cost = _scale_piety_cost(abil.ability, abil.piety_cost);
     const int hp_cost    = abil.hp_cost.cost(you.hp_max);
 
-    dprf("Cost: mp=%d; hp=%d; food=%d; piety=%d",
-         abil.mp_cost, hp_cost, food_cost, piety_cost);
+    dprf("Cost: mp=%d; hp=%d; piety=%d",
+         abil.mp_cost, hp_cost, piety_cost);
 
     if (abil.mp_cost)
     {
@@ -3240,9 +3220,6 @@ static void _pay_ability_costs(const ability_def& abil)
         if (abil.flags & abflag::PERMANENT_HP)
             rot_hp(hp_cost);
     }
-
-    if (food_cost)
-        make_hungry(food_cost, false, true);
 
     if (piety_cost)
         lose_piety(piety_cost);
@@ -3547,12 +3524,6 @@ vector<talent> your_talents(bool check_confused, bool include_unusable)
         && !you.get_mutation_level(MUT_NO_ARTIFICE))
     {
         _add_talent(talents, ABIL_EVOKE_BLINK, check_confused);
-    }
-
-    if (you.scan_artefacts(ARTP_FOG)
-        && !you.get_mutation_level(MUT_NO_ARTIFICE))
-    {
-        _add_talent(talents, ABIL_EVOKE_FOG, check_confused);
     }
 
     if (you.evokable_berserk() && !you.get_mutation_level(MUT_NO_ARTIFICE))

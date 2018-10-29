@@ -14,7 +14,6 @@
 #include "delay.h"
 #include "english.h"
 #include "env.h"
-#include "food.h"
 #include "initfile.h"
 #include "itemname.h"
 #include "itemprop.h"
@@ -102,11 +101,6 @@ LUARET1(you_base_mp, number, get_real_mp(false))
 LUARET1(you_rot, number, player_rotted())
 LUARET1(you_poison_survival, number, poison_survival())
 LUARET1(you_corrosion, number, you.props["corrosion_amount"].get_int())
-LUARET1(you_hunger, number, you.hunger_state - 1)
-LUARET1(you_hunger_name, string, hunger_level())
-//LUARET2(you_strength, number, you.strength(false), you.max_strength())
-//LUARET2(you_intelligence, number, you.intel(false), you.max_intel())
-//LUARET2(you_dexterity, number, you.dex(false), you.max_dex())
 LUARET1(you_xl, number, you.experience_level)
 LUARET1(you_xl_progress, number, get_exp_progress())
 LUARET1(you_skill_progress, number,
@@ -606,11 +600,6 @@ static const struct luaL_reg you_clib[] =
     { "mp"          , you_mp },
     { "base_mp"     , you_base_mp },
     { "rot"         , you_rot },
-    { "hunger"      , you_hunger },
-    { "hunger_name" , you_hunger_name },
-    //{ "strength"    , you_strength },
-    // { "intelligence", you_intelligence },
-    //{ "dexterity"   , you_dexterity },
     { "skill"       , you_skill },
     { "base_skill"  , you_base_skill },
     { "skill_progress", you_skill_progress },

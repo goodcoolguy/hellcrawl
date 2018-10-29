@@ -11,7 +11,6 @@
 #include "describe-god.h"
 #include "english.h"
 #include "env.h"
-#include "food.h"
 #include "fprop.h"
 #include "godabil.h"
 #include "goditem.h"
@@ -264,7 +263,6 @@ int zin_tithe(const item_def& item, int quant, bool quiet, bool converting)
 enum jiyva_slurp_results
 {
     JS_NONE = 0,
-    JS_FOOD = 1 << 0,
     JS_HP   = 1 << 1,
     JS_MP   = 1 << 2,
 };

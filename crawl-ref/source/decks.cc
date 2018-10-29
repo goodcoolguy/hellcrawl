@@ -23,7 +23,6 @@
 #include "dungeon.h"
 #include "english.h"
 #include "evoke.h"
-#include "food.h"
 #include "ghost.h"
 #include "godpassive.h" // passive_t::no_haste
 #include "godwrath.h"

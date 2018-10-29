@@ -22,8 +22,6 @@ void init_perishable_stack(item_def &stack, int age = -1);
 int remove_oldest_perishable_item(item_def &stack);
 void remove_newest_perishable_item(item_def &stack, int quant = -1);
 void merge_perishable_stacks(const item_def &source, item_def &dest, int quant);
-
-void rot_inventory_food(int time_delta);
 void rot_floor_items(int elapsedTime);
 
 

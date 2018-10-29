@@ -80,7 +80,7 @@ enum class passive_t
     /// Your attributes are boosted.
     stat_boost,
 
-    /// Hunger, poison, and disease affect you more slowly.
+    /// poison, and disease affect you more slowly.
     slow_metabolism,
 
     /// You have an umbra.

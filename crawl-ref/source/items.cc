@@ -38,7 +38,6 @@
 #include "directn.h"
 #include "dungeon.h"
 #include "env.h"
-#include "food.h"
 #include "godpassive.h"
 #include "godprayer.h"
 #include "godwrath.h"
@@ -209,8 +208,7 @@ void link_items()
 static bool _item_ok_to_clean(int item)
 {
     // Never clean food, zigfigs, Orbs, or runes.
-    if (mitm[item].base_type == OBJ_FOOD
-        || mitm[item].base_type == OBJ_MISCELLANY
+    if (mitm[item].base_type == OBJ_MISCELLANY
             && mitm[item].sub_type == MISC_ZIGGURAT
         || item_is_orb(mitm[item])
         || mitm[item].base_type == OBJ_RUNES)
@@ -256,7 +254,7 @@ static int _cull_items()
     //  2. Don't cleanup shops
     //  3. Don't cleanup monster inventory
     //  4. Clean 15% of items
-    //  5. never remove food, orbs, runes
+    //  5. never remove orbs, runes
     //  7. uniques weapons are moved to the abyss
     //  8. randarts are simply lost
     //  9. unrandarts are 'destroyed', but may be generated again
@@ -1177,8 +1175,7 @@ bool origin_describable(const item_def &item)
            && !_origin_is_special(item)
            && !is_stackable_item(item)
            && item.quantity == 1
-           && item.base_type != OBJ_CORPSES
-           && (item.base_type != OBJ_FOOD || item.sub_type != FOOD_CHUNK);
+           && item.base_type != OBJ_CORPSES;
 }
 
 static string _article_it(const item_def &item)
@@ -1494,7 +1491,6 @@ bool is_stackable_item(const item_def &item)
         return false;
 
     if (item.base_type == OBJ_MISSILES
-        || item.base_type == OBJ_FOOD
         || item.base_type == OBJ_SCROLLS
         || item.base_type == OBJ_POTIONS
         || item.base_type == OBJ_GOLD
@@ -1645,9 +1641,7 @@ int find_free_slot(const item_def &i)
         return slot;
 
     FixedBitVector<ENDOFPACK> disliked;
-    if (i.base_type == OBJ_FOOD)
-        disliked.set('e' - 'a'), disliked.set('y' - 'a');
-    else if (i.base_type == OBJ_POTIONS)
+    if (i.base_type == OBJ_POTIONS)
         disliked.set('y' - 'a');
 
     if (!searchforward)
@@ -2898,9 +2892,6 @@ static int _autopickup_subtype(const item_def &item)
             return item.sub_type;
         else
             return max_type;
-#if TAG_MAJOR_VERSION == 34
-    case OBJ_RODS:
-#endif
     case OBJ_GOLD:
     case OBJ_RUNES:
         return max_type;
@@ -2946,13 +2937,6 @@ static bool _is_option_autopickup(const item_def &item, bool ignore_force)
     return Options.autopickups[item.base_type];
 }
 
-/// Should the player automatically butcher the given item?
-static bool _should_autobutcher(const item_def &item)
-{
-    return Options.auto_butcher && item.base_type == OBJ_CORPSES
-           && !is_inedible(item);
-}
-
 /** Is the item something that we should try to autopickup?
  *
  * @param ignore_force If true, ignore force_autopickup settings from the
@@ -2963,10 +2947,6 @@ bool item_needs_autopickup(const item_def &item, bool ignore_force)
 {
     if (in_inventory(item))
         return false;
-
-    // mark autobutcher corpses for pickup so autotravel works
-    if (_should_autobutcher(item))
-        return true;
 
     if (item_is_stationary(item))
         return false;
@@ -3007,12 +2987,6 @@ static bool _identical_types(const item_def& pickup_item,
                              const item_def& inv_item)
 {
     return pickup_item.is_type(inv_item.base_type, inv_item.sub_type);
-}
-
-static bool _edible_food(const item_def& pickup_item,
-                         const item_def& inv_item)
-{
-    return inv_item.base_type == OBJ_FOOD && !is_inedible(inv_item);
 }
 
 static bool _similar_equip(const item_def& pickup_item,
@@ -3147,16 +3121,6 @@ static bool _interesting_explore_pickup(const item_def& item)
     case OBJ_JEWELLERY:
         return _item_different_than_inv(item, _similar_jewellery);
 
-    case OBJ_FOOD:
-        if (you_worship(GOD_FEDHAS) && is_fruit(item))
-            return true;
-
-        if (is_inedible(item))
-            return false;
-
-        // Interesting if we don't have any other edible food.
-        return _item_different_than_inv(item, _edible_food);
-
     case OBJ_MISCELLANY:
         // Decks always start out unidentified.
         if (is_deck(item))
@@ -3217,9 +3181,6 @@ static void _do_autopickup()
 
         if (item_needs_autopickup(mi))
         {
-            if (_should_autobutcher(mi))
-                butchery(&mi);
-
             // Do this before it's picked up, otherwise the picked up
             // item will be in inventory and _interesting_explore_pickup()
             // will always return false.
@@ -3233,8 +3194,6 @@ static void _do_autopickup()
             clear_item_pickup_flags(mi);
 
             const bool pickup_result = move_item_to_inv(o, mi.quantity);
-            if (mi.is_type(OBJ_FOOD, FOOD_CHUNK))
-                mi.flags |= ISFLAG_DROPPED;
 
             if (pickup_result)
             {
@@ -3312,7 +3271,6 @@ int get_max_subtype(object_class_type base_type)
         NUM_MISSILES,
         NUM_ARMOURS,
         NUM_WANDS,
-        NUM_FOODS,
         NUM_SCROLLS,
         NUM_JEWELLERY,
         NUM_POTIONS,
@@ -3322,9 +3280,6 @@ int get_max_subtype(object_class_type base_type)
         NUM_MISCELLANY,
         -1,              // corpses     -- handled specially
         1,              // gold         -- handled specially
-#if TAG_MAJOR_VERSION == 34
-        NUM_RODS,
-#endif
         NUM_RUNE_TYPES,
     };
     COMPILE_CHECK(ARRAYSZ(max_subtype) == NUM_OBJECT_CLASSES);
@@ -3692,30 +3647,6 @@ colour_t item_def::potion_colour() const
 }
 
 /**
- * Assuming this item is a piece of food, what colour is it?
- */
-colour_t item_def::food_colour() const
-{
-    ASSERT(base_type == OBJ_FOOD);
-
-    switch (sub_type)
-    {
-        case FOOD_ROYAL_JELLY:
-        case FOOD_PIZZA:
-            return YELLOW;
-        case FOOD_FRUIT:
-            return LIGHTGREEN;
-        case FOOD_CHUNK:
-            return LIGHTRED;
-        case FOOD_BEEF_JERKY:
-        case FOOD_BREAD_RATION:
-        case FOOD_MEAT_RATION:
-        default:
-            return BROWN;
-    }
-}
-
-/**
  * Assuming this item is a ring, what colour is it?
  */
 colour_t item_def::ring_colour() const
@@ -4057,18 +3988,12 @@ colour_t item_def::get_colour() const
             return wand_colour();
         case OBJ_POTIONS:
             return potion_colour();
-        case OBJ_FOOD:
-            return food_colour();
         case OBJ_JEWELLERY:
             return jewellery_colour();
         case OBJ_SCROLLS:
             return LIGHTGREY;
         case OBJ_BOOKS:
             return book_colour();
-#if TAG_MAJOR_VERSION == 34
-        case OBJ_RODS:
-            return YELLOW;
-#endif
         case OBJ_STAVES:
             return BROWN;
         case OBJ_ORBS:
@@ -4100,9 +4025,6 @@ bool item_type_has_unidentified(object_class_type base_type)
         || base_type == OBJ_BOOKS
         || base_type == OBJ_STAVES
         || base_type == OBJ_MISCELLANY
-#if TAG_MAJOR_VERSION == 34
-        || base_type == OBJ_RODS
-#endif
         ;
 }
 
@@ -4597,20 +4519,8 @@ bool get_item_by_name(item_def *item, const char* specs,
 
     case OBJ_POTIONS:
         item->quantity = 12;
-        if (is_blood_potion(*item))
-        {
-            const char* prompt;
-            prompt = "# turns away from rotting? "
-                     "[ENTER for fully fresh] ";
-            int age = prompt_for_int(prompt, false);
-
-            if (age <= 0)
-                age = -1;
-            init_perishable_stack(*item, age);
-        }
         break;
 
-    case OBJ_FOOD:
     case OBJ_SCROLLS:
         item->quantity = 12;
         break;
@@ -4796,14 +4706,6 @@ item_info get_item_info(const item_def& item)
             ii.sub_type = NUM_POTIONS;
         ii.subtype_rnd = item.subtype_rnd;
         break;
-    case OBJ_FOOD:
-        ii.sub_type = item.sub_type;
-        if (ii.sub_type == FOOD_CHUNK)
-        {
-            ii.mon_type = item.mon_type;
-            ii.freshness = 100;
-        }
-        break;
     case OBJ_CORPSES:
         ii.sub_type = item.sub_type;
         ii.mon_type = item.mon_type;
@@ -4834,11 +4736,6 @@ item_info get_item_info(const item_def& item)
         if (item.sub_type == BOOK_MANUAL && item_type_known(item))
             ii.skill = item.skill; // manual skill
         break;
-#if TAG_MAJOR_VERSION == 34
-    case OBJ_RODS:
-        ii.sub_type = NUM_RODS;
-        break;
-#endif
     case OBJ_STAVES:
         ii.sub_type = item_type_known(item) ? item.sub_type : NUM_STAVES;
         ii.subtype_rnd = item.subtype_rnd;

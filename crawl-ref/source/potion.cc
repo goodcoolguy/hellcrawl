@@ -244,12 +244,6 @@ public:
 
     bool can_quaff(string *reason = nullptr) const override
     {
-        if (you.hunger_state == HS_ENGORGED)
-        {
-            if (reason)
-                *reason = "You are much too full right now.";
-            return false;
-        }
         return true;
     }
 
@@ -884,11 +878,6 @@ public:
 
     bool can_quaff(string *reason = nullptr) const override
     {
-        if (you.hunger_state == HS_ENGORGED)
-        {
-            *reason = "You are much too full right now.";
-            return false;
-        }
         return true;
     }
 
@@ -1013,12 +1002,6 @@ public:
 
     bool can_quaff(string *reason) const override
     {
-        if (you.hunger_state == HS_ENGORGED)
-        {
-            if (reason)
-                *reason = "You are much too full right now.";
-            return false;
-        }
         return true;
     }
 };

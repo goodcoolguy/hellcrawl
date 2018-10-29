@@ -400,8 +400,6 @@ object_class_type item_class_by_sym(char32_t c)
         return OBJ_ARMOUR;
     case '/':
         return OBJ_WANDS;
-    case '%':
-        return OBJ_FOOD;
     case '?':
         return OBJ_SCROLLS;
     case '"': // Make the amulet symbol equiv to ring -- bwross
@@ -430,10 +428,6 @@ object_class_type item_class_by_sym(char32_t c)
     case 0x00a3: // £
     case 0x00a5: // ¥
         return OBJ_GOLD;
-#if TAG_MAJOR_VERSION == 34
-    case '\\': // Compat break: used to be staves (why not '|'?).
-        return OBJ_RODS;
-#endif
     default:
         return NUM_OBJECT_CLASSES;
     }
@@ -464,7 +458,7 @@ static msg_colour_type _str_to_channel_colour(const string &str)
 static const string message_channel_names[] =
 {
     "plain", "friend_action", "prompt", "god", "pray", "duration", "danger",
-    "warning", "food", "recovery", "sound", "talk", "talk_visual",
+    "warning", "recovery", "sound", "talk", "talk_visual",
     "intrinsic_gain", "mutation", "monster_spell", "monster_enchant",
     "friend_spell", "friend_enchant", "monster_damage", "monster_target",
     "banishment", "rotten_meat", "equipment", "floor", "multiturn", "examine",
@@ -824,7 +818,7 @@ void game_options::set_default_activity_interrupts()
         "interrupt_vampire_feed = interrupt_butcher",
         "interrupt_multidrop = hp_loss, monster_attack, teleport, stat",
         "interrupt_macro = interrupt_multidrop",
-        "interrupt_travel = interrupt_butcher, hungry, hit_monster, "
+        "interrupt_travel = interrupt_butcher, hit_monster, "
                             "sense_monster",
         "interrupt_run = interrupt_travel, message",
         "interrupt_rest = interrupt_run, full_hp, full_mp",
@@ -1019,7 +1013,6 @@ void game_options::reset_options()
     autopickups.set(OBJ_BOOKS);
     autopickups.set(OBJ_JEWELLERY);
     autopickups.set(OBJ_WANDS);
-    autopickups.set(OBJ_FOOD);
     autopickups.set(OBJ_MISSILES);
 
     confirm_butcher        = CONFIRM_AUTO;
@@ -1531,7 +1524,6 @@ static const char* config_defaults[] =
     "defaults/autopickup_exceptions.txt",
     "defaults/runrest_messages.txt",
     "defaults/standard_colours.txt",
-    "defaults/food_colouring.txt",
     "defaults/menu_colours.txt",
     "defaults/glyph_colours.txt",
     "defaults/messages.txt",

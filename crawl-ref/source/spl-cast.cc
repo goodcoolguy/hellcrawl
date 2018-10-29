@@ -24,7 +24,6 @@
 #include "english.h"
 #include "env.h"
 #include "exercise.h"
-#include "food.h"
 #include "format.h"
 #include "godabil.h"
 #include "godconduct.h"
@@ -138,7 +137,7 @@ static string _spell_extra_description(spell_type spell, bool viewing)
     // spell name
     desc << chop_string(spell_title(spell), 30);
 
-    // spell power, spell range, hunger level, noise
+    // spell power, spell range,nnoise
     const string rangestring = spell_range_string(spell);
 
     desc << chop_string(spell_power_string(spell), 9)
@@ -2232,11 +2231,6 @@ int failure_rate_to_int(int fail)
 string failure_rate_to_string(int fail)
 {
     return make_stringf("%d%%", failure_rate_to_int(fail));
-}
-
-string spell_hunger_string(spell_type spell)
-{
-    return hunger_cost_string(spell_hunger(spell));
 }
 
 string spell_failure_rate_string(spell_type spell)

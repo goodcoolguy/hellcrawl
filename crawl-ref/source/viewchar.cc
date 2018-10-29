@@ -23,7 +23,7 @@ static const char32_t dchar_table[NUM_CSET][NUM_DCHAR_TYPES] =
         0x2206, // WGL4 and DEC
 #endif
     //       φ
-        '0', 0x03C6, ')', '[', '/', '%', '?', '=', '!', '(',
+        '0', 0x03C6, ')', '[', '/', '?', '=', '!', '(',
     //                       †       ÷               §     ♣       ©
         ':', '|', 
 #if TAG_MAJOR_VERSION == 34
@@ -42,7 +42,7 @@ static const char32_t dchar_table[NUM_CSET][NUM_DCHAR_TYPES] =
         '#', '#', '*', '.', ',', '\'', '+', '^', '>', '<',  // wall .. stairs up
         '#', '_', '\\', '}', '~', '8', '{', '{',       // grate .. item detect
         '{', '}', ')', '[', '/', '%', '?', '=', '!', '(',   // orb .. missile
-        ':', '|', '|', '}', '%', '%', '$', '"', '0', '7', '^', // book .. teleporter
+        ':', '|', '|', '}', '%', '$', '"', '0', '7', '^', // book .. teleporter
         ' ', '#', '*', '+', 'X', '`', '#', // space .. explosion
         '-', '|', '+', '+', '+', '+', '-', '|', '/',
         '\\', '*', '*', '*', '*', 'V', '^', '>', '<'
@@ -60,7 +60,7 @@ dungeon_char_type dchar_by_name(const string &name)
         "door_closed", "trap", "stairs_down", "stairs_up",
         "grate", "altar", "arch", "fountain", "wavy", "statue",
         "invis_exposed", "item_detected",
-        "item_orb", "item_rune", "item_weapon", "item_armour", "item_wand", "item_food",
+        "item_orb", "item_rune", "item_weapon", "item_armour", "item_wand",
         "item_scroll", "item_ring", "item_potion", "item_missile", "item_book",
         "item_staff",
 #if TAG_MAJOR_VERSION == 34

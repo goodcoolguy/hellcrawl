@@ -1076,7 +1076,7 @@ KITEM:  F = scroll of enchant weapon q:2 / scroll of enchant armour q:2 /\
             potion of heal wounds q:3 / potion of resistance q:2 /\
             scroll of blinking q:2 / scroll of fog q:2 / potion of ambrosia q:2 /\
             any good_item book w:30
-KITEM:  g = any food
+KITEM:  g = any scroll
 KITEM:  | = scroll of acquirement ident:type
 KITEM:  $ = gold
 NSUBST: | = 1:| / *:$

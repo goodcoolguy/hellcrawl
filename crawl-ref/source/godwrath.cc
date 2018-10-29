@@ -18,7 +18,6 @@
 #include "english.h"
 #include "env.h"
 #include "evoke.h"
-#include "food.h"
 #include "ghost.h"
 #include "godabil.h"
 #include "godpassive.h" // shadow_monster
@@ -328,9 +327,7 @@ static bool _zin_retribution()
         }
         break;
     case 3:
-    case 4: // famine
-        simple_god_message(" sends a famine down upon you!", god);
-        make_hungry(you.hunger / 2, false);
+    case 4:
         break;
     case 5: // noisiness
         simple_god_message(" booms out: \"Turn to the light! REPENT!\"", god);

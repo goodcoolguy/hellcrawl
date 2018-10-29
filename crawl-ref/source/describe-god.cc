@@ -15,7 +15,6 @@
 #include "database.h"
 #include "describe.h"
 #include "english.h"
-#include "food.h"
 #include "godabil.h"
 #include "godconduct.h"
 #include "godpassive.h"

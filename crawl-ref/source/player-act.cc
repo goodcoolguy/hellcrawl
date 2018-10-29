@@ -17,7 +17,6 @@
 #include "english.h"
 #include "env.h"
 #include "fight.h"
-#include "food.h"
 #include "godabil.h" // RU_SAC_XP_LEVELS
 #include "godconduct.h"
 #include "goditem.h"
@@ -462,11 +461,6 @@ item_def *player::shield() const
     return slot_item(EQ_SHIELD, false);
 }
 
-void player::make_hungry(int hunger_increase, bool silent)
-{
-    return;
-}
-
 string player::name(description_level_type dt, bool, bool) const
 {
     switch (dt)
@@ -796,7 +790,6 @@ bool player::can_go_berserk() const
 bool player::can_go_berserk(bool intentional, bool potion, bool quiet,
                             string *reason) const
 {
-    COMPILE_CHECK(HUNGER_STARVING - 100 + BERSERK_NUTRITION < HUNGER_VERY_HUNGRY);
     const bool verbose = (intentional || potion) && !quiet;
     string msg;
     bool success = false;

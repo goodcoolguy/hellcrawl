@@ -28,7 +28,6 @@
 #include "english.h"
 #include "env.h"
 #include "fineff.h"
-#include "food.h"
 #include "godabil.h"
 #include "godblessing.h"
 #include "godcompanions.h"
@@ -160,70 +159,6 @@ static bool _fill_out_corpse(const monster& mons, item_def& corpse)
         if (saved_mon.max_hit_points <= 0)
             saved_mon.max_hit_points = 1;
         saved_mon.hit_points = saved_mon.max_hit_points;
-    }
-
-    return true;
-}
-
-static bool _explode_corpse(item_def& corpse, const coord_def& where)
-{
-    // Don't want chunks to show up behind the player.
-    los_def ld(where, opc_no_actor);
-
-    if (mons_class_leaves_hide(corpse.mon_type)
-        && mons_genus(corpse.mon_type) == MONS_DRAGON)
-    {
-        // Uh... dragon hide is tough stuff and it keeps the monster in
-        // one piece?  More importantly, it prevents a flavour feature
-        // from becoming a trap for the unwary.
-
-        return false;
-    }
-
-    ld.update();
-
-    const int nchunks = 1;
-    if (corpse.base_type != OBJ_GOLD)
-        blood_spray(where, corpse.mon_type, nchunks * 3); // spray some blood
-
-    // turn the corpse into chunks
-    if (corpse.base_type != OBJ_GOLD)
-    {
-        corpse.base_type = OBJ_FOOD;
-        corpse.sub_type  = FOOD_CHUNK;
-    }
-
-    const int total_gold = corpse.quantity;
-
-    // spray chunks everywhere!
-    for (int ntries = 0, chunks_made = 0;
-         chunks_made < nchunks && ntries < 10000; ++ntries)
-    {
-        coord_def cp = where;
-        cp.x += random_range(-LOS_DEFAULT_RANGE, LOS_DEFAULT_RANGE);
-        cp.y += random_range(-LOS_DEFAULT_RANGE, LOS_DEFAULT_RANGE);
-
-        dprf("Trying to scatter chunk to %d, %d...", cp.x, cp.y);
-
-        if (!in_bounds(cp))
-            continue;
-
-        if (!ld.see_cell(cp))
-            continue;
-
-        dprf("Cell is visible...");
-
-        if (cell_is_solid(cp) || actor_at(cp))
-            continue;
-
-        ++chunks_made;
-
-        dprf("Success");
-
-        if (corpse.base_type == OBJ_GOLD)
-            corpse.quantity = div_rand_round(total_gold, nchunks);
-        if (corpse.quantity)
-            copy_item_to_grid(corpse, cp);
     }
 
     return true;
@@ -513,7 +448,7 @@ item_def* place_monster_corpse(const monster& mons, bool silent, bool force)
 
     origin_set_monster(corpse, &mons);
 
-    if ((mons.flags & MF_EXPLODE_KILL) && _explode_corpse(corpse, mons.pos()))
+    if ((mons.flags & MF_EXPLODE_KILL))
     {
         // We already have a spray of chunks.
         item_was_destroyed(corpse);

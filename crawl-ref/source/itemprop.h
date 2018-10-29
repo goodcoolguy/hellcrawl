@@ -186,19 +186,6 @@ bool evoker_is_charged(const item_def &item);
 bool jewellery_has_pluses(const item_def &item) PURE;
 bool ring_has_stackable_effect(const item_def &item) PURE;
 
-// food functions:
-#if TAG_MAJOR_VERSION == 34
-bool is_real_food(food_type food) PURE;
-#endif
-bool is_blood_potion(const item_def &item) PURE;
-bool food_is_meaty(int food_type) PURE;
-bool food_is_meaty(const item_def &item) PURE;
-bool food_is_veggie(int food_type) PURE;
-bool food_is_veggie(const item_def &item) PURE;
-int food_value(const item_def &item) PURE;
-int food_turns(const item_def &item) PURE;
-bool is_fruit(const item_def &item) PURE;
-
 // generic item property functions:
 int armour_type_prop(const uint8_t arm, const armour_flag prop) PURE;
 
@@ -233,7 +220,6 @@ int armour_base_price(armour_type type) PURE;
 
 string item_base_name(const item_def &item);
 string item_base_name(object_class_type type, int sub_type);
-string food_type_name(int sub_type);
 const char *weapon_base_name(weapon_type subtype) IMMUTABLE;
 weapon_type name_nospace_to_weapon(string name_nospace);
 

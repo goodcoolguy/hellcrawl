@@ -17,7 +17,6 @@
 #include "coord.h"
 #include "enum.h"
 #include "env.h"
-#include "food.h"
 #include "invent.h"
 #include "itemprop.h"
 #include "items.h"
@@ -578,26 +577,6 @@ IDEF(can_zombify)
 
     lua_pushboolean(ls, item->is_type(OBJ_CORPSES, CORPSE_BODY)
                         && mons_zombifiable(item->mon_type));
-
-    return 1;
-}
-
-IDEF(is_preferred_food)
-{
-    if (!item || !item->defined())
-        return 0;
-
-    lua_pushboolean(ls, is_preferred_food(*item));
-
-    return 1;
-}
-
-IDEF(is_bad_food)
-{
-    if (!item || !item->defined())
-        return 0;
-
-    lua_pushboolean(ls, false);
 
     return 1;
 }
@@ -1334,8 +1313,6 @@ static ItemAccessor item_attrs[] =
     { "is_corpse",         l_item_is_corpse },
     { "has_skeleton",      l_item_has_skeleton },
     { "can_zombify",       l_item_can_zombify },
-    { "is_preferred_food", l_item_is_preferred_food },
-    { "is_bad_food",       l_item_is_bad_food },
     { "is_useless",        l_item_is_useless },
     { "spells",            l_item_spells },
     { "artprops",          l_item_artprops },

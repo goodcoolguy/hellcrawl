@@ -1140,11 +1140,6 @@ static void _get_status_lights(vector<status_light>& out)
         snprintf(static_pos_buf, sizeof(static_pos_buf),
                  "%2d,%2d", you.pos().x, you.pos().y);
         out.emplace_back(LIGHTGREY, static_pos_buf);
-
-        static char static_hunger_buf[80];
-        snprintf(static_hunger_buf, sizeof(static_hunger_buf),
-                 "(%d:%d)", you.hunger - you.old_hunger, you.hunger);
-        out.emplace_back(LIGHTGREY, static_hunger_buf);
     }
 #endif
 
@@ -1154,7 +1149,6 @@ static void _get_status_lights(vector<status_light>& out)
     {
         STATUS_ORB,
         STATUS_STR_ZERO, STATUS_INT_ZERO, STATUS_DEX_ZERO,
-        STATUS_HUNGER,
         DUR_PARALYSIS,
         DUR_CONF,
         DUR_PETRIFYING,

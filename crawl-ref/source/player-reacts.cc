@@ -57,7 +57,6 @@
 #include "fight.h"
 #include "files.h"
 #include "fineff.h"
-#include "food.h"
 #include "fprop.h"
 #include "godabil.h"
 #include "godcompanions.h"
@@ -718,11 +717,6 @@ static void _decrement_durations()
     if (you.duration[DUR_LIQUEFYING] && !you.stand_on_solid_ground())
         you.duration[DUR_LIQUEFYING] = 1;
 
-    if (you.duration[DUR_BERSERK]
-        && you.hunger + 100 <= HUNGER_STARVING + BERSERK_NUTRITION)
-    {
-        you.duration[DUR_BERSERK] = 1; // end
-    }
 
     // Leak piety from the piety pool into actual piety.
     // Note that changes of religious status without corresponding actions
@@ -1065,12 +1059,6 @@ void player_reacts()
         mprf("The lava roasts you! (%d)", lava_damage);
         ouch(lava_damage, KILLED_BY_LAVA);
     }
-	
-    // Handle starvation before subtracting hunger for this turn (including
-    // hunger from the berserk duration) and before monsters react, so you
-    // always get a turn (though it may be a delay or macro!) between getting
-    // the Fainting light and actually fainting.
-    handle_starvation();
 
     _decrement_durations();
 
@@ -1084,11 +1072,6 @@ void player_reacts()
 
     // increment constriction durations
     you.accum_has_constricted();
-
-    const int food_use = div_rand_round(player_hunger_rate() * you.time_taken,
-                                        BASELINE_DELAY);
-    if (food_use > 0 && you.hunger > 0)
-        make_hungry(food_use, true);
 
     _regenerate_hp_and_mp(you.time_taken);
 

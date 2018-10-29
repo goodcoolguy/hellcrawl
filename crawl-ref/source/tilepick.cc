@@ -12,7 +12,6 @@
 #include "describe.h"
 #include "env.h"
 #include "files.h"
-#include "food.h"
 #include "ghost.h"
 #include "itemname.h"
 #include "itemprop.h"
@@ -129,10 +128,6 @@ tileidx_t tileidx_shop(const shop_struct *shop)
             return TILE_SHOP_JEWELLERY;
         case SHOP_EVOKABLES:
             return TILE_SHOP_GADGETS;
-#if TAG_MAJOR_VERSION == 34
-		case SHOP_FOOD:
-			return TILE_SHOP_FOOD;
-#endif
         case SHOP_BOOK:
             return TILE_SHOP_BOOKS;
         case SHOP_SCROLL:
@@ -2216,26 +2211,11 @@ static tileidx_t _tileidx_armour(const item_def &item)
 
 static tileidx_t _tileidx_chunk(const item_def &item)
 {
-    if (is_inedible(item))
-        return TILE_FOOD_CHUNK_INEDIBLE;
-
     return TILE_FOOD_CHUNK;
 }
 
 static tileidx_t _tileidx_food(const item_def &item)
 {
-    switch (item.sub_type)
-    {
-    case FOOD_MEAT_RATION:  return TILE_FOOD_MEAT_RATION;
-    case FOOD_BREAD_RATION: return TILE_FOOD_BREAD_RATION;
-    case FOOD_FRUIT:        return _modrng(item.rnd, TILE_FOOD_FRUIT_FIRST, TILE_FOOD_FRUIT_LAST);
-    case FOOD_ROYAL_JELLY:  return TILE_FOOD_ROYAL_JELLY;
-    case FOOD_PIZZA:        return TILE_FOOD_PIZZA;
-    case FOOD_BEEF_JERKY:   return TILE_FOOD_BEEF_JERKY;
-    case FOOD_CHUNK:        return _tileidx_chunk(item);
-    case NUM_FOODS:         return TILE_FOOD_BREAD_RATION;
-    }
-
     return TILE_ERROR;
 }
 
@@ -2469,9 +2449,6 @@ tileidx_t tileidx_item(const item_def &item)
             return TILE_WAND_ID_FIRST + type;
         else
             return TILE_WAND_OFFSET + subtype_rnd % NDSC_WAND_PRI;
-
-    case OBJ_FOOD:
-        return _tileidx_food(item);
 
     case OBJ_SCROLLS:
         if (item.flags & ISFLAG_KNOW_TYPE)
@@ -3607,13 +3584,6 @@ tileidx_t tileidx_known_brand(const item_def &item)
 
 tileidx_t tileidx_corpse_brand(const item_def &item)
 {
-    if (item.base_type != OBJ_CORPSES || item.sub_type != CORPSE_BODY)
-        return 0;
-
-    // Vampires are only interested in fresh blood.
-    if (you.species == SP_VAMPIRE && !mons_has_blood(item.mon_type))
-        return TILE_FOOD_INEDIBLE;
-
     return 0;
 }
 

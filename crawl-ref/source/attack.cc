@@ -203,10 +203,6 @@ int attack::calc_to_hit(bool random)
                               || (weapon && is_range_weapon(*weapon)
                                          && using_weapon()));
 
-        // hunger penalty
-        if (you.hunger_state <= HS_STARVING)
-            mhit -= 3;
-
         // armour penalty
         mhit -= (attacker_armour_tohit_penalty + attacker_shield_tohit_penalty);
 
@@ -1233,12 +1229,7 @@ int attack::player_apply_misc_modifiers(int damage)
  */
 int attack::get_weapon_plus()
 {
-    if (weapon->base_type == OBJ_STAVES
-#if TAG_MAJOR_VERSION == 34
-        || weapon->sub_type == WPN_BLOWGUN
-        || weapon->base_type == OBJ_RODS
-#endif
-       )
+    if (weapon->base_type == OBJ_STAVES)
     {
         return 0;
     }

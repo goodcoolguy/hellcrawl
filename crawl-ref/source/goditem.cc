@@ -16,7 +16,6 @@
 
 #include "artefact.h"
 #include "art-enum.h"
-#include "food.h"
 #include "itemname.h"
 #include "itemprop.h"
 #include "items.h"
@@ -170,8 +169,6 @@ bool is_evil_item(const item_def& item)
                || item_brand == SPWPN_REAPING;
         }
         break;
-    case OBJ_POTIONS:
-        return is_blood_potion(item);
     case OBJ_SCROLLS:
         return item.sub_type == SCR_TORMENT;
     case OBJ_STAVES:

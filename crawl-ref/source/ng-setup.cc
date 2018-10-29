@@ -8,7 +8,6 @@
 #include "dungeon.h"
 #include "end.h"
 #include "files.h"
-#include "food.h"
 #include "godcompanions.h"
 #include "hints.h"
 #include "invent.h"
@@ -106,8 +105,6 @@ item_def* newgame_make_item(object_class_type base,
     int slot;
     for (slot = 0; slot < ENDOFPACK; ++slot)
     {
-        if (base == OBJ_FOOD && slot == letter_to_index('e'))
-            continue;
 
         item_def& item = you.inv[slot];
         if (!item.defined())
@@ -298,11 +295,6 @@ static void _give_items_skills(const newgame_def& ng)
     }
 }
 
-static void _give_starting_food()
-{
-    return;
-}
-
 static void _setup_tutorial_miscs()
 {
     // Allow for a few specific hint mode messages.
@@ -332,8 +324,6 @@ static void _give_basic_knowledge()
     // Removed item types are handled in _set_removed_types_as_identified.
 }
 
-static void _setup_normal_game();
-static void _setup_tutorial(const newgame_def& ng);
 static void _setup_sprint(const newgame_def& ng);
 static void _setup_hints();
 static void _setup_generic(const newgame_def& ng);
@@ -348,10 +338,8 @@ void setup_game(const newgame_def& ng)
     switch (crawl_state.type)
     {
     case GAME_TYPE_NORMAL:
-        _setup_normal_game();
         break;
     case GAME_TYPE_TUTORIAL:
-        _setup_tutorial(ng);
         break;
     case GAME_TYPE_SPRINT:
         _setup_sprint(ng);
@@ -366,22 +354,6 @@ void setup_game(const newgame_def& ng)
     }
 
     _setup_generic(ng);
-}
-
-/**
- * Special steps that normal game needs;
- */
-static void _setup_normal_game()
-{
-    make_hungry(0, true);
-}
-
-/**
- * Special steps that tutorial game needs;
- */
-static void _setup_tutorial(const newgame_def& ng)
-{
-    make_hungry(0, true);
 }
 
 /**
@@ -443,7 +415,6 @@ static void _setup_generic(const newgame_def& ng)
 
     _unfocus_stats();
 
-    // Needs to be done before handing out food.
     give_basic_mutations(you.species);
 
     // This function depends on stats and mutations being finalised.
@@ -453,8 +424,6 @@ static void _setup_generic(const newgame_def& ng)
 
     if (you.species == SP_DEMONSPAWN)
         roll_demonspawn_mutations();
-
-    _give_starting_food();
 
     if (crawl_state.game_is_sprint())
         _give_bonus_items();

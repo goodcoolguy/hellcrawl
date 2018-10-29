@@ -39,7 +39,6 @@
 #include "english.h"
 #include "files.h"
 #include "flood_find.h"
-#include "food.h"
 #include "ghost.h"
 #include "godpassive.h"
 #include "itemname.h"
@@ -495,10 +494,6 @@ void bazaar_postlevel_shops()
         if(grd(c) == DNGN_FLOOR) //need this in case another shop was already placed here
         {
 			shop_type type = static_cast<shop_type>(random2(NUM_SHOPS));
-            while(type == SHOP_FOOD)
-            {
-                 type = static_cast<shop_type>(random2(NUM_SHOPS));
-            }
             place_spec_shop(c, type);
 			added_shop_count--;
             map_cell& cell = env.map_knowledge(c);
@@ -4261,19 +4256,11 @@ static int _dgn_item_corpse(const item_spec &ispec, const coord_def where)
 
     if (ispec.base_type == OBJ_CORPSES && ispec.sub_type == CORPSE_SKELETON)
         turn_corpse_into_skeleton(*corpse);
-    else if (ispec.base_type == OBJ_FOOD && ispec.sub_type == FOOD_CHUNK)
-        turn_corpse_into_chunks(*corpse, false);
 
     if (ispec.props.exists(MONSTER_HIT_DICE))
     {
         corpse->props[MONSTER_HIT_DICE].get_short() =
             ispec.props[MONSTER_HIT_DICE].get_short();
-    }
-
-    if (ispec.qty && ispec.base_type == OBJ_FOOD)
-    {
-        corpse->quantity = ispec.qty;
-        init_perishable_stack(*corpse);
     }
 
     return corpse->index();
@@ -5495,7 +5482,7 @@ static bool _valid_item_for_shop(int item_index, shop_type shop_type_,
     // Don't generate gold in shops! This used to be possible with
     // general stores (GDL)
 	//don't generate food either, since it's removed forever
-    if (item.base_type == OBJ_GOLD || item.base_type == OBJ_FOOD)
+    if (item.base_type == OBJ_GOLD)
         return false;
 
     // Don't place missiles or food in general antique shops...
@@ -5630,11 +5617,7 @@ void place_spec_shop(const coord_def& where, shop_spec &spec, int shop_level)
     shop.type = spec.sh_type;
     if (shop.type == SHOP_RANDOM)
     {
-		do
-		{
-			shop.type = static_cast<shop_type>(random2(NUM_SHOPS));
-		}
-		while(shop_type_removed(shop.type));
+        shop.type = static_cast<shop_type>(random2(NUM_SHOPS));
 	}
     shop.greed = _shop_greed(shop.type, level_number, spec.greed);
     shop.pos = where;
@@ -5679,12 +5662,6 @@ object_class_type item_in_shop(shop_type shop_type)
 
     case SHOP_BOOK:
         return OBJ_BOOKS;
-		
-#if TAG_MAJOR_VERSION == 34
-	//food shops shouldn't generate, but make extra sure to not generate food just in case
-	case SHOP_FOOD:
-        return OBJ_RANDOM; 
-#endif
 
     case SHOP_DISTILLERY:
         return OBJ_POTIONS;

@@ -776,42 +776,4 @@ enum zap_count_type
     ZAPCOUNT_RECHARGED   = -3,
 };
 
-enum food_type
-{
-    FOOD_MEAT_RATION,
-    FOOD_BREAD_RATION,
-#if TAG_MAJOR_VERSION == 34
-    FOOD_PEAR,
-    FOOD_APPLE,
-    FOOD_CHOKO,
-#endif
-    FOOD_ROYAL_JELLY,
-#if TAG_MAJOR_VERSION == 34
-    FOOD_UNUSED, // was: royal jelly
-#endif
-    FOOD_FRUIT,  // was: snozzcumber
-    FOOD_PIZZA,
-#if TAG_MAJOR_VERSION == 34
-    FOOD_APRICOT,
-    FOOD_ORANGE,
-    FOOD_BANANA,
-    FOOD_STRAWBERRY,
-    FOOD_RAMBUTAN,
-    FOOD_LEMON,
-    FOOD_GRAPE,
-    FOOD_SULTANA,
-    FOOD_LYCHEE,
-#endif
-    FOOD_BEEF_JERKY,
-#if TAG_MAJOR_VERSION == 34
-    FOOD_CHEESE,
-    FOOD_SAUSAGE,
-#endif
-    FOOD_CHUNK,
-#if TAG_MAJOR_VERSION == 34
-    FOOD_AMBROSIA,
-#endif
-    NUM_FOODS
-};
-
 #endif

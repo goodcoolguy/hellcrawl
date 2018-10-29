@@ -33,7 +33,6 @@
 #include "env.h"
 #include "evoke.h"
 #include "fight.h"
-#include "food.h"
 #include "ghost.h"
 #include "godabil.h"
 #include "goditem.h"
@@ -52,6 +51,7 @@
 #include "mon-tentacle.h"
 #include "options.h"
 #include "output.h"
+#include "player.h"
 #include "process_desc.h"
 #include "prompt.h"
 #include "religion.h"
@@ -2078,26 +2078,6 @@ string get_item_description(const item_def &item, bool verbose,
         if (item.sub_type == CORPSE_SKELETON)
             break;
 
-        // intentional fall-through
-    case OBJ_FOOD:
-        if (item.base_type == OBJ_FOOD)
-        {
-            description << "\n\n";
-
-            const int turns = food_turns(item);
-            ASSERT(turns > 0);
-            if (turns > 1)
-            {
-                description << "It is large enough that eating it takes "
-                            << ((turns > 2) ? "several" : "a couple of")
-                            << " turns, during which time the eater is vulnerable"
-                               " to attack.";
-            }
-            else
-                description << "It is small enough that eating it takes "
-                               "only one turn.";
-        }
-        break;
 
     case OBJ_STAVES:
         description << "\n\nIt falls into the 'Staves' category. ";
@@ -2147,9 +2127,6 @@ string get_item_description(const item_def &item, bool verbose,
     case OBJ_ORBS:
     case OBJ_GOLD:
     case OBJ_RUNES:
-#if TAG_MAJOR_VERSION == 34
-    case OBJ_RODS:
-#endif
         // No extra processing needed for these item types.
         break;
 
@@ -2317,10 +2294,6 @@ static vector<command_type> _allowed_actions(const item_def& item)
         else
             actions.push_back(CMD_WEAR_ARMOUR);
         break;
-    case OBJ_FOOD:
-        if (can_eat(item, true, false))
-            actions.push_back(CMD_EAT);
-        break;
     case OBJ_SCROLLS:
     //case OBJ_BOOKS: these are handled differently
         actions.push_back(CMD_READ);
@@ -2332,7 +2305,7 @@ static vector<command_type> _allowed_actions(const item_def& item)
             actions.push_back(CMD_WEAR_JEWELLERY);
         break;
     case OBJ_POTIONS:
-        if (!you_foodless(true)) // mummies and lich form forbidden
+        if (!you_potionless()) // mummies and lich form forbidden
             actions.push_back(CMD_QUAFF);
         break;
     default:
@@ -2442,7 +2415,6 @@ static bool _do_action(item_def &item, const vector<command_type>& actions, int 
     case CMD_WEAR_ARMOUR:      wear_armour(slot);                   break;
     case CMD_REMOVE_ARMOUR:    takeoff_armour(slot);                break;
     case CMD_EVOKE:            evoke_item(slot);                    break;
-    case CMD_EAT:              eat_food(slot);                      break;
     case CMD_READ:             read(&item);                         break;
     case CMD_WEAR_JEWELLERY:   puton_ring(slot, true);              break;
     case CMD_REMOVE_JEWELLERY: remove_ring(slot, true);             break;
@@ -2601,8 +2573,6 @@ static string _player_spell_stats(const spell_type spell)
     description += spell_power_string(spell);
     description += "\nRange : ";
     description += spell_range_string(spell);
-    description += "\nHunger: ";
-    description += spell_hunger_string(spell);
     description += "\nNoise : ";
     description += spell_noise_string(spell);
     description += "\n";
@@ -3031,7 +3001,6 @@ static string _flavour_effect(attack_flavour flavour, int HD)
         { AF_DRAIN_XP,          "drain skills" },
         { AF_ELEC,              "deal up to %d electric damage" },
         { AF_FIRE,              "deal up to %d fire damage" },
-        { AF_HUNGER,            "cause hunger" },
         { AF_MUTATE,            "cause mutations" },
         { AF_PARALYSE,          "poison and cause paralysis" },
         { AF_POISON,            "cause poisoning" },

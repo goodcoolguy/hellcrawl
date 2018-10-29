@@ -33,7 +33,6 @@
 #include "env.h"
 #include "errors.h"
 #include "exercise.h"
-#include "food.h"
 #include "godabil.h"
 #include "godconduct.h"
 #include "godpassive.h"
@@ -310,6 +309,11 @@ bool check_moveto(const coord_def& p, const string &move_verb, const string &msg
            && check_moveto_cloud(p, move_verb)
            && check_moveto_trap(p, move_verb)
            && check_moveto_exclusion(p, move_verb);
+}
+
+bool you_potionless()
+{
+    return you.undead_state() == US_UNDEAD;
 }
 
 // Returns true if this is a valid swap for this monster. If true, then
@@ -1269,11 +1273,6 @@ void update_mana_regen_amulet_attunement()
     }
     else
         you.props[MANA_REGEN_AMULET_ACTIVE] = 0;
-}
-
-int player_hunger_rate(bool temp)
-{
-    return 0;
 }
 
 /**
@@ -5019,8 +5018,6 @@ player::player()
     stat_loss.init(0);
     base_stats.init(0);
 
-    hunger          = HUNGER_DEFAULT;
-    hunger_state    = HS_SATIATED;
     disease         = 0;
     max_level       = 1;
     hit_points_regeneration   = 0;
@@ -5225,8 +5222,6 @@ player::player()
     abyss_speed         = 0;
     for (int i = 0; i < NUM_SEEDS; i++)
         game_seeds[i] = get_uint32();
-
-    old_hunger          = hunger;
 
     los_noise_level     = 0;        ///< temporary slot for loud noise levels
     los_noise_last_turn = 0;
@@ -5486,13 +5481,6 @@ void player::banish(actor* /*agent*/, const string &who, const int power,
     banished    = true;
     banished_by = who;
     banished_power = power;
-}
-
-// For semi-undead species (Vampire!) reduce food cost for spells and abilities
-// to 50% (hungry, very hungry, near starving) or zero (starving).
-int calc_hunger(int food_cost)
-{
-    return 0;
 }
 
 /*
@@ -6194,7 +6182,7 @@ int player::res_rotting(bool temp) const
         return 1; // rottable by Zin, not by necromancy
 
     case US_SEMI_UNDEAD:
-        if (temp && hunger_state < HS_SATIATED)
+        if (temp)
             return 1;
         return 0; // no permanent resistance
 
@@ -7104,9 +7092,6 @@ bool player::can_safely_mutate(bool temp) const
 // Is the player too undead to bleed, rage, or polymorph?
 bool player::is_lifeless_undead(bool temp) const
 {
-    if (undead_state() == US_SEMI_UNDEAD)
-        return temp ? hunger_state < HS_SATIATED : false;
-    else
         return undead_state() != US_ALIVE;
 }
 
@@ -8473,9 +8458,6 @@ void player_end_berserk()
     Hints.hints_events[HINT_YOU_ENCHANTED] = false;
 
     slow_player(dur, true);
-
-    make_hungry(BERSERK_NUTRITION, true);
-    you.hunger = max(HUNGER_STARVING - 100, you.hunger);
 
     // 1KB: No berserk healing.
     set_hp((you.hp + 1) * 2 / 3);

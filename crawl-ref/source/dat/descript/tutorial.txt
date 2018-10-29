@@ -569,12 +569,6 @@ Mephitic Cloud covers an area in noxious fumes when cast, and you'll be able to
 see the area it affects as you target it. Try to catch multiple enemies in a
 single cloud in order to be more efficient with your magic.
 %%%%
-tutorial4 spell_hunger
-
-Spellcasting can make you really hungry. Spell hunger is higher for more
-difficult spells and can be reduced by high intelligence and by training the
-Spellcasting skill.
-%%%%
 tutorial4 forget_spell
 
 Gaining an experience level and raising your Spellcasting skill gives you spell
@@ -706,11 +700,6 @@ A berserker rage is truly exhausting. While fatigued, you cannot berserk again
 and are also slowed. It's best to rest with <input>$cmd[CMD_REST]</input>
 <localtiles> (or via the <w>command panel</w>)</localtiles> until you feel fit
 again.
-%%%%
-tutorial5 hunger
-
-Berserking also causes a large amount of hunger. You cannot berserk while very
-hungry, so you should always carry some food with you.
 %%%%
 tutorial5 berserk2
 

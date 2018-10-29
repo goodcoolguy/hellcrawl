@@ -3517,9 +3517,7 @@ bool monster::is_nonliving(bool /*temp*/) const
 int monster::how_unclean(bool check_god) const
 {
     int uncleanliness = 0;
-
-    if (has_attack_flavour(AF_HUNGER))
-        uncleanliness++;
+	
     if (has_attack_flavour(AF_ROT))
         uncleanliness++;
     if (has_attack_flavour(AF_STEAL))

@@ -20,7 +20,6 @@
 #include "decks.h"
 #include "describe.h"
 #include "env.h"
-#include "food.h"
 #include "goditem.h"
 #include "godpassive.h"
 #include "initfile.h"
@@ -240,9 +239,6 @@ void get_class_hotkeys(const int type, vector<char> &glyphs)
     case OBJ_WANDS:
         glyphs.push_back('/');
         break;
-    case OBJ_FOOD:
-        glyphs.push_back('%');
-        break;
     case OBJ_BOOKS:
         glyphs.push_back(':');
         break;
@@ -259,11 +255,6 @@ void get_class_hotkeys(const int type, vector<char> &glyphs)
     case OBJ_STAVES:
         glyphs.push_back('|');
         break;
-#if TAG_MAJOR_VERSION == 34
-    case OBJ_RODS:
-        glyphs.push_back('\\');
-        break;
-#endif
     case OBJ_MISCELLANY:
         glyphs.push_back('}');
         break;
@@ -421,8 +412,6 @@ string no_selectables_message(int item_selector)
         return "You don't have any corpses.";
     case OSEL_DRAW_DECK:
         return "You aren't carrying any decks from which to draw.";
-    case OBJ_FOOD:
-        return "There is no food.";
     case OBJ_POTIONS:
         return "You aren't carrying any potions.";
     case OBJ_SCROLLS:
@@ -538,9 +527,6 @@ bool get_tiles_for_item(const item_def &item, vector<tile_def>& tileset, bool sh
     }
     if (item.base_type == OBJ_WEAPONS || item.base_type == OBJ_MISSILES
         || item.base_type == OBJ_ARMOUR
-#if TAG_MAJOR_VERSION == 34
-        || item.base_type == OBJ_RODS
-#endif
        )
     {
         tileidx_t brand = tileidx_known_brand(item);
@@ -746,16 +732,12 @@ FixedVector<int, NUM_OBJECT_CLASSES> inv_order(
     OBJ_MISSILES,
     OBJ_ARMOUR,
     OBJ_STAVES,
-#if TAG_MAJOR_VERSION == 34
-    OBJ_RODS,
-#endif
     OBJ_JEWELLERY,
     OBJ_WANDS,
     OBJ_SCROLLS,
     OBJ_POTIONS,
     OBJ_BOOKS,
     OBJ_MISCELLANY,
-    OBJ_FOOD,
     // These four can't actually be in your inventory.
     OBJ_CORPSES,
     OBJ_RUNES,
@@ -931,15 +913,11 @@ const char *item_class_name(int type, bool terse)
         case OBJ_MISSILES:   return "Missiles";
         case OBJ_ARMOUR:     return "Armour";
         case OBJ_WANDS:      return "Wands";
-        case OBJ_FOOD:       return "Comestibles";
         case OBJ_SCROLLS:    return "Scrolls";
         case OBJ_JEWELLERY:  return "Jewellery";
         case OBJ_POTIONS:    return "Potions";
         case OBJ_BOOKS:      return "Books";
         case OBJ_STAVES:     return "Magical Staves";
-#if TAG_MAJOR_VERSION == 34
-        case OBJ_RODS:       return "Rods";
-#endif
         case OBJ_ORBS:       return "Orbs of Power";
         case OBJ_MISCELLANY: return "Miscellaneous";
         case OBJ_CORPSES:    return "Carrion";
@@ -999,7 +977,7 @@ bool item_is_selected(const item_def &i, int selector)
 {
     const object_class_type itype = i.base_type;
     if (selector == OSEL_ANY || selector == itype
-                                && itype != OBJ_FOOD && itype != OBJ_ARMOUR)
+                                && itype != OBJ_ARMOUR)
     {
         return true;
     }
@@ -1048,9 +1026,6 @@ bool item_is_selected(const item_def &i, int selector)
 
     case OSEL_ENCHANTABLE_ARMOUR:
         return is_enchantable_armour(i, true);
-
-    case OBJ_FOOD:
-        return itype == OBJ_FOOD && !is_inedible(i);
 
     case OSEL_DRAW_DECK:
         return is_deck(i);

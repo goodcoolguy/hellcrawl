@@ -136,9 +136,7 @@ public:
     FixedVector<int8_t, NUM_STATS> stat_loss;
     FixedVector<int8_t, NUM_STATS> base_stats;
 
-    int hunger;
     int disease;
-    hunger_state_t hunger_state;
     uint8_t max_level;
     int hit_points_regeneration;
     int magic_points_regeneration;
@@ -418,8 +416,6 @@ public:
 
     int time_taken;
 
-    int old_hunger;            // used for hunger delta-meter (see output.cc)
-
     // the loudest noise level the player has experienced in los this turn
     int los_noise_level;
     int los_noise_last_turn;
@@ -692,8 +688,6 @@ public:
     void expose_to_element(beam_type element, int strength = 0,
                            bool slow_cold_blood = true) override;
     void god_conduct(conduct_type thing_done, int level) override;
-
-    void make_hungry(int nutrition, bool silent = true) override;
     bool poison(actor *agent, int amount = 1, bool force = false) override;
     bool sicken(int amount) override;
     void paralyse(actor *, int str, string source = "") override;
@@ -959,10 +953,6 @@ int player_armour_shield_spell_penalty();
 
 int player_movement_speed();
 
-int player_hunger_rate(bool temp = true);
-
-int calc_hunger(int food_cost);
-
 int player_icemail_armour_class();
 int sanguine_armour_bonus();
 
@@ -1135,7 +1125,7 @@ void float_player();
 bool land_player(bool quiet = false);
 void player_open_door(coord_def doorpos);
 void player_close_door(coord_def doorpos);
-
+bool you_potionless();
 void dec_disease_player(int delay);
 void player_end_berserk();
 

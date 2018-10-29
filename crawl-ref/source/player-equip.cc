@@ -11,7 +11,6 @@
 #include "delay.h"
 #include "english.h" // conjugate_verb
 #include "evoke.h"
-#include "food.h"
 #include "godabil.h"
 #include "goditem.h"
 #include "godpassive.h"

@@ -22,7 +22,6 @@
 #include "english.h"
 #include "env.h"
 #include "files.h"
-#include "food.h"
 #include "invent.h"
 #include "itemname.h"
 #include "itemprop.h"
@@ -178,18 +177,6 @@ int artefact_value(const item_def &item)
         ret += 20;
 
     return (ret > 0) ? ret : 0;
-}
-
-const set<int> removed_shops =
-{
-#if TAG_MAJOR_VERSION == 34
-	{SHOP_FOOD, },
-	#endif
-};
-
-bool shop_type_removed(int subtype)
-{
-    return removed_shops.count({subtype}) != 0;
 }
 
 unsigned int item_value(item_def item, bool ident)
@@ -540,10 +527,6 @@ unsigned int item_value(item_def item, bool ident)
 #endif
             }
         }
-        break;
-
-    case OBJ_FOOD:
-        valued += 50000;
         break;
 
     case OBJ_CORPSES:
@@ -1467,10 +1450,6 @@ string shop_type_name(shop_type type)
             return "Gadget";
         case SHOP_BOOK:
             return "Book";
-#if TAG_MAJOR_VERSION == 34			
-		case SHOP_FOOD:
-			return "Food";
-#endif
         case SHOP_SCROLL:
             return "Magic Scroll";
         case SHOP_GENERAL_ANTIQUE:
@@ -1569,7 +1548,6 @@ static const char *shop_types[] =
     "jewellery",
     "gadget",
     "book",
-    "food",
     "distillery",
     "scroll",
     "general",

@@ -1358,7 +1358,6 @@ static void tag_construct_you(writer &th)
     ASSERT(you.hp > 0 || you.pending_revival);
     marshallShort(th, you.pending_revival ? 0 : you.hp);
 
-    marshallShort(th, you.hunger);
     marshallBoolean(th, you.fishtail);
     marshallInt(th, you.form);
     CANARY;
@@ -2293,7 +2292,6 @@ static void tag_read_you(reader &th)
 
     you.disease         = unmarshallInt(th);
     you.hp              = unmarshallShort(th);
-    you.hunger          = unmarshallShort(th);
     you.fishtail        = unmarshallBoolean(th);
 #if TAG_MAJOR_VERSION == 34
     if (th.getMinorVersion() < TAG_MINOR_NOME_NO_MORE)
@@ -3807,26 +3805,6 @@ static void tag_read_you_items(reader &th)
         for (int j = 0; j < count2; j++)
             you.force_autopickup[i][j] = unmarshallInt(th);
 #if TAG_MAJOR_VERSION == 34
-    if (th.getMinorVersion() < TAG_MINOR_FOOD_AUTOPICKUP)
-    {
-        const int oldstate = you.force_autopickup[OBJ_FOOD][NUM_FOODS];
-        you.force_autopickup[OBJ_FOOD][FOOD_MEAT_RATION] = oldstate;
-        you.force_autopickup[OBJ_FOOD][FOOD_FRUIT] = oldstate;
-        you.force_autopickup[OBJ_FOOD][FOOD_ROYAL_JELLY] = oldstate;
-
-        you.force_autopickup[OBJ_BOOKS][BOOK_MANUAL] =
-            you.force_autopickup[OBJ_BOOKS][NUM_BOOKS];
-    }
-    if (th.getMinorVersion() < TAG_MINOR_FOOD_PURGE_AP_FIX)
-    {
-        FixedVector<int, MAX_SUBTYPES> &food_pickups =
-            you.force_autopickup[OBJ_FOOD];
-
-        // If fruit pickup was not set explicitly during the time between
-        // FOOD_PURGE and FOOD_PURGE_AP_FIX, copy the old exemplar FOOD_PEAR.
-        if (food_pickups[FOOD_FRUIT] == 0)
-            food_pickups[FOOD_FRUIT] = food_pickups[FOOD_PEAR];
-    }
     if (you.species == SP_FORMICID)
         remove_one_equip(EQ_HELMET, false, true);
 
@@ -4509,48 +4487,6 @@ void unmarshallItem(reader &th, item_def &item)
         }
     }
 
-    if (th.getMinorVersion() < TAG_MINOR_NO_POT_FOOD)
-    {
-        // Replace War Chants with Battle to avoid empty-book errors.
-
-        // Moved under TAG_MINOR_NO_POT_FOOD because it was formerly
-        // not restricted to a particular range of minor tags.
-        if (item.is_type(OBJ_BOOKS, BOOK_WAR_CHANTS))
-            item.sub_type = BOOK_BATTLE;
-
-        if (item.base_type == OBJ_FOOD && (item.sub_type == FOOD_UNUSED
-                                           || item.sub_type == FOOD_AMBROSIA))
-        {
-            item.sub_type = FOOD_ROYAL_JELLY;
-        }
-    }
-
-    if (th.getMinorVersion() < TAG_MINOR_FOOD_PURGE)
-    {
-        if (item.base_type == OBJ_FOOD)
-        {
-            if (item.sub_type == FOOD_SAUSAGE)
-                item.sub_type = FOOD_BEEF_JERKY;
-            if (item.sub_type == FOOD_CHEESE)
-                item.sub_type = FOOD_PIZZA;
-            if (item.sub_type == FOOD_PEAR
-                || item.sub_type == FOOD_APPLE
-                || item.sub_type == FOOD_CHOKO
-                || item.sub_type == FOOD_APRICOT
-                || item.sub_type == FOOD_ORANGE
-                || item.sub_type == FOOD_BANANA
-                || item.sub_type == FOOD_STRAWBERRY
-                || item.sub_type == FOOD_RAMBUTAN
-                || item.sub_type == FOOD_GRAPE
-                || item.sub_type == FOOD_SULTANA
-                || item.sub_type == FOOD_LYCHEE
-                || item.sub_type == FOOD_LEMON)
-            {
-                item.sub_type = FOOD_FRUIT;
-            }
-        }
-    }
-
     // Combine old rings of slaying (Acc/Dam) to new (Dam).
     // Also handle the changes to the respective ARTP_.
     if (th.getMinorVersion() < TAG_MINOR_SLAYRING_PLUSES)
@@ -4716,9 +4652,6 @@ void unmarshallItem(reader &th, item_def &item)
     {
         item.used_count = 0;
     }
-
-    if (item.base_type == OBJ_RODS && item.cursed())
-        do_uncurse_item(item); // rods can't be cursed anymore
 
     // turn old hides into the corresponding armour
     static const map<int, armour_type> hide_to_armour = {

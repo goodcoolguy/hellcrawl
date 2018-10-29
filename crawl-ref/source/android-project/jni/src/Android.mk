@@ -86,7 +86,6 @@ LOCAL_SRC_FILES := $(SDL_PATH)/src/main/android/SDL_android_main.c \
     $(CRAWL_PATH)/fight.cc \
     $(CRAWL_PATH)/files.cc \
     $(CRAWL_PATH)/fineff.cc \
-    $(CRAWL_PATH)/food.cc \
     $(CRAWL_PATH)/format.cc \
     $(CRAWL_PATH)/fprop.cc \
     $(CRAWL_PATH)/game-options.cc \
@@ -126,7 +125,6 @@ LOCAL_SRC_FILES := $(SDL_PATH)/src/main/android/SDL_android_main.c \
     $(CRAWL_PATH)/l_dgntil.cc \
     $(CRAWL_PATH)/l_feat.cc \
     $(CRAWL_PATH)/l_file.cc \
-    $(CRAWL_PATH)/l_food.cc \
     $(CRAWL_PATH)/l_global.cc \
     $(CRAWL_PATH)/l_item.cc \
     $(CRAWL_PATH)/l_los.cc \

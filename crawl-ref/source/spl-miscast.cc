@@ -16,7 +16,6 @@
 #include "directn.h"
 #include "english.h"
 #include "env.h"
-#include "food.h"
 #include "godpassive.h"
 #include "godwrath.h"
 #include "item_use.h"

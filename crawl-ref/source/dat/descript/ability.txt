@@ -85,11 +85,6 @@ anyone adjacent, and are not affected by any means of protection, such as armour
 or resistances. However, certain creatures, usually those able to invoke
 damnation themselves, are entirely unscathed by damnation.
 %%%%
-Release Delayed Fireball ability
-
-Instantly releases a previously prepared (delayed) fireball without additional
-cost in terms of magic or hunger.
-%%%%
 Stop Singing ability
 
 Stops singing your Song of Slaying.
@@ -167,8 +162,8 @@ Dig ability
 
 Allows making tunnels through soft rock and rusted grates. Activating the
 ability has no cost and simply prepares you to start digging; once active,
-moving into a wall will start tunneling. Doing so makes some noise and causes
-hunger, and is a little slower than walking.
+moving into a wall will start tunneling. Doing so makes some noise and is
+a little slower than walking.
 
 Once active, activating the ability again or making any non-digging movement
 action will cancel the Dig status.
@@ -450,7 +445,7 @@ other intelligent creatures. Undead and demons are harder still to pacify.
 Mindless creatures cannot be pacified, and no monster can be pacified while it
 is asleep.
 
-Whether the pacification succeeds or not, the invested food, piety and magic
+Whether the pacification succeeds or not, the invested piety and magic
 points are lost. If it does succeed, the monster is healed and you gain half
 the monster's experience value. Otherwise, the monster is unaffected and you
 gain nothing.

@@ -20,7 +20,6 @@
 #include "end.h"
 #include "exclude.h"
 #include "files.h"
-#include "food.h"
 #include "godabil.h"
 #include "godpassive.h"
 #include "hints.h"

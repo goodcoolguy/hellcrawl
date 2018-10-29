@@ -14,7 +14,6 @@
 #include "command.h"
 #include "dungeon.h"
 #include "end.h"
-#include "food.h"
 #include "itemname.h"
 #include "items.h"
 #include "libutil.h"
@@ -809,8 +808,6 @@ namespace arena
 
                 viewwindow();
                 you.time_taken = 10;
-                // Make sure we don't starve.
-                you.hunger = HUNGER_MAXIMUM;
                 //report_foes();
                 world_reacts();
                 do_miscasts();
