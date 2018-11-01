@@ -418,12 +418,6 @@ bool InventoryRegion::update_tip_text(string& tip)
                     _handle_wield_tip(tmp, cmd, "\n[Ctrl + L-Click] ", true);
                     break;
                 }
-                // else fall-through
-            case OBJ_RODS + EQUIP_OFFSET:
-                tmp += "Evoke (%)";
-                cmd.push_back(CMD_EVOKE_WIELDED);
-                _handle_wield_tip(tmp, cmd, "\n[Ctrl + L-Click] ", true);
-                break;
             case OBJ_ARMOUR:
                 tmp += "Wear (%)";
                 cmd.push_back(CMD_WEAR_ARMOUR);
@@ -623,9 +617,6 @@ static void _fill_item_info(InventoryTile &desc, const item_info &item)
 
     if (type == OBJ_WEAPONS || type == OBJ_MISSILES
         || type == OBJ_ARMOUR
-#if TAG_MAJOR_VERSION == 34
-        || type == OBJ_RODS
-#endif
        )
     {
         desc.special = tileidx_known_brand(item);

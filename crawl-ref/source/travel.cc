@@ -31,7 +31,6 @@
 #include "env.h"
 #include "fight.h"
 #include "files.h"
-#include "food.h"
 #include "format.h"
 #include "godabil.h"
 #include "godpassive.h"

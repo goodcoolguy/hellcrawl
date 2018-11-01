@@ -773,13 +773,7 @@ static void _magic_contamination_effects()
         beam.explode();
     }
 
-#if TAG_MAJOR_VERSION == 34
-    const mutation_permanence_class mutclass = you.species == SP_DJINNI
-        ? MUTCLASS_TEMPORARY
-        : MUTCLASS_NORMAL;
-#else
     const mutation_permanence_class mutclass = MUTCLASS_NORMAL;
-#endif
 
     // We want to warp the player, not do good stuff!
     mutate(one_chance_in(5) ? RANDOM_MUTATION : RANDOM_BAD_MUTATION,
@@ -813,7 +807,7 @@ static void _handle_magic_contamination(int /*time_delta*/)
 // Exercise armour *xor* stealth skill: {dlb}
 static void _wait_practice(int /*time_delta*/)
 {
-    practise_waiting();
+    return;
 }
 
 static void _lab_change(int /*time_delta*/)
@@ -978,26 +972,13 @@ static struct timed_effect timed_effects[] =
 {
     { rot_floor_items,               200,   200, true  },
     { _hell_effects,                 200,   600, false },
-#if TAG_MAJOR_VERSION == 34
-    { nullptr,                         0,     0, false },
-#endif
     { _handle_magic_contamination,   200,   600, false },
-#if TAG_MAJOR_VERSION == 34
-    { nullptr,                         0,     0, false },
-#endif
     { handle_god_time,               100,   300, false },
-#if TAG_MAJOR_VERSION == 34
-    { nullptr,                                0,     0, false },
-#endif
     { _antiscumming,                 400,   700, false },
-    { _wait_practice,                100,   300, false },
     { _lab_change,                  1000,  3000, false },
     { _abyss_speed,                  100,   300, false },
     { _jiyva_effects,                100,   300, false },
     { _evolve,                      5000, 15000, false },
-#if TAG_MAJOR_VERSION == 34
-	{  nullptr,                        0,     0, false },
-#endif
     { _timeout_traps,                200,   300, false },
 };
 

@@ -2088,9 +2088,6 @@ bool item_type_has_ids(object_class_type base_type)
     COMPILE_CHECK(NUM_BOOKS      < MAX_SUBTYPES);
     COMPILE_CHECK(NUM_STAVES     < MAX_SUBTYPES);
     COMPILE_CHECK(NUM_MISCELLANY < MAX_SUBTYPES);
-#if TAG_MAJOR_VERSION == 34
-    COMPILE_CHECK(NUM_RODS       < MAX_SUBTYPES);
-#endif
 
     return base_type == OBJ_WANDS || base_type == OBJ_SCROLLS
         || base_type == OBJ_JEWELLERY || base_type == OBJ_POTIONS

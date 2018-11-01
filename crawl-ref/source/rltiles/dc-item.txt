@@ -884,33 +884,6 @@ i-staff_earth STAFF_EARTH
 %rim 0
 i-staff_channeling STAFF_CHANNELING STAFF_ID_LAST
 
-# Remove rods TAG_MAJOR_VERSION > 34
-%sdir item/rod
-rod00 ROD
-rod01
-rod02
-rod03
-rod04
-rod05
-rod06
-rod07
-rod08
-rod09
-
-# These must be in the same order as the enum in item-prop-enum.h!
-%sdir misc
-error ROD_LIGHTNING ROD_ID_FIRST
-error ROD_SUMMONING
-error ROD_IGNITION
-error ROD_CLOUDS
-error ROD_DESTRUCTION
-error ROD_INACCURACY
-error ROD_WARDING
-error ROD_SHADOWS
-error ROD_IRON
-error ROD_VENOM ROD_ID_LAST
-%rim 1
-
 #OBJ_ORBS
 %sdir item/misc
 misc_orb ORB UNSEEN_ORB

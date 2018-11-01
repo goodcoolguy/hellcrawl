@@ -178,10 +178,7 @@ void rot_floor_items(int elapsedTime)
         if (is_shop_item(it) || !_item_needs_rot_check(it))
             continue;
 
-        if (it.base_type == OBJ_CORPSES)
-            _rot_corpse(it, mitm_index, rot_time);
-        else
-            _rot_stack(it, mitm_index, false);
+        _rot_stack(it, mitm_index, false);
     }
 }
 
