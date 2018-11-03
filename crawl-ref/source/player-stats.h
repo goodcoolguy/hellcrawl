@@ -19,6 +19,11 @@ void modify_stat(stat_type which_stat, int amount, bool suppress_msg);
 void notify_stat_change(stat_type which_stat, int amount, bool suppress_msg);
 void notify_stat_change();
 
+string stat_name(stat_type stat);
+string stat_abbreviation(stat_type stat);
+stat_type nth_stat(int n);
+vector<stat_type> ordered_stats();
+
 void jiyva_stat_action();
 
 int stat_loss_roll();

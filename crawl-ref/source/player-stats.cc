@@ -367,29 +367,91 @@ static int _stat_modifier(stat_type stat, bool innate_only)
   return 0;
     switch (stat)
     {
-      //case STAT_STR: return _strength_modifier(innate_only);
-      //case STAT_INT: return _int_modifier(innate_only);
-      //case STAT_DEX: return _dex_modifier(innate_only);
     default:
         mprf(MSGCH_ERROR, "Bad stat: %d", stat);
         return 0;
     }
 }
 
-static string _stat_name(stat_type stat)
+string stat_name(stat_type stat)
 {
-  return "no_stat";
     switch (stat)
     {
-      //case STAT_STR:
-      //  return "strength";
-      //case STAT_INT:
-      // return "intelligence";
-      //case STAT_DEX:
-      // return "dexterity";
+    case STAT_MELEE:
+        return "melee";
+    case STAT_RANGED:
+        return "ranged";
+    case STAT_SNEAK:
+        return "stealth";
+    case STAT_DEFENSE:
+        return "defense";
+    case STAT_BLACK_MAGIC:
+        return "black magic";
+    case STAT_ELEMENTAL:
+        return "elemental magic";
+    case STAT_THAUMATURGY:
+        return "thaumaturgy";
     default:
         die("invalid stat");
     }
+}
+
+string stat_abbreviation(stat_type stat)
+{
+    switch (stat)
+    {
+    case STAT_MELEE:
+        return "mel";
+    case STAT_RANGED:
+        return "rng";
+    case STAT_SNEAK:
+        return "sth";
+    case STAT_DEFENSE:
+        return "def";
+    case STAT_BLACK_MAGIC:
+        return "blk";
+    case STAT_ELEMENTAL:
+        return "ele";
+    case STAT_THAUMATURGY:
+        return "thm";
+    default:
+        die("invalid stat");
+    }
+}
+
+//return the player's nth highest stat
+//ties return the first enumerated stat
+stat_type nth_stat(int n)
+{
+    vector<stat_type> stats = ordered_stats();
+    return stats[n];
+}
+
+//provide a sorted vector of stats in descending order
+//ties favor the earliest enum
+vector<stat_type> ordered_stats()
+{
+	vector<stat_type> ret;
+	//std::vector<stat_type>::iterator it;
+	ret.emplace_back(STAT_MELEE);
+	for(int s = (int) STAT_MELEE + 1; s < (int) NUM_STATS; s++)
+    {
+        stat_type stat = static_cast<stat_type>(s);
+        if(you.stat(stat) <= you.stat(ret.back()))
+			ret.emplace_back(stat);
+		else
+        {
+			for(int i = 0; i < ret.size(); i++)
+            {
+				if(you.stat(stat) > you.stat(ret[i]))
+                {
+					ret.insert(ret.begin() + i, 1, stat);
+					break;
+                }
+            }
+        }
+    }
+    return ret;
 }
 
 int stat_loss_roll()
@@ -407,16 +469,6 @@ bool lose_stat(stat_type which_stat, int stat_loss, bool force)
 
     if (which_stat == STAT_RANDOM)
         which_stat = static_cast<stat_type>(random2(NUM_STATS));
-
-    if (!force)
-    {
-        if (you.duration[DUR_DIVINE_STAMINA] > 0)
-        {
-            mprf("Your divine stamina protects you from %s loss.",
-                 _stat_name(which_stat).c_str());
-            return false;
-        }
-    }
 
     mprf(MSGCH_WARN, "You feel %s.", stat_desc(which_stat, SD_LOSS));
 
@@ -466,13 +518,6 @@ bool restore_stat(stat_type which_stat, int stat_gain,
 
     if (which_stat >= NUM_STATS || you.stat_loss[which_stat] == 0)
         return false;
-
-    if (!suppress_msg)
-    {
-        mprf(recovery ? MSGCH_RECOVERY : MSGCH_PLAIN,
-             "You feel your %s returning.",
-             _stat_name(which_stat).c_str());
-    }
 
     if (stat_gain == 0 || stat_gain > you.stat_loss[which_stat])
         stat_gain = you.stat_loss[which_stat];

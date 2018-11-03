@@ -924,16 +924,6 @@ static short _get_stat_colour(stat_type stat)
         if (you.stat(stat) <= entry.first)
             return entry.second;
 
-    // Stat is magically increased.
-    //if (you.duration[DUR_DIVINE_STAMINA]
-    //    || stat == STAT_STR && you.duration[DUR_MIGHT]
-    //    || stat == STAT_STR && you.duration[DUR_BERSERK]
-    //    || stat == STAT_INT && you.duration[DUR_BRILLIANCE]
-    //    || stat == STAT_DEX && you.duration[DUR_AGILITY])
-    //{
-    //    return LIGHTBLUE;  // no end of effect warning
-    //}
-
     // Stat is degenerated.
     if (you.stat_loss[stat] > 0)
         return YELLOW;
@@ -948,10 +938,6 @@ static void _print_stat(stat_type stat, int x, int y)
     textcolour(_get_stat_colour(stat));
     CPRINTF("%d", you.stat(stat, false));
 
-    //if (you.stat_loss[stat] > 0)
-    //    CPRINTF(" (%d)  ", you.max_stat(stat));
-    //else
-    //    CPRINTF("       ");
 }
 
 static void _print_stats_ac(int x, int y)
@@ -1459,11 +1445,7 @@ void print_stats()
     for (int i = 0; i < NUM_STATS; ++i)
         if (you.redraw_stats[i])
         {
-#if TAG_MAJOR_VERSION == 34
-            _print_stat(static_cast<stat_type>(i), 19, 5 + i + temp);
-#else
             _print_stat(static_cast<stat_type>(i), 19, 5 + i);
-#endif
         }
     you.redraw_stats.init(false);
 
@@ -1588,20 +1570,12 @@ void draw_border()
 
     textcolour(Options.status_caption_colour);
 
-#if TAG_MAJOR_VERSION == 34
-    int temp = (you.species == SP_LAVA_ORC) ? 1 : 0;
-#endif
 //    int hp_pos = 3;
     int mp_pos = 4;
-#if TAG_MAJOR_VERSION == 34
-    int ac_pos = 5 + temp;
-    int ev_pos = 6 + temp;
-    int sh_pos = 7 + temp;
-#else
     int ac_pos = 5;
     int ev_pos = 6;
     int sh_pos = 7;
-#endif
+
     int one_pos = ac_pos;
     int two_pos = ev_pos;
     int three_pos = sh_pos;
@@ -1618,16 +1592,13 @@ void draw_border()
     CGOTOXY(1, ev_pos, GOTO_STAT); CPRINTF("EV:");
     CGOTOXY(1, sh_pos, GOTO_STAT); CPRINTF("SH:");
 
-    CGOTOXY(19, one_pos, GOTO_STAT); CPRINTF("One:");
-    CGOTOXY(19, two_pos, GOTO_STAT); CPRINTF("Two:");
-    CGOTOXY(19, three_pos, GOTO_STAT); CPRINTF("Thr:");
-    CGOTOXY(19, four_pos, GOTO_STAT); CPRINTF("For:");
+    CGOTOXY(19, one_pos, GOTO_STAT); CPRINTF(stat_abbreviation(nth_stat(1)).c_str());
+    CGOTOXY(19, two_pos, GOTO_STAT); CPRINTF(stat_abbreviation(nth_stat(2)).c_str());
+    CGOTOXY(19, three_pos, GOTO_STAT); CPRINTF(stat_abbreviation(nth_stat(3)).c_str());
+    CGOTOXY(19, four_pos, GOTO_STAT); CPRINTF(stat_abbreviation(nth_stat(4)).c_str());
 
-#if TAG_MAJOR_VERSION == 34
-    int yhack = temp;
-#else
     int yhack = 0;
-#endif
+
     CGOTOXY(19, 9 + yhack, GOTO_STAT);
     CPRINTF(Options.show_game_time ? "Time:" : "Turn:");
     // Line 8 is exp pool, Level
@@ -1651,10 +1622,7 @@ void redraw_screen(bool show_updates)
     you.redraw_title        = true;
     you.redraw_hit_points   = true;
     you.redraw_magic_points = true;
-#if TAG_MAJOR_VERSION == 34
-    if (you.species == SP_LAVA_ORC)
-        you.redraw_temperature = true;
-#endif
+
     you.redraw_stats.init(true);
     you.redraw_armour_class  = true;
     you.redraw_evasion       = true;
