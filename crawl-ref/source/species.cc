@@ -157,6 +157,11 @@ bool species_has_hair(species_type species)
     return !bool(_species_def(species).flags & (SPF_NO_HAIR | SPF_DRACONIAN));
 }
 
+map<stat_type, int> stat_classes(species_type species)
+{
+	return _species_def(species).initial_stats;
+}
+
 size_type species_size(species_type species, size_part_type psize)
 {
     const size_type size = _species_def(species).size;

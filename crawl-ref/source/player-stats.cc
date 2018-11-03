@@ -424,7 +424,7 @@ string stat_abbreviation(stat_type stat)
 stat_type nth_stat(int n)
 {
     vector<stat_type> stats = ordered_stats();
-    return stats[n];
+    return stats[n-1];
 }
 
 //provide a sorted vector of stats in descending order

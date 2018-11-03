@@ -1445,7 +1445,13 @@ void print_stats()
     for (int i = 0; i < NUM_STATS; ++i)
         if (you.redraw_stats[i])
         {
-            _print_stat(static_cast<stat_type>(i), 19, 5 + i);
+            for(int j = 1; j <= 4; j++)
+            {
+                if (static_cast<stat_type>(i) == nth_stat(j))
+                {
+                    _print_stat(static_cast<stat_type>(i), 19, 4 + j);
+                }
+            }
         }
     you.redraw_stats.init(false);
 

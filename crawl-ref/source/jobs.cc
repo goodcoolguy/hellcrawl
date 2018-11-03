@@ -1,5 +1,7 @@
 #include "AppHdr.h"
 
+#include <map>
+
 #include "jobs.h"
 
 #include "enum.h"
@@ -9,6 +11,7 @@
 #include "mapdef.h"
 #include "ng-setup.h"
 #include "player.h"
+#include "species.h"
 #include "stringutil.h"
 
 #include "job-data.h"
@@ -65,31 +68,11 @@ job_type get_job_by_name(const char *name)
     return job;
 }
 
-// Must be called after species_stat_init for the wanderer formula to work.
-void job_stat_init(job_type job)
+void job_stat_init(job_type job, species_type species)
 {
-  return;
-  /*    you.hp_max_adj_perm = 0;
-
-    //you.base_stats[STAT_STR] += _job_def(job).s;
-    //you.base_stats[STAT_INT] += _job_def(job).i;
-    //you.base_stats[STAT_DEX] += _job_def(job).d;
-
-    if (job == JOB_WANDERER)
-    {
-        for (int i = 0; i < 12; i++)
-        {
-            const stat_type stat = static_cast<stat_type>(random2(NUM_STATS));
-            // Stats that are already high will be chosen half as often.
-            if (you.base_stats[stat] > 17 && coinflip())
-            {
-                i--;
-                continue;
-            }
-
-            you.base_stats[stat]++;
-        }
-	}*/
+	you.base_stats[_job_def(job).a] = stat_classes(species)[STAT_CLASS_A];
+	you.base_stats[_job_def(job).b] = stat_classes(species)[STAT_CLASS_B];
+	you.base_stats[_job_def(job).c] = stat_classes(species)[STAT_CLASS_C];
 }
 
 bool job_has_weapon_choice(job_type job)

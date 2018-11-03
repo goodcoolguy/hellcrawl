@@ -15,7 +15,7 @@ bool job_gets_ranged_weapons(job_type job);
 void give_job_equipment(job_type job);
 void give_job_skills(job_type job);
 
-void job_stat_init(job_type job);
+void job_stat_init(job_type job, species_type species);
 
 void debug_jobdata();
 #endif
