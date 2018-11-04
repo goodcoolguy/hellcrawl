@@ -411,8 +411,6 @@ static void _setup_generic(const newgame_def& ng)
 
     job_stat_init(you.char_class, you.species);
 
-    _unfocus_stats();
-
     give_basic_mutations(you.species);
 
     // This function depends on stats and mutations being finalised.
@@ -464,11 +462,6 @@ static void _setup_generic(const newgame_def& ng)
             auto_assign_item_slot(item);
         }
     }
-
-    reassess_starting_skills();
-    init_skill_order();
-    init_can_train();
-    init_train();
 
     // Apply autoinscribe rules to inventory.
     request_autoinscribe();
