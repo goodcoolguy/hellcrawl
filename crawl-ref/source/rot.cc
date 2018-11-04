@@ -25,7 +25,7 @@
 
 static bool _is_chunk(const item_def &item);
 static bool _item_needs_rot_check(const item_def &item);
-static int _get_initial_stack_longevity(const item_def &stack);
+//static int _get_initial_stack_longevity(const item_def &stack);
 
 static void _rot_corpse(item_def &it, int mitm_index, int rot_time);
 static int _rot_stack(item_def &it, int slot, bool in_inv);
@@ -123,6 +123,8 @@ static void _rot_corpse(item_def &it, int mitm_index, int rot_time)
  */
 static void _compare_stack_quantity(item_def &stack)
 {
+  return;
+  /*
     CrawlVector &stack_timer = stack.props[TIMER_KEY].get_vector();
     const int timer_size = stack_timer.size();
     if (timer_size != stack.quantity)
@@ -134,8 +136,8 @@ static void _compare_stack_quantity(item_def &stack)
         // sanity measure; sync stack/timer size
 
         // more items than timers
-        const int default_timer = _get_initial_stack_longevity(stack)
-                                  + you.elapsed_time;
+	//        const int default_timer = _get_initial_stack_longevity(stack)
+        //                          + you.elapsed_time;
         while (stack.quantity > stack_timer.size())
             stack_timer.push_back(default_timer);
         // more timers than items
@@ -143,7 +145,7 @@ static void _compare_stack_quantity(item_def &stack)
             stack_timer.pop_back();
 
         ASSERT(stack.quantity == stack_timer.size());
-    }
+	} */
 }
 
 /**
