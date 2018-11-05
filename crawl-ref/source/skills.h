@@ -50,16 +50,10 @@ int one_level_cost(skill_type sk);
 float scaled_skill_cost(skill_type sk);
 
 unsigned int skill_cost_needed(int level);
-int calc_skill_cost(int skill_cost_level);
 void check_skill_cost_change();
 
 bool training_restricted(skill_type sk);
-void reassess_starting_skills();
 bool check_selected_skills();
-void init_train();
-void init_can_train();
-void update_can_train();
-void reset_training();
 int calc_skill_level_change(skill_type sk, int starting_level, int sk_points);
 void check_skill_level_change(skill_type sk, bool do_level_up = true);
 void change_skill_level(skill_type exsk, int num_level);
@@ -93,11 +87,9 @@ string player_title(bool the = true);
 
 skill_type best_skill(skill_type min_skill, skill_type max_skill,
                       skill_type excl_skill = SK_NONE);
-void init_skill_order();
 
 bool is_useless_skill(skill_type skill);
 bool is_harmful_skill(skill_type skill);
-bool all_skills_maxed(bool really_all = false);
 
 float species_apt_factor(skill_type sk, species_type sp = you.species);
 float apt_to_factor(int apt);
@@ -107,7 +99,6 @@ skill_diff skill_level_to_diffs(skill_type skill, double amount,
     int scaled_training=100, bool base_only=true);
 
 bool compare_skills(skill_type sk1, skill_type sk2);
-vector<skill_type> get_crosstrain_skills(skill_type sk);
 int get_crosstrain_points(skill_type sk);
 
 int elemental_preference(spell_type spell, int scale = 1);

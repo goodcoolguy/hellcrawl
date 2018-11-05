@@ -468,14 +468,6 @@ void wizard_set_piety()
 void wizard_exercise_skill()
 {
     skill_type skill = debug_prompt_for_skill("Which skill (by name)? ");
-
-    if (skill == SK_NONE)
-        mpr("That skill doesn't seem to exist.");
-    else
-    {
-        mpr("Exercising...");
-        exercise(skill, 10);
-    }
 }
 
 void wizard_set_skill_level(skill_type skill)
@@ -506,7 +498,6 @@ void wizard_set_skill_level(skill_type skill)
     {
         you.train[skill] = TRAINING_DISABLED;
         you.train_alt[skill] = TRAINING_DISABLED;
-        reset_training();
         check_selected_skills();
     }
 

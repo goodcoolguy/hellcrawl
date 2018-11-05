@@ -323,7 +323,6 @@ static monster* _init_fsim()
 static void _uninit_fsim(monster *mon)
 {
     monster_die(mon, KILL_DISMISSED, NON_MONSTER);
-    reset_training();
 }
 
 static fight_data _get_fight_data(monster &mon, int iter_limit, bool defend)

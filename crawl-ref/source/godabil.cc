@@ -5321,7 +5321,6 @@ static void _ru_kill_skill(skill_type skill)
 {
     change_skill_points(skill, -you.skill_points[skill], true);
     you.can_train.set(skill, false);
-    reset_training();
     check_selected_skills();
 }
 

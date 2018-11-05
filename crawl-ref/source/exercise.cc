@@ -58,16 +58,6 @@ void practise_casting(spell_type spell, bool success)
 
     shuffle_array(disc);
 
-    for (const skill_type skill : disc)
-    {
-        workout = (random2(1 + diff) / skillcount);
-
-        if (!one_chance_in(5))
-            workout++;       // most recently, this was an automatic add {dlb}
-
-        exercise(skill, workout);
-    }
-
     /* ******************************************************************
        Other recent formulae for the above:
 
@@ -98,7 +88,6 @@ static bool _check_train_armour(int amount)
     if (x_chance_in_y(_armour_mass() - mass_base,
                       you.skill(SK_ARMOUR, 50)))
     {
-        exercise(SK_ARMOUR, amount);
         return true;
     }
     return false;
@@ -108,7 +97,6 @@ static bool _check_train_dodging(int amount)
 {
     if (!x_chance_in_y(_armour_mass(), 800))
     {
-        exercise(SK_DODGING, amount);
         return true;
     }
     return false;
@@ -117,13 +105,7 @@ static bool _check_train_dodging(int amount)
 /// Skill training while not being noticed by a monster.
 void practise_sneaking(bool invis)
 {
-    if (!x_chance_in_y(_armour_mass(), 1000)
-        && !you.attribute[ATTR_SHADOWS]
-            // If invisible, training happens much more rarely.
-        && (!invis && one_chance_in(25) || one_chance_in(100)))
-    {
-        exercise(SK_STEALTH, 1);
-    }
+    return;
 }
 
 /// Skill training while doing nothing in particular.
@@ -135,35 +117,13 @@ void practise_waiting()
     if (you.berserk() || you.attribute[ATTR_SHADOWS])
         return;
 
-    // Exercise stealth skill:
-    if (!x_chance_in_y(_armour_mass(), 1000)
-        // Diminishing returns for stealth training by waiting.
-        && you.skills[SK_STEALTH] <= 2 + random2(3)
-        && one_chance_in(15))
-    {
-        exercise(SK_STEALTH, 1);
-    }
+    return;
 }
 
 /// Skill training when the player uses the given weapon.
 static void _practise_weapon_use(const item_def &weapon)
 {
-    const skill_type weapon_skill = item_attack_skill(weapon);
-    const int mindelay_skill = weapon_min_delay_skill(weapon);
-    const int your_skill = you.skills[weapon_skill];
-    if (your_skill >= mindelay_skill)
-        exercise(weapon_skill, coinflip()); //1/2 past mindelay
-    else
-    {
-        // 3 at 0 skill, 2 at 1/2 mindelay skill, 1 at mindelay
-        const int degree
-            = 1 + div_rand_round(2 * (mindelay_skill - your_skill),
-                                 mindelay_skill);
-        exercise(weapon_skill, degree);
-    }
-
-    if (coinflip())
-        exercise(SK_FIGHTING, 1);
+    return;
 }
 
 /// Skill training when the player hits a monster in melee combat.
@@ -171,18 +131,7 @@ void practise_hitting(const item_def *weapon)
 {
     you.props[USKAYAW_DID_DANCE_ACTION] = true;
 
-    if (!weapon)
-    {
-        exercise(SK_UNARMED_COMBAT, 1);
-        return;
-    }
-    if (!is_melee_weapon(*weapon))
-        return;
-
-    // Slow down the practice of low-damage weapons. XXX: use speed instead?
-    const int damage = property(*weapon, PWPN_DAMAGE);
-    if (x_chance_in_y(damage, 20))
-        _practise_weapon_use(*weapon);
+    return;
 }
 
 /// Skill training when the player shoots at a monster with a ranged weapon.
@@ -198,12 +147,11 @@ void practise_throwing(missile_type mi_type)
 {
     if (mi_type == MI_STONE && coinflip())
         return;
-    exercise(SK_THROWING, 1);
     you.props[USKAYAW_DID_DANCE_ACTION] = true;
 }
 
 /// Skill training when the player stabs an vulnerable monster for extra dam.
-void practise_stabbing() { exercise(SK_STEALTH, 1 + random2avg(5, 4)); }
+void practise_stabbing() { return; }
 
 /// Skill training when a monster attacks the player in melee.
 void practise_being_attacked()
@@ -217,25 +165,20 @@ void practise_being_hit()
 {
     if (coinflip())
         _check_train_armour(coinflip() ? 2 : 1);
-    else if (coinflip())
-        exercise(SK_FIGHTING, 1);
+    return;
 }
 
 /// Skill training when the player uses a special ability.
 void practise_using_ability(ability_type abil)
 {
     const skill_type sk = abil_skill(abil);
-    if (sk != SK_NONE)
-        exercise(sk, abil_skill_weight(abil));
     you.props[USKAYAW_DID_DANCE_ACTION] = true;
 }
 
 /// Skill training when blocking or failing to block attacks with a shield.
 void practise_shield_block(bool successful)
 {
-    const int odds_denom = successful ? 2 : 6;
-    if (one_chance_in(odds_denom))
-        exercise(SK_SHIELDS, 1);
+    return;
 }
 
 /// Skill training when being hit by a spell or other ranged attack.
@@ -255,14 +198,11 @@ void practise_being_shot_at()
 /// Skill training when using an evocable item such as a wand.
 void practise_evoking(int amount)
 {
-    // XXX: degree determination is just passed in but should be done here.
-    exercise(SK_EVOCATIONS, amount);
     you.props[USKAYAW_DID_DANCE_ACTION] = true;
 }
 
 /// Skill training while using one of Nemelex's decks.
 void practise_using_deck()
 {
-    exercise(SK_INVOCATIONS, 1);
     you.props[USKAYAW_DID_DANCE_ACTION] = true;
 }

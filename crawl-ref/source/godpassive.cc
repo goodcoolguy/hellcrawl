@@ -906,7 +906,6 @@ int ash_skill_boost(skill_type sk, int scale)
     // high bonus   -> factor = 7
 
     unsigned int skill_points = you.skill_points[sk]
-                  + get_crosstrain_points(sk)
                   + ash_skill_point_boost(sk, you.skill(sk, 10, true));
 
     int level = you.skills[sk];

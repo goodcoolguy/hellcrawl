@@ -83,7 +83,6 @@ int SkillRegion::handle_mouse(MouseEvent &event)
                 you.train[skill] = (training_status)
                     ((you.train[skill] + 1) % NUM_TRAINING_STATUSES);
             }
-            reset_training();
         }
         return CK_MOUSE_CMD;
     }

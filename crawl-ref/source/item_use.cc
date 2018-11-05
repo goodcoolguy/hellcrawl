@@ -565,12 +565,7 @@ bool wield_weapon(bool auto_wield, int slot, bool show_weff_messages,
     // Unwield any old weapon.
     if (you.weapon())
     {
-        if (unwield_item(show_weff_messages))
-        {
-            // Enable skills so they can be re-disabled later
-            update_can_train();
-        }
-        else
+        if (!unwield_item(show_weff_messages))
             return false;
     }
 

@@ -49,9 +49,6 @@
 #define MAX_COST_LIMIT           265
 #define MAX_SPENDING_LIMIT       265
 
-static int _train(skill_type exsk, int &max_exp, bool simu = false);
-static void _train_skills(int exp, const int cost, const bool simu);
-
 // Basic goals for titles:
 // The higher titles must come last.
 // Referring to the skill itself is fine ("Transmuter") but not impressive.
@@ -129,11 +126,6 @@ struct species_skill_aptitude
     }
 };
 
-// Traditionally, Spellcasting and In/Evocations formed the exceptions here:
-// Spellcasting skill was more expensive with about 130%, the other two got
-// a discount with about 75%.
-static int _spec_skills[NUM_SPECIES][NUM_SKILLS];
-
 // The progress of skill_cost_level depends only on total experience points,
 // it's independent of species. We try to keep close to the old system
 // and use an experience aptitude of 130 as a reference (Tengu).
@@ -148,20 +140,7 @@ unsigned int skill_cost_needed(int level)
 
 static const int MAX_SKILL_COST_LEVEL = 27;
 
-// skill_cost_level makes skills more expensive for more experienced characters
-int calc_skill_cost(int skill_cost_level)
-{
-    const int cost[] = { 1, 2, 3, 4, 5,            // 1-5
-                         7, 8, 9, 13, 22,         // 6-10
-                         37, 48, 73, 98, 125,      // 11-15
-                         145, 170, 190, 212, 225,  // 16-20
-                         240, 255, 260, 265, 265,  // 21-25
-                         265, 265 };
-    COMPILE_CHECK(ARRAYSZ(cost) == MAX_SKILL_COST_LEVEL);
 
-    ASSERT_RANGE(skill_cost_level, 1, MAX_SKILL_COST_LEVEL + 1);
-    return cost[skill_cost_level - 1];
-}
 
 /**
  * The baseline skill cost for the 'cost' interface on the m screen.
@@ -205,56 +184,6 @@ float scaled_skill_cost(skill_type sk)
         baseline *= 2;
 
     return (float)next_level / baseline;
-}
-
-// Characters are actually granted skill points, not skill levels.
-// Here we take racial aptitudes into account in determining final
-// skill levels.
-void reassess_starting_skills()
-{
-    // go backwards, need to do Dodging before Armour
-    // "sk >= SK_FIRST_SKILL" might be optimised away, so do this differently.
-    for (skill_type next = NUM_SKILLS; next > SK_FIRST_SKILL; )
-    {
-        skill_type sk = --next;
-        ASSERT(you.skills[sk] == 0 || !is_useless_skill(sk));
-
-        // Grant the amount of skill points required for a human.
-        you.skill_points[sk] = you.skills[sk] ?
-            skill_exp_needed(you.skills[sk], sk, SP_HUMAN) + 1 : 0;
-
-        if (sk == SK_DODGING && you.skills[SK_ARMOUR]
-            && (is_useless_skill(SK_ARMOUR)
-                || you_can_wear(EQ_BODY_ARMOUR) != MB_TRUE))
-        {
-            // No one who can't wear mundane heavy armour should start with
-            // the Armour skill -- D:1 dragon armour is too unlikely.
-            you.skill_points[sk] += skill_exp_needed(you.skills[SK_ARMOUR],
-                SK_ARMOUR, SP_HUMAN) + 1;
-            you.skills[SK_ARMOUR] = 0;
-        }
-
-        if (!you.skill_points[sk])
-            continue;
-
-        // Find out what level that earns this character.
-        you.skills[sk] = 0;
-
-        for (int lvl = 1; lvl <= 8; ++lvl)
-        {
-            if (you.skill_points[sk] > skill_exp_needed(lvl, sk))
-                you.skills[sk] = lvl;
-            else
-                break;
-        }
-
-        // Wanderers get at least 1 level in their skills.
-        /*if (you.char_class == JOB_WANDERER && you.skills[sk] < 1)
-        {
-            you.skill_points[sk] = skill_exp_needed(1, sk);
-            you.skills[sk] = 1;
-	    }*/
-    }
 }
 
 static void _change_skill_level(skill_type exsk, int n)
@@ -303,9 +232,6 @@ static void _change_skill_level(skill_type exsk, int n)
         you.train[exsk] = TRAINING_ENABLED;
         need_reset = true;
     }
-
-    if (need_reset)
-        reset_training();
 
     // calc_hp() has to be called here because it currently doesn't work
     // right if you.skills[] hasn't been updated yet.
@@ -408,80 +334,10 @@ string skill_names(const skill_set &skills)
     return comma_separated_fn(begin(skills), end(skills), skill_name);
 }
 
-static void _check_start_train()
-{
-    skill_set skills;
-    for (skill_type sk : you.start_train)
-    {
-        if (is_invalid_skill(sk) || is_useless_skill(sk))
-            continue;
-
-        if (!you.can_train[sk] && you.train[sk])
-            skills.insert(sk);
-        you.can_train.set(sk);
-    }
-
-    reset_training();
-
-    // We're careful of not invalidating the iterator when erasing.
-    for (auto it = skills.begin(); it != skills.end();)
-        if (!you.training[*it])
-            skills.erase(it++);
-        else
-            ++it;
-
-    if (!skills.empty())
-        mprf("You resume training %s.", skill_names(skills).c_str());
-
-    you.start_train.clear();
-}
-
-void update_can_train()
-{
-    if (!you.start_train.empty())
-        _check_start_train();
-}
 
 bool training_restricted(skill_type sk)
 {
     return false;
-}
-
-/*
- * Init the can_train array by examining inventory and spell list to see which
- * skills can be trained.
- */
-void init_can_train()
-{
-    // Clear everything out, in case this isn't the first game.
-    you.start_train.clear();
-    you.stop_train.clear();
-    you.can_train.reset();
-
-    for (int i = 0; i < NUM_SKILLS; ++i)
-    {
-        const skill_type sk = skill_type(i);
-
-        if (is_useless_skill(sk))
-            continue;
-
-        you.can_train.set(sk);
-        if (training_restricted(sk))
-            you.stop_train.insert(sk);
-    }
-}
-
-void init_train()
-{
-    for (int i = 0; i < NUM_SKILLS; ++i)
-        if (you.can_train[i] && you.skill_points[i])
-            you.train[i] = you.train_alt[i] = TRAINING_ENABLED;
-        else
-        {
-            // Skills are on by default in auto mode and off in manual.
-            you.train[i] = (training_status)you.auto_training;
-            you.train_alt[i] = (training_status)!you.auto_training;
-        }
 }
 
 static bool _cmp_rest(const pair<skill_type, int64_t>& a,
@@ -581,7 +437,6 @@ bool check_selected_skills()
 
         mpr("You need to enable at least one skill for training.");
         more();
-        reset_training();
         skill_menu();
         redraw_screen();
         return true;
@@ -598,249 +453,9 @@ bool check_selected_skills()
     // or level 27, so we don't assert.
 }
 
-/**
- * Reset the training array. Disabled skills are skipped.
- * In automatic mode, we use values from the exercise queue.
- * In manual mode, all enabled skills are set to the same value.
- * Result is scaled back to 100.
- */
-void reset_training()
-{
-    // We clear the values in the training array. In auto mode they are set
-    // to 0 (and filled later with the content of the queue), in manual mode,
-    // the trainable ones are set to 1 (or 2 for focus).
-    for (int i = 0; i < NUM_SKILLS; ++i)
-        if (you.auto_training || !skill_trained(i))
-            you.training[i] = 0;
-        else
-            you.training[i] = you.train[i];
-
-    bool empty = true;
-    // In automatic mode, we fill the array with the content of the queue.
-    if (you.auto_training)
-    {
-        for (auto sk : you.exercises)
-            if (skill_trained(sk))
-            {
-                you.training[sk] += you.train[sk];
-                empty = false;
-            }
-
-        // We count the practise events in the other queue.
-        FixedVector<unsigned int, NUM_SKILLS> exer_all;
-        exer_all.init(0);
-        for (auto sk : you.exercises_all)
-            if (skill_trained(sk))
-            {
-                exer_all[sk] += you.train[sk];
-                empty = false;
-            }
-
-        // We keep the highest of the 2 numbers.
-        for (int sk = 0; sk < NUM_SKILLS; ++sk)
-            you.training[sk] = max(you.training[sk], exer_all[sk]);
-
-        // The selected skills have not been exercised recently. Give them all
-        // a default weight of 1 (or 2 for focus skills).
-        if (empty)
-        {
-            for (int sk = 0; sk < NUM_SKILLS; ++sk)
-                if (skill_trained(sk))
-                    you.training[sk] = you.train[sk];
-        }
-
-        // Focused skills get at least 20% training.
-        for (int sk = 0; sk < NUM_SKILLS; ++sk)
-            if (you.train[sk] == 2 && you.training[sk] < 20 && you.can_train[sk])
-                you.training[sk] += 5 * (5 - you.training[sk] / 4);
-    }
-
-    _scale_array(you.training, 100, you.auto_training);
-}
-
-void exercise(skill_type exsk, int deg)
-{
-    if (you.skills[exsk] >= MAX_SKILL_LEVEL)
-        return;
-
-    dprf(DIAG_SKILLS, "Exercise %s by %d.", skill_name(exsk), deg);
-
-    // push first in case queues are empty, like during -test
-    while (deg > 0)
-    {
-        if (skill_trained(exsk))
-        {
-            you.exercises.push_back(exsk);
-            you.exercises.pop_front();
-        }
-        you.exercises_all.push_back(exsk);
-        you.exercises_all.pop_front();
-        deg--;
-    }
-    reset_training();
-}
-
-// Check if we should stop training this skill immediately.
-// We look at skill points because actual level up comes later.
-static bool _level_up_check(skill_type sk, bool simu)
-{
-    // Don't train past level 27.
-    if (you.skill_points[sk] >= skill_exp_needed(MAX_SKILL_LEVEL, sk))
-    {
-        you.training[sk] = 0;
-        if (!simu)
-        {
-            you.train[sk] = TRAINING_DISABLED;
-            you.train_alt[sk] = TRAINING_DISABLED;
-        }
-        return true;
-    }
-
-    return false;
-}
-
 bool is_magic_skill(skill_type sk)
 {
     return sk > SK_LAST_MUNDANE && sk <= SK_LAST_MAGIC;
-}
-
-//#define DEBUG_TRAINING_COST
-static void _train_skills(int exp, const int cost, const bool simu)
-{
-    bool skip_first_phase = false;
-    int magic_gain = 0;
-    FixedVector<int, NUM_SKILLS> sk_exp;
-    sk_exp.init(0);
-    vector<skill_type> training_order;
-#ifdef DEBUG_DIAGNOSTICS
-    FixedVector<int, NUM_SKILLS> total_gain;
-    total_gain.init(0);
-#endif
-#ifdef DEBUG_TRAINING_COST
-    int exp_pool = you.exp_available;
-    dprf(DIAG_SKILLS,
-         "skill cost level: %d, cost: %dxp/10skp, max XP usable: %d.",
-         you.skill_cost_level, cost, exp);
-#endif
-
-    // pre-check training targets -- may disable some skills.
-    if (!simu)
-        check_training_targets();
-
-    // We scale the training array to the amount of XP available in the pool.
-    // That gives us the amount of XP available to train each skill.
-    for (int i = 0; i < NUM_SKILLS; ++i)
-    {
-        if (you.training[i] > 0)
-        {
-            sk_exp[i] = you.training[i] * exp / 100;
-            if (sk_exp[i] < cost)
-            {
-                // One skill has a too low training to be trained at all.
-                // We skip the first phase and go directly to the random
-                // phase so it has a chance to be trained.
-                skip_first_phase = true;
-                break;
-            }
-            training_order.push_back(static_cast<skill_type>(i));
-        }
-    }
-
-    if (!skip_first_phase)
-    {
-        // We randomize the order, to avoid a slight bias to first skills.
-        // Being trained first can make a difference if skill cost increases.
-        shuffle_array(training_order);
-        for (auto sk : training_order)
-        {
-            int gain = 0;
-
-            while (sk_exp[sk] >= cost && you.training[sk])
-            {
-                exp -= sk_exp[sk];
-                gain += _train(sk, sk_exp[sk], simu);
-                exp += sk_exp[sk];
-                ASSERT(exp >= 0);
-                if (_level_up_check(sk, simu))
-                    sk_exp[sk] = 0;
-            }
-
-            if (gain && is_magic_skill(sk))
-                magic_gain += gain;
-
-#ifdef DEBUG_DIAGNOSTICS
-           total_gain[sk] += gain;
-#endif
-        }
-    }
-    // If there's enough xp in the pool, we use it to train skills selected
-    // with random_choose_weighted.
-    while (exp >= cost)
-    {
-        int gain;
-        skill_type sk = SK_NONE;
-        if (!skip_first_phase)
-            sk = static_cast<skill_type>(random_choose_weighted(sk_exp));
-        if (is_invalid_skill(sk))
-            sk = static_cast<skill_type>(random_choose_weighted(you.training));
-        if (!is_invalid_skill(sk))
-        {
-            gain = _train(sk, exp, simu);
-            ASSERT(exp >= 0);
-            sk_exp[sk] = 0;
-        }
-        else
-        {
-            // No skill to train. Can happen if all skills are at 27.
-            break;
-        }
-
-        _level_up_check(sk, simu);
-
-        if (gain && is_magic_skill(sk))
-            magic_gain += gain;
-
-#ifdef DEBUG_DIAGNOSTICS
-        total_gain[sk] += gain;
-#endif
-    }
-
-    // clean up any cross-training effects
-    if (!simu)
-        check_training_targets();
-
-#ifdef DEBUG_DIAGNOSTICS
-    if (!crawl_state.script)
-    {
-#ifdef DEBUG_TRAINING_COST
-        int total = 0;
-#endif
-        for (int i = 0; i < NUM_SKILLS; ++i)
-        {
-            skill_type sk = static_cast<skill_type>(i);
-            if (total_gain[sk] && !simu)
-            {
-                dprf(DIAG_SKILLS, "Trained %s by %d.",
-                     skill_name(sk), total_gain[sk]);
-            }
-#ifdef DEBUG_TRAINING_COST
-            total += total_gain[sk];
-        }
-        dprf(DIAG_SKILLS, "Total skill points gained: %d, cost: %d XP.",
-             total, exp_pool - you.exp_available);
-#else
-        }
-#endif
-    }
-#endif
-
-    // Avoid doubly rewarding spell practise in sprint
-    // (by inflated XP and inflated piety gain)
-    if (crawl_state.game_is_sprint())
-        magic_gain = sprint_modify_exp_inverse(magic_gain);
-
-    if (magic_gain && !simu)
-        did_god_conduct(DID_SPELL_PRACTISE, div_rand_round(magic_gain, 10));
 }
 
 bool skill_trained(int i)
@@ -933,8 +548,6 @@ bool check_training_targets()
     bool change = false;
     for (skill_type sk = SK_FIRST_SKILL; sk < NUM_SKILLS; ++sk)
         change |= check_training_target(sk);
-    if (change)
-        reset_training();
     return change;
 }
 
@@ -946,61 +559,6 @@ void change_skill_points(skill_type sk, int points, bool do_level_up)
     you.skill_points[sk] += points;
 
     check_skill_level_change(sk, do_level_up);
-}
-
-static int _train(skill_type exsk, int &max_exp, bool simu)
-{
-    // This will be added to you.skill_points[exsk];
-    int skill_inc = 10;
-
-    // This will be deducted from you.exp_available.
-    int cost = calc_skill_cost(you.skill_cost_level);
-
-    // Scale cost and skill_inc to available experience.
-    const int spending_limit = min(MAX_SPENDING_LIMIT, max_exp);
-    if (cost > spending_limit)
-    {
-        int frac = spending_limit * 10 / cost;
-        cost = spending_limit;
-        skill_inc = skill_inc * frac / 10;
-    }
-
-    if (skill_inc <= 0)
-        return 0;
-
-    // Bonus from manual
-    item_def* manual = manual_for_skill(exsk);
-    int bonus_left = skill_inc;
-    while (bonus_left > 0 && manual != nullptr && manual->skill_points > 0)
-    {
-        int bonus = min<int>(bonus_left, manual->skill_points);
-        skill_inc += bonus;
-        bonus_left -= bonus;
-        manual->skill_points -= bonus;
-        if (!manual->skill_points && !simu)
-            finish_manual(manual);
-    }
-
-    const skill_type old_best_skill = best_skill(SK_FIRST_SKILL, SK_LAST_SKILL);
-    you.skill_points[exsk] += skill_inc;
-    you.exp_available -= cost;
-    you.total_experience += cost;
-    max_exp -= cost;
-
-    if (!simu)
-    {
-        // TODO should check_training_targets be called here, to halt training
-        // and clean up cross-training immediately?
-        check_training_target(exsk);
-        redraw_skill(exsk, old_best_skill);
-    }
-
-    check_skill_cost_change();
-    ASSERT(you.exp_available >= 0);
-    ASSERT(max_exp >= 0);
-    you.redraw_experience = true;
-
-    return skill_inc;
 }
 
 /**
@@ -1050,10 +608,6 @@ skill_diff skill_level_to_diffs(skill_type skill, double amount,
 
     if (!base_only)
     {
-        // Factor in crosstraining bonus at the time of the query.
-        // This will not address the case where some cross-training skills are
-        // also being trained.
-        you_skill += get_crosstrain_points(skill);
 
         if (skill_has_manual(skill))
             target = you_skill + (target - you_skill) / 2;
@@ -1090,7 +644,7 @@ skill_diff skill_level_to_diffs(skill_type skill, double amount,
         if (decrease_skill && you_skill_cost_level)
             ++max_xp;
 
-        const int cost = calc_skill_cost(you_skill_cost_level);
+        const int cost = 1;
         // Maximum number of skill points to transfer in one go.
         // It's max_xp/cost rounded up.
         const int max_skp = max((max_xp + cost - 1) / cost, 1);
@@ -1449,45 +1003,6 @@ skill_type best_skill(skill_type min_skill, skill_type max_skill,
     return ret;
 }
 
-// Calculate the skill_order array from scratch.
-//
-// The skill order array is used for breaking ties in best_skill.
-// This is done by ranking each skill by the order in which it
-// has attained its current level (the values are the number of
-// skills at or above that level when the current skill reached it).
-//
-// In this way, the skill which has been at a level for the longest
-// is judged to be the best skill (thus, nicknames are sticky)...
-// other skills will have to attain the next level higher to be
-// considered a better skill (thus, the first skill to reach level 27
-// becomes the characters final nickname). -- bwr
-void init_skill_order()
-{
-    for (skill_type si = SK_FIRST_SKILL; si < NUM_SKILLS; ++si)
-    {
-        const unsigned int i_points = you.skill_points[si]
-                                      / species_apt_factor(si);
-
-        you.skill_order[si] = 0;
-
-        for (skill_type sj = SK_FIRST_SKILL; sj < NUM_SKILLS; ++sj)
-        {
-            if (si == sj)
-                continue;
-
-            const unsigned int j_points = you.skill_points[sj]
-                                          / species_apt_factor(sj);
-
-            if (you.skills[sj] == you.skills[si]
-                && (j_points > i_points
-                    || (j_points == i_points && sj > si)))
-            {
-                you.skill_order[si]++;
-            }
-        }
-    }
-}
-
 bool is_useless_skill(skill_type skill)
 {
 	return false;
@@ -1496,26 +1011,6 @@ bool is_useless_skill(skill_type skill)
 bool is_harmful_skill(skill_type skill)
 {
     return is_magic_skill(skill) && you_worship(GOD_TROG);
-}
-
-/**
- * Has the player maxed out all skills?
- *
- * @param really_all If true, also consider skills that are harmful and/or
- *        currently untrainable. Useless skills are never considered.
- */
-bool all_skills_maxed(bool really_all)
-{
-    for (skill_type i = SK_FIRST_SKILL; i < NUM_SKILLS; ++i)
-    {
-        if (you.skills[i] < MAX_SKILL_LEVEL && !is_useless_skill(i)
-            && (really_all || you.can_train[i] && !is_harmful_skill(i)))
-        {
-            return false;
-        }
-    }
-
-    return true;
 }
 
 int skill_bump(skill_type skill, int scale)
@@ -1549,36 +1044,6 @@ unsigned int skill_exp_needed(int lev, skill_type sk, species_type sp)
 float species_apt_factor(skill_type sk, species_type sp)
 {
     return 1;
-}
-
-vector<skill_type> get_crosstrain_skills(skill_type sk)
-{
-    switch (sk)
-    {
-    case SK_SHORT_BLADES:
-        return {};
-    case SK_AXES:
-        return { SK_POLEARMS, SK_MACES_FLAILS };
-    case SK_MACES_FLAILS:
-    case SK_POLEARMS:
-        return { SK_AXES };
-    case SK_THROWING:
-        return {};
-    default:
-        return {};
-    }
-}
-
-/**
- * Calculate the current crosstraining bonus for skill `sk`, in skill points.
- */
-int get_crosstrain_points(skill_type sk)
-{
-    int points = 0;
-    for (skill_type cross : get_crosstrain_skills(sk))
-        points += you.skill_points[cross] * 2 / 5;
-    return points;
-
 }
 
 /**
@@ -1827,7 +1292,6 @@ void skill_state::restore_training()
 
     you.can_train                   = can_train;
     you.auto_training               = auto_training;
-    reset_training();
 }
 
 // Sanitize skills after an upgrade, racechange, etc.
@@ -1841,10 +1305,6 @@ void fixup_skills()
                                    skill_exp_needed(MAX_SKILL_LEVEL, sk));
         check_skill_level_change(sk);
     }
-    init_can_train();
-
-    if (you.exp_available >= calc_skill_cost(you.skill_cost_level))
-        skill_menu(SKMF_EXPERIENCE);
 
     check_training_targets();
 }

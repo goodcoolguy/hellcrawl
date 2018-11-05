@@ -576,19 +576,6 @@ skill_menu_state SkillMenuSwitch::get_state()
 
 static bool _any_crosstrained()
 {
-    for (skill_type sk = SK_FIRST_SKILL; sk < NUM_SKILLS; ++sk)
-    {
-        // Assumes crosstraining is symmetric; otherwise we should
-        // iterate over the result of get_crosstrain_skills and
-        // check the levels of *those* skills
-        if (you.skill_points[sk]
-            && !get_crosstrain_skills(sk).empty())
-        {
-            // Didn't necessarily boost us by a noticeable amount,
-            // but close enough.
-            return true;
-        }
-    }
     return false;
 }
 
@@ -807,7 +794,6 @@ void SkillMenu::init(int flag)
     {
         m_skill_backup.save();
         you.auto_training = false;
-        reset_training();
 
         for (int i = 0; i < NUM_SKILLS; ++i)
         {
@@ -1031,7 +1017,7 @@ bool SkillMenu::exit()
         }
     }
 
-    if (!enabled_skill && !all_skills_maxed()
+    if (!enabled_skill
         && you.species != SP_KOBOLD && you.species != SP_GNOLL)
     {
         set_help("<lightred>You need to enable at least one skill.</lightred>");
@@ -1186,7 +1172,6 @@ void SkillMenu::toggle(skill_menu_switch sw)
         you.train = you.train_alt;
         you.train_alt = tmp;
 
-        reset_training();
         break;
     case SKM_DO:
         you.skill_menu_do = get_state(SKM_DO);
@@ -1589,7 +1574,6 @@ void SkillMenu::toggle_practise(skill_type sk, int keyn)
     }
     else
         die("Invalid state.");
-    reset_training();
     SkillMenuEntry* skme = find_entry(sk);
     skme->set_name(true);
     const vector<int> hotkeys = skme->get_name_item()->get_hotkeys();
@@ -1707,13 +1691,6 @@ void SkillMenu::set_links()
 
 void skill_menu(int flag, int exp)
 {
-    // experience potion; you may elect to sin against Trog
-    if (flag & SKMF_EXPERIENCE && all_skills_maxed(true))
-    {
-        mpr("You feel omnipotent.");
-        return;
-    }
-
     // notify the player again
     you.received_noskill_warning = false;
 

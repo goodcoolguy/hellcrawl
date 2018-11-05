@@ -570,13 +570,6 @@ bool chardump_parser::_parse_from_file(const string &full_filename)
     while (!f.eof())
         _modify_character(f.get_line());
 
-    if (seen_skills)
-    {
-        init_skill_order();
-        init_can_train();
-        init_train();
-    }
-
     return true;
 }
 

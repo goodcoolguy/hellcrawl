@@ -2421,7 +2421,6 @@ void target_item(item_def &item)
     you.set_training_target(skill, target, true);
     you.train[skill] = TRAINING_ENABLED;
     you.train_alt[skill] = TRAINING_ENABLED;
-    reset_training();
 }
 
 /**

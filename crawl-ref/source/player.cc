@@ -2533,8 +2533,7 @@ static void _transfer_knowledge(int exp)
     }
     else
     {
-        int amount = exp * 20
-        / calc_skill_cost(you.skill_cost_level);
+        int amount = exp * 20;
         if (amount >= 20 || one_chance_in(20 - amount))
         {
             amount = max(20, amount);
@@ -2561,14 +2560,12 @@ static void _handle_stat_loss(int exp)
     if (!(you.attribute[ATTR_STAT_LOSS_XP] > 0))
         return;
 
-    int loss = div_rand_round(exp * 3 / 2,
-                              max(1, calc_skill_cost(you.skill_cost_level) - 3));
+    int loss = div_rand_round(exp * 3 / 2,1);
 
     //special case since their skill exp gain is whack
 	if (you.species == SP_KOBOLD || you.species == SP_GNOLL)
     {
-        loss = div_rand_round(exp * 3 / 2, 
-                              max(1, calc_skill_cost(you.experience_level) - 3));
+        loss = div_rand_round(exp * 3 / 2, 1);
     }   					  
     you.attribute[ATTR_STAT_LOSS_XP] -= loss;
     dprf("Stat loss points: %d", you.attribute[ATTR_STAT_LOSS_XP]);
@@ -2583,13 +2580,12 @@ static void _handle_xp_drain(int exp)
     if (!you.attribute[ATTR_XP_DRAIN])
         return;
 
-    int loss = div_rand_round(exp * 3 / 2,
-                              calc_skill_cost(you.skill_cost_level));
+    int loss = div_rand_round(exp * 3 / 2,1);
 
     //special case since their skill exp gain is whack
 	if (you.species == SP_KOBOLD || you.species == SP_GNOLL)
     {
-        loss = div_rand_round(exp * 3 / 2, calc_skill_cost(you.experience_level));
+        loss = div_rand_round(exp * 3 / 2, 1);
     }   
 
     // Make it easier to recover from very heavy levels of draining
@@ -2675,9 +2671,6 @@ void gain_exp(unsigned int exp_gained, unsigned int* actual_gain)
         you.experience += exp_gained;
 
     you.exp_available += skill_xp;
-
-    if (you.exp_available >= calc_skill_cost(you.skill_cost_level))
-        you.exp_available = calc_skill_cost(you.skill_cost_level);
 
     level_change();
 
@@ -5724,8 +5717,7 @@ int player::skill(skill_type sk, int scale, bool real, bool drained) const
     // skill training, so make sure to use the correct value.
     int actual_skill = skills[sk];
     unsigned int effective_points = skill_points[sk];
-    if (!real)
-        effective_points += get_crosstrain_points(sk);
+
     effective_points = min(effective_points, skill_exp_needed(MAX_SKILL_LEVEL, sk));
     actual_skill = calc_skill_level_change(sk, actual_skill, effective_points);
 

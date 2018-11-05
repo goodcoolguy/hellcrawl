@@ -877,10 +877,6 @@ static void _do_wizard_command(int wiz_command)
     case '_': wizard_join_religion(); break;
 
     case '=':
-        mprf("Cost level: %d  Total experience: %d  Next cost level: %d Skill cost: %d",
-              you.skill_cost_level, you.total_experience,
-              skill_cost_needed(you.skill_cost_level + 1),
-              calc_skill_cost(you.skill_cost_level));
         break;
     case '+': wizard_make_object_randart(); break;
 
@@ -1432,9 +1428,6 @@ static void _input()
             world_reacts();
         }
 
-        if (!you_are_delayed())
-            update_can_train();
-
 #ifdef USE_TILE_WEB
         tiles.flush_messages();
 #endif
@@ -1547,8 +1540,6 @@ static void _input()
 
         world_reacts();
     }
-
-    update_can_train();
 
     _update_replay_state();
 

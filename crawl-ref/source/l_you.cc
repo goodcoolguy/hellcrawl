@@ -497,7 +497,6 @@ LUAFN(you_train_skill)
         you.train[sk] = min(max((training_status)luaL_checkint(ls, 2),
                                                  TRAINING_DISABLED),
                                              TRAINING_FOCUSED);
-        reset_training();
     }
 
     PLUARET(number, you.train[sk]);
@@ -955,8 +954,7 @@ LUAFN(you_init)
     PLUARET(string, skill_name(item_attack_skill(OBJ_WEAPONS, ng.weapon)));
 }
 
-LUARET1(you_exp_needed, number, exp_needed(luaL_checkint(ls, 1)))
-LUAWRAP(you_exercise, exercise(str_to_skill(luaL_checkstring(ls, 1)), 1))
+LUARET1(you_exp_needed, number, exp_needed(luaL_checkint(ls, 1)))\
 LUARET1(you_skill_cost_level, number, you.skill_cost_level)
 LUARET1(you_skill_points, number,
         you.skill_points[str_to_skill(luaL_checkstring(ls, 1))])
@@ -985,8 +983,7 @@ static const struct luaL_reg you_dlib[] =
 { "at_branch_bottom",   _you_at_branch_bottom },
 { "gain_exp",           you_gain_exp },
 { "init",               you_init },
-{ "exp_needed",         you_exp_needed },
-{ "exercise",           you_exercise },
+{ "exp_needed",         you_exp_needed },\
 { "skill_cost_level",   you_skill_cost_level },
 { "skill_points",       you_skill_points },
 { "zigs_completed",     you_zigs_completed },

@@ -38,27 +38,6 @@ static void _init_player()
     dlua.callfn("dgn_clear_data", "");
 }
 
-// Make sure no stats are unacceptably low
-// (currently possible only for GhBe - 1KB)
-static void _unfocus_stats()
-{
-    int needed;
-
-    for (int i = 0; i < NUM_STATS; ++i)
-    {
-        int j = (i + 1) % NUM_STATS;
-        int k = (i + 2) % NUM_STATS;
-        if ((needed = MIN_START_STAT - you.base_stats[i]) > 0)
-        {
-            if (you.base_stats[j] > you.base_stats[k])
-                you.base_stats[j] -= needed;
-            else
-                you.base_stats[k] -= needed;
-            you.base_stats[i] = MIN_START_STAT;
-        }
-    }
-}
-
 // Some consumables to make the starts of Sprint a little easier.
 static void _give_bonus_items()
 {

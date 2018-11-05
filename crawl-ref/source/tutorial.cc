@@ -28,8 +28,6 @@ void set_tutorial_skill(const char *skill, int level)
     else
         need_exercise_check = false;
 
-    if (need_exercise_check)
-        reassess_starting_skills();
 }
 
 // FIXME: There's got to be a less hacky solution!
