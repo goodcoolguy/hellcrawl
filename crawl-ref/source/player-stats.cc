@@ -33,7 +33,7 @@
 
 int player::stat(stat_type s, bool nonneg) const
 {
-    const int val = max(1, max_stat(s) - stat_loss[s]);
+    const int val = max(0, max_stat(s) - stat_loss[s]);
     return nonneg ? max(val, 0) : val;
 }
 
