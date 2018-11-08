@@ -124,18 +124,12 @@ bool attribute_increase()
 #else
     mprf(MSGCH_INTRINSIC_GAIN, "%s", stat_gain_message.c_str());
     learned_something_new(HINT_CHOOSE_STAT);
-    //if (innate_stat(STAT_STR) != you.strength()
-    //    || innate_stat(STAT_INT) != you.intel()
-    //    || innate_stat(STAT_DEX) != you.dex())
-    //{
-    //    mprf(MSGCH_PROMPT, "Your base attributes are Str %d, Int %d, Dex %d.",
-    //         innate_stat(STAT_STR),
-    //         innate_stat(STAT_INT),
-    //         innate_stat(STAT_DEX));
-    //}
-    //mprf(MSGCH_PROMPT, "Increase (S)trength, (I)ntelligence, or (D)exterity? ");
+    mprf(MSGCH_PROMPT, "Increase (M)elee, (D)efense, (R)anged, (S)tealth, " 
+    "(B)lack Magic, (E)lemental Magic, or (T)haumaturgy? ");
 #endif
-    //mouse_control mc(MOUSE_MODE_PROMPT);
+    mouse_control mc(MOUSE_MODE_PROMPT);
+	
+    const int statgain = 1;
 
     bool tried_lua = false;
     int keyin;
@@ -170,25 +164,49 @@ bool attribute_increase()
             if (crawl_state.seen_hups)
                 return false;
             break;
-	    /*
-	case 's':
-        case 'S':
+			
+        case 'm':
+        case 'M':
             for (int i = 0; i < statgain; i++)
-                modify_stat(STAT_STR, 1, false);
+                modify_stat(STAT_MELEE, 1, false);
             return true;
-
-        case 'i':
-        case 'I':
+        
+        case 'r':
+        case 'R':
             for (int i = 0; i < statgain; i++)
-                modify_stat(STAT_INT, 1, false);
+                modify_stat(STAT_RANGED, 1, false);
             return true;
 
         case 'd':
         case 'D':
             for (int i = 0; i < statgain; i++)
-                modify_stat(STAT_DEX, 1, false);
+                modify_stat(STAT_DEFENSE, 1, false);
             return true;
-	    */
+
+	    case 's':
+        case 'S':
+            for (int i = 0; i < statgain; i++)
+                modify_stat(STAT_SNEAK, 1, false);
+            return true;
+
+        case 'b':
+        case 'B':
+            for (int i = 0; i < statgain; i++)
+                modify_stat(STAT_BLACK_MAGIC, 1, false);
+            return true;
+
+        case 'e':
+        case 'E':
+            for (int i = 0; i < statgain; i++)
+                modify_stat(STAT_ELEMENTAL, 1, false);
+            return true;
+			
+        case 't':
+        case 'T':
+            for (int i = 0; i < statgain; i++)
+                modify_stat(STAT_THAUMATURGY, 1, false);
+            return true;
+	    
 #ifdef TOUCH_UI
 	    
         default:
@@ -544,23 +562,4 @@ static void _handle_stat_change(stat_type stat)
 
     you.redraw_stats[stat] = true;
     _normalize_stat(stat);
-    /*
-    switch (stat)
-    {
-    case STAT_STR:
-        you.redraw_armour_class = true; // includes shields
-        you.redraw_evasion = true; // Might reduce EV penalty
-        break;
-
-    case STAT_INT:
-        break;
-
-    case STAT_DEX:
-        you.redraw_evasion = true;
-        you.redraw_armour_class = true; // includes shields
-        break;
-
-    default:
-        break;
-	} */
 }
