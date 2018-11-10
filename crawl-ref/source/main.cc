@@ -69,7 +69,6 @@
 #include "env.h"
 #include "errors.h"
 #include "evoke.h"
-#include "exercise.h"
 #include "fight.h"
 #include "files.h"
 #include "fineff.h"

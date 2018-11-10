@@ -23,7 +23,6 @@
 #include "beam.h"          // For Lajatang of Order's silver damage
 #include "cloud.h"         // For storm bow's and robe of clouds' rain
 #include "english.h"       // For apostrophise
-#include "exercise.h"      // For practise_evoking
 #include "fight.h"
 #include "ghost.h"         // For is_dragonkind ghost_demon datas
 #include "godconduct.h"    // did_god_conduct
@@ -108,7 +107,6 @@ static bool _ASMODEUS_evoke(item_def *item, bool* did_work, bool* unevokable)
     if (_evoke_sceptre_of_asmodeus())
     {
         *did_work = true;
-        practise_evoking(1);
     }
 
     return false;
@@ -204,7 +202,6 @@ static bool _DISPATER_evoke(item_def *item, bool* did_work, bool* unevokable)
     mpr("You feel the staff feeding on your energy!");
     dec_hp(14, false);
     dec_mp(4);
-    practise_evoking(coinflip() ? 2 : 1);
 
     return false;
 }
@@ -256,7 +253,6 @@ static bool _OLGREB_evoke(item_def *item, bool* did_work, bool* unevokable)
         your_spells(SPELL_VENOM_BOLT, power, false);
 
     dec_mp(4);
-    practise_evoking(1);
 
     return false;
 }
@@ -470,7 +466,6 @@ static bool _WUCAD_MU_evoke(item_def *item, bool* did_work, bool* unevokable)
     inc_mp(3 + random2(5) + you.skill_rdiv(SK_EVOCATIONS, 1, 3));
 
     *did_work = true;
-    practise_evoking(1);
     did_god_conduct(DID_CHANNEL, 10, true);
 
     return false;

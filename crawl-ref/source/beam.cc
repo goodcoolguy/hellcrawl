@@ -29,7 +29,6 @@
 #include "directn.h"
 #include "dungeon.h"
 #include "english.h"
-#include "exercise.h"
 #include "fight.h"
 #include "godabil.h"
 #include "godconduct.h"
@@ -3305,16 +3304,10 @@ bool bolt::misses_player()
             if (!penet)
                 return true;
         }
-
-        // Some training just for the "attempt".
-        practise_shield_block(false);
     }
 
     if (is_enchantment())
         return false;
-
-    if (!aimed_at_feet)
-        practise_being_shot_at();
 
     defer_rand r;
     bool miss = true;
@@ -3854,8 +3847,6 @@ void bolt::affect_player()
     dprf(DIAG_BEAM, "Player damage: before AC=%d; after AC=%d",
                     preac, postac);
 #endif
-
-    practise_being_shot();
 
     bool was_affected = false;
     int  old_hp       = you.hp;

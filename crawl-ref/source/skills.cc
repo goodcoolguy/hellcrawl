@@ -18,7 +18,6 @@
 #include "clua.h"
 #include "describe-god.h"
 #include "evoke.h"
-#include "exercise.h"
 #include "godabil.h"
 #include "godconduct.h"
 #include "godpassive.h"

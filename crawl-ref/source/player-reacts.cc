@@ -53,7 +53,6 @@
 #include "dungeon.h"
 #include "env.h"
 #include "evoke.h"
-#include "exercise.h"
 #include "fight.h"
 #include "files.h"
 #include "fineff.h"
@@ -515,11 +514,6 @@ static void _handle_recitation(int step)
 
     if (apply_area_visible(zin_recite_to_single_monster, you.pos()))
         viewwindow();
-
-    // Recite trains more than once per use, because it has a
-    // long timer in between uses and actually takes up multiple
-    // turns.
-    practise_using_ability(ABIL_ZIN_RECITE);
 
     noisy(you.shout_volume(), you.pos());
 

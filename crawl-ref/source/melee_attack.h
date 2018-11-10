@@ -132,7 +132,6 @@ private:
     int  player_apply_misc_modifiers(int damage) override;
     int  player_apply_final_multipliers(int damage) override;
 
-    void player_exercise_combat_skills() override;
     bool player_monattk_hit_effects();
     void attacker_sustain_passive_damage();
     int  staff_damage(skill_type skill);

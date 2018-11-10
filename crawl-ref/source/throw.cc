@@ -16,7 +16,6 @@
 #include "directn.h"
 #include "english.h"
 #include "env.h"
-#include "exercise.h"
 #include "fight.h"
 #include "godabil.h"
 #include "godconduct.h"
@@ -895,7 +894,6 @@ bool throw_it(bolt &pbolt, item_def& thrown, dist *target, bool created)
     {
         const item_def *launcher = you.weapon();
         ASSERT(launcher);
-        practise_launching(*launcher);
         if (is_unrandom_artefact(*launcher)
             && get_unrand_entry(launcher->unrand_idx)->type_name)
         {
@@ -906,7 +904,6 @@ bool throw_it(bolt &pbolt, item_def& thrown, dist *target, bool created)
         break;
     }
     case LRET_THROWN:
-        practise_throwing((missile_type)wepType);
         count_action(CACT_THROW, wepType, OBJ_MISSILES);
         break;
     case LRET_FUMBLED:

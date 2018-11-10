@@ -25,7 +25,6 @@
 #include "enum.h"
 #include "env.h"
 #include "exclude.h"
-#include "exercise.h"
 #include "fprop.h"
 #include "godabil.h"
 #include "godconduct.h"

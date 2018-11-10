@@ -20,7 +20,6 @@
 #include "delay.h"
 #include "english.h"
 #include "env.h"
-#include "exercise.h"
 #include "fight.h"
 #include "fineff.h"
 #include "godconduct.h"
@@ -104,12 +103,7 @@ bool attack::handle_phase_damaged()
     damage_done = inflict_damage(damage_done);
 
     // TODO: Unify these, added here so we can get rid of player_attack
-    if (attacker->is_player())
-    {
-        if (damage_done)
-            player_exercise_combat_skills();
-    }
-    else
+    if (!attacker->is_player())
     {
         if (!mons_attack_effects())
             return false;
@@ -1263,10 +1257,6 @@ int attack::player_apply_final_multipliers(int damage)
     return damage;
 }
 
-void attack::player_exercise_combat_skills()
-{
-}
-
 /* Returns attacker base unarmed damage
  *
  * Scales for current mutations and unarmed effects
@@ -1888,7 +1878,6 @@ int attack::player_stab(int damage)
     {
         // Construct reasonable message.
         stab_message();
-        practise_stabbing();
     }
     else
     {

@@ -25,7 +25,6 @@
 #include "english.h"
 #include "env.h"
 #include "evoke.h"
-#include "exercise.h"
 #include "godabil.h"
 #include "godconduct.h"
 #include "goditem.h"

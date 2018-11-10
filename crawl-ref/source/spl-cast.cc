@@ -23,7 +23,6 @@
 #include "directn.h"
 #include "english.h"
 #include "env.h"
-#include "exercise.h"
 #include "format.h"
 #include "godabil.h"
 #include "godconduct.h"
@@ -884,7 +883,6 @@ bool cast_a_spell(bool check_range, spell_type spell)
         return false;
     }
 
-    practise_casting(spell, cast_result == SPRET_SUCCESS);
     if (cast_result == SPRET_SUCCESS)
     {
         did_god_conduct(DID_SPELL_CASTING, 1 + random2(5));

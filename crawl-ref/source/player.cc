@@ -32,7 +32,6 @@
 #include "english.h"
 #include "env.h"
 #include "errors.h"
-#include "exercise.h"
 #include "godabil.h"
 #include "godconduct.h"
 #include "godpassive.h"
@@ -5597,7 +5596,6 @@ void player::shield_block_succeeded(actor *foe)
     actor::shield_block_succeeded(foe);
 
     shield_blocks++;
-    practise_shield_block();
     if (shield())
         count_action(CACT_BLOCK, shield()->sub_type);
     else

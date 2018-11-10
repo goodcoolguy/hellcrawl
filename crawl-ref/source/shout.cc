@@ -18,7 +18,6 @@
 #include "directn.h"
 #include "english.h"
 #include "env.h"
-#include "exercise.h"
 #include "ghost.h"
 #include "godabil.h"
 #include "hints.h"
@@ -322,15 +321,6 @@ bool check_awaken(monster* mons, int stealth)
 
     if (x_chance_in_y(mons_perc + 1, stealth))
         return true; // Oops, the monster wakes up!
-
-    // You didn't wake the monster!
-    if (you.can_see(*mons) // to avoid leaking information
-        && !mons->wont_attack()
-        && !mons->neutral() // include pacified monsters
-        && mons_class_gives_xp(mons->type))
-    {
-        practise_sneaking(unnatural_stealthy);
-    }
 
     return false;
 }

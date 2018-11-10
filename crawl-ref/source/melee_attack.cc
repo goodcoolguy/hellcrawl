@@ -23,7 +23,6 @@
 #include "delay.h"
 #include "english.h"
 #include "env.h"
-#include "exercise.h"
 #include "fineff.h"
 #include "godconduct.h"
 #include "goditem.h"
@@ -197,21 +196,6 @@ bool melee_attack::handle_phase_attempted()
         check_autoberserk();
     }
 
-    // Xom thinks fumbles are funny...
-    if (attacker->fumbles_attack())
-    {
-        // ... and thinks fumbling when trying to hit yourself is just
-        // hilarious.
-        xom_is_stimulated(attacker == defender ? 200 : 10);
-        return false;
-    }
-    // Non-fumbled self-attacks due to confusion are still pretty funny, though.
-    else if (attacker == defender && attacker->confused())
-    {
-        // And is still hilarious if it's the player.
-        xom_is_stimulated(attacker->is_player() ? 200 : 100);
-    }
-
     // Any attack against a monster we're afraid of has a chance to fail
     if (attacker->is_player() && you.afraid_of(defender->as_monster())
         && one_chance_in(3))
@@ -239,10 +223,6 @@ bool melee_attack::handle_phase_attempted()
     }
 
     attack_occurred = true;
-
-    // Check for player practicing dodging
-    if (defender->is_player())
-        practise_being_attacked();
 
     return true;
 }
@@ -1712,15 +1692,6 @@ void melee_attack::set_attack_verb(int damage)
     }
 }
 
-void melee_attack::player_exercise_combat_skills()
-{
-    if (defender && defender->is_monster()
-        && !mons_is_firewood(*defender->as_monster()))
-    {
-        practise_hitting(weapon);
-    }
-}
-
 /*
  * Applies god conduct for weapon ego
  *
@@ -2387,9 +2358,6 @@ bool melee_attack::mons_attack_effects()
             defender->expose_to_element(special_damage_flavour, 2);
         }
     }
-
-    if (defender->is_player())
-        practise_being_hit();
 
     // A tentacle may have banished its own parent/sibling and thus itself.
     if (!attacker->alive())

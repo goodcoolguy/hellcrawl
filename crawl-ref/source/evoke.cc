@@ -25,7 +25,6 @@
 #include "dungeon.h"
 #include "english.h"
 #include "env.h"
-#include "exercise.h"
 #include "fight.h"
 #include "ghost.h"
 #include "godabil.h"
@@ -706,7 +705,6 @@ void zap_wand(int slot)
 		dec_inv_item_quantity(wand.link, 1);
     }
 
-    practise_evoking(1);
     count_action(CACT_EVOKE, EVOC_WAND);
     alert_nearby_monsters();
 
@@ -1844,7 +1842,6 @@ bool evoke_item(int slot, bool check_range)
         if (is_deck(item))
         {
             evoke_deck(item);
-            practise_using_deck();
             count_action(CACT_EVOKE, EVOC_DECK);
             break;
         }
@@ -1872,7 +1869,6 @@ bool evoke_item(int slot, bool check_range)
                                                 surge),
                        coord_def());
             expend_xp_evoker(item);
-            practise_evoking(3);
             break;
         }
 
@@ -1885,7 +1881,6 @@ bool evoke_item(int slot, bool check_range)
             if (_lamp_of_fire())
             {
                 expend_xp_evoker(item);
-                practise_evoking(3);
             }
             else
                 return false;
@@ -1907,7 +1902,6 @@ bool evoke_item(int slot, bool check_range)
             if (_phial_of_floods())
             {
                 expend_xp_evoker(item);
-                practise_evoking(3);
             }
             else
                 return false;
@@ -1922,7 +1916,6 @@ bool evoke_item(int slot, bool check_range)
             if (_evoke_horn_of_geryon(item))
             {
                 expend_xp_evoker(item);
-                practise_evoking(3);
             }
             else
                 return false;
@@ -1930,12 +1923,10 @@ bool evoke_item(int slot, bool check_range)
 
         case MISC_BOX_OF_BEASTS:
             if (_box_of_beasts(item))
-                practise_evoking(1);
             break;
 
         case MISC_SACK_OF_SPIDERS:
             if (_sack_of_spiders(item))
-                practise_evoking(1);
             break;
 
         case MISC_CRYSTAL_BALL_OF_ENERGY:
@@ -1944,13 +1935,11 @@ bool evoke_item(int slot, bool check_range)
             else if (_ball_of_energy())
 			{
 				expend_xp_evoker(item);
-                practise_evoking(1);
 			}
             break;
 
         case MISC_DISC_OF_STORMS:
-            if (disc_of_storms())
-                practise_evoking(1);
+            disc_of_storms();
             break;
 
         case MISC_QUAD_DAMAGE:
@@ -1973,7 +1962,6 @@ bool evoke_item(int slot, bool check_range)
                     dec_inv_item_quantity(item.link, 1);
                     // deliberate fall-through
                 case SPRET_FAIL:
-                    practise_evoking(1);
                     break;
             }
             break;

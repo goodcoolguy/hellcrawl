@@ -194,8 +194,6 @@ protected:
     virtual int  player_apply_slaying_bonuses(int damage, bool aux);
     virtual int  player_apply_final_multipliers(int damage);
 
-    virtual void player_exercise_combat_skills();
-
     virtual bool player_good_stab() = 0;
     virtual int  player_stab_weapon_bonus(int damage);
     virtual int  player_stab(int damage);

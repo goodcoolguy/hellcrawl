@@ -20,7 +20,6 @@
 #include "dgnevent.h"
 #include "dungeon.h"
 #include "env.h"
-#include "exercise.h"
 #include "externs.h"
 #include "fprop.h"
 #include "godpassive.h"
