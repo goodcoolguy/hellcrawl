@@ -649,12 +649,6 @@ void objstat_record_item(const item_def &item)
     }
     if (_item_track_piles(itype.base_type))
         _record_item_stat(cur_lev, itype, "NumPiles", 1);
-    if (_item_track_curse(itype.base_type) && item.cursed())
-    {
-        if (has_antiq)
-            _record_item_stat(cur_lev, itype, antiq_cursed_f, 1);
-        _record_item_stat(cur_lev, itype, all_cursed_f, 1);
-    }
     if (_item_track_plus(itype.base_type))
     {
         if (has_antiq)

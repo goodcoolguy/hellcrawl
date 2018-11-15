@@ -11,7 +11,6 @@ void wizard_create_spec_object_by_name();
 void wizard_tweak_object();
 void wizard_make_object_randart();
 void wizard_value_artefact();
-void wizard_uncurse_item();
 void wizard_create_all_artefacts();
 void wizard_identify_pack();
 void wizard_unidentify_pack();

@@ -936,11 +936,6 @@ static bool _init_artefact_properties(item_def &item)
 
     for (int i = 0; i < ART_PROPERTIES; i++)
     {
-        if (i == ARTP_CURSE && prop[i] < 0)
-        {
-            do_curse_item(item);
-            continue;
-        }
         rap[i] = static_cast<short>(prop[i]);
     }
 
@@ -1678,9 +1673,6 @@ bool make_item_unrandart(item_def &item, int unrand_index)
     item.flags |= ISFLAG_UNRANDART;
     _artefact_setup_prop_vectors(item);
     _init_artefact_properties(item);
-
-    if (unrand->prpty[ARTP_CURSE] != 0)
-        do_curse_item(item);
 
     // get artefact appearance
     ASSERT(!item.props.exists(ARTEFACT_APPEAR_KEY));

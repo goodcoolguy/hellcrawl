@@ -172,8 +172,6 @@ bool bless_weapon(god_type god, brand_type brand, colour_t colour)
     set_item_ego_type(wpn, OBJ_WEAPONS, brand);
     enchant_weapon(wpn, true);
     enchant_weapon(wpn, true);
-    if (wpn.cursed())
-        do_uncurse_item(wpn);
 
     if (god == GOD_SHINING_ONE)
     {
@@ -3466,28 +3464,7 @@ bool ashenzari_end_transfer(bool finished, bool force)
  */
 bool ashenzari_curse_item(int num_rc)
 {
-    ASSERT(num_rc > 0);
-    const string prompt_msg = make_stringf(
-            "Curse which item? (%d remove curse scroll%s left)"
-            " (Esc to abort)",
-            num_rc, num_rc == 1 ? "" : "s");
-    const int item_slot = prompt_invent_item(prompt_msg.c_str(), MT_INVLIST,
-                                             OSEL_CURSABLE, OPER_ANY,
-                                             invprompt_flag::escape_only);
-    if (prompt_failed(item_slot))
-        return false;
-
-    item_def& item(you.inv[item_slot]);
-
-    if (!item_is_cursable(item))
-    {
-        mpr("You can't curse that!");
-        return false;
-    }
-
-    do_curse_item(item, false);
-    learned_something_new(HINT_YOU_CURSED);
-    return true;
+    return false;
 }
 
 bool can_convert_to_beogh()

@@ -86,16 +86,10 @@ void InventoryRegion::pack_buffers()
 
             if (item.flag & TILEI_FLAG_EQUIP)
             {
-                if (item.flag & TILEI_FLAG_CURSE)
-                    m_buf.add_main_tile(TILE_ITEM_SLOT_EQUIP_CURSED, x, y);
-                else
-                    m_buf.add_main_tile(TILE_ITEM_SLOT_EQUIP, x, y);
+                m_buf.add_main_tile(TILE_ITEM_SLOT_EQUIP, x, y);
 
                 if (item.flag & TILEI_FLAG_MELDED)
                     m_buf.add_icons_tile(TILEI_MESH, x, y);
-            }
-            else if (item.flag & TILEI_FLAG_CURSE)
-                m_buf.add_main_tile(TILE_ITEM_SLOT_CURSED, x, y);
 
             if (item.flag & TILEI_FLAG_SELECT)
                 m_buf.add_icons_tile(TILEI_ITEM_SLOT_SELECTED, x, y);
@@ -235,17 +229,6 @@ static bool _can_use_item(const item_def &item, bool equipped)
         return you.species == SP_VAMPIRE
                && item.sub_type != CORPSE_SKELETON
                && mons_has_blood(item.mon_type);
-    }
-
-    if (equipped && item.cursed())
-    {
-        // Evocable items (e.g. dispater staff) are still evocable when cursed.
-        if (item_is_evokable(item))
-            return true;
-
-        // You can't unwield/fire a wielded cursed weapon/staff
-        // but cursed armour and rings can be unwielded without problems.
-        return !_is_true_equipped_item(item);
     }
 
     // Mummies can't do anything with food or potions.
@@ -495,9 +478,8 @@ bool InventoryRegion::update_tip_text(string& tip)
         }
 
         tip += "\n[R-Click] Describe";
-        // Has to be non-equipped or non-cursed to drop.
-        if (!equipped || !_is_true_equipped_item(you.inv[idx])
-            || !you.inv[idx].cursed())
+        // Has to be non-equipped to drop.
+        if (!equipped || !_is_true_equipped_item(you.inv[idx]))
         {
             tip += "\n[Shift + L-Click] Drop (%)";
             cmd.push_back(CMD_DROP);
@@ -625,8 +607,6 @@ static void _fill_item_info(InventoryTile &desc, const item_info &item)
         desc.special = tileidx_corpse_brand(item);
 
     desc.flag = 0;
-    if (item.cursed())
-        desc.flag |= TILEI_FLAG_CURSE;
     if (item.pos.x != -1)
         desc.flag |= TILEI_FLAG_FLOOR;
 }

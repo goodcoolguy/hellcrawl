@@ -731,11 +731,7 @@ const set<pair<object_class_type, int> > removed_items =
     { OBJ_WANDS,     WAND_HEAL_WOUNDS_REMOVED },
     { OBJ_WANDS,     WAND_RANDOM_EFFECTS },
     { OBJ_WANDS,     WAND_SLOWING },
-    { OBJ_SCROLLS,   SCR_CURSE_WEAPON },
-    { OBJ_SCROLLS,   SCR_CURSE_ARMOUR },
-    { OBJ_SCROLLS,   SCR_CURSE_JEWELLERY },
 	{ OBJ_SCROLLS,   SCR_IDENTIFY },
-	{ OBJ_SCROLLS,   SCR_REMOVE_CURSE },
 	{ OBJ_SCROLLS,   SCR_RANDOM_USELESSNESS },
     { OBJ_SCROLLS,   SCR_RECHARGING },
 	{ OBJ_MISSILES,   MI_NEEDLE },
@@ -755,182 +751,11 @@ bool item_type_removed(object_class_type base, int subtype)
 // an interface layer between the code and the data in case this
 // gets changed again. - bwr
 
-//
-// Item cursed status functions:
-//
-bool item_known_cursed(const item_def &item)
-{
-    return _full_ident_mask(item) & ISFLAG_KNOW_CURSE
-           && item_ident(item, ISFLAG_KNOW_CURSE) && item.cursed();
-}
-
-/**
- * Is the provided item cursable? Note: this function would leak
- * information about unidentified holy wrath weapons, which is alright
- * because only Ashenzari worshippers can deliberately curse items and
- * they see all weapon egos anyway.
- *
- * @param item  The item under consideration.
- * @return      Whether the given item is a blessed weapon.
- */
-bool item_is_cursable(const item_def &item, bool ignore_holy_wrath)
-{
-    if (!item_type_has_curses(item.base_type))
-        return false;
-    if (item_known_cursed(item))
-        return false;
-    if (!ignore_holy_wrath && item.base_type == OBJ_WEAPONS
-        && get_weapon_brand(item) == SPWPN_HOLY_WRATH)
-    {
-        return false;
-    }
-    return true;
-}
-
-// Curses a random player inventory item.
-bool curse_an_item(bool ignore_holy_wrath)
-{
-    // allowing these would enable mummy scumming
-    if (have_passive(passive_t::want_curses))
-    {
-        mprf(MSGCH_GOD, "The curse is absorbed by %s.",
-             god_name(you.religion).c_str());
-        return false;
-    }
-
-    int count = 0;
-    item_def *found = nullptr;
-
-    for (auto &item : you.inv)
-    {
-        if (!item.defined())
-            continue;
-
-        if (!item_is_cursable(item, ignore_holy_wrath))
-            continue;
-
-        // Item is valid for cursing, so we'll give it a chance.
-        count++;
-        if (one_chance_in(count))
-            found = &item;
-    }
-
-    // Any item to curse?
-    if (!found)
-        return false;
-
-    do_curse_item(*found, false);
-
-    return true;
-}
-
 void auto_id_inventory()
 {
     for (auto &item : you.inv)
         if (item.defined())
             god_id_item(item, false);
-}
-
-void do_curse_item(item_def &item, bool quiet)
-{
-  return; // curses are bad, fam. --mps
-    // Already cursed?
-    if (item.flags & ISFLAG_CURSED)
-        return;
-
-    if (!is_weapon(item) && item.base_type != OBJ_ARMOUR
-        && item.base_type != OBJ_JEWELLERY)
-    {
-        return;
-    }
-
-    // Holy wrath weapons cannot be cursed.
-    if (item.base_type == OBJ_WEAPONS
-        && get_weapon_brand(item) == SPWPN_HOLY_WRATH)
-    {
-        if (!quiet)
-        {
-            const bool was_known = is_artefact(item)
-                                 ? artefact_known_property(item, ARTP_BRAND)
-                                 : item_ident(item, ISFLAG_KNOW_TYPE);
-            mprf("Your %s glows black briefly, but repels the curse.",
-                 item.name(DESC_PLAIN).c_str());
-            if (is_artefact(item))
-                artefact_learn_prop(item, ARTP_BRAND);
-            else
-                set_ident_flags(item, ISFLAG_KNOW_TYPE);
-
-            if (!was_known)
-                mprf_nocap("%s", item.name(DESC_INVENTORY_EQUIP).c_str());
-        }
-        return;
-    }
-
-    if (!quiet)
-    {
-        mprf("Your %s glows black for a moment.",
-             item.name(DESC_PLAIN).c_str());
-
-        // If we get the message, we know the item is cursed now.
-        item.flags |= ISFLAG_KNOW_CURSE;
-    }
-
-    item.flags |= ISFLAG_CURSED;
-
-    // Xom is amused by the player's items being cursed, especially if
-    // they're worn/equipped.
-    if (in_inventory(item))
-    {
-        int amusement = 50;
-
-        if (item_is_equipped(item))
-        {
-            amusement *= 2;
-
-            if (you.equip[EQ_WEAPON] == item.link)
-            {
-                // Redraw the weapon.
-                you.wield_change = true;
-            }
-
-            ash_check_bondage();
-            auto_id_inventory();
-        }
-
-        xom_is_stimulated(amusement);
-    }
-}
-
-/**
- * Attempt to un-curse the given item.
- *
- * @param item      The item in question.
- * @param check_bondage     Whether to update the player's Ash bondage status.
- *                          (Ash ?rc delays this until later.)
- */
-void do_uncurse_item(item_def &item, bool check_bondage)
-{
-    const bool in_inv = in_inventory(item);
-    if (!item.cursed())
-    {
-        if (in_inv)
-            item.flags |= ISFLAG_KNOW_CURSE;
-        return;
-    }
-
-    if (in_inv)
-    {
-        if (you.equip[EQ_WEAPON] == item.link)
-        {
-            // Redraw the weapon.
-            you.wield_change = true;
-        }
-        item.flags |= ISFLAG_KNOW_CURSE;
-    }
-    item.flags &= (~ISFLAG_CURSED);
-
-    if (check_bondage && in_inv)
-        ash_check_bondage();
 }
 
 /**

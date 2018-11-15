@@ -750,7 +750,7 @@ static void _do_wizard_command(int wiz_command)
         break;
 
     case 'c': wizard_draw_card(); break;
-    case 'C': wizard_uncurse_item(); break;
+    case 'C': wizard_draw_card(); break;
     case CONTROL('C'): die("Intentional crash");
 
     case 'd': wizard_level_travel(true); break;

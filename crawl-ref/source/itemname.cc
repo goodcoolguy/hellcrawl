@@ -310,17 +310,6 @@ string item_def::name(description_level_type descrip, bool terse, bool ident,
     if (descrip != DESC_BASENAME && descrip != DESC_DBNAME && with_inscription)
         buff << _item_inscription(*this);
 
-    // These didn't have "cursed " prepended; add them here so that
-    // it comes after the inscription.
-    if (terse && descrip != DESC_DBNAME && descrip != DESC_BASENAME
-        && descrip != DESC_QUALNAME
-        && is_artefact(*this) && cursed()
-        && !testbits(ignore_flags, ISFLAG_KNOW_CURSE)
-        && (ident || item_ident(*this, ISFLAG_KNOW_CURSE)))
-    {
-        buff << " (curse)";
-    }
-
     return buff.str();
 }
 
@@ -712,18 +701,12 @@ static const char* scroll_type_name(int scrolltype)
     case SCR_TELEPORTATION:      return "teleportation";
     case SCR_FEAR:               return "fear";
     case SCR_NOISE:              return "noise";
-#if TAG_MAJOR_VERSION == 34
-    case SCR_REMOVE_CURSE:       return "remove curse";
-#endif
     case SCR_SUMMONING:          return "summoning";
     case SCR_ENCHANT_WEAPON:     return "enchant weapon";
     case SCR_ENCHANT_ARMOUR:     return "enchant armour";
     case SCR_TORMENT:            return "torment";
 #if TAG_MAJOR_VERSION == 34
     case SCR_RANDOM_USELESSNESS: return "random uselessness";
-    case SCR_CURSE_WEAPON:       return "curse weapon";
-    case SCR_CURSE_ARMOUR:       return "curse armour";
-    case SCR_CURSE_JEWELLERY:    return "curse jewellery";
 #endif
     case SCR_IMMOLATION:         return "immolation";
     case SCR_BLINKING:           return "blinking";
@@ -1334,15 +1317,6 @@ static bool _know_ident(const item_def &item, description_level_type desc,
 }
 
 /**
- * When naming the given item, should the curse be mentioned?
- */
-static bool _know_curse(const item_def &item, description_level_type desc,
-                        bool ident, iflags_t ignore_flags)
-{
-    return _know_ident(item, desc, ident, ignore_flags, ISFLAG_KNOW_CURSE);
-}
-
-/**
  * When naming the given item, should the pluses be mentioned?
  */
 static bool _know_pluses(const item_def &item, description_level_type desc,
@@ -1423,37 +1397,6 @@ static void _name_deck(const item_def &deck, description_level_type desc,
     }
 
     buff << "}";
-}
-
-/**
- * The curse-describing prefix to a weapon's name, including trailing space if
- * appropriate. (Empty if the weapon isn't cursed, or if the curse shouldn't be
- * prefixed.)
- */
-static string _curse_prefix(const item_def &weap, description_level_type desc,
-                            bool terse, bool ident, iflags_t ignore_flags)
-{
-    if (!_know_curse(weap, desc, ident, ignore_flags) || terse)
-        return "";
-
-    if (weap.cursed())
-        return "cursed ";
-
-    // We don't bother printing "uncursed" if the item is identified
-    // for pluses (its state should be obvious), this is so that
-    // the weapon name is kept short (there isn't a lot of room
-    // for the name on the main screen). If you're going to change
-    // this behaviour, *please* make it so that there is an option
-    // that maintains this behaviour. -- bwr
-    if (_know_pluses(weap, desc, ident, ignore_flags))
-        return "";
-    // Nor for artefacts. Again, the state should be obvious. --jpeg
-    if (!ident && !item_type_known(weap)
-        || !is_artefact(weap))
-    {
-        return "uncursed ";
-    }
-    return "";
 }
 
 /**
@@ -1555,17 +1498,14 @@ static string _name_weapon(const item_def &weap, description_level_type desc,
     const bool basename = _use_basename(weap, desc, ident);
     const bool qualname = (desc == DESC_QUALNAME);
 
-    const bool know_curse =  _know_curse(weap, desc, ident, ignore_flags);
     const bool know_pluses = _know_pluses(weap, desc, ident, ignore_flags);
     const bool know_ego =    _know_ego(weap, desc, ident, ignore_flags);
 
-    const string curse_prefix
-        = _curse_prefix(weap, desc, terse, ident, ignore_flags);
     const string plus_text = know_pluses ? _plus_prefix(weap) : "";
 
     if (is_artefact(weap) && !dbname)
     {
-        const string long_name = curse_prefix + plus_text
+        const string long_name = plus_text
                                  + get_artefact_name(weap, ident);
 
         // crop long artefact names when not controlled by webtiles -
@@ -1602,7 +1542,7 @@ static string _name_weapon(const item_def &weap, description_level_type desc,
         }
 
         const string short_name
-            = curse_prefix + plus_text + get_artefact_base_name(weap, true);
+            = plus_text + get_artefact_base_name(weap, true);
         return short_name;
     }
 
@@ -1616,11 +1556,10 @@ static string _name_weapon(const item_def &weap, description_level_type desc,
     const string ego_prefix
         = _ego_prefix(weap, desc, terse, ident, ignore_flags);
     const string ego_suffix = know_ego ? _ego_suffix(weap, terse) : "";
-    const string curse_suffix
-        = know_curse && weap.cursed() && terse ? " (curse)" :  "";
-    return curse_prefix + plus_text + cosmetic_text + ego_prefix
+
+    return plus_text + cosmetic_text + ego_prefix
            + item_base_name(weap)
-           + ego_suffix + curse_suffix;
+           + ego_suffix;
 }
 
 // Note that "terse" is only currently used for the "in hand" listing on
@@ -1637,7 +1576,6 @@ string item_def::name_aux(description_level_type desc, bool terse, bool ident,
     const bool basename = _use_basename(*this, desc, ident);
     const bool qualname = (desc == DESC_QUALNAME);
 
-    const bool know_curse =  _know_curse(*this, desc, ident, ignore_flags);
     const bool know_pluses = _know_pluses(*this, desc, ident, ignore_flags);
     const bool know_brand =  _know_ego(*this, desc, ident, ignore_flags);
 
@@ -1695,14 +1633,6 @@ string item_def::name_aux(description_level_type desc, bool terse, bool ident,
         break;
     }
     case OBJ_ARMOUR:
-        if (know_curse && !terse)
-        {
-            if (cursed())
-                buff << "cursed ";
-            else if (!know_pluses)
-                buff << "uncursed ";
-
-        }
 
         // If we know enough to know it has *something* ('shiny' etc),
         // but we know it has no ego, it must have a plus. (or maybe a curse.)
@@ -1778,9 +1708,6 @@ string item_def::name_aux(description_level_type desc, bool terse, bool ident,
                     buff << "}";
             }
         }
-
-        if (know_curse && cursed() && terse)
-            buff << " (curse)";
         break;
 
     case OBJ_WANDS:
@@ -1887,21 +1814,6 @@ string item_def::name_aux(description_level_type desc, bool terse, bool ident,
 
         const bool is_randart = is_artefact(*this);
 
-        if (know_curse && !terse)
-        {
-            if (cursed())
-                buff << "cursed ";
-            else if (desc != DESC_PLAIN
-                     && (!is_randart || !know_type)
-                     && (!jewellery_has_pluses(*this) || !know_pluses)
-                     // If the item is worn, its curse status is known,
-                     // no need to belabour the obvious.
-                     && get_equip_slot(this) == -1)
-            {
-                buff << "uncursed ";
-            }
-        }
-
         if (is_randart && !dbname)
         {
             buff << get_artefact_name(*this);
@@ -1930,8 +1842,6 @@ string item_def::name_aux(description_level_type desc, bool terse, bool ident,
                      << " ring";
             }
         }
-        if (know_curse && cursed() && terse)
-            buff << " (curse)";
         break;
     }
     case OBJ_MISCELLANY:
@@ -1969,16 +1879,6 @@ string item_def::name_aux(description_level_type desc, bool terse, bool ident,
         break;
 
     case OBJ_STAVES:
-        if (know_curse && !terse)
-        {
-            if (cursed())
-                buff << "cursed ";
-            else if (desc != DESC_PLAIN
-                     && (!know_type || !is_artefact(*this)))
-            {
-                buff << "uncursed ";
-            }
-        }
 
         if (!know_type)
         {
@@ -1992,9 +1892,6 @@ string item_def::name_aux(description_level_type desc, bool terse, bool ident,
         }
         else
             buff << "staff of " << staff_type_name(item_typ);
-
-        if (know_curse && cursed() && terse)
-            buff << " (curse)";
         break;
 
     // rearranged 15 Apr 2000 {dlb}:
@@ -3165,19 +3062,8 @@ bool is_bad_item(const item_def &item, bool temp)
     switch (item.base_type)
     {
     case OBJ_SCROLLS:
-        switch (item.sub_type)
-        {
-#if TAG_MAJOR_VERSION == 34
-        case SCR_CURSE_ARMOUR:
-        case SCR_CURSE_WEAPON:
-            if (you.species == SP_FELID)
-                return false;
-        case SCR_CURSE_JEWELLERY:
-            return !have_passive(passive_t::want_curses);
-#endif
-        default:
-            return false;
-        }
+        return false;
+
     case OBJ_POTIONS:
         // Can't be bad if you can't use them.
         if (you.species == SP_MUMMY)
@@ -3395,10 +3281,6 @@ bool is_useless_item(const item_def &item, bool temp)
             return you.species == SP_FORMICID;
         case SCR_AMNESIA:
             return you_worship(GOD_TROG);
-#if TAG_MAJOR_VERSION == 34
-        case SCR_CURSE_WEAPON: // for non-Ashenzari, already handled
-        case SCR_CURSE_ARMOUR:
-#endif
         case SCR_ENCHANT_WEAPON:
         case SCR_ENCHANT_ARMOUR:
         case SCR_BRAND_WEAPON:
@@ -3685,13 +3567,6 @@ string item_prefix(const item_def &item, bool temp)
     }
     else
         prefixes.push_back("unidentified");
-
-    // Sometimes this is abbreviated out of the item name.
-    if (item_type_has_curses(item.base_type)
-        && item_ident(item, ISFLAG_KNOW_CURSE) && !item.cursed())
-    {
-        prefixes.push_back("uncursed");
-    }
 
     if (god_hates_item(item))
     {

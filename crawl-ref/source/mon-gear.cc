@@ -852,7 +852,6 @@ static void _give_weapon(monster* mon, int level, bool melee_only = false,
     };
 
     bool force_item = false;
-    bool force_uncursed = false;
 
     string floor_tile = "";
     string equip_tile = "";
@@ -925,7 +924,6 @@ static void _give_weapon(monster* mon, int level, bool melee_only = false,
     case MONS_NAGA_SHARPSHOOTER:
     case MONS_SATYR:
     case MONS_SONJA:
-        force_uncursed = true;
         break;
 
     case MONS_JORGRUN:
@@ -1137,12 +1135,6 @@ static void _give_weapon(monster* mon, int level, bool melee_only = false,
 
     if (force_item)
         item_set_appearance(i);
-
-    if (force_uncursed)
-    {
-        do_uncurse_item(i);
-        set_ident_flags(i, ISFLAG_KNOW_CURSE); // despoiler
-    }
 
     if (!is_artefact(mitm[thing_created]) && !floor_tile.empty())
     {

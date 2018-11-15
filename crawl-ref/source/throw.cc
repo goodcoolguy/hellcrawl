@@ -356,14 +356,7 @@ static int _fire_prompt_for_item()
 // Returns false and err text if this item can't be fired.
 static bool _fire_validate_item(int slot, string &err)
 {
-    if (slot == you.equip[EQ_WEAPON]
-        && is_weapon(you.inv[slot])
-        && you.inv[slot].cursed())
-    {
-        err = "That weapon is stuck to your " + you.hand_name(false) + "!";
-        return false;
-    }
-    else if (item_is_worn(slot))
+    if (item_is_worn(slot))
     {
         err = "You are wearing that object!";
         return false;

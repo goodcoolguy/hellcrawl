@@ -122,11 +122,6 @@ const string &InvEntry::get_dbname() const
     return dbname;
 }
 
-bool InvEntry::is_cursed() const
-{
-    return item_ident(*item, ISFLAG_KNOW_CURSE) && item->cursed();
-}
-
 bool InvEntry::is_glowing() const
 {
     return !item_ident(*item, ISFLAG_KNOW_TYPE)
@@ -429,22 +424,12 @@ string no_selectables_message(int item_selector)
             return "You aren't carrying any items that you can evoke without wielding.";
         else
             return "You aren't carrying any items that you can evoke.";
-    case OSEL_CURSED_WORN:
-        return "None of your equipped items are cursed.";
-#if TAG_MAJOR_VERSION == 34
-    case OSEL_UNCURSED_WORN_ARMOUR:
-        return "You aren't wearing any piece of uncursed armour.";
-    case OSEL_UNCURSED_WORN_JEWELLERY:
-        return "You aren't wearing any piece of uncursed jewellery.";
-#endif
     case OSEL_BRANDABLE_WEAPON:
         return "You aren't carrying any weapons that can be branded.";
     case OSEL_ENCHANTABLE_WEAPON:
         return "You aren't carrying any weapons that can be enchanted.";
     case OSEL_BEOGH_GIFT:
         return "You aren't carrying anything you can give to a follower.";
-    case OSEL_CURSABLE:
-        return "You don't have any cursable items.";
     }
 
     return "You aren't carrying any such object.";
@@ -477,13 +462,8 @@ bool get_tiles_for_item(const item_def &item, vector<tile_def>& tileset, bool sh
         const equipment_type eq = item_equip_slot(item);
         if (eq != EQ_NONE)
         {
-            if (item_known_cursed(item))
-                tileset.emplace_back(TILE_ITEM_SLOT_EQUIP_CURSED, TEX_DEFAULT);
-            else
-                tileset.emplace_back(TILE_ITEM_SLOT_EQUIP, TEX_DEFAULT);
+            tileset.emplace_back(TILE_ITEM_SLOT_EQUIP, TEX_DEFAULT);
         }
-        else if (item_known_cursed(item))
-            tileset.emplace_back(TILE_ITEM_SLOT_CURSED, TEX_DEFAULT);
 
         tileidx_t base_item = tileidx_known_base_item(idx);
         if (base_item)
@@ -563,8 +543,6 @@ bool InvMenu::is_selectable(int index) const
     if (type == MT_DROP)
     {
         InvEntry *item = dynamic_cast<InvEntry*>(items[index]);
-        if (item->is_cursed() && item->is_equipped())
-            return false;
 
         string text = item->get_text();
 
@@ -676,7 +654,6 @@ void init_item_sort_comparators(item_sort_comparators &list, const string &set)
           { "qualname",  compare_item_str<&InvEntry::get_qualname> },
           { "fullname",  compare_item_str<&InvEntry::get_fullname> },
           { "dbname",    compare_item_str<&InvEntry::get_dbname> },
-          { "curse",     compare_item<bool, &InvEntry::is_cursed> },
           { "glowing",   compare_item_rev<bool, &InvEntry::is_glowing> },
           { "ego",       compare_item_rev<bool, &InvEntry::is_ego> },
           { "art",       compare_item_rev<bool, &InvEntry::is_art> },
@@ -1030,18 +1007,6 @@ bool item_is_selected(const item_def &i, int selector)
     case OSEL_DRAW_DECK:
         return is_deck(i);
 
-    case OSEL_CURSED_WORN:
-        return i.cursed() && item_is_equipped(i)
-               && (&i != you.weapon() || is_weapon(i));
-
-#if TAG_MAJOR_VERSION == 34
-    case OSEL_UNCURSED_WORN_ARMOUR:
-        return !i.cursed() && item_is_equipped(i) && itype == OBJ_ARMOUR;
-
-    case OSEL_UNCURSED_WORN_JEWELLERY:
-        return !i.cursed() && item_is_equipped(i) && itype == OBJ_JEWELLERY;
-#endif
-
     case OSEL_BRANDABLE_WEAPON:
         return is_brandable_weapon(i, true);
 
@@ -1060,9 +1025,6 @@ bool item_is_selected(const item_def &i, int selector)
                 || itype == OBJ_ARMOUR
                    && get_armour_slot(i) == EQ_BODY_ARMOUR)
                 && !item_is_equipped(i);
-
-    case OSEL_CURSABLE:
-        return item_is_cursable(i);
 
     default:
         return false;
@@ -1539,14 +1501,6 @@ bool needs_handle_warning(const item_def &item, operation_types oper,
     if (_has_warning_inscription(item, oper))
         return true;
 
-    // Curses first.
-    if (item_known_cursed(item)
-        && (oper == OPER_WIELD && is_weapon(item) && !_is_wielded(item)
-            || oper == OPER_PUTON || oper == OPER_WEAR))
-    {
-        return true;
-    }
-
     // The consequences of evokables are generally known unless it's a deck
     // and you don't know what kind of a deck it is.
     if (item.base_type == OBJ_MISCELLANY && !is_deck(item)
@@ -1703,12 +1657,6 @@ bool check_warning_inscriptions(const item_def& item,
                         return check_old_item_warning(item, oper);
                 }
             }
-        }
-        else if (oper == OPER_REMOVE || oper == OPER_TAKEOFF)
-        {
-            // Don't ask if it will fail anyway.
-            if (item.cursed())
-                return true;
         }
 
         // XXX: duplicates a check in delay.cc:_finish_delay()

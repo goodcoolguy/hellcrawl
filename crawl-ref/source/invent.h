@@ -29,19 +29,10 @@ enum object_selector
     OSEL_EVOKABLE                = -10,
     OSEL_WORN_ARMOUR             = -11,
 //  OSEL_FRUIT                   = -12,
-    OSEL_CURSED_WORN             = -13,
-#if TAG_MAJOR_VERSION == 34
-    OSEL_UNCURSED_WORN_ARMOUR    = -14,
-    OSEL_UNCURSED_WORN_JEWELLERY = -15,
-#endif
     OSEL_BRANDABLE_WEAPON        = -16,
     OSEL_ENCHANTABLE_WEAPON      = -17,
     OSEL_BLESSABLE_WEAPON        = -18,
     OSEL_SUPERCHARGE             = -19,
-    OSEL_CURSABLE                = -20, // Items that are cursable and not
-                                        // known-cursed. Unknown-cursed items
-                                        // are included, to prevent information
-                                        // leakage.
     OSEL_DIVINE_RECHARGE         = -21,
 };
 
@@ -124,7 +115,6 @@ public:
     const string &get_qualname() const;
     const string &get_fullname() const;
     const string &get_dbname() const;
-    bool         is_cursed() const;
     bool         is_glowing() const;
     bool         is_ego() const;
     bool         is_art() const;

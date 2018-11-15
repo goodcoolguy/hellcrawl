@@ -938,14 +938,6 @@ bool handle_throw(monster* mons, bolt & beem, bool teleport, bool check_only)
 
     ASSERT(missile->base_type == OBJ_MISSILES);
 
-    // If the attack needs a launcher that we can't wield, bail out.
-    if (launcher)
-    {
-        weapon = mons->mslot_item(MSLOT_WEAPON);
-        if (weapon && weapon != launcher && weapon->cursed())
-            return false;
-    }
-
     // Ok, we'll try it.
     setup_monster_throw_beam(mons, beem);
 

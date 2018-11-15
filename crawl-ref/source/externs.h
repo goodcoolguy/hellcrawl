@@ -582,7 +582,6 @@ public:
                 bool quantity_in_words = false,
                 iflags_t ignore_flags = 0x0) const;
     bool has_spells() const;
-    bool cursed() const;
     colour_t get_colour() const;
     zap_type zap() const; ///< what kind of beam it shoots (if wand).
 

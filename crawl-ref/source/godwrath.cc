@@ -482,10 +482,7 @@ static bool _cheibriados_retribution()
             break;
     // No tension wrath.
     case 0:
-        if (curse_an_item())
-            simple_god_message(" makes up for lost time.", god);
-        else
-            glammer = true;
+        glammer = true;
 
     default:
         break;

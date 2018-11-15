@@ -264,9 +264,6 @@ unsigned int item_value(item_def item, bool ident)
             valued += 60; // un-id'd "glowing" - arbitrary added cost
         }
 
-        if (item_known_cursed(item))
-            valued -= 30;
-
         break;
 
     case OBJ_MISSILES:          // ammunition
@@ -383,9 +380,6 @@ unsigned int item_value(item_def item, bool ident)
         {
             valued += 60; // un-id'd "glowing" - arbitrary added cost
         }
-
-        if (item_known_cursed(item))
-            valued -= 30;
 
         break;
 
@@ -567,9 +561,6 @@ unsigned int item_value(item_def item, bool ident)
             case SCR_MAGIC_MAPPING:
                 valued += 35;
                 break;
-#if TAG_MAJOR_VERSION == 34
-            case SCR_REMOVE_CURSE:
-#endif
             case SCR_TELEPORTATION:
                 valued += 30;
                 break;
@@ -577,9 +568,6 @@ unsigned int item_value(item_def item, bool ident)
             case SCR_FOG:
 #if TAG_MAJOR_VERSION == 34
             case SCR_IDENTIFY:
-            case SCR_CURSE_ARMOUR:
-            case SCR_CURSE_WEAPON:
-            case SCR_CURSE_JEWELLERY:
 #endif
                 valued += 20;
                 break;
@@ -595,8 +583,6 @@ unsigned int item_value(item_def item, bool ident)
         break;
 
     case OBJ_JEWELLERY:
-        if (item_known_cursed(item))
-            valued -= 30;
 
         if (!item_type_known(item))
             valued += 50;
@@ -827,11 +813,6 @@ bool is_worthless_consumable(const item_def &item)
     case OBJ_SCROLLS:
         switch (item.sub_type)
         {
-#if TAG_MAJOR_VERSION == 34
-        case SCR_CURSE_ARMOUR:
-        case SCR_CURSE_WEAPON:
-        case SCR_CURSE_JEWELLERY:
-#endif
         case SCR_NOISE:
         case SCR_RANDOM_USELESSNESS:
             return true;

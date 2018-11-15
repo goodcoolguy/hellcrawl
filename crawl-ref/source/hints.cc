@@ -1021,7 +1021,6 @@ static bool _rare_hints_event(hints_event_type event)
     case HINT_YOU_ENCHANTED:
     case HINT_YOU_POISON:
     case HINT_YOU_ROTTING:
-    case HINT_YOU_CURSED:
     case HINT_GLOWING:
     case HINT_CAUGHT_IN_NET:
     case HINT_YOU_SILENCE:
@@ -1807,16 +1806,6 @@ void learned_something_new(hints_event_type seen_what, coord_def gc)
         cmd.push_back(CMD_QUAFF);
         break;
 
-    case HINT_YOU_CURSED:
-        text << "Cursed equipment, once worn or wielded, cannot be dropped or "
-                "removed. Curses can be removed by reading certain scrolls.";
-        break;
-
-    case HINT_REMOVED_CURSE:
-        text << "The curses on your worn equipment have been removed, so you "
-                "can now unequip any previously cursed items.";
-        break;
-
     case HINT_MULTI_PICKUP:
         text << "There are a lot of items here. You choose what to pick up "
                 "from a menu: type <w>%</w> "
@@ -2291,14 +2280,6 @@ void learned_something_new(hints_event_type seen_what, coord_def gc)
     case HINT_WIELD_WEAPON:
     {
         int wpn = you.equip[EQ_WEAPON];
-        if (wpn != -1
-            && you.inv[wpn].base_type == OBJ_WEAPONS
-            && you.inv[wpn].cursed())
-        {
-            // Don't trigger if the wielded weapon is cursed.
-            Hints.hints_events[seen_what] = true;
-            return;
-        }
 
         if (Hints.hints_type == HINT_RANGER_CHAR && wpn != -1
             && you.inv[wpn].is_type(OBJ_WEAPONS, WPN_SHORTBOW))
@@ -2868,9 +2849,7 @@ static string _hints_throw_stuff(const item_def &item)
 // before putting on this item.
 void check_item_hint(const item_def &item, unsigned int num_old_talents)
 {
-    if (item.cursed())
-        learned_something_new(HINT_YOU_CURSED);
-    else if (Hints.hints_events[HINT_NEW_ABILITY_ITEM]
+    if (Hints.hints_events[HINT_NEW_ABILITY_ITEM]
              && your_talents(false).size() > num_old_talents)
     {
         learned_something_new(HINT_NEW_ABILITY_ITEM);
@@ -2997,15 +2976,6 @@ string hints_describe_item(const item_def &item)
 
                 Hints.hints_events[HINT_SEEN_RANDART] = false;
             }
-            if (item_known_cursed(item) && !long_text)
-            {
-                ostr << "\n\nOnce wielded, a cursed weapon can't be "
-                        "unwielded until the curse has been lifted by "
-                        "reading a scroll of remove curse or one of the "
-                        "enchantment scrolls.";
-
-                Hints.hints_events[HINT_YOU_CURSED] = false;
-            }
             Hints.hints_events[HINT_SEEN_WEAPON] = false;
             break;
         }
@@ -3120,13 +3090,6 @@ string hints_describe_item(const item_def &item)
             }
             if (wearable)
             {
-                if (item_known_cursed(item))
-                {
-                    ostr << "\nA cursed piece of armour, once worn, cannot be "
-                            "removed again until the curse has been lifted by "
-                            "reading a scroll of remove curse or enchant "
-                            "armour.";
-                }
                 if (gives_resistance(item))
                 {
                     ostr << "\n\nThis armour offers its wearer protection from "
@@ -3199,13 +3162,6 @@ string hints_describe_item(const item_def &item)
             cmd.push_back(CMD_WEAR_JEWELLERY);
             cmd.push_back(CMD_REMOVE_JEWELLERY);
 
-            if (item_known_cursed(item))
-            {
-                ostr << "\nA cursed piece of jewellery will cling to its "
-                        "unfortunate wearer's neck or fingers until the curse "
-                        "is finally lifted when he or she reads a scroll of "
-                        "remove curse.";
-            }
             if (gives_resistance(item))
             {
                 ostr << "\n\nThis "

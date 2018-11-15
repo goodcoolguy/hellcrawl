@@ -443,8 +443,6 @@ void wizard_tweak_object()
         else
             die("unhandled keyin");
 
-        // cursedness might have changed
-        ash_check_bondage();
         auto_id_inventory();
     }
 }
@@ -611,47 +609,11 @@ void wizard_make_object_randart()
         return;
     }
 
-    // Remove curse flag from item, unless worshipping Ashenzari.
-    if (have_passive(passive_t::want_curses))
-        do_curse_item(item, true);
-    else
-        do_uncurse_item(item);
-
     // If it was equipped, requip the item.
     if (eq != EQ_NONE)
         equip_item(eq, invslot);
 
     mprf_nocap("%s", item.name(DESC_INVENTORY_EQUIP).c_str());
-}
-
-// Returns whether an item of this type can be cursed.
-static bool _item_type_can_be_cursed(int type)
-{
-    return type == OBJ_WEAPONS || type == OBJ_ARMOUR || type == OBJ_JEWELLERY
-           || type == OBJ_STAVES;
-}
-
-void wizard_uncurse_item()
-{
-    const int i = prompt_invent_item("(Un)curse which item?", MT_INVLIST, -1);
-
-    if (!prompt_failed(i))
-    {
-        item_def& item(you.inv[i]);
-
-        if (item.cursed())
-            do_uncurse_item(item);
-        else
-        {
-            if (!_item_type_can_be_cursed(item.base_type))
-            {
-                mpr("That type of item cannot be cursed.");
-                return;
-            }
-            do_curse_item(item);
-        }
-        mprf_nocap("%s", item.name(DESC_INVENTORY_EQUIP).c_str());
-    }
 }
 
 void wizard_identify_pack()

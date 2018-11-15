@@ -420,128 +420,7 @@ static bool _two_handed()
 
 void ash_check_bondage(bool msg)
 {
-    if (!will_have_passive(passive_t::bondage_skill_boost))
-        return;
-
-    int cursed[NUM_ET] = {0}, slots[NUM_ET] = {0};
-
-    for (int j = EQ_FIRST_EQUIP; j < NUM_EQUIP; j++)
-    {
-        const equipment_type i = static_cast<equipment_type>(j);
-        eq_type s;
-        if (i == EQ_WEAPON)
-            s = ET_WEAPON;
-        else if (i == EQ_SHIELD)
-            s = ET_SHIELD;
-        else if (i <= EQ_MAX_ARMOUR)
-            s = ET_ARMOUR;
-        // Missing hands mean fewer rings
-        else if (you.species != SP_OCTOPODE && i == EQ_LEFT_RING
-                 && you.get_mutation_level(MUT_MISSING_HAND))
-        {
-            continue;
-        }
-        // Octopodes don't count these slots:
-        else if (you.species == SP_OCTOPODE
-                 && ((i == EQ_LEFT_RING || i == EQ_RIGHT_RING)
-                     || (i == EQ_RING_EIGHT
-                         && you.get_mutation_level(MUT_MISSING_HAND))))
-        {
-            continue;
-        }
-        // *Only* octopodes count these slots:
-        else if (you.species != SP_OCTOPODE
-                 && i >= EQ_RING_ONE && i <= EQ_RING_EIGHT)
-        {
-            continue;
-        }
-        // The macabre finger necklace's extra slot does count if equipped.
-        else if (!player_equip_unrand(UNRAND_FINGER_AMULET)
-                 && i == EQ_RING_AMULET)
-        {
-            continue;
-        }
-        else
-            s = ET_JEWELS;
-
-        // transformed away slots are still considered to be possibly bound
-        if (you_can_wear(i))
-        {
-            slots[s]++;
-            if (you.equip[i] != -1)
-            {
-                const item_def& item = you.inv[you.equip[i]];
-                if (item.cursed() && (i != EQ_WEAPON || is_weapon(item)))
-                {
-                    if (s == ET_WEAPON
-                        && (_two_handed()
-                            || you.get_mutation_level(MUT_MISSING_HAND)))
-                    {
-                        cursed[ET_WEAPON] = 3;
-                        cursed[ET_SHIELD] = 3;
-                    }
-                    else
-                    {
-                        cursed[s]++;
-                        if (i == EQ_BODY_ARMOUR && is_unrandom_artefact(item, UNRAND_LEAR))
-                            cursed[s] += 3;
-                    }
-                }
-            }
-        }
-    }
-
-    int8_t new_bondage[NUM_ET];
-    int old_level = you.bondage_level;
-    for (int s = ET_WEAPON; s < NUM_ET; s++)
-    {
-        if (slots[s] == 0)
-            new_bondage[s] = -1;
-        // That's only for 2 handed weapons.
-        else if (cursed[s] > slots[s])
-            new_bondage[s] = 3;
-        else if (cursed[s] == slots[s])
-            new_bondage[s] = 2;
-        else if (cursed[s] > slots[s] / 2)
-            new_bondage[s] = 1;
-        else
-            new_bondage[s] = 0;
-    }
-
-    you.bondage_level = 0;
-    
-    for (int i = ET_WEAPON; i < NUM_ET; ++i)
-         if (new_bondage[i] > 0)
-            ++you.bondage_level;
-
-    int flags = 0;
-    if (msg)
-    {
-        for (int s = ET_WEAPON; s < NUM_ET; s++)
-            if (new_bondage[s] != you.bondage[s])
-                flags |= 1 << s;
-    }
-
-    you.skill_boost.clear();
-    for (int s = ET_WEAPON; s < NUM_ET; s++)
-    {
-        you.bondage[s] = new_bondage[s];
-        map<skill_type, int8_t> boosted_skills = ash_get_boosted_skills(eq_type(s));
-        for (const auto &entry : boosted_skills)
-        {
-            you.skill_boost[entry.first] += entry.second;
-            if (you.skill_boost[entry.first] > 3)
-                you.skill_boost[entry.first] = 3;
-        }
-
-    }
-
-    if (msg)
-    {
-        string desc = ash_describe_bondage(flags, you.bondage_level != old_level);
-        if (!desc.empty())
-            mprf(MSGCH_GOD, "%s", desc.c_str());
-    }
+    return;
 }
 
 string ash_describe_bondage(int flags, bool level)
@@ -623,17 +502,6 @@ string ash_describe_bondage(int flags, bool level)
     return trim_string(desc);
 }
 
-static bool _is_slot_cursed(equipment_type eq)
-{
-    const item_def *worn = you.slot_item(eq, true);
-    if (!worn || !worn->cursed())
-        return false;
-
-    if (eq == EQ_WEAPON)
-        return is_weapon(*worn);
-    return true;
-}
-
 bool god_id_item(item_def& item, bool silent)
 {
     iflags_t old_ided = item.flags & ISFLAG_IDENT_MASK;
@@ -663,18 +531,6 @@ bool god_id_item(item_def& item, bool silent)
 
         if (item.base_type == OBJ_JEWELLERY)
             ided |= ISFLAG_IDENT_MASK;
-
-        if (item.base_type == OBJ_ARMOUR
-            && (!ash || _is_slot_cursed(get_armour_slot(item))))
-        {
-            ided |= ISFLAG_KNOW_PLUSES;
-        }
-
-        if (is_weapon(item)
-            && (!ash || _is_slot_cursed(EQ_WEAPON)))
-        {
-            ided |= ISFLAG_KNOW_PLUSES;
-        }
     }
 
     if (ided & ~old_ided)

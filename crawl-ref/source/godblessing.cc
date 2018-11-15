@@ -205,12 +205,6 @@ static string _beogh_bless_melee_weapon(monster* mon)
         set_ident_flags(wpn, ISFLAG_KNOW_PLUSES);
         blessed = true;
     }
-    if (wpn.cursed())
-    {
-        do_uncurse_item(wpn);
-        if (!blessed)
-            return "uncursed armament";
-    }
 
     if (!blessed)
     {
@@ -250,12 +244,6 @@ static string _beogh_bless_ranged_weapon(monster* mon)
         {
             set_ident_flags(launcher, ISFLAG_KNOW_PLUSES);
             blessed = true;
-        }
-        if (launcher.cursed())
-        {
-            do_uncurse_item(launcher);
-            if (!blessed)
-                return "uncursed armament";
         }
 
         // Otherwise gift ammunition.

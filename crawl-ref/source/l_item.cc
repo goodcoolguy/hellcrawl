@@ -333,14 +333,6 @@ static int l_item_do_ego(lua_State *ls)
 
 IDEFN(ego, do_ego)
 
-IDEF(cursed)
-{
-    bool cursed = item && item_ident(*item, ISFLAG_KNOW_CURSE)
-                       && item->cursed();
-    lua_pushboolean(ls, cursed);
-    return 1;
-}
-
 IDEF(worn)
 {
     int worn = get_equip_slot(item);
@@ -904,8 +896,6 @@ IDEFN(inc_quantity, do_inc_quantity)
 static iflags_t _str_to_item_status_flags(string flag)
 {
     iflags_t flags = 0;
-    if (flag.find("curse") != string::npos)
-        flags &= ISFLAG_KNOW_CURSE;
     // type is dealt with using item_type_known.
     //if (flag.find("type") != string::npos)
     //    flags &= ISFLAG_KNOW_TYPE;
@@ -1007,16 +997,6 @@ IDEF(artefact_name)
     else
         lua_pushnil(ls);
 
-    return 1;
-}
-
-IDEF(is_cursed)
-{
-    ASSERT_DLUA;
-
-    bool cursed = item->cursed();
-
-    lua_pushboolean(ls, cursed);
     return 1;
 }
 
@@ -1288,7 +1268,6 @@ static ItemAccessor item_attrs[] =
     { "class",             l_item_class },
     { "subtype",           l_item_subtype },
     { "ego",               l_item_ego },
-    { "cursed",            l_item_cursed },
     { "worn",              l_item_worn },
     { "name",              l_item_name },
     { "name_coloured",     l_item_name_coloured },
@@ -1335,7 +1314,6 @@ static ItemAccessor item_attrs[] =
     { "ego_type",          l_item_ego_type },
     { "ego_type_terse",    l_item_ego_type_terse },
     { "artefact_name",     l_item_artefact_name },
-    { "is_cursed",         l_item_is_cursed },
     { "hands",             l_item_hands },
 };
 

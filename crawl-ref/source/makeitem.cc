@@ -210,26 +210,12 @@ static bool _try_make_weapon_artefact(item_def& item, int force_type,
         // Mean enchantment +6.
         item.plus = 12 - biased_random2(7,2) - biased_random2(7,2) - biased_random2(7,2);
 
-        bool cursed = false;
-        if (one_chance_in(5))
-        {
-            cursed = true;
-            item.plus = 3 - random2(6);
-        }
-        else if (item.plus < 0 && !one_chance_in(3))
-            cursed = true;
-
         // On weapons, an enchantment of less than 0 is never viable.
         item.plus = max(static_cast<int>(item.plus), random2(2));
 
         // The rest are normal randarts.
         make_item_randart(item);
 
-        if (cursed)
-            do_curse_item(item);
-
-        if (get_weapon_brand(item) == SPWPN_HOLY_WRATH)
-            item.flags &= (~ISFLAG_CURSED);
         return true;
     }
 
@@ -416,9 +402,6 @@ static void _generate_weapon_item(item_def& item, bool allow_uniques,
                 _determine_weapon_brand(item, 2 + 2 * env.absdepth0));
         }
         item.plus -= 1 + random2(3);
-
-        if (item_level == ISPEC_BAD)
-            do_curse_item(item);
     }
     else if ((force_good || is_demonic(item) || forced_ego
                     || x_chance_in_y(51 + item_level, 200))
@@ -449,16 +432,6 @@ static void _generate_weapon_item(item_def& item, bool allow_uniques,
         // squash boring items.
         if (!force_good && item.brand == SPWPN_NORMAL && item.plus < 3)
             item.plus = 0;
-    }
-    else
-    {
-        if (one_chance_in(12))
-        {
-            // Make a cursed item.
-            do_curse_item(item);
-            item.plus  -= random2(4);
-            set_item_ego_type(item, OBJ_WEAPONS, SPWPN_NORMAL);
-        }
     }
 }
 
@@ -702,26 +675,15 @@ static bool _try_make_armour_artefact(item_def& item, int force_type,
             item.sub_type = ARM_NAGA_BARDING;
         }
 
-        // Determine enchantment and cursedness.
+        int max_plus = armour_max_enchant(item);
+        item.plus = random2(max_plus + 1);
+
         if (one_chance_in(5))
-        {
-            do_curse_item(item);
-            item.plus = 0;
-        }
-        else
-        {
-            int max_plus = armour_max_enchant(item);
-            item.plus = random2(max_plus + 1);
+            item.plus += random2(max_plus + 6) / 2;
 
-            if (one_chance_in(5))
-                item.plus += random2(max_plus + 6) / 2;
-
-            if (one_chance_in(6))
-                item.plus -= random2(max_plus + 6);
-
-            if (item.plus < 0 && !one_chance_in(3))
-                do_curse_item(item);
-        }
+        if (one_chance_in(6))
+            item.plus -= random2(max_plus + 6);
+        
 
         // On body armour, an enchantment of less than 0 is never viable.
         if (get_armour_slot(item) == EQ_BODY_ARMOUR)
@@ -1121,9 +1083,6 @@ static void _generate_armour_item(item_def& item, bool allow_uniques,
         }
 
         item.plus -= 1 + random2(3);
-
-        if (item_level == ISPEC_BAD)
-            do_curse_item(item);
     }
     else if ((forced_ego || item.sub_type == ARM_HAT
                     || x_chance_in_y(51 + item_level, 250))
@@ -1147,16 +1106,6 @@ static void _generate_armour_item(item_def& item, bool allow_uniques,
             if (get_armour_ego_type(item) == SPARM_PONDEROUSNESS)
                 item.plus += 3 + random2(8);
         }
-    }
-    else if (one_chance_in(12))
-    {
-        // Make a bad (cursed) item.
-        do_curse_item(item);
-
-        if (one_chance_in(5))
-            item.plus -= random2(3);
-
-        set_item_ego_type(item, OBJ_ARMOUR, SPARM_NORMAL);
     }
 
     // Don't overenchant items.
@@ -1566,9 +1515,6 @@ static void _generate_jewellery_item(item_def& item, bool allow_uniques,
 
     item.plus = _determine_ring_plus(item.sub_type);
 
-    if (item.plus < 0)
-        do_curse_item(item);
-
     // All jewellery base types should now work. - bwr
     if (item_level == ISPEC_RANDART
         || allow_uniques && item_level > 2
@@ -1898,9 +1844,6 @@ static bool _weapon_is_visibly_special(const item_def &item)
     if (item.is_mundane())
         return false;
 
-    if (item.flags & ISFLAG_CURSED && one_chance_in(3))
-        return true;
-
     return false;
 }
 
@@ -1917,9 +1860,6 @@ static bool _armour_is_visibly_special(const item_def &item)
 
     if (item.is_mundane())
         return false;
-
-    if (item.flags & ISFLAG_CURSED && one_chance_in(3))
-        return true;
 
     return false;
 }

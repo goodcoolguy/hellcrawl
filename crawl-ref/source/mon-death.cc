@@ -344,8 +344,6 @@ static void _create_monster_hide(const item_def &corpse, bool silent)
         return;
     item_def& item = mitm[o];
 
-    do_uncurse_item(item);
-
     const coord_def pos = item_pos(corpse);
     if (pos.origin())
     {

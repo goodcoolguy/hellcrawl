@@ -95,7 +95,6 @@ enum hints_event_type
 #endif
     HINT_YOU_POISON,
     HINT_YOU_ROTTING,
-    HINT_YOU_CURSED,
     HINT_YOU_MUTATED,
     HINT_CAN_BERSERK,
     HINT_POSTBERSERK,
@@ -125,7 +124,6 @@ enum hints_event_type
     // for the tutorial
     HINT_AUTOPICKUP_THROWN,
     HINT_TARGET_NO_FOE,
-    HINT_REMOVED_CURSE,
     HINT_ITEM_RESISTANCES,
     HINT_FLYING,
     HINT_INACCURACY,

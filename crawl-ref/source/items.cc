@@ -2544,13 +2544,6 @@ bool drop_item(int item_dropped, int quant_drop)
         return false;
     }
 
-    if (item_dropped == you.equip[EQ_WEAPON]
-        && item.base_type == OBJ_WEAPONS && item.cursed())
-    {
-        mprf("%s is stuck to you!", item.name(DESC_THE).c_str());
-        return false;
-    }
-
     for (int i = EQ_MIN_ARMOUR; i <= EQ_MAX_ARMOUR; i++)
     {
         if (item_dropped == you.equip[i] && you.equip[i] != -1)
@@ -2997,11 +2990,6 @@ static bool _similar_equip(const item_def& pickup_item,
     if (inv_slot == EQ_NONE)
         return false;
 
-    // If it's an unequipped cursed item the player might be looking
-    // for a replacement.
-    if (item_known_cursed(inv_item) && !item_is_equipped(inv_item))
-        return false;
-
     if (get_item_slot(pickup_item) != inv_slot)
         return false;
 
@@ -3320,11 +3308,6 @@ bool item_is_melded(const item_def& item)
 bool item_def::has_spells() const
 {
     return item_is_spellbook(*this) && item_type_known(*this);
-}
-
-bool item_def::cursed() const
-{
-    return flags & ISFLAG_CURSED;
 }
 
 bool item_def::launched_by(const item_def &launcher) const
@@ -4806,9 +4789,6 @@ item_info get_item_info(const item_def& item)
         ii.sub_type = item.sub_type;
         break;
     }
-
-    if (item_ident(item, ISFLAG_KNOW_CURSE))
-        ii.flags |= (item.flags & ISFLAG_CURSED);
 
     if (item_type_known(item))
     {

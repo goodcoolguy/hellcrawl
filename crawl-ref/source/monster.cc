@@ -550,20 +550,6 @@ bool monster::can_wield(const item_def& item, bool ignore_curse,
         _shield = &mitm[inv[MSLOT_SHIELD]];
     }
 
-    if (!ignore_curse)
-    {
-        int num_cursed = 0;
-        if (weap1 && weap1->cursed())
-            num_cursed++;
-        if (weap2 && weap2->cursed())
-            num_cursed++;
-        if (_shield && _shield->cursed())
-            num_cursed++;
-
-        if (two_handed && num_cursed > 0 || num_cursed >= avail_slots)
-            return false;
-    }
-
     return could_wield(item, ignore_brand, ignore_transform);
 }
 
@@ -1011,17 +997,10 @@ void monster::unequip_jewellery(item_def &item, bool msg)
  * Note: this method does NOT modify this->inv to point to NON_ITEM!
  * @param item  the item to be removed.
  * @param msg   whether to give a message
- * @param force whether to remove the item even if cursed.
  * @return whether the item was unequipped successfully.
  */
 bool monster::unequip(item_def &item, bool msg, bool force)
 {
-    if (!force && item.cursed())
-        return false;
-
-    if (!force && you.can_see(*this))
-        set_ident_flags(item, ISFLAG_KNOW_CURSE);
-
     switch (item.base_type)
     {
     case OBJ_WEAPONS:
@@ -1482,20 +1461,7 @@ bool monster::pickup_melee_weapon(item_def &item, bool msg)
                     new_wpn_better = true;
             }
 
-            if (new_wpn_better && !weap->cursed())
-            {
-                if (!dual_wielding
-                    || slot == MSLOT_WEAPON
-                    || old_wpn_dam
-                       < mons_weapon_damage_rating(*mslot_item(MSLOT_WEAPON))
-                         + _ego_damage_bonus(*mslot_item(MSLOT_WEAPON)))
-                {
-                    eslot = slot;
-                    if (!dual_wielding)
-                        break;
-                }
-            }
-            else if (!dual_wielding)
+            if (!dual_wielding)
             {
                 // Only dual wielders want two melee weapons.
                 return false;
@@ -2097,16 +2063,6 @@ void monster::swap_weapons(maybe_bool maybe_msg)
     item_def *weap = mslot_item(MSLOT_WEAPON);
     item_def *alt  = mslot_item(MSLOT_ALT_WEAPON);
 
-    if (weap && !unequip(*weap, msg))
-    {
-        // Item was cursed.
-        // A centaur may randomly decide to not shoot you, but bashing
-        // people with a ranged weapon is a dead giveaway.
-        if (weap->cursed() && you.can_see(*this) && is_range_weapon(*weap))
-            set_ident_flags(*weap, ISFLAG_KNOW_CURSE);
-        return;
-    }
-
     swap(inv[MSLOT_WEAPON], inv[MSLOT_ALT_WEAPON]);
 
     if (alt)
@@ -2123,7 +2079,7 @@ void monster::swap_weapons(maybe_bool maybe_msg)
 void monster::wield_melee_weapon(maybe_bool msg)
 {
     const item_def *weap = mslot_item(MSLOT_WEAPON);
-    if (!weap || (!weap->cursed() && is_range_weapon(*weap)))
+    if (!weap || (is_range_weapon(*weap)))
     {
         const item_def *alt = mslot_item(MSLOT_ALT_WEAPON);
 
@@ -6285,7 +6241,6 @@ item_def* monster::disarm()
                                  || !feat_eliminates_items(grd(pos())));
 
     if (!mons_wpn
-        || mons_wpn->cursed()
         || mons_class_is_animated_weapon(type)
         || !adjacent(you.pos(), pos())
         || !you.can_see(*this)

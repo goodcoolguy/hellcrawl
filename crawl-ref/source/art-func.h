@@ -155,9 +155,7 @@ static void _CURSES_equip(item_def *item, bool *show_msgs, bool unmeld)
 
 static void _CURSES_world_reacts(item_def *item)
 {
-    // don't spam messages for ash worshippers
-    if (one_chance_in(30) && !have_passive(passive_t::want_curses))
-        curse_an_item(true);
+	return;
 }
 
 static void _CURSES_melee_effects(item_def* weapon, actor* attacker,
