@@ -647,6 +647,20 @@ static void _print_stats_equip(int x, int y)
     }
 }
 
+
+void _draw_stat_titles()
+{
+	int one_pos = 5;
+    int two_pos = 6;
+    int three_pos = 7;
+    int four_pos = 8;
+	
+	CGOTOXY(19, one_pos, GOTO_STAT); CPRINTF(stat_abbreviation(nth_stat(1)).c_str());
+    CGOTOXY(19, two_pos, GOTO_STAT); CPRINTF(stat_abbreviation(nth_stat(2)).c_str());
+    CGOTOXY(19, three_pos, GOTO_STAT); CPRINTF(stat_abbreviation(nth_stat(3)).c_str());
+    CGOTOXY(19, four_pos, GOTO_STAT); CPRINTF(stat_abbreviation(nth_stat(4)).c_str());
+}
+
 /*
  * Print the noise bar to the HUD with appropriate coloring.
  * if in wizmode, also print the numeric noise value.
@@ -1449,6 +1463,8 @@ void print_stats()
             {
                 if (static_cast<stat_type>(i) == nth_stat(j))
                 {
+                    //need to redraw stat titles in case the order of our stats changed
+                    _draw_stat_titles();
                     _print_stat(static_cast<stat_type>(i), 19, 4 + j);
                 }
             }
@@ -1582,11 +1598,6 @@ void draw_border()
     int ev_pos = 6;
     int sh_pos = 7;
 
-    int one_pos = ac_pos;
-    int two_pos = ev_pos;
-    int three_pos = sh_pos;
-    int four_pos = three_pos + 1;
-
     //CGOTOXY(1, 3, GOTO_STAT); CPRINTF("Hp:");
     CGOTOXY(1, mp_pos, GOTO_STAT);
 #if TAG_MAJOR_VERSION == 34
@@ -1597,11 +1608,6 @@ void draw_border()
     CGOTOXY(1, ac_pos, GOTO_STAT); CPRINTF("AC:");
     CGOTOXY(1, ev_pos, GOTO_STAT); CPRINTF("EV:");
     CGOTOXY(1, sh_pos, GOTO_STAT); CPRINTF("SH:");
-
-    CGOTOXY(19, one_pos, GOTO_STAT); CPRINTF(stat_abbreviation(nth_stat(1)).c_str());
-    CGOTOXY(19, two_pos, GOTO_STAT); CPRINTF(stat_abbreviation(nth_stat(2)).c_str());
-    CGOTOXY(19, three_pos, GOTO_STAT); CPRINTF(stat_abbreviation(nth_stat(3)).c_str());
-    CGOTOXY(19, four_pos, GOTO_STAT); CPRINTF(stat_abbreviation(nth_stat(4)).c_str());
 
     int yhack = 0;
 
