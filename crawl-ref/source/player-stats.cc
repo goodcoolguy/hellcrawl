@@ -1,5 +1,9 @@
 #include "AppHdr.h"
 
+#include <iostream>
+#include <algorithm>
+#include <vector>
+
 #include "player-stats.h"
 
 #include "artefact.h"
@@ -438,37 +442,23 @@ string stat_abbreviation(stat_type stat)
 }
 
 //return the player's nth highest stat
-//ties return the first enumerated stat
 stat_type nth_stat(int n)
 {
-    vector<stat_type> stats = ordered_stats();
-    return stats[n-1];
+    vector<pair <int, stat_type>> stats = ordered_stats();
+    return stats[n-1].second;
 }
 
 //provide a sorted vector of stats in descending order
-//ties favor the earliest enum
-vector<stat_type> ordered_stats()
+vector<pair <int, stat_type>> ordered_stats()
 {
-	vector<stat_type> ret;
-	//std::vector<stat_type>::iterator it;
-	ret.emplace_back(STAT_MELEE);
-	for(int s = (int) STAT_MELEE + 1; s < (int) NUM_STATS; s++)
+	vector<pair <int, stat_type>> ret;
+	for(int s = (int) STAT_MELEE; s < (int) NUM_STATS; s++)
     {
         stat_type stat = static_cast<stat_type>(s);
-        if(you.stat(stat) <= you.stat(ret.back()))
-			ret.emplace_back(stat);
-		else
-        {
-			for(int i = 0; i < ret.size(); i++)
-            {
-				if(you.stat(stat) > you.stat(ret[i]))
-                {
-					ret.insert(ret.begin() + i, 1, stat);
-					break;
-                }
-            }
-        }
+        ret.emplace_back(make_pair(you.stat(stat), stat));
     }
+    sort(ret.begin(),ret.end());
+    reverse(ret.begin(),ret.end());
     return ret;
 }
 
