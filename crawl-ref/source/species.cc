@@ -4,6 +4,7 @@
 #include "species.h"
 
 #include "itemprop.h"
+#include "jobs.h"
 #include "mon-enum.h"
 #include "mutation.h"
 #include "player.h"
@@ -161,6 +162,16 @@ map<stat_type, int> stat_classes(species_type species)
 {
 	return _species_def(species).initial_stats;
 }
+
+stat_type scheduled_stat_gain(species_type species, int xl)
+{
+    if(xl < 2 || xl > 15)
+        return STAT_NO_STAT;
+    stat_type statclass = _species_def(species).stat_schedule[xl-2];
+    if (statclass == STAT_NO_STAT)
+        return statclass;
+    return job_stat_type(you.char_class, statclass);
+} 
 
 size_type species_size(species_type species, size_part_type psize)
 {
@@ -371,10 +382,9 @@ void species_stat_init(species_type species)
 
 void species_stat_gain(species_type species)
 {
-  // bde fix -- rewrite/replace this function
-  return;
-  
-  //const species_def& sd = _species_def(species);
-  //  if (you.experience_level % sd.how_often == 0)
-  //      modify_stat(*random_iterator(sd.level_stats), 1, false);
+    stat_type stat = scheduled_stat_gain(species, you.experience_level);
+    if (stat == STAT_NO_STAT)
+        return;
+    //need to handle special stat type cases here
+    modify_stat(stat, 1, false);
 }

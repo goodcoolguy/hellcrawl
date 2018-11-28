@@ -75,6 +75,21 @@ void job_stat_init(job_type job, species_type species)
 	you.base_stats[_job_def(job).c] = stat_classes(species)[STAT_CLASS_C];
 }
 
+stat_type job_stat_type(job_type job, stat_type stat)
+{
+    switch(stat)
+    {
+        case STAT_CLASS_A:
+            return _job_def(job).a;
+        case STAT_CLASS_B:
+            return _job_def(job).b;
+       case STAT_CLASS_C:
+            return _job_def(job).c;
+        default:
+            return STAT_NO_STAT;
+    }
+}
+
 bool job_has_weapon_choice(job_type job)
 {
     return _job_def(job).wchoice != WCHOICE_NONE;

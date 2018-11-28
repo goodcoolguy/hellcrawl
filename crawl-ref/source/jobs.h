@@ -16,6 +16,6 @@ void give_job_equipment(job_type job);
 void give_job_skills(job_type job);
 
 void job_stat_init(job_type job, species_type species);
-
+stat_type job_stat_type(job_type job, stat_type stat);
 void debug_jobdata();
 #endif

@@ -21,7 +21,7 @@ size_type species_size(species_type species,
 bool species_recommends_job(species_type species, job_type job);
 bool species_recommends_weapon(species_type species, weapon_type wpn);
 map<stat_type, int> stat_classes(species_type species);
-
+stat_type scheduled_stat_gain(species_type species, int xl);
 species_type get_species_by_abbrev(const char *abbrev);
 const char *get_species_abbrev(species_type which_species);
 
