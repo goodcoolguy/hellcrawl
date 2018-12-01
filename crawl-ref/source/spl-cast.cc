@@ -507,9 +507,6 @@ static int _spell_enhancement(spell_type spell)
     if (typeflags & SPTYP_SUMMONING)
         enhanced += player_spec_summ();
 
-    if (typeflags & SPTYP_POISON)
-        enhanced += player_spec_poison();
-
     if (typeflags & SPTYP_NECROMANCY)
         enhanced += player_spec_death();
 
@@ -1186,7 +1183,6 @@ static unique_ptr<targetter> _spell_targetter(spell_type spell, int pow,
     case SPELL_FIRE_STORM:
         return make_unique<targetter_smite>(&you, range, 2, pow > 76 ? 3 : 2);
     case SPELL_FREEZING_CLOUD:
-    case SPELL_POISONOUS_CLOUD:
     case SPELL_HOLY_BREATH:
         return make_unique<targetter_cloud>(&you, range);
     case SPELL_THUNDERBOLT:
@@ -1846,7 +1842,6 @@ static spret_type _do_cast(spell_type spell, int powc,
         return cast_iood(&you, powc, &beam, 0, 0, MHITNOT, fail);
 
     // Clouds and explosions.
-    case SPELL_POISONOUS_CLOUD:
     case SPELL_HOLY_BREATH:
     case SPELL_FREEZING_CLOUD:
         return cast_big_c(powc, spell, &you, beam, fail);
@@ -1903,9 +1898,6 @@ static spret_type _do_cast(spell_type spell, int powc,
 
     case SPELL_OLGREBS_TOXIC_RADIANCE:
         return cast_toxic_radiance(&you, powc, fail);
-
-    case SPELL_IGNITE_POISON:
-        return cast_ignite_poison(&you, powc, fail);
 
     case SPELL_TORNADO:
         return cast_tornado(powc, fail);
@@ -2091,7 +2083,6 @@ static spret_type _do_cast(spell_type spell, int powc,
     case SPELL_FULSOME_DISTILLATION:
     case SPELL_INSULATION:
     case SPELL_LETHAL_INFUSION:
-    case SPELL_POISON_WEAPON:
     case SPELL_SEE_INVISIBLE:
     case SPELL_SINGULARITY:
     case SPELL_SONG_OF_SHIELDING:
@@ -2104,7 +2095,6 @@ static spret_type _do_cast(spell_type spell, int powc,
     case SPELL_SUMMON_SWARM:
     case SPELL_PHASE_SHIFT:
     case SPELL_MASS_CONFUSION:
-    case SPELL_CURE_POISON:
         mpr("Sorry, this spell is gone!");
         return SPRET_ABORT;
 #endif

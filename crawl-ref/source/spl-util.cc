@@ -952,8 +952,6 @@ const char* spelltype_short_name(spschool_flag_type which_spelltype)
         return "Summ";
     case SPTYP_TRANSLOCATION:
         return "Tloc";
-    case SPTYP_POISON:
-        return "Pois";
     case SPTYP_EARTH:
         return "Erth";
     case SPTYP_AIR:
@@ -987,8 +985,6 @@ const char* spelltype_long_name(spschool_flag_type which_spelltype)
         return "Summoning";
     case SPTYP_TRANSLOCATION:
         return "Translocation";
-    case SPTYP_POISON:
-        return "Poison";
     case SPTYP_EARTH:
         return "Earth";
     case SPTYP_AIR:
@@ -1594,7 +1590,6 @@ string spell_uselessness_reason(spell_type spell, bool temp, bool prevent,
 
     case SPELL_CORPSE_ROT:
     case SPELL_CONJURE_FLAME:
-    case SPELL_POISONOUS_CLOUD:
     case SPELL_FREEZING_CLOUD:
     case SPELL_MEPHITIC_CLOUD:
         if (env.level_state & LSTATE_STILL_WINDS)
@@ -1686,7 +1681,6 @@ bool spell_no_hostile_in_range(spell_type spell)
 
     // Special handling for cloud spells.
     case SPELL_FREEZING_CLOUD:
-    case SPELL_POISONOUS_CLOUD:
     case SPELL_HOLY_BREATH:
     {
         targetter_cloud tgt(&you, range);
@@ -1713,9 +1707,6 @@ bool spell_no_hostile_in_range(spell_type spell)
 
         return true;
     }
-
-    case SPELL_IGNITE_POISON:
-        return cast_ignite_poison(&you, -1, false, true) == SPRET_ABORT;
 
     default:
         break;
@@ -1797,7 +1788,6 @@ static const mutation_type arcana_sacrifice_map[] = {
     MUT_NO_NECROMANCY_MAGIC,
     MUT_NO_SUMMONING_MAGIC,
     MUT_NO_TRANSLOCATION_MAGIC,
-    MUT_NO_POISON_MAGIC,
     MUT_NO_EARTH_MAGIC,
     MUT_NO_AIR_MAGIC
 };

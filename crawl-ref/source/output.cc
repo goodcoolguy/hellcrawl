@@ -925,9 +925,9 @@ static void _print_stats_hp(int x, int y)
     if (you.species == SP_DJINNI)
         EP_Bar.draw(19, y, you.hp, you.hp_max);
     else
-        HP_Bar.draw(19, y, you.hp, you.hp_max, false, you.hp - max(0, poison_survival()));
+        HP_Bar.draw(19, y, you.hp, you.hp_max, false, you.hp);
 #else
-        HP_Bar.draw(19, y, you.hp, you.hp_max, you.hp - max(0, poison_survival()));
+        HP_Bar.draw(19, y, you.hp, you.hp_max, you.hp);
 #endif
 }
 
@@ -1410,13 +1410,6 @@ void print_stats()
     if (Temp_Bar.wants_redraw() && you.species == SP_LAVA_ORC)
         you.redraw_temperature = true;
 #endif
-
-    // Poison display depends on regen rate, so should be redrawn every turn.
-    if (you.duration[DUR_POISONING])
-    {
-        you.redraw_hit_points = true;
-        you.redraw_status_lights = true;
-    }
 
 #ifdef USE_TILE_LOCAL
     bool has_changed = _need_stats_printed();
@@ -2467,7 +2460,7 @@ static vector<formatted_string> _get_overview_resistances(
     const int rlife = player_prot_life(calc_unid);
     out += _resist_composer("rNeg", cwidth, rlife, 3) + "\n";
 
-    const int rpois = player_res_poison(calc_unid);
+    const int rpois = 0;
     string rpois_string = _resist_composer("rPois", cwidth, rpois) + "\n";
     //XXX
     if (rpois == 3)

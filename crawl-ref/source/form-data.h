@@ -66,10 +66,10 @@ static const form_entry formdata[] =
 {
     TRAN_SPIDER, MONS_SPIDER, "Spider", "spider-form", "spider",
     "a venomous arachnid creature.",
-    EQF_PHYSICAL, MR_VUL_POISON,
+    EQF_PHYSICAL, MR_NO_FLAGS,
     FormDuration(10, PS_DOUBLE, 60), 0, 5, SIZE_TINY, 10,
     2, 0, 0, true, 0, 10, 5,
-    SPWPN_VENOM, LIGHTGREEN, "Fangs", ANIMAL_VERBS,
+    SPWPN_NORMAL, LIGHTGREEN, "Fangs", ANIMAL_VERBS,
     FC_DEFAULT, FC_FORBID, FC_FORBID, true, false,
     "hiss", -4, "front leg", "", "crawl onto", "flesh"
 },
@@ -96,7 +96,7 @@ static const form_entry formdata[] =
 {
     TRAN_ICE_BEAST, MONS_ICE_BEAST, "Ice", "ice-form", "ice",
     "a creature of crystalline ice.",
-    EQF_PHYSICAL, MR_RES_POISON | MR_VUL_FIRE | mrd(MR_RES_COLD, 3),
+    EQF_PHYSICAL, MR_VUL_FIRE | mrd(MR_RES_COLD, 3),
     FormDuration(30, PS_DOUBLE, 100), 0, 0, SIZE_LARGE, 12,
     5, 7, 0, true, 0, 10, 12,
     SPWPN_FREEZING, WHITE, "", DEFAULT_VERBS,
@@ -107,7 +107,7 @@ static const form_entry formdata[] =
 {
     TRAN_DRAGON, MONS_PROGRAM_BUG, "Dragon", "dragon-form", "dragon",
     "a fearsome dragon!",
-    EQF_PHYSICAL, MR_RES_POISON,
+    EQF_PHYSICAL, MR_NO_FLAGS,
     DEFAULT_DURATION, 10, 0, SIZE_GIANT, 15,
     16, 0, 0, true, 0, 10, 32,
     SPWPN_NORMAL, GREEN, "Teeth and claws", { "hit", "claw", "bite", "maul" },
@@ -162,7 +162,7 @@ static const form_entry formdata[] =
 {
     TRAN_TREE, MONS_ANIMATED_TREE, "Tree", "tree-form", "tree",
     "a tree.",
-    EQF_LEAR | SLOTF(EQ_CLOAK), MR_RES_POISON | mrd(MR_RES_NEG, 3),
+    EQF_LEAR | SLOTF(EQ_CLOAK), mrd(MR_RES_NEG, 3),
     BAD_DURATION, 0, 0, SIZE_CHARACTER, 15,
     20, 0, 50, true, 0, 10, 12,
     SPWPN_NORMAL, BROWN, "Branches", { "hit", "smack", "pummel", "thrash" },
@@ -210,7 +210,7 @@ static const form_entry formdata[] =
 {
     TRAN_FUNGUS, MONS_WANDERING_MUSHROOM, "Fungus", "fungus-form", "fungus",
     "a sentient fungus.",
-    EQF_PHYSICAL, MR_RES_POISON | mrd(MR_RES_NEG, 3),
+    EQF_PHYSICAL, mrd(MR_RES_NEG, 3),
     BAD_DURATION, 0, 0, SIZE_TINY, 10,
     12, 0, 0, false, 0, 10, 12,
     SPWPN_CONFUSE, BROWN, "Spores", FormAttackVerbs("release spores at"),
@@ -221,7 +221,7 @@ static const form_entry formdata[] =
 {
     TRAN_SHADOW, MONS_PLAYER_SHADOW, "Shadow", "shadow-form", "shadow",
     "a swirling mass of dark shadows.",
-    EQF_NONE, mrd(MR_RES_POISON, 3) | mrd(MR_RES_NEG, 3) | MR_RES_ROTTING
+    EQF_NONE, mrd(MR_RES_NEG, 3) | MR_RES_ROTTING
                                                          | MR_RES_PETRIFY,
     DEFAULT_DURATION, 0, 0, SIZE_CHARACTER, 10,
     0, 0, 0, true, 0, 0, 3,
@@ -233,7 +233,7 @@ static const form_entry formdata[] =
 {
     TRAN_HYDRA, MONS_HYDRA, "Hydra", "hydra-form", "hydra",
     "",
-    EQF_PHYSICAL, MR_RES_POISON,
+    EQF_PHYSICAL, MR_NO_FLAGS,
     FormDuration(10, PS_SINGLE, 100), 0, 0, SIZE_BIG, 13,
     6, 5, 0, true, 0, 10, -1,
     SPWPN_NORMAL, GREEN, "", { "nip at", "bite", "gouge", "chomp" },

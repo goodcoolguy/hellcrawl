@@ -1615,79 +1615,7 @@ bool player_kiku_res_torment()
 // If temp is set to false, temporary sources or resistance won't be counted.
 int player_res_poison(bool calc_unid, bool temp, bool items)
 {
-    switch (you.undead_state(temp))
-    {
-        case US_ALIVE:
-            break;
-        case US_HUNGRY_DEAD: //ghouls
-        case US_UNDEAD: // mummies & lichform
-            return 3;
-        case US_SEMI_UNDEAD: // vampire
-            break;
-    }
-
-    if (you.is_nonliving(temp)
-        || temp && get_form()->res_pois() == 3
-        || items && player_equip_unrand(UNRAND_OLGREB)
-        || temp && you.duration[DUR_DIVINE_STAMINA])
-    {
-        return 3;
-    }
-
-    int rp = 0;
-
-    if (items)
-    {
-        // rings of poison resistance
-        rp += you.wearing(EQ_RINGS, RING_POISON_RESISTANCE, calc_unid);
-
-        // ego armour:
-        rp += you.wearing_ego(EQ_ALL_ARMOUR, SPARM_POISON_RESISTANCE);
-
-        // body armour:
-        const item_def *body_armour = you.slot_item(EQ_BODY_ARMOUR);
-        if (body_armour)
-            rp += armour_type_prop(body_armour->sub_type, ARMF_RES_POISON);
-
-        // rPois+ artefacts
-        rp += you.scan_artefacts(ARTP_POISON, calc_unid);
-
-        // dragonskin cloak: 0.5 to draconic resistances
-        if (calc_unid && player_equip_unrand(UNRAND_DRAGONSKIN) && coinflip())
-            rp++;
-    }
-
-    // mutations:
-    rp += you.get_mutation_level(MUT_POISON_RESISTANCE, temp);
-    rp += you.get_mutation_level(MUT_SLIMY_GREEN_SCALES, temp) == 3 ? 1 : 0;
-
-    if (temp)
-    {
-        // potions/cards:
-        if (you.duration[DUR_RESISTANCE])
-            rp++;
-
-        if (get_form()->res_pois() > 0)
-            rp++;
-    }
-
-    // Cap rPois at + before vulnerability effects are applied
-    // (so carrying multiple rPois effects is never useful)
-    rp = min(1, rp);
-
-    if (temp)
-    {
-        if (get_form()->res_pois() < 0)
-            rp--;
-
-        if (you.duration[DUR_POISON_VULN])
-            rp--;
-    }
-
-    // don't allow rPois--, etc.
-    rp = max(-1, rp);
-
-    return rp;
+    return 0;
 }
 
 int player_res_sticky_flame(bool calc_unid, bool temp, bool items)
@@ -1841,12 +1769,7 @@ int player_spec_summ()
 
 int player_spec_poison()
 {
-    int sp = 0;
-
-    if (player_equip_unrand(UNRAND_OLGREB))
-        sp++;
-
-    return sp;
+    return 0;
 }
 
 int player_energy()
@@ -4179,259 +4102,38 @@ void paralyse_player(string source, int amount)
 
 bool poison_player(int amount, string source, string source_aux, bool force)
 {
-    ASSERT(!crawl_state.game_is_arena());
-
-    if (crawl_state.disables[DIS_AFFLICTIONS])
-        return false;
-
-    if (you.duration[DUR_DIVINE_STAMINA] > 0)
-    {
-        mpr("Your divine stamina protects you from poison!");
-        return false;
-    }
-	
-	if(have_passive(passive_t::purification) && x_chance_in_y(you.piety, 200))
-    {
-		simple_god_message(" protects you from poison.");
-        return false;
-    }
-
-    if (player_res_poison() >= 3)
-    {
-        dprf("Cannot poison, you are immune!");
-        return false;
-    }
-    else if (!force && player_res_poison() > 0 && !one_chance_in(3))
-        return false;
-
-    const int old_value = you.duration[DUR_POISONING];
-    const bool was_fatal = poison_is_lethal();
-
-    if (player_res_poison() < 0)
-        amount *= 2;
-	
-    // stepdown high poison values
-    amount = stepdown_value(amount, 30, 30, 120, 120);
-
-    you.duration[DUR_POISONING] += amount * 1000;
-
-    if (you.duration[DUR_POISONING] > old_value)
-    {
-        if (poison_is_lethal() && !was_fatal)
-            mprf(MSGCH_DANGER, "You are lethally poisoned!");
-        else
-        {
-            mprf(MSGCH_WARN, "You are %spoisoned.",
-                old_value > 0 ? "more " : "");
-        }
-
-        learned_something_new(HINT_YOU_POISON);
-    }
-
-    you.props["poisoner"] = source;
-    you.props["poison_aux"] = source_aux;
-
-    // Display the poisoned segment of our health, in case we take no damage
-    you.redraw_hit_points = true;
-
-    return amount;
+    return false;
 }
 
 // Amount of damage poison will do to the player
 // Capped at their current HP minus one.
 int get_player_poisoning()
 {
-    if (player_res_poison() < 3)
-    {
-        return min(you.duration[DUR_POISONING] / 1000, you.hp - 1);
-    }
-    else
-        return 0;
-}
-
-// The amount of aut needed for poison to end if
-// you.duration[DUR_POISONING] == dur, assuming no Chei/DD shenanigans.
-// This function gives the following behavior:
-// * 1/15 of current poison is removed every 10 aut normally
-// * but speed of poison is capped between 0.025 and 1.000 HP/aut
-static double _poison_dur_to_aut(double dur)
-{
-    // Poison already at minimum speed.
-    if (dur < 15.0 * 250.0)
-        return dur / 100.0;
-    // Poison is not at maximum speed.
-    if (dur < 15.0 * 10000.0)
-        return (150.0 + 10.0 * log(dur / (15.0 * 250.0)) / log(15.0 / 14.0)) / 4.0;
-    return (150.0 + (dur - 15.0 * 10000.0) / 1000.0
-                 + 10.0 * log(10000.0 / 250.0) / log(15.0 / 14.0)) / 4.0;
-}
-
-// The inverse of the above function, i.e. the amount of poison needed
-// to last for aut time.
-static double _poison_aut_to_dur(double aut)
-{
-    // Amount of time that poison lasts at minimum speed.
-    if (aut < 1500.0)
-        return aut * 100.0;
-    // Amount of time that poison exactly at the maximum speed lasts.
-    const double aut_from_max_speed = 150.0 + 10.0 * log(40.0) / log(15.0 / 14.0);
-    if (aut < aut_from_max_speed)
-        return (15.0 * 250.0 * exp(log(15.0 / 14.0) / 10.0 * (aut - 150.0))) * 4.0;
-    return (15.0 * 10000.0 + 1000.0 * (aut - aut_from_max_speed)) * 4.0;
+    return 0;
 }
 
 void handle_player_poison(int delay)
 {
-    const double cur_dur = you.duration[DUR_POISONING];
-    const double cur_aut = _poison_dur_to_aut(cur_dur);
-
-    // If Cheibriados has slowed your life processes, poison affects you less
-    // quickly (you take the same total damage, but spread out over a longer
-    // period of time).
-    const double delay_scaling = have_passive(passive_t::slow_metabolism)
-                               ? 2.0 / 3.0 : 1.0;
-
-    const double new_aut = cur_aut - ((double) delay) * delay_scaling;
-    const double new_dur = _poison_aut_to_dur(new_aut);
-
-    const int decrease = you.duration[DUR_POISONING] - (int) new_dur;
-
-    // Transforming into a form with no metabolism merely suspends the poison
-    // but doesn't let your body get rid of it.
-    if (you.is_nonliving() || you.undead_state()
-        && (you.undead_state() != US_SEMI_UNDEAD))
-    {
-        return;
-    }
-
-    // Other sources of immunity (Zin, staff of Olgreb) let poison dissipate.
-    bool do_dmg = (player_res_poison() >= 3 ? false : true);
-
-    int dmg = (you.duration[DUR_POISONING] / 1000)
-               - ((you.duration[DUR_POISONING] - decrease) / 1000);
-    // Never lethal
-    dmg = min(you.hp - 1, dmg);
-    dprf("Poison damage is %d", dmg);
-
-    msg_channel_type channel = MSGCH_PLAIN;
-    const char *adj = "";
-
-    if (dmg > 6)
-    {
-        channel = MSGCH_DANGER;
-        adj = "extremely ";
-    }
-    else if (dmg > 2)
-    {
-        channel = MSGCH_WARN;
-        adj = "very ";
-    }
-
-    if (do_dmg && dmg > 0)
-    {
-        int oldhp = you.hp;
-        ouch(dmg, KILLED_BY_POISON);
-        if (you.hp < oldhp)
-            mprf(channel, "You feel %ssick.", adj);
-    }
-
-    // Now decrease the poison in our system
-    reduce_player_poison(decrease);
+    return;
 }
 
 void reduce_player_poison(int amount)
 {
-    if (amount <= 0)
-        return;
-
-    you.duration[DUR_POISONING] -= amount;
-
-    // Less than 1 point of damage remaining, so just end the poison
-    if (you.duration[DUR_POISONING] < 1000)
-        you.duration[DUR_POISONING] = 0;
-
-    if (you.duration[DUR_POISONING] <= 0)
-    {
-        you.duration[DUR_POISONING] = 0;
-        you.props.erase("poisoner");
-        you.props.erase("poison_aux");
-        mprf(MSGCH_RECOVERY, "You are no longer poisoned.");
-    }
-
-    you.redraw_hit_points = true;
+    return;
 }
 
 // Takes *current* regeneration rate into account. Might sometimes be
 // incorrect, but hopefully if so then the player is surviving with 1 HP.
 bool poison_is_lethal()
 {
-    if (you.hp <= 0)
-        return get_player_poisoning();
-    if (get_player_poisoning() < you.hp)
-        return false;
-    return poison_survival() <= 0;
+    return false;
 }
 
 // Try to predict the minimum value of the player's health in the coming
 // turns given the current poison amount and regen rate.
 int poison_survival()
 {
-    if (!get_player_poisoning())
-        return you.hp;
-    const int rr = player_regen();
-    const bool chei = have_passive(passive_t::slow_metabolism);
-    const bool dd = (false);
-    const int amount = you.duration[DUR_POISONING];
-    const double full_aut = _poison_dur_to_aut(amount);
-    // Calculate the poison amount at which regen starts to beat poison.
-    double min_poison_rate = 0.25;
-    if (chei)
-        min_poison_rate /= 1.5;
-    int regen_beats_poison;
-    if (rr <= (int) (100.0 * min_poison_rate))
-        regen_beats_poison = dd ? 25000 : 0;
-    else
-    {
-        regen_beats_poison = 150 * rr;
-        if (chei)
-            regen_beats_poison = 3 * regen_beats_poison / 2;
-    }
-
-    if (rr == 0)
-        return min(you.hp, you.hp - amount / 1000 + regen_beats_poison / 1000);
-
-    // Calculate the amount of time until regen starts to beat poison.
-    double poison_duration = full_aut - _poison_dur_to_aut(regen_beats_poison);
-
-    if (poison_duration < 0)
-        poison_duration = 0;
-    if (chei)
-        poison_duration *= 1.5;
-
-    // Worst case scenario is right before natural regen gives you a point of
-    // HP, so consider the nearest two such points.
-    const int predicted_regen = (int) ((((double) you.hit_points_regeneration) + rr * poison_duration / 10.0) / 100.0);
-    double test_aut1 = (100.0 * predicted_regen - 1.0 - ((double) you.hit_points_regeneration)) / (rr / 10.0);
-    double test_aut2 = (100.0 * predicted_regen + 99.0 - ((double) you.hit_points_regeneration)) / (rr / 10.0);
-
-    if (chei)
-    {
-        test_aut1 /= 1.5;
-        test_aut2 /= 1.5;
-    }
-
-    const int test_amount1 = _poison_aut_to_dur(full_aut - test_aut1);
-    const int test_amount2 = _poison_aut_to_dur(full_aut - test_aut2);
-
-    int prediction1 = you.hp;
-    int prediction2 = you.hp;
-
-    // Don't look backwards in time.
-    if (test_aut1 > 0)
-        prediction1 -= (amount / 1000 - test_amount1 / 1000 - (predicted_regen - 1));
-    prediction2 -= (amount / 1000 - test_amount2 / 1000 - predicted_regen);
-
-    return min(prediction1, prediction2);
+    return you.hp;
 }
 
 bool miasma_player(actor *who, string source_aux)
@@ -4447,9 +4149,7 @@ bool miasma_player(actor *who, string source_aux)
         return false;
     }
 
-    bool success = poison_player(5 + roll_dice(3, 12),
-                                 who ? who->name(DESC_A) : "",
-                                 source_aux);
+    bool success = false;
 
     if (coinflip())
     {
@@ -6149,7 +5849,7 @@ int player::res_water_drowning() const
 
 int player::res_poison(bool temp) const
 {
-    return player_res_poison(true, temp);
+    return 0;
 }
 
 int player::res_rotting(bool temp) const
@@ -6473,8 +6173,7 @@ monster_type player::mons_species(bool zombie_base) const
 
 bool player::poison(actor *agent, int amount, bool force)
 {
-    return ::poison_player(amount, agent? agent->name(DESC_A, true) : "", "",
-                           force);
+    return false;
 }
 
 void player::expose_to_element(beam_type element, int _strength,

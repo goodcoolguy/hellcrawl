@@ -43,23 +43,7 @@ function ($, comm, enums, map_knowledge, messages, options) {
         var increase = old_value < value;
         var full_bar = Math.round(10000 * (increase ? old_value : value) / max);
         var change_bar = Math.round(10000 * Math.abs(old_value - value) / max);
-        // Use poison_survival to display our remaining hp after poison expires.
-        if (name == "hp")
-        {
-            $("#stats_hp_bar_poison").css("width", 0);
-            var poison_survival = player["poison_survival"]
-            if (poison_survival < value)
-            {
-                var poison_bar = Math.round(10000 * (value - poison_survival)
-                                            / max);
-                full_bar = Math.round(10000 * poison_survival / max);
-                $("#stats_hp_bar_poison").css("width", (poison_bar / 100)
-                                              + "%");
-            }
-            if (full_bar + poison_bar + change_bar > 10000)
-                change_bar = 10000 - poison_bar - full_bar;
-        }
-        else if (full_bar + change_bar > 10000)
+        if (full_bar + change_bar > 10000)
         {
             change_bar = 10000 - full_bar;
         }
@@ -566,7 +550,7 @@ function ($, comm, enums, map_knowledge, messages, options) {
         .on("game_init.player", function () {
             $.extend(player, {
                 name: "", god: "", title: "", species: "",
-                hp: 0, hp_max: 0, real_hp_max: 0, poison_survival: 0,
+                hp: 0, hp_max: 0, real_hp_max: 0,
                 mp: 0, mp_max: 0, frozen_mp: 0, real_mp_max: 0,
                 ac: 0, gdr: 0, ev: 0, sh: 0,
                 diff: 0,

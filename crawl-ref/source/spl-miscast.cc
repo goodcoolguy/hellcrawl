@@ -330,7 +330,6 @@ void MiscastEffect::do_miscast()
     case SPTYP_ICE:            _ice(severity);            break;
     case SPTYP_EARTH:          _earth(severity);          break;
     case SPTYP_AIR:            _air(severity);            break;
-    case SPTYP_POISON:         _poison(severity);         break;
 
     default:
         die("Invalid miscast spell discipline.");
@@ -1226,54 +1225,9 @@ void MiscastEffect::_air(int severity)
     }
 }
 
-void MiscastEffect::_poison(int severity)
-{
-    switch (severity)
-    {
-    case 0:         // just a harmless message
-        you_msg      = "You feel slightly ill.";
-        mon_msg_seen = "@The_monster@ briefly looks sick.";
-        do_msg();
-        break;
-
-    case 1:         // a bit less harmless stuff
-        if (target->res_poison() <= 0)
-        {
-            you_msg      = "You feel sick.";
-            mon_msg_seen = "@The_monster@ looks sick.";
-            _do_poison(7 + random2(9));
-        }
-        do_msg();
-            break;
-
-    case 2:         // rather less harmless stuff
-        if (target->res_poison() <= 0)
-        {
-            you_msg      = "You feel very sick.";
-            mon_msg_seen = "@The_monster@ looks very sick.";
-            _do_poison(14 + random2avg(17, 2));
-        }
-        do_msg();
-        break;
-
-    case 3:         // less harmless stuff
-        if (target->res_poison() <= 0)
-        {
-                you_msg      = "You feel incredibly sick.";
-                mon_msg_seen = "@The_monster@ looks incredibly sick.";
-                _do_poison(20 + random2avg(35, 2));
-        }
-        do_msg();
-        break;
-    }
-}
-
 void MiscastEffect::_do_poison(int amount)
 {
-    if (target->is_player())
-        poison_player(amount, cause, "residual poison");
-    else
-        target->poison(act_source, amount);
+    return;
 }
 
 void MiscastEffect::_zot()

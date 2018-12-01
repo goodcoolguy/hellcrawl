@@ -321,7 +321,7 @@ bool Form::res_elec() const
  */
 int Form::res_pois() const
 {
-    return get_resist(resists, MR_RES_POISON);
+    return 0;
 }
 
 /**

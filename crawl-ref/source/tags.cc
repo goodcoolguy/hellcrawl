@@ -2887,8 +2887,6 @@ static void tag_read_you(reader &th)
     you.mutation[MUT_FAST] = you.innate_mutation[MUT_FAST];
     you.mutation[MUT_SLOW] = you.innate_mutation[MUT_SLOW];
     you.mutation[MUT_BREATHE_FLAMES] = 0;
-    if (you.species != SP_NAGA)
-        you.mutation[MUT_SPIT_POISON] = 0;
 #endif
 
     for (int j = count; j < NUM_MUTATIONS; ++j)
@@ -2906,11 +2904,6 @@ static void tag_read_you(reader &th)
             you.mutation[MUT_TRAMPLE_RESISTANCE] = 0;
         if (you.mutation[MUT_CLING] == 1)
             you.mutation[MUT_CLING] = 0;
-        if (you.species == SP_GARGOYLE)
-        {
-            you.mutation[MUT_POISON_RESISTANCE] =
-            you.innate_mutation[MUT_POISON_RESISTANCE] = 0;
-        }
         if (you.species == SP_DJINNI)
         {
             you.mutation[MUT_NEGATIVE_ENERGY_RESISTANCE] =
@@ -3013,21 +3006,6 @@ static void tag_read_you(reader &th)
         you.innate_mutation[MUT_SLOW_METABOLISM];
     }
 
-    if (th.getMinorVersion() < TAG_MINOR_SPIT_POISON
-        && you.species == SP_NAGA)
-    {
-        if (you.innate_mutation[MUT_SPIT_POISON] < 2)
-        {
-            you.mutation[MUT_SPIT_POISON] =
-            you.innate_mutation[MUT_SPIT_POISON] = 2;
-        }
-        if (you.mutation[MUT_BREATHE_POISON])
-        {
-            you.mutation[MUT_BREATHE_POISON] = 0;
-            you.mutation[MUT_SPIT_POISON] = 3;
-        }
-    }
-
     // Give nagas constrict, tengu flight, and mummies restoration/enhancers.
     if (th.getMinorVersion() < TAG_MINOR_REAL_MUTS
         && (you.species == SP_NAGA
@@ -3077,12 +3055,6 @@ static void tag_read_you(reader &th)
             you.mutation[MUT_MUMMY_RESTORATION] = 0;
         if (you.mutation[MUT_SUSTAIN_ATTRIBUTES])
             you.mutation[MUT_SUSTAIN_ATTRIBUTES] = 0;
-    }
-
-    if (th.getMinorVersion() < TAG_MINOR_SPIT_POISON_AGAIN)
-    {
-        if (you.mutation[MUT_SPIT_POISON] > 1)
-            you.mutation[MUT_SPIT_POISON] -= 1;
     }
 
     // Fixup for Sacrifice XP from XL 27 (#9895). No minor tag, but this
@@ -4359,12 +4331,6 @@ void unmarshallItem(reader &th, item_def &item)
             item.flags |= ISFLAG_KNOW_TYPE;
     }
 
-    if (item.is_type(OBJ_POTIONS, POT_WATER)
-        || item.is_type(OBJ_POTIONS, POT_POISON))
-    {
-        item.sub_type = POT_DEGENERATION;
-    }
-
     if (item.is_type(OBJ_POTIONS, POT_CURE_MUTATION)
         || item.is_type(OBJ_POTIONS, POT_BENEFICIAL_MUTATION))
     {
@@ -4609,14 +4575,6 @@ void unmarshallItem(reader &th, item_def &item)
     {
         if (artefact_property(item, ARTP_NEGATIVE_ENERGY) < 0)
             artefact_set_property(item, ARTP_NEGATIVE_ENERGY, 0);
-    }
-
-    if (th.getMinorVersion() < TAG_MINOR_NO_RPOIS_MINUS
-        && is_artefact(item)
-        && artefact_property(item, ARTP_POISON))
-    {
-        if (artefact_property(item, ARTP_POISON) < 0)
-            artefact_set_property(item, ARTP_POISON, 0);
     }
 
     if (th.getMinorVersion() < TAG_MINOR_TELEPORTITIS

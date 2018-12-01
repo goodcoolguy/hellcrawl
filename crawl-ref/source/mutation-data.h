@@ -56,14 +56,6 @@ static const mutation_def mut_data[] =
   {"", "", ""},
 },
 
-{ MUT_POISON_RESISTANCE, 4, 1, mutflag::GOOD, true,
-  "poison resistance",
-
-  {"Your system is resistant to poisons. (rPois)", "", ""},
-  {"You feel resistant to poisons.", "",  ""},
-  {"You feel less resistant to poisons.", "", ""},
-},
-
 { MUT_HEAT_RESISTANCE, 4, 3, mutflag::GOOD, true,
   "fire resistance",
 
@@ -303,22 +295,6 @@ static const mutation_def mut_data[] =
   {"Armour fits poorly on your strangely shaped body.", "", ""},
   {"Your body twists and deforms.", "", ""},
   {"Your body's shape seems more normal.", "", ""},
-},
-
-{ MUT_SPIT_POISON, 8, 2, mutflag::GOOD, false,
-  "spit poison",
-
-  {"You can spit poison.",
-   "You can exhale a cloud of poison.",
-   ""},
-
-  {"There is a nasty taste in your mouth for a moment.",
-   "There is a nasty taste in your mouth for a moment.",
-   ""},
-
-  {"You feel an ache in your throat.",
-   "You feel an ache in your throat.",
-   ""},
 },
 
 #if TAG_MAJOR_VERSION == 34
@@ -813,16 +789,6 @@ static const mutation_def mut_data[] =
 
   {"Your tentacle spike disappears.", "", ""},
 },
-#if TAG_MAJOR_VERSION == 34
-
-{ MUT_BREATHE_POISON, 0, 1, mutflag::GOOD, false,
-  "breathe poison",
-
-  {"You can exhale a cloud of poison.", "", ""},
-  {"You taste something nasty.", "", ""},
-  {"Your breath is less nasty.", "", ""},
-},
-#endif
 
 { MUT_CONSTRICTING_TAIL, 0, 1, mutflag::GOOD, true,
   "constrict 1",
@@ -1742,14 +1708,6 @@ static const mutation_def mut_data[] =
   {"You cannot study or cast Necromancy magic.", "", ""},
   {"You can no longer study or cast Necromancy magic.", "", ""},
   {"You can once more study and cast Necromancy magic.", "", ""},
-},
-
-{ MUT_NO_POISON_MAGIC, 0, 1, mutflag::BAD, false,
-  "no poison magic",
-
-  {"You cannot study or cast Poison magic.", "", ""},
-  {"You can no longer study or cast Poison magic.", "", ""},
-  {"You can once more study and cast Poison magic.", "", ""},
 },
 
 { MUT_NO_SUMMONING_MAGIC, 0, 1, mutflag::BAD, false,

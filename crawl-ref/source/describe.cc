@@ -250,7 +250,6 @@ static vector<string> _randart_propnames(const item_def& item,
 
         // Resists, also really important
         { ARTP_ELECTRICITY,           PROPN_PLAIN },
-        { ARTP_POISON,                PROPN_PLAIN },
         { ARTP_FIRE,                  PROPN_SYMBOLIC },
         { ARTP_COLD,                  PROPN_SYMBOLIC },
         { ARTP_NEGATIVE_ENERGY,       PROPN_SYMBOLIC },
@@ -485,7 +484,6 @@ static string _randart_descrip(const item_def &item)
         { ARTP_FIRE, "fire", true},
         { ARTP_COLD, "cold", true},
         { ARTP_ELECTRICITY, "It insulates you from electricity.", false},
-        { ARTP_POISON, "poison", true},
         { ARTP_NEGATIVE_ENERGY, "negative energy", true},
         { ARTP_MAGIC_RESISTANCE, "It affects your resistance to hostile "
                                  "enchantments.", false},
@@ -1410,9 +1408,6 @@ static string _describe_ammo(const item_def &item)
 
             description += "it has a random effect.";
             break;
-        case SPMSL_POISONED:
-            description += "It is coated with poison.";
-            break;
         case SPMSL_CURARE:
             description += "It is tipped with impact poison.";
             break;
@@ -1612,9 +1607,6 @@ static string _describe_armour(const item_def &item, bool verbose)
             break;
         case SPARM_COLD_RESISTANCE:
             description += "It protects its wearer from cold.";
-            break;
-        case SPARM_POISON_RESISTANCE:
-            description += "It protects its wearer from poison.";
             break;
 #if TAG_MAJOR_VERSION == 34
         case SPARM_SEE_INVISIBLE:
@@ -2878,8 +2870,6 @@ static const char* _get_resist_name(mon_resist_flags res_type)
     {
     case MR_RES_ELEC:
         return "electricity";
-    case MR_RES_POISON:
-        return "poison";
     case MR_RES_FIRE:
         return "fire";
     case MR_RES_STEAM:
@@ -2973,9 +2963,7 @@ static string _flavour_effect(attack_flavour flavour, int HD)
         { AF_ELEC,              "deal up to %d electric damage" },
         { AF_FIRE,              "deal up to %d fire damage" },
         { AF_MUTATE,            "cause mutations" },
-        { AF_PARALYSE,          "poison and cause paralysis" },
-        { AF_POISON,            "cause poisoning" },
-        { AF_POISON_STRONG,     "cause strong poisoning" },
+        { AF_PARALYSE,          "cause paralysis" },
         { AF_ROT,               "cause rotting" },
         { AF_VAMPIRIC,          "drain health from the living" },
         { AF_KLOWN,             "cause random powerful effects" },
@@ -3283,7 +3271,7 @@ static string _monster_stat_description(const monster_info& mi)
 
     const mon_resist_flags resists[] =
     {
-        MR_RES_ELEC,    MR_RES_POISON, MR_RES_FIRE,
+        MR_RES_ELEC,    MR_RES_FIRE,
         MR_RES_STEAM,   MR_RES_COLD,   MR_RES_ACID,
         MR_RES_ROTTING, MR_RES_NEG,    MR_RES_DAMNATION,
         MR_RES_TORNADO,

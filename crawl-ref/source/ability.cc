@@ -250,8 +250,6 @@ static const ability_def Ability_List[] =
 {
     // NON_ABILITY should always come first
     { ABIL_NON_ABILITY, "No ability", 0, 0, 0, 0, {}, abflag::NONE },
-    { ABIL_SPIT_POISON, "Spit Poison",
-        0, 0, 40, 0, {FAIL_XL, 20, 1}, abflag::BREATH },
 
     { ABIL_BLINK, "Blink", 0, 50, 50, 0, {FAIL_XL, -1}, abflag::NONE },
     // ^ failure special-cased
@@ -260,8 +258,6 @@ static const ability_def Ability_List[] =
         0, 0, 125, 0, {FAIL_XL, 30, 1}, abflag::BREATH },
     { ABIL_BREATHE_FROST, "Breathe Frost",
         0, 0, 125, 0, {FAIL_XL, 30, 1}, abflag::BREATH },
-    { ABIL_BREATHE_POISON, "Breathe Poison Gas",
-      0, 0, 125, 0, {FAIL_XL, 30, 1}, abflag::BREATH },
     { ABIL_BREATHE_MEPHITIC, "Breathe Noxious Fumes",
       0, 0, 125, 0, {FAIL_XL, 30, 1}, abflag::BREATH },
     { ABIL_BREATHE_LIGHTNING, "Breathe Lightning",
@@ -1335,7 +1331,7 @@ static bool _check_ability_possible(const ability_def& abil,
         return true;
 
     case ABIL_ELYVILON_PURIFICATION:
-        if (!you.disease && !you.duration[DUR_POISONING]
+        if (!you.disease
             && !you.duration[DUR_CONF] && !you.duration[DUR_SLOW]
             && !you.petrifying()
             //&& you.strength(false) == you.max_strength()
@@ -1403,10 +1399,8 @@ static bool _check_ability_possible(const ability_def& abil,
         return true;
     }
 
-    case ABIL_SPIT_POISON:
     case ABIL_BREATHE_FIRE:
     case ABIL_BREATHE_FROST:
-    case ABIL_BREATHE_POISON:
     case ABIL_BREATHE_LIGHTNING:
     case ABIL_BREATHE_ACID:
     case ABIL_BREATHE_POWER:
@@ -1633,12 +1627,10 @@ static int _calc_breath_ability_range(ability_type ability)
         break;
     case ABIL_BREATHE_FIRE:
     case ABIL_BREATHE_FROST:
-    case ABIL_SPIT_POISON:
         range = 5;
         break;
     case ABIL_BREATHE_MEPHITIC:
     case ABIL_BREATHE_STEAM:
-    case ABIL_BREATHE_POISON:
         range = 6;
         break;
     case ABIL_BREATHE_LIGHTNING:
@@ -1771,25 +1763,6 @@ static spret_type _do_ability(const ability_def& abil, bool fail)
     }
 #endif
 
-    case ABIL_SPIT_POISON:      // Naga poison spit
-    {
-        int power = 12 + you.experience_level;
-        beam.range = _calc_breath_ability_range(abil.ability);
-
-        if (!spell_direction(abild, beam)
-            || !player_tracer(ZAP_SPIT_POISON, power, beam))
-        {
-            return SPRET_ABORT;
-        }
-        else
-        {
-            fail_check();
-            zapping(ZAP_SPIT_POISON, power, beam);
-            you.set_duration(DUR_BREATH_WEAPON, 3 + random2(5));
-        }
-        break;
-    }
-
     case ABIL_BREATHE_ACID:       // Draconian acid splash
     {
         beam.range = _calc_breath_ability_range(abil.ability);
@@ -1815,7 +1788,6 @@ static spret_type _do_ability(const ability_def& abil, bool fail)
 
     case ABIL_BREATHE_FIRE:
     case ABIL_BREATHE_FROST:
-    case ABIL_BREATHE_POISON:
     case ABIL_BREATHE_POWER:
     case ABIL_BREATHE_STEAM:
     case ABIL_BREATHE_MEPHITIC:
@@ -1854,14 +1826,6 @@ static spret_type _do_ability(const ability_def& abil, bool fail)
                      2 * you.experience_level : you.experience_level,
                  beam, true,
                          "You exhale a wave of freezing cold."))
-            {
-                return SPRET_ABORT;
-            }
-            break;
-
-        case ABIL_BREATHE_POISON:
-            if (!zapping(ZAP_BREATHE_POISON, you.experience_level, beam, true,
-                         "You exhale a blast of poison gas."))
             {
                 return SPRET_ABORT;
             }
@@ -3390,12 +3354,6 @@ vector<talent> your_talents(bool check_confused, bool include_unusable)
 
     if (you.get_mutation_level(MUT_HOP))
         _add_talent(talents, ABIL_HOP, check_confused);
-
-    // Spit Poison, possibly upgraded to Breathe Poison.
-    if (you.get_mutation_level(MUT_SPIT_POISON) == 2)
-        _add_talent(talents, ABIL_BREATHE_POISON, check_confused);
-    else if (you.get_mutation_level(MUT_SPIT_POISON))
-        _add_talent(talents, ABIL_SPIT_POISON, check_confused);
 
     if (species_is_draconian(you.species)
         // Draconians don't maintain their original breath weapons

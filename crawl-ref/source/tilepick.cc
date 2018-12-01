@@ -1774,8 +1774,6 @@ tileidx_t tileidx_monster(const monster_info& mons)
         ch |= TILE_FLAG_NET;
     if (mons.is(MB_WEBBED))
         ch |= TILE_FLAG_WEB;
-    if (mons.is(MB_POISONED))
-        ch |= TILE_FLAG_POISON;
     if (mons.is(MB_BURNING))
         ch |= TILE_FLAG_STICKY_FLAME;
     if (mons.is(MB_INNER_FLAME))
@@ -2085,7 +2083,6 @@ static tileidx_t _tileidx_missile_base(const item_def &item)
         case SPMSL_STEEL:    return TILE_MI_JAVELIN_STEEL;
         case SPMSL_SILVER:   return TILE_MI_JAVELIN_SILVER;
         }
-    case MI_DART_POISONED: return TILE_MI_NEEDLE_P;
     case MI_DART_CURARE:   return TILE_MI_NEEDLE_CURARE;
     case MI_DART_FRENZY:   return TILE_MI_NEEDLE + 1;
     }
@@ -2950,7 +2947,6 @@ tileidx_t tileidx_skill(skill_type skill, int train)
     case SK_ICE_MAGIC:      ch = TILEG_ICE_MAGIC_ON; break;
     case SK_AIR_MAGIC:      ch = TILEG_AIR_MAGIC_ON; break;
     case SK_EARTH_MAGIC:    ch = TILEG_EARTH_MAGIC_ON; break;
-    case SK_POISON_MAGIC:   ch = TILEG_POISON_MAGIC_ON; break;
     case SK_EVOCATIONS:     ch = TILEG_EVOCATIONS_ON; break;
     case SK_INVOCATIONS:
         {
@@ -3145,14 +3141,10 @@ tileidx_t tileidx_ability(const ability_type ability)
     switch (ability)
     {
     // Innate abilities and (Demonspaw) mutations.
-    case ABIL_SPIT_POISON:
-        return TILEG_ABILITY_SPIT_POISON;
     case ABIL_BREATHE_FIRE:
         return TILEG_ABILITY_BREATHE_FIRE;
     case ABIL_BREATHE_FROST:
         return TILEG_ABILITY_BREATHE_FROST;
-    case ABIL_BREATHE_POISON:
-        return TILEG_ABILITY_BREATHE_POISON;
     case ABIL_BREATHE_LIGHTNING:
         return TILEG_ABILITY_BREATHE_LIGHTNING;
     case ABIL_BREATHE_POWER:
@@ -3530,8 +3522,6 @@ tileidx_t tileidx_known_brand(const item_def &item)
         case SPMSL_FROST:
             return TILE_BRAND_FROST;
 #endif
-        case SPMSL_POISONED:
-            return TILE_BRAND_POISONED;
         case SPMSL_CURARE:
             return TILE_BRAND_CURARE;
 #if TAG_MAJOR_VERSION == 34

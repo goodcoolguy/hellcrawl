@@ -647,11 +647,6 @@ void monster::remove_enchantment_effect(const mon_enchant &me, bool quiet)
             simple_monster_message(*this, " stops burning.");
         break;
 
-    case ENCH_POISON:
-        if (!quiet)
-            simple_monster_message(*this, " looks more healthy.");
-        break;
-
     case ENCH_HELD:
     {
         int net = get_trapping_net(pos());
@@ -868,11 +863,6 @@ void monster::remove_enchantment_effect(const mon_enchant &me, bool quiet)
 
     case ENCH_MERFOLK_AVATAR_SONG:
         props.erase("merfolk_avatar_call");
-        break;
-
-    case ENCH_POISON_VULN:
-        if (!quiet)
-            simple_monster_message(*this, " is no longer more vulnerable to poison.");
         break;
 
     case ENCH_ICEMAIL:
@@ -1439,7 +1429,6 @@ void monster::apply_enchantment(const mon_enchant &me)
     case ENCH_AWAKEN_VINES:
     case ENCH_FIRE_VULN:
     case ENCH_BARBS:
-    case ENCH_POISON_VULN:
     case ENCH_DIMENSION_ANCHOR:
     case ENCH_AGILE:
     case ENCH_FROZEN:
@@ -1515,28 +1504,6 @@ void monster::apply_enchantment(const mon_enchant &me)
 
         if (!monster_can_submerge(this, grid))
             del_ench(ENCH_SUBMERGED); // forced to surface
-        break;
-    }
-    case ENCH_POISON:
-    {
-        const int poisonval = me.degree;
-        int dam = (poisonval >= 4) ? 1 : 0;
-
-        if (coinflip())
-            dam += roll_dice(1, poisonval + 1);
-
-        if (res_poison() < 0)
-            dam += roll_dice(2, poisonval) - 1;
-
-        if (dam > 0)
-        {
-            dprf("%s takes poison damage: %d (degree %d)",
-                 name(DESC_THE).c_str(), dam, me.degree);
-
-            hurt(me.agent(), dam, BEAM_POISON, KILLED_BY_POISON);
-        }
-
-        decay_enchantment(en, true);
         break;
     }
 
@@ -2045,7 +2012,7 @@ static inline int _mod_speed(int val, int speed)
 static const char *enchant_names[] =
 {
     "none", "berserk", "haste", "might", "fatigue", "slow", "fear",
-    "confusion", "invis", "poison",
+    "confusion", "invis",
 #if TAG_MAJOR_VERSION == 34
     "rot",
 #endif
@@ -2112,7 +2079,7 @@ static const char *enchant_names[] =
 #if TAG_MAJOR_VERSION == 34
     "building_charge",
 #endif
-    "poison_vuln", "icemail", "agile",
+    "icemail", "agile",
     "frozen",
 #if TAG_MAJOR_VERSION == 34
     "ephemeral_infusion",
@@ -2312,9 +2279,6 @@ int mon_enchant::calc_duration(const monster* mons,
         break;
     case ENCH_HELD:
         cturn = 120 / _mod_speed(25, mons->speed);
-        break;
-    case ENCH_POISON:
-        cturn = 1000 * deg / _mod_speed(125, mons->speed);
         break;
     case ENCH_STICKY_FLAME:
         cturn = 1000 * deg / _mod_speed(200, mons->speed);

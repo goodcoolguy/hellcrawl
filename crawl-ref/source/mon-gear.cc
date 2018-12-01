@@ -1187,10 +1187,8 @@ static void _give_ammo(monster* mon, int level, bool mons_summoned)
             // A few of the smarter kobolds have darts.
             if (one_chance_in(10) && level > 1)
             {
-                weap_type  = got_curare_roll(level) ? MI_DART_CURARE :
-                                                  MI_DART_POISONED;
-                qty        = weap_type == MI_DART_CURARE ? random_range(2, 8) :
-                                                       random_range(4, 16);
+                weap_type  = MI_DART_CURARE;
+                qty        = random_range(4, 16);
             }
             break;
         case MONS_BIG_KOBOLD:

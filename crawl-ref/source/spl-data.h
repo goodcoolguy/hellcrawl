@@ -474,17 +474,6 @@ static const struct spell_desc spelldata[] =
 },
 
 {
-    SPELL_POISONOUS_CLOUD, "Poisonous Cloud",
-    SPTYP_HEXES | SPTYP_AIR,
-    SPFLAG_TARGET | SPFLAG_AREA | SPFLAG_NEEDS_TRACER | SPFLAG_CLOUD | SPFLAG_MONSTER,
-    6,
-    200,
-    5, 5,
-    6, 2,
-    TILEG_POISONOUS_CLOUD,
-},
-
-{
     SPELL_FIRE_STORM, "Fire Storm",
     SPTYP_FIRE,
     SPFLAG_TARGET | SPFLAG_AREA | SPFLAG_NEEDS_TRACER,
@@ -827,17 +816,6 @@ static const struct spell_desc spelldata[] =
 #endif
 
 {
-    SPELL_POISON_ARROW, "Poison Arrow",
-    SPTYP_CONJURATION,
-    SPFLAG_DIR_OR_TARGET | SPFLAG_NEEDS_TRACER | SPFLAG_MONSTER,
-    6,
-    200,
-    6, 6,
-    6, 0,
-    TILEG_POISON_ARROW,
-},
-
-{
     SPELL_TWISTED_RESURRECTION, "Twisted Resurrection",
     SPTYP_NECROMANCY,
     SPFLAG_CHAOTIC | SPFLAG_CORPSE_VIOLATING | SPFLAG_UTILITY | SPFLAG_MONSTER,
@@ -1070,34 +1048,10 @@ static const struct spell_desc spelldata[] =
 
 #if TAG_MAJOR_VERSION == 34
 {
-    SPELL_CURE_POISON, "Cure Poison",
-    SPTYP_CHARMS,
-    SPFLAG_RECOVERY | SPFLAG_HELPFUL | SPFLAG_UTILITY,
-    2,
-    200,
-    -1, -1,
-    1, 0,
-    TILEG_ERROR,
-},
-#endif
-
-#if TAG_MAJOR_VERSION == 34
-{
     SPELL_CONTROL_TELEPORT, "Control Teleport",
     SPTYP_CHARMS | SPTYP_TRANSLOCATION,
     SPFLAG_HELPFUL | SPFLAG_UTILITY,
     4,
-    200,
-    -1, -1,
-    3, 0,
-    TILEG_ERROR,
-},
-
-{
-    SPELL_POISON_WEAPON, "Poison Weapon",
-    SPTYP_CHARMS,
-    SPFLAG_HELPFUL,
-    3,
     200,
     -1, -1,
     3, 0,
@@ -1336,17 +1290,6 @@ static const struct spell_desc spelldata[] =
     1, 9,
     0, 0, // make silent to keep passwall a viable stabbing spell [rob]
     TILEG_PASSWALL,
-},
-
-{
-    SPELL_IGNITE_POISON, "Ignite Poison",
-    SPTYP_FIRE | SPTYP_TRANSMUTATION,
-    SPFLAG_AREA,
-    3,
-    100,
-    -1, -1,
-    4, 0,
-    TILEG_IGNITE_POISON,
 },
 
 {
@@ -1827,17 +1770,6 @@ static const struct spell_desc spelldata[] =
     LOS_RADIUS, LOS_RADIUS,
     4, 0,
     TILEG_ENERGY_BOLT,
-},
-
-{
-    SPELL_SPIT_POISON, "Spit Poison",
-    SPTYP_CONJURATION,
-    SPFLAG_DIR_OR_TARGET | SPFLAG_MONSTER | SPFLAG_NOISY | SPFLAG_NEEDS_TRACER,
-    2,
-    0,
-    6, 6,
-    3, 0,
-    TILEG_SPIT_POISON,
 },
 
 {
@@ -2963,19 +2895,6 @@ static const struct spell_desc spelldata[] =
     2, 0,
     TILEG_VIRULENCE,
 },
-
-#if TAG_MAJOR_VERSION == 34
-{
-    SPELL_IGNITE_POISON_SINGLE, "Localized Ignite Poison",
-    SPTYP_FIRE | SPTYP_TRANSMUTATION,
-    SPFLAG_MONSTER | SPFLAG_DIR_OR_TARGET | SPFLAG_NOT_SELF | SPFLAG_NEEDS_TRACER | SPFLAG_MR_CHECK,
-    4,
-    200,
-    LOS_RADIUS, LOS_RADIUS,
-    3, 0,
-    TILEG_ERROR,
-},
-#endif
 
 {
     SPELL_ORB_OF_ELECTRICITY, "Orb of Electricity",

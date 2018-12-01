@@ -1953,8 +1953,7 @@ static void _cloud_card(int power, deck_rarity_type rarity)
 
         switch (power_level)
         {
-            case 0: cloudy = (!one_chance_in(5))
-                              ? CLOUD_MEPHITIC : CLOUD_POISON;
+            case 0: cloudy = CLOUD_MEPHITIC;
                     break;
 
             case 1: cloudy = (coinflip())
@@ -2072,8 +2071,7 @@ static void _wild_magic_card(int power, deck_rarity_type rarity)
                                                     SPTYP_FIRE,
                                                     SPTYP_ICE,
                                                     SPTYP_EARTH,
-                                                    SPTYP_AIR,
-                                                    SPTYP_POISON);
+                                                    SPTYP_AIR);
 
             MiscastEffect(mons, actor_by_mid(MID_YOU_FAULTLESS),
                           DECK_MISCAST, type,

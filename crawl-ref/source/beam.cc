@@ -544,7 +544,6 @@ static beam_type _chaos_beam_flavour(bolt* beam)
             10, BEAM_FIRE,
             10, BEAM_COLD,
             10, BEAM_ELECTRICITY,
-            10, BEAM_POISON,
             10, BEAM_NEG,
             10, BEAM_ACID,
             10, BEAM_DAMNATION,
@@ -1556,38 +1555,6 @@ int mons_adjust_flavoured(monster* mons, bolt &pbolt, int hurted,
         break;
     }
 
-    case BEAM_POISON:
-    {
-        hurted = resist_adjust_damage(mons, pbolt.flavour, hurted);
-
-        if (!hurted && doFlavouredEffects)
-        {
-            simple_monster_message(*mons,
-                                   (original > 0) ? " completely resists."
-                                                  : " appears unharmed.");
-        }
-        else if (doFlavouredEffects && !one_chance_in(3))
-            poison_monster(mons, pbolt.agent());
-
-        break;
-    }
-
-    case BEAM_POISON_ARROW:
-        hurted = resist_adjust_damage(mons, pbolt.flavour, hurted);
-        if (hurted < original)
-        {
-            if (doFlavouredEffects)
-            {
-                simple_monster_message(*mons, " partially resists.");
-
-                poison_monster(mons, pbolt.agent(), 2, true);
-            }
-        }
-        else if (doFlavouredEffects)
-            poison_monster(mons, pbolt.agent(), 4, true);
-
-        break;
-
     case BEAM_NEG:
         if (mons->res_negative_energy() == 3)
         {
@@ -1710,7 +1677,7 @@ int mons_adjust_flavoured(monster* mons, bolt &pbolt, int hurted,
         break;
 
     case BEAM_MEPHITIC:
-        if (mons->res_poison() > 0)
+        if (mons)
         {
             if (doFlavouredEffects)
             {
@@ -1946,9 +1913,6 @@ static bool _curare_hits_monster(actor *agent, monster* mons, int levels)
     if (!mons->alive())
         return false;
 
-    if (mons->res_poison() > 0)
-        return false;
-
     poison_monster(mons, agent, levels, false);
 
     int hurted = 0;
@@ -1960,7 +1924,7 @@ static bool _curare_hits_monster(actor *agent, monster* mons, int levels)
         if (hurted)
         {
             simple_monster_message(*mons, " convulses.");
-            mons->hurt(agent, hurted, BEAM_POISON);
+            mons->hurt(agent, hurted, BEAM_MISSILE);
         }
     }
 
@@ -1991,35 +1955,7 @@ static bool _curare_hits_monster(actor *agent, monster* mons, int levels)
 bool poison_monster(monster* mons, const actor *who, int levels,
                     bool force, bool verbose)
 {
-    if (!mons->alive() || levels <= 0)
-        return false;
-
-    if (monster_resists_this_poison(*mons, force))
-        return false;
-
-    const mon_enchant old_pois = mons->get_ench(ENCH_POISON);
-    mons->add_ench(mon_enchant(ENCH_POISON, levels, who));
-    const mon_enchant new_pois = mons->get_ench(ENCH_POISON);
-
-    // Actually do the poisoning. The order is important here.
-    if (new_pois.degree > old_pois.degree
-        || new_pois.degree >= MAX_ENCH_DEGREE_DEFAULT)
-    {
-        if (verbose)
-        {
-            const char* msg;
-            if (new_pois.degree >= MAX_ENCH_DEGREE_DEFAULT)
-                msg = " looks as sick as possible!";
-            else if (old_pois.degree > 0)
-                msg = " looks even sicker.";
-            else
-                msg = " is poisoned.";
-
-            simple_monster_message(*mons, msg);
-        }
-    }
-
-    return new_pois.duration > old_pois.duration;
+    return false;
 }
 
 // Actually poisons, rots, and/or slows a monster with miasma (with
@@ -2088,14 +2024,6 @@ static bool _curare_hits_player(actor* agent, int levels, string name,
                                 string source_name)
 {
     ASSERT(!crawl_state.game_is_arena());
-
-    if (player_res_poison() >= 3
-        || player_res_poison() > 0 && !one_chance_in(3))
-    {
-        return false;
-    }
-
-    poison_player(roll_dice(levels, 12) + 1, source_name, name);
 
     int hurted = 0;
 
@@ -2461,9 +2389,6 @@ cloud_type bolt::get_cloud_type() const
     if (origin_spell == SPELL_NOXIOUS_CLOUD)
         return CLOUD_MEPHITIC;
 
-    if (origin_spell == SPELL_POISONOUS_CLOUD)
-        return CLOUD_POISON;
-
     if (origin_spell == SPELL_HOLY_BREATH)
         return CLOUD_HOLY;
 
@@ -2490,8 +2415,7 @@ cloud_type bolt::get_cloud_type() const
 
 int bolt::get_cloud_pow() const
 {
-    if (origin_spell == SPELL_FREEZING_CLOUD
-        || origin_spell == SPELL_POISONOUS_CLOUD)
+    if (origin_spell == SPELL_FREEZING_CLOUD)
     {
         return random_range(10, 15);
     }
@@ -2783,9 +2707,6 @@ void bolt::affect_place_clouds()
     // No clouds here, free to make new ones.
     const dungeon_feature_type feat = grd(p);
 
-    if (origin_spell == SPELL_POISONOUS_CLOUD)
-        place_cloud(CLOUD_POISON, p, random2(5) + 3, agent());
-
     if (origin_spell == SPELL_HOLY_BREATH)
         place_cloud(CLOUD_HOLY, p, random2(4) + 2, agent());
 
@@ -2811,9 +2732,6 @@ void bolt::affect_place_clouds()
     //XXX: these use the name for a gameplay effect.
     if (name == "ball of steam")
         place_cloud(CLOUD_STEAM, p, random2(5) + 2, agent());
-
-    if (name == "poison gas")
-        place_cloud(CLOUD_POISON, p, random2(4) + 3, agent());
 
     if (name == "blast of choking fumes")
         place_cloud(CLOUD_MEPHITIC, p, random2(4) + 3, agent());
@@ -3026,9 +2944,6 @@ bool bolt::is_harmless(const monster* mon) const
     case BEAM_ELECTRICITY:
         return mon->res_elec() >= 3;
 
-    case BEAM_POISON:
-        return mon->res_poison() >= 3;
-
     case BEAM_ACID:
         return mon->res_acid() >= 3;
 
@@ -3036,7 +2951,7 @@ bool bolt::is_harmless(const monster* mon) const
         return mon->res_petrify() || mon->petrified();
 
     case BEAM_MEPHITIC:
-        return mon->res_poison() > 0 || mon->is_unbreathing();
+        return mon->is_unbreathing();
 
     default:
         return false;
@@ -3077,15 +2992,11 @@ bool bolt::harmless_to_player() const
     case BEAM_NEG:
         return player_prot_life(false) >= 3;
 
-    case BEAM_POISON:
-        return player_res_poison(false) >= 3
-               || is_big_cloud() && player_res_poison(false) > 0;
-
     case BEAM_MEPHITIC:
         // With clarity, meph still does a tiny amount of damage (1d3 - 1).
         // Normally we'd just ignore it, but we shouldn't let a player
         // kill themselves without a warning.
-        return player_res_poison(false) > 0 || you.is_unbreathing()
+        return you.is_unbreathing()
             || you.clarity(false) && you.hp > 2;
 
     case BEAM_ELECTRICITY:
@@ -3102,9 +3013,6 @@ bool bolt::harmless_to_player() const
     case BEAM_STICKY_FLAME:
         return you.species == SP_DJINNI;
 #endif
-
-    case BEAM_VIRULENCE:
-        return player_res_poison(false) >= 3;
 
     default:
         return false;
@@ -3631,19 +3539,6 @@ void bolt::affect_player_enchantment(bool resistible)
             canned_msg(MSG_YOU_UNAFFECTED);
         break;
     }
-
-    case BEAM_VIRULENCE:
-        // Those completely immune cannot be made more susceptible this way
-        if (you.res_poison(false) >= 3)
-        {
-            canned_msg(MSG_YOU_UNAFFECTED);
-            break;
-        }
-
-        mpr("You feel yourself grow more vulnerable to poison.");
-        you.increase_duration(DUR_POISON_VULN, 12 + random2(18), 50);
-        obvious_effect = true;
-        break;
 
     case BEAM_AGILITY:
         potionlike_effect(POT_AGILITY, ench_power);
@@ -5123,10 +5018,6 @@ bool ench_flavour_affects_monster(beam_type flavour, const monster* mon,
         rc = (mon->res_negative_energy(intrinsic_only) < 3);
         break;
 
-    case BEAM_VIRULENCE:
-        rc = (mon->res_poison() < 3);
-        break;
-
     case BEAM_DRAIN_MAGIC:
         rc = mon->antimagic_susceptible();
         break;
@@ -5596,19 +5487,6 @@ mon_resist_type bolt::apply_enchantment_to_monster(monster* mon)
             return MON_UNAFFECTED;
         }
     }
-
-    case BEAM_VIRULENCE:
-        if (!mon->has_ench(ENCH_POISON_VULN)
-            && mon->add_ench(mon_enchant(ENCH_POISON_VULN, 0, agent(),
-                                         random_range(20, 30) * BASELINE_DELAY)))
-        {
-            if (simple_monster_message(*mon,
-                                       " grows more vulnerable to poison."))
-            {
-                obvious_effect = true;
-            }
-        }
-        return MON_AFFECTED;
 
     case BEAM_AGILITY:
         if (!mon->has_ench(ENCH_AGILE)
@@ -6391,12 +6269,10 @@ static string _beam_type_name(beam_type type)
     case BEAM_MAGIC:                 return "magic";
     case BEAM_ELECTRICITY:           return "electricity";
     case BEAM_MEPHITIC:              return "noxious fumes";
-    case BEAM_POISON:                return "poison";
     case BEAM_NEG:                   return "negative energy";
     case BEAM_ACID:                  return "acid";
     case BEAM_MIASMA:                return "miasma";
     case BEAM_SPORE:                 return "spores";
-    case BEAM_POISON_ARROW:          return "poison arrow";
     case BEAM_DAMNATION:             return "damnation";
     case BEAM_STICKY_FLAME:          return "sticky fire";
     case BEAM_STEAM:                 return "steam";

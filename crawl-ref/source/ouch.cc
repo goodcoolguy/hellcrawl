@@ -177,44 +177,6 @@ int check_your_resists(int hurted, beam_type flavour, string source,
         }
         break;
 
-    case BEAM_POISON:
-        hurted = resist_adjust_damage(&you, flavour, hurted);
-
-        if (doEffects)
-        {
-            // Ensure that we received a valid beam object before proceeding.
-            // See also melee_attack.cc:_print_resist_messages() which cannot be
-            // used with this beam type (as it does not provide a valid beam).
-            ASSERT(beam);
-            int pois = div_rand_round(beam->damage.num * beam->damage.size, 3);
-            pois = 3 + random_range(pois * 2 / 3, pois * 4 / 3);
-            poison_player(pois, source, kaux);
-
-            if (player_res_poison() > 0)
-                canned_msg(MSG_YOU_RESIST);
-        }
-
-        break;
-
-    case BEAM_POISON_ARROW:
-        if (doEffects)
-        {
-            // Ensure that we received a valid beam object before proceeding.
-            // See also melee_attack.cc:_print_resist_messages() which cannot be
-            // used with this beam type (as it does not provide a valid beam).
-            ASSERT(beam);
-            int pois = div_rand_round(beam->damage.num * beam->damage.size, 3);
-            pois = 3 + random_range(pois * 2 / 3, pois * 4 / 3);
-
-            const int resist = player_res_poison();
-            poison_player((resist ? pois / 2 : pois), source, kaux, true);
-        }
-
-        hurted = resist_adjust_damage(&you, flavour, hurted);
-        if (hurted < original && doEffects)
-            canned_msg(MSG_YOU_PARTIALLY_RESIST);
-        break;
-
     case BEAM_NEG:
         hurted = resist_adjust_damage(&you, flavour, hurted);
 
@@ -928,7 +890,7 @@ void ouch(int dam, kill_method_type death_type, mid_t source, const char *aux,
         {
             if (Options.hp_warning
                 && you.hp <= (you.hp_max * Options.hp_warning) / 100
-                && (death_type != KILLED_BY_POISON || poison_is_lethal()))
+                && (death_type != KILLED_BY_POISON))
             {
                 flash_view_delay(UA_HP, RED, 50);
                 mprf(MSGCH_DANGER, "* * * LOW HITPOINT WARNING * * *");

@@ -272,8 +272,7 @@ bool ranged_attack::handle_phase_hit()
     if (!is_penetrating_attack(*attacker, weapon, *projectile))
         range_used = BEAM_STOP;
 
-    if (projectile->is_type(OBJ_MISSILES, MI_DART_POISONED)
-        || projectile->is_type(OBJ_MISSILES, MI_DART_CURARE)
+    if (projectile->is_type(OBJ_MISSILES, MI_DART_CURARE)
         || projectile->is_type(OBJ_MISSILES, MI_DART_FRENZY))
     {
         //hack to fix dart damage messaging
@@ -439,7 +438,6 @@ special_missile_type ranged_attack::random_chaos_missile_brand()
         brand = (random_choose_weighted(
                     10, SPMSL_FLAME,
                     10, SPMSL_FROST,
-                    10, SPMSL_POISONED,
                     10, SPMSL_CHAOS,
                      5, SPMSL_PARALYSIS,
                      5, SPMSL_SLEEP,
@@ -460,10 +458,6 @@ special_missile_type ranged_attack::random_chaos_missile_brand()
             break;
         case SPMSL_FROST:
             if (defender->is_icy())
-                susceptible = false;
-            break;
-        case SPMSL_POISONED:
-            if (defender->holiness() & MH_UNDEAD)
                 susceptible = false;
             break;
         case SPMSL_DISPERSAL:
@@ -506,7 +500,6 @@ special_missile_type ranged_attack::random_chaos_missile_brand()
     case SPMSL_NORMAL:          brand_name += "(plain)"; break;
     case SPMSL_FLAME:           brand_name += "flame"; break;
     case SPMSL_FROST:           brand_name += "frost"; break;
-    case SPMSL_POISONED:        brand_name += "poisoned"; break;
     case SPMSL_CURARE:          brand_name += "curare"; break;
     case SPMSL_CHAOS:           brand_name += "chaos"; break;
     case SPMSL_DISPERSAL:       brand_name += "dispersal"; break;
@@ -581,9 +574,6 @@ bool ranged_attack::dart_check(uint8_t sub_type)
 
 int ranged_attack::dart_duration_roll(uint8_t sub_type)
 {
-    // Leaving monster poison the same by separating it from player poison
-    if (sub_type == MI_DART_POISONED && attacker->is_monster())
-        return 6 + random2(8);
 
     if (sub_type == MI_DART_CURARE)
         return 2;
@@ -600,8 +590,6 @@ int ranged_attack::dart_duration_roll(uint8_t sub_type)
     // high HD shooters and too ignorable from low ones.
     if (defender->is_player())
         return 5 + random2(5);
-    else if (sub_type == MI_DART_POISONED) // Player poison needles
-        return random2(3 + base_power * 2 + plus);
     else
         return 5 + random2(base_power + plus);
 }
@@ -633,38 +621,6 @@ bool ranged_attack::apply_missile_brand()
         calc_elemental_brand_damage(BEAM_COLD, "freeze",
                                     projectile->name(DESC_THE).c_str());
         defender->expose_to_element(BEAM_COLD, 2);
-        break;
-    case SPMSL_POISONED:
-        if (projectile->is_type(OBJ_MISSILES, MI_NEEDLE)
-                && using_weapon()
-                && damage_done > 0
-            || !one_chance_in(4))
-        {
-            int old_poison;
-
-            if (defender->is_player())
-                old_poison = you.duration[DUR_POISONING];
-            else
-            {
-                old_poison =
-                    (defender->as_monster()->get_ench(ENCH_POISON)).degree;
-            }
-
-            defender->poison(attacker,
-                             projectile->is_type(OBJ_MISSILES, MI_NEEDLE)
-                             ? damage_done
-                             : 6 + random2(8) + random2(damage_done * 3 / 2));
-
-            if (defender->is_player()
-                   && old_poison < you.duration[DUR_POISONING]
-                || !defender->is_player()
-                   && old_poison <
-                      (defender->as_monster()->get_ench(ENCH_POISON)).degree)
-            {
-                obvious_effect = true;
-            }
-
-        }
         break;
     case SPMSL_CURARE:
         obvious_effect = curare_actor(attacker, defender,
@@ -767,34 +723,6 @@ bool ranged_attack::apply_dart_type()
     switch (projectile->sub_type)
     {
     default:
-        break;
-    case MI_DART_POISONED:
-        int old_poison;
-
-        if (defender->is_player())
-            old_poison = you.duration[DUR_POISONING];
-        else
-        {
-            old_poison =
-                (defender->as_monster()->get_ench(ENCH_POISON)).degree;
-        }
-
-        defender->poison(attacker, damage_done);
-
-        if (defender->is_player()
-               && old_poison < you.duration[DUR_POISONING]
-            || !defender->is_player()
-               && old_poison <
-                  (defender->as_monster()->get_ench(ENCH_POISON)).degree)
-        {
-            obvious_effect = true;
-        }
-        break;
-    case MI_DART_CURARE:
-        obvious_effect = curare_actor(attacker, defender,
-                                      damage_done,
-                                      projectile->name(DESC_PLAIN),
-                                      atk_name(DESC_PLAIN));
         break;
     case MI_DART_FRENZY:
         if (!dart_check(projectile->sub_type))

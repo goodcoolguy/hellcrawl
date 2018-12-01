@@ -73,7 +73,7 @@ static const mon_spellbook mspell_list[] =
     {  MST_ANNIHILATOR,
       {
        { SPELL_LIGHTNING_BOLT, 11, MON_SPELL_WIZARD },
-       { SPELL_POISON_ARROW, 11, MON_SPELL_WIZARD },
+       { SPELL_IRON_SHOT, 11, MON_SPELL_WIZARD },
        { SPELL_IRON_SHOT, 11, MON_SPELL_WIZARD },
        { SPELL_LEHUDIBS_CRYSTAL_SPEAR, 11, MON_SPELL_WIZARD },
        { SPELL_BLINK, 22, MON_SPELL_WIZARD },
@@ -824,7 +824,7 @@ static const mon_spellbook mspell_list[] =
 
     {  MST_SWAMP_DRAGON,
       {
-       { SPELL_POISONOUS_CLOUD, 59, MON_SPELL_NATURAL | MON_SPELL_BREATH
+       { SPELL_FREEZING_CLOUD, 59, MON_SPELL_NATURAL | MON_SPELL_BREATH
                                      | MON_SPELL_NOISY },
       }
     },
@@ -869,7 +869,7 @@ static const mon_spellbook mspell_list[] =
                                   | MON_SPELL_NOISY },
        { SPELL_BOLT_OF_COLD, 23, MON_SPELL_NATURAL | MON_SPELL_BREATH
                                   | MON_SPELL_NOISY },
-       { SPELL_POISONOUS_CLOUD, 23, MON_SPELL_NATURAL | MON_SPELL_BREATH
+       { SPELL_FREEZING_CLOUD, 23, MON_SPELL_NATURAL | MON_SPELL_BREATH
                                   | MON_SPELL_NOISY },
       }
     },
@@ -1026,7 +1026,7 @@ static const mon_spellbook mspell_list[] =
     {  MST_LICH_V,
       {
        { SPELL_BOLT_OF_DRAINING, 12, MON_SPELL_WIZARD },
-       { SPELL_POISON_ARROW, 12, MON_SPELL_WIZARD },
+       { SPELL_IRON_SHOT, 12, MON_SPELL_WIZARD },
        { SPELL_HAUNT, 12, MON_SPELL_WIZARD },
        { SPELL_CURSE, 12, MON_SPELL_WIZARD },
        { SPELL_HASTE, 12, MON_SPELL_WIZARD },
@@ -1082,17 +1082,17 @@ static const mon_spellbook mspell_list[] =
     // ('N') Naga and other snake people.
     {  MST_NAGA,
       {
-       { SPELL_SPIT_POISON, 55, MON_SPELL_NATURAL | MON_SPELL_BREATH },
+       { SPELL_THROW_FLAME, 55, MON_SPELL_NATURAL | MON_SPELL_BREATH },
       }
     },
 
     // Shared with greater naga.
     {  MST_NAGA_MAGE,
       {
-       { SPELL_SPIT_POISON, 55, MON_SPELL_NATURAL | MON_SPELL_BREATH },
+       { SPELL_THROW_FLAME, 55, MON_SPELL_NATURAL | MON_SPELL_BREATH },
        { SPELL_VENOM_BOLT, 10, MON_SPELL_WIZARD },
        { SPELL_ISKENDERUNS_MYSTIC_BLAST, 10, MON_SPELL_WIZARD },
-       { SPELL_POISON_ARROW, 10, MON_SPELL_WIZARD },
+       { SPELL_IRON_SHOT, 10, MON_SPELL_WIZARD },
        { SPELL_DIMENSION_ANCHOR, 10, MON_SPELL_WIZARD  },
        { SPELL_HASTE, 10, MON_SPELL_WIZARD },
       }
@@ -1100,14 +1100,14 @@ static const mon_spellbook mspell_list[] =
 
     {  MST_NAGA_SHARPSHOOTER,
       {
-       { SPELL_SPIT_POISON, 55, MON_SPELL_NATURAL | MON_SPELL_BREATH },
+       { SPELL_THROW_FLAME, 55, MON_SPELL_NATURAL | MON_SPELL_BREATH },
        { SPELL_PORTAL_PROJECTILE, 59, MON_SPELL_WIZARD },
       }
     },
 
     {  MST_NAGA_RITUALIST,
       {
-       { SPELL_SPIT_POISON, 55, MON_SPELL_NATURAL | MON_SPELL_BREATH },
+       { SPELL_THROW_FLAME, 55, MON_SPELL_NATURAL | MON_SPELL_BREATH },
        { SPELL_FORCE_LANCE, 12, MON_SPELL_WIZARD },
        { SPELL_OLGREBS_TOXIC_RADIANCE, 23, MON_SPELL_WIZARD },
        { SPELL_VIRULENCE, 23, MON_SPELL_WIZARD },
@@ -1222,7 +1222,7 @@ static const mon_spellbook mspell_list[] =
     {  MST_TENGU_REAVER_III,
       {
        { SPELL_VENOM_BOLT, 13, MON_SPELL_WIZARD },
-       { SPELL_POISONOUS_CLOUD, 13, MON_SPELL_WIZARD },
+       { SPELL_FREEZING_CLOUD, 13, MON_SPELL_WIZARD },
        { SPELL_CORROSIVE_BOLT, 13, MON_SPELL_WIZARD },
        { SPELL_BATTLESPHERE, 27, MON_SPELL_WIZARD },
       }
@@ -1283,7 +1283,7 @@ static const mon_spellbook mspell_list[] =
 	
 	{  MST_SUBTRACTOR_SNAKE,
       {
-       { SPELL_POISON_ARROW, 39, MON_SPELL_WIZARD },
+       { SPELL_IRON_SHOT, 39, MON_SPELL_WIZARD },
        { SPELL_BLINK_ALLIES_ENCIRCLE, 39, MON_SPELL_WIZARD },
       }
     },
@@ -1451,8 +1451,8 @@ static const mon_spellbook mspell_list[] =
 
     {  MST_GREEN_DEATH,
       {
-       { SPELL_POISON_ARROW, 21, MON_SPELL_MAGICAL },
-       { SPELL_POISONOUS_CLOUD, 21, MON_SPELL_MAGICAL },
+       { SPELL_IRON_SHOT, 21, MON_SPELL_MAGICAL },
+       { SPELL_FREEZING_CLOUD, 21, MON_SPELL_MAGICAL },
        { SPELL_VENOM_BOLT, 21, MON_SPELL_MAGICAL },
       }
     },
@@ -1861,7 +1861,7 @@ static const mon_spellbook mspell_list[] =
     {  MST_ARACHNE,
       {
        { SPELL_VENOM_BOLT, 11, MON_SPELL_WIZARD },
-       { SPELL_POISON_ARROW, 11, MON_SPELL_WIZARD },
+       { SPELL_IRON_SHOT, 11, MON_SPELL_WIZARD },
        { SPELL_ENSNARE, 34, MON_SPELL_WIZARD },
        { SPELL_BLINK, 11, MON_SPELL_WIZARD },
       }
@@ -1928,7 +1928,7 @@ static const mon_spellbook mspell_list[] =
     // ('N') Naga.
     {  MST_VASHNIA,
       {
-       { SPELL_SPIT_POISON, 55, MON_SPELL_NATURAL | MON_SPELL_BREATH },
+       { SPELL_THROW_FLAME, 55, MON_SPELL_NATURAL | MON_SPELL_BREATH },
        { SPELL_PORTAL_PROJECTILE, 22, MON_SPELL_WIZARD },
        { SPELL_BLINK_OTHER, 11, MON_SPELL_WIZARD | MON_SPELL_EMERGENCY },
        { SPELL_BLINK_ALLIES_AWAY, 22, MON_SPELL_WIZARD },
@@ -1972,7 +1972,7 @@ static const mon_spellbook mspell_list[] =
     {  MST_AIZUL,
       {
        { SPELL_VENOM_BOLT, 32, MON_SPELL_WIZARD },
-       { SPELL_POISON_ARROW, 16, MON_SPELL_WIZARD },
+       { SPELL_IRON_SHOT, 16, MON_SPELL_WIZARD },
        { SPELL_SLEEP, 16, MON_SPELL_WIZARD },
       }
     },
@@ -2229,7 +2229,7 @@ static const mon_spellbook mspell_list[] =
 
     {  MST_GLOORX_VLOQ,
       {
-       { SPELL_POISON_ARROW, 20, MON_SPELL_MAGICAL },
+       { SPELL_IRON_SHOT, 20, MON_SPELL_MAGICAL },
        { SPELL_MIASMA_BREATH, 20, MON_SPELL_MAGICAL },
        { SPELL_SYMBOL_OF_TORMENT, 20, MON_SPELL_MAGICAL },
        { SPELL_DISPEL_UNDEAD, 20, MON_SPELL_MAGICAL },

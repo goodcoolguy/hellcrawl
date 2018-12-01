@@ -139,7 +139,6 @@ private:
     void _ice(int severity);
     void _earth(int severity);
     void _air(int severity);
-    void _poison(int severity);
 
     void _zot();
 };

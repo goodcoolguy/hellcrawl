@@ -1002,15 +1002,6 @@ int main(int argc, char* argv[])
                 case AF_PARALYSE:
                     monsterattacks += colour(LIGHTRED, "(paralyse)");
                     break;
-                case AF_POISON:
-                    monsterattacks += colour(
-                        YELLOW, damage_flavour("poison", hd * 2, hd * 4));
-                    break;
-                case AF_POISON_STRONG:
-                    monsterattacks += colour(
-                        LIGHTRED, damage_flavour("strong poison", hd * 11 / 3,
-                                                 hd * 13 / 2));
-                    break;
                 case AF_ROT:
                     monsterattacks += colour(LIGHTRED, "(rot)");
                     break;
@@ -1082,8 +1073,6 @@ int main(int argc, char* argv[])
 #if TAG_MAJOR_VERSION == 34
                 case AF_DISEASE:
                 case AF_PLAGUE:
-                case AF_POISON_MEDIUM:
-                case AF_POISON_NASTY:
                 case AF_POISON_STR:
                 case AF_POISON_DEX:
                 case AF_POISON_INT:
@@ -1233,7 +1222,6 @@ int main(int argc, char* argv[])
         res(RED, DAMNATION);
         res(BLUE, COLD);
         res(CYAN, ELEC);
-        res(GREEN, POISON);
         res(BROWN, ACID);
         res(0, STEAM);
 

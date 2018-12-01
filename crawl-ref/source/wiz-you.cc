@@ -337,7 +337,6 @@ void wizard_heal(bool super_heal)
     // Clear most status ailments.
     you.disease = 0;
     you.duration[DUR_CONF]      = 0;
-    you.duration[DUR_POISONING] = 0;
     you.duration[DUR_EXHAUSTED] = 0;
     set_hp(you.hp_max);
     set_mp(you.max_magic_points);

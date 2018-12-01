@@ -2085,7 +2085,6 @@ void melee_attack::apply_staff_damage()
 #if TAG_MAJOR_VERSION == 34
     case STAFF_POWER:
     case STAFF_CONJURATION:
-	case STAFF_POISON:
     case STAFF_ENCHANTMENT:
     case STAFF_ENERGY:
 #endif
@@ -2233,37 +2232,7 @@ void melee_attack::announce_hit()
 // Returns if the target was actually poisoned by this attack
 bool melee_attack::mons_do_poison()
 {
-    int amount = 1;
-    bool force = false;
-
-    if (attk_flavour == AF_POISON_STRONG)
-    {
-        amount = random_range(attacker->get_hit_dice() * 11 / 3,
-                              attacker->get_hit_dice() * 13 / 2);
-    }
-    else
-    {
-        amount = random_range(attacker->get_hit_dice() * 2,
-                              attacker->get_hit_dice() * 4);
-    }
-
-    if (!defender->poison(attacker, amount, force))
-        return false;
-
-    if (needs_message)
-    {
-        mprf("%s poisons %s!",
-                atk_name(DESC_THE).c_str(),
-                defender_name(true).c_str());
-        if (force)
-        {
-            mprf("%s partially resist%s.",
-                defender_name(false).c_str(),
-                defender->is_player() ? "" : "s");
-        }
-    }
-
-    return true;
+    return false;
 }
 
 void melee_attack::mons_do_napalm()
@@ -2458,13 +2427,6 @@ void melee_attack::mons_apply_attack_flavour()
         }
         break;
 
-    case AF_POISON:
-    case AF_POISON_STRONG:
-    case AF_REACH_STING:
-        if (one_chance_in(3))
-            mons_do_poison();
-        break;
-
     case AF_ROT:
         if (one_chance_in(3))
             rot_defender(1);
@@ -2637,10 +2599,6 @@ void melee_attack::mons_apply_attack_flavour()
             break;
         }
 
-        // doesn't affect poison-immune enemies
-        if (defender->res_poison() >= 3)
-            break;
-
         if (attacker->type == MONS_HORNET || one_chance_in(3))
         {
             int dmg = random_range(attacker->get_hit_dice() * 3 / 2,
@@ -2653,12 +2611,12 @@ void melee_attack::mons_apply_attack_flavour()
         const bool strong_result = one_chance_in(paralyse_roll);
 
         if (strong_result
-            && !(defender->res_poison() > 0 || x_chance_in_y(2, 3)))
+            && !(x_chance_in_y(2, 3)))
         {
             defender->paralyse(attacker, roll_dice(1, 3));
         }
         else if (strong_result
-                 || !(defender->res_poison() > 0 || x_chance_in_y(2, 3)))
+                 || !(x_chance_in_y(2, 3)))
         {
             defender->slow_down(attacker, roll_dice(1, 3));
         }

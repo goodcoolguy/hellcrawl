@@ -444,9 +444,6 @@ static bool _blessing_balms(monster* mon)
     // fatigue.
     bool success = false;
 
-    if (mon->del_ench(ENCH_POISON, true))
-        success = true;
-
     if (mon->del_ench(ENCH_SICK, true))
         success = true;
 

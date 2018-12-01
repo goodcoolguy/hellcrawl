@@ -45,7 +45,6 @@
 /// Simple 1:1 mappings between monster enchantments & info flags.
 static map<enchant_type, monster_info_flags> trivial_ench_mb_mappings = {
     { ENCH_BERSERK,         MB_BERSERK },
-    { ENCH_POISON,          MB_POISONED },
     { ENCH_CORONA,          MB_GLOWING },
     { ENCH_SILVER_CORONA,   MB_GLOWING },
     { ENCH_SLOW,            MB_SLOWED },
@@ -90,7 +89,6 @@ static map<enchant_type, monster_info_flags> trivial_ench_mb_mappings = {
     { ENCH_TORNADO,         MB_TORNADO },
     { ENCH_TORNADO_COOLDOWN, MB_TORNADO_COOLDOWN },
     { ENCH_BARBS,           MB_BARBS },
-    { ENCH_POISON_VULN,     MB_POISON_VULN },
     { ENCH_ICEMAIL,         MB_ICEMAIL },
     { ENCH_AGILE,           MB_AGILE },
     { ENCH_FROZEN,          MB_FROZEN },
@@ -1382,9 +1380,6 @@ vector<string> monster_info::attributes() const
         v.emplace_back("slow");
     if (is(MB_STRONG) || is(MB_BERSERK))
         v.emplace_back("unusually strong");
-
-    if (is(MB_POISONED))
-        v.emplace_back("poisoned");
     if (is(MB_SICK))
         v.emplace_back("sick");
     if (is(MB_GLOWING))
@@ -1475,8 +1470,6 @@ vector<string> monster_info::attributes() const
         v.emplace_back("surrounded by restless winds");
     if (is(MB_BARBS))
         v.emplace_back("skewered by barbs");
-    if (is(MB_POISON_VULN))
-        v.emplace_back("more vulnerable to poison");
     if (is(MB_ICEMAIL))
         v.emplace_back("surrounded by an icy envelope");
     if (is(MB_AGILE))

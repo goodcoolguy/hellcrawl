@@ -1049,7 +1049,6 @@ static void _debug_acquirement_stats(FILE *ostat)
             "running",
             "fire resistance",
             "cold resistance",
-            "poison resistance",
             "see invis",
             "invisibility",
             "strength",
@@ -1104,7 +1103,6 @@ static void _debug_acquirement_stats(FILE *ostat)
                 "necromancy",
                 "summoning",
                 "translocation",
-                "poison magic",
                 "earth magic",
                 "air magic",
             };
@@ -1366,7 +1364,6 @@ static void _debug_rap_stats(FILE *ostat)
         "ARTP_FIRE",
         "ARTP_COLD",
         "ARTP_ELECTRICITY",
-        "ARTP_POISON",
         "ARTP_NEGATIVE_ENERGY",
         "ARTP_MAGIC_RESISTANCE",
         "ARTP_SEE_INVISIBLE",

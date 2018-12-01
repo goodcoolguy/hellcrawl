@@ -449,8 +449,6 @@ static bool is_boolean_resist(beam_type flavour)
     case BEAM_STICKY_FLAME:
     case BEAM_WATER:  // water asphyxiation damage,
                       // bypassed by being water inhabitant.
-    case BEAM_POISON:
-    case BEAM_POISON_ARROW:
         return true;
     default:
         return false;
@@ -474,9 +472,6 @@ static inline int get_resistible_fraction(beam_type flavour)
 
     case BEAM_LAVA:
         return 55;
-
-    case BEAM_POISON_ARROW:
-        return 70;
 
     default:
         return 100;
@@ -507,9 +502,6 @@ static int _beam_to_resist(const actor* defender, beam_type flavour)
             return defender->res_negative_energy();
         case BEAM_ACID:
             return defender->res_acid();
-        case BEAM_POISON:
-        case BEAM_POISON_ARROW:
-            return defender->res_poison();
         case BEAM_HOLY:
             return defender->res_holy_energy();
         default:
@@ -555,10 +547,7 @@ int resist_adjust_damage(const actor* defender, beam_type flavour, int rawdamage
                                      || flavour == BEAM_NEG
                                      || flavour == BEAM_PAIN
                                      || flavour == BEAM_MALIGN_OFFERING
-                                     || flavour == BEAM_HOLY
-                                     || flavour == BEAM_POISON
-                                     // just the resistible part
-                                     || flavour == BEAM_POISON_ARROW;
+                                     || flavour == BEAM_HOLY;
 
         if (immune_at_3_res && res >= 3 || res > 3)
             resistible = 0;

@@ -34,7 +34,6 @@ enum armour_flag
     // boolean resists
     ARMF_RES_MAGIC          = 1 << 17,
     ARMF_RES_ELEC           = 1 << 18,
-    ARMF_RES_POISON         = 1 << 19,
     ARMF_RES_CORR           = 1 << 20,
     ARMF_RES_STEAM          = 1 << 21,
     // vulnerabilities

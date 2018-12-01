@@ -409,12 +409,7 @@ void hints_new_turn()
         }
         else
         {
-            if (poison_is_lethal())
-            {
-                if (Hints.hints_events[HINT_NEED_POISON_HEALING])
-                    learned_something_new(HINT_NEED_POISON_HEALING);
-            }
-            else if (2*you.hp < you.hp_max)
+            if (2*you.hp < you.hp_max)
                 learned_something_new(HINT_RUN_AWAY);
 
             if (Hints.hints_type == HINT_MAGIC_CHAR && you.magic_points < 1)
@@ -598,8 +593,7 @@ static void _hints_healing_reminder()
     {
         if (Hints.hints_events[HINT_NEED_HEALING])
             learned_something_new(HINT_NEED_HEALING);
-        else if (you.num_turns - Hints.hints_last_healed >= 50
-                 && !you.duration[DUR_POISONING])
+        else if (you.num_turns - Hints.hints_last_healed >= 50)
         {
             if (Hints.hints_just_triggered)
                 return;
@@ -1019,12 +1013,10 @@ static bool _rare_hints_event(hints_event_type event)
     case HINT_KILLED_MONSTER:
     case HINT_NEW_LEVEL:
     case HINT_YOU_ENCHANTED:
-    case HINT_YOU_POISON:
     case HINT_YOU_ROTTING:
     case HINT_GLOWING:
     case HINT_CAUGHT_IN_NET:
     case HINT_YOU_SILENCE:
-    case HINT_NEED_POISON_HEALING:
     case HINT_INVISIBLE_DANGER:
     case HINT_NEED_HEALING_INVIS:
     case HINT_ABYSS:
@@ -1055,7 +1047,6 @@ static bool _tutorial_interesting(hints_event_type event)
     {
     case HINT_AUTOPICKUP_THROWN:
     case HINT_TARGET_NO_FOE:
-    case HINT_YOU_POISON:
     case HINT_NEW_ABILITY_ITEM:
     case HINT_ITEM_RESISTANCES:
     case HINT_FLYING:
@@ -1776,21 +1767,6 @@ void learned_something_new(hints_event_type seen_what, coord_def gc)
         cmd.push_back(CMD_DISPLAY_COMMANDS);
         break;
 
-    case HINT_YOU_POISON:
-        if (crawl_state.game_is_hints())
-        {
-            // Hack: reset hints_just_triggered, to force recursive calling of
-            // learned_something_new(). Don't do this for the tutorial!
-            Hints.hints_just_triggered = false;
-            learned_something_new(HINT_YOU_ENCHANTED);
-            Hints.hints_just_triggered = true;
-        }
-        text << "Poison will slowly reduce your health. You can try to wait it out "
-                "with <w>%</w>, but if you're low on health it's usually safer "
-                "to quaff a potion of curing.";
-        cmd.push_back(CMD_REST);
-        break;
-
     case HINT_YOU_ROTTING:
         // Hack: Reset hints_just_triggered, to force recursive calling of
         //       learned_something_new().
@@ -1962,14 +1938,6 @@ void learned_something_new(hints_event_type seen_what, coord_def gc)
 #endif
                 " to do so.";
         cmd.push_back(CMD_REST);
-        break;
-
-    case HINT_NEED_POISON_HEALING:
-        text << "You are lethally poisoned, so now would be a good time to "
-                "<w>%</w>uaff a potion of heal wounds or, better yet, a "
-                "potion of curing. If you have seen neither of these so far, "
-                "try unknown potions in your inventory. Good luck!";
-        cmd.push_back(CMD_QUAFF);
         break;
 
     case HINT_INVISIBLE_DANGER:

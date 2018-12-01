@@ -405,11 +405,7 @@ static bool _elyvilon_retribution()
         confuse_player(5 + random2(3));
         break;
 
-    case 2: // mostly flavour messages
-        MiscastEffect(&you, nullptr, GOD_MISCAST + god, SPTYP_POISON,
-                      one_chance_in(3) ? 1 : 0, _god_wrath_name(god));
-        break;
-
+    case 2:
     case 3:
     case 4: // Dull weapons in your inventory.
         _ely_dull_inventory_weapons();
@@ -1195,8 +1191,6 @@ static spell_type _vehumet_wrath_type()
                                  SPELL_BOLT_OF_COLD,
                                  SPELL_CORROSIVE_BOLT,
                                  SPELL_FREEZING_CLOUD,
-                                 SPELL_POISONOUS_CLOUD,
-                                 SPELL_POISON_ARROW,
                                  SPELL_IRON_SHOT,
                                  SPELL_CONJURE_BALL_LIGHTNING);
         case 7:

@@ -1476,7 +1476,6 @@ attack_flavour attack::random_chaos_attack_flavour()
         flavour = random_choose_weighted(10, AF_FIRE,
                                          10, AF_COLD,
                                          10, AF_ELEC,
-                                         10, AF_POISON,
                                          10, AF_CHAOTIC,
                                           5, AF_DRAIN_XP,
                                           5, AF_VAMPIRIC,
@@ -1497,10 +1496,6 @@ attack_flavour attack::random_chaos_attack_flavour()
             break;
         case AF_COLD:
             if (defender->is_icy())
-                susceptible = false;
-            break;
-        case AF_POISON:
-            if (defender->holiness() & MH_UNDEAD)
                 susceptible = false;
             break;
         case AF_VAMPIRIC:
@@ -1525,29 +1520,6 @@ attack_flavour attack::random_chaos_attack_flavour()
 
 bool attack::apply_poison_damage_brand()
 {
-    if (!one_chance_in(4))
-    {
-        int old_poison;
-
-        if (defender->is_player())
-            old_poison = you.duration[DUR_POISONING];
-        else
-        {
-            old_poison =
-                (defender->as_monster()->get_ench(ENCH_POISON)).degree;
-        }
-
-        defender->poison(attacker, 6 + random2(8) + random2(damage_done * 3 / 2));
-
-        if (defender->is_player()
-               && old_poison < you.duration[DUR_POISONING]
-            || !defender->is_player()
-               && old_poison <
-                  (defender->as_monster()->get_ench(ENCH_POISON)).degree)
-        {
-            return true;
-        }
-    }
     return false;
 }
 
@@ -1643,10 +1615,6 @@ bool attack::apply_damage_brand(const char *what)
             defender->expose_to_element(BEAM_ELECTRICITY, 2);
         }
 
-        break;
-
-    case SPWPN_VENOM:
-        obvious_effect = apply_poison_damage_brand();
         break;
 
     case SPWPN_DRAINING:
@@ -1802,11 +1770,6 @@ bool attack::apply_damage_brand(const char *what)
         if (miscast_level == 0)
             miscast_level = -1;
     }
-
-    // Preserve Nessos's brand stacking in a hacky way -- but to be fair, it
-    // was always a bit of a hack.
-    if (attacker->type == MONS_NESSOS && weapon && is_range_weapon(*weapon))
-        apply_poison_damage_brand();
 
     if (special_damage > 0)
         inflict_damage(special_damage, special_damage_flavour);

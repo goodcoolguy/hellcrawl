@@ -100,13 +100,6 @@ static const cloud_data clouds[] = {
       BEAM_COLD,                                // beam_effect
       NORMAL_CLOUD_DAM,                         // base, random damage
     },
-    // CLOUD_POISON,
-    { "poison gas", nullptr,                    // terse, verbose name
-      LIGHTGREEN,                               // colour
-      { TILE_CLOUD_POISON, CTVARY_DUR },        // tile
-      BEAM_POISON,                              // beam_effect
-      {0, 10},                                  // base, random damage
-    },
     // CLOUD_BLACK_SMOKE,
     { "black smoke",  nullptr,                  // terse, verbose name
       DARKGREY,                                 // colour
@@ -915,9 +908,7 @@ bool actor_cloud_immune(const actor *act, const cloud_struct &cloud)
         return you.has_mutation(MUT_FREEZING_CLOUD_IMMUNITY)
                || player_equip_unrand(UNRAND_FROSTBITE);
     case CLOUD_MEPHITIC:
-        return act->res_poison() > 0 || act->is_unbreathing();
-    case CLOUD_POISON:
-        return act->res_poison() > 0;
+        return act->is_unbreathing();
     case CLOUD_STEAM:
         return act->res_steam() > 0;
     case CLOUD_MIASMA:
@@ -1073,17 +1064,6 @@ static bool _actor_apply_cloud_side_effects(actor *act,
         }
         break;
     }
-
-    case CLOUD_POISON:
-        if (player)
-        {
-            const actor* agent = cloud.agent();
-            poison_player(5 + roll_dice(2, 8), agent ? agent->name(DESC_A) : "",
-                          cloud.cloud_name());
-        }
-        else
-            poison_monster(mons, cloud.agent());
-        return true;
 
     case CLOUD_MIASMA:
         if (player)

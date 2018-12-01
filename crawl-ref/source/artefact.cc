@@ -341,7 +341,6 @@ static void _populate_armour_intrinsic_artps(const armour_type arm,
     proprt[ARTP_FIRE] += armour_type_prop(arm, ARMF_RES_FIRE);
     proprt[ARTP_COLD] += armour_type_prop(arm, ARMF_RES_COLD);
     proprt[ARTP_NEGATIVE_ENERGY] += armour_type_prop(arm, ARMF_RES_NEG);
-    proprt[ARTP_POISON] += armour_type_prop(arm, ARMF_RES_POISON);
     proprt[ARTP_ELECTRICITY] += armour_type_prop(arm, ARMF_RES_ELEC);
     proprt[ARTP_RCORR] += armour_type_prop(arm, ARMF_RES_CORR);
     proprt[ARTP_MAGIC_RESISTANCE] += armour_type_prop(arm, ARMF_RES_MAGIC);
@@ -362,7 +361,6 @@ static map<jewellery_type, vector<jewellery_fake_artp>> jewellery_artps = {
     { AMU_REGENERATION, { { ARTP_REGENERATION, 1 } } },
     { AMU_REFLECTION, { { ARTP_SHIELDING, 0 } } },
 
-    { RING_POISON_RESISTANCE, { { ARTP_POISON, 1 } } },
     { RING_LIFE_PROTECTION, { { ARTP_NEGATIVE_ENERGY, 1 } } },
     { RING_PROTECTION_FROM_MAGIC, { { ARTP_MAGIC_RESISTANCE, 1 } } },
 
@@ -517,9 +515,6 @@ static bool _artp_can_go_on_item(artefact_prop_type prop, const item_def &item,
     {
         case ARTP_SLAYING:
             return item_class != OBJ_WEAPONS; // they already have slaying!
-        case ARTP_POISON:
-            return !item.is_type(OBJ_ARMOUR, ARM_NAGA_BARDING);
-            // naga already have rPois
         case ARTP_SEE_INVISIBLE:
             return false;
         case ARTP_CORRODE:
@@ -616,8 +611,6 @@ static const artefact_prop_data artp_data[] =
         _gen_good_res_artp, _gen_bad_res_artp, 2, 4 },
     { "rElec", ARTP_VAL_BOOL, 55,   // ARTP_ELECTRICITY,
         []() { return 1; }, nullptr, 0, 0  },
-    { "rPois", ARTP_VAL_BOOL, 55,   // ARTP_POISON,
-        []() { return 1; }, nullptr, 0, 0 },
     { "rN", ARTP_VAL_ANY, 55,       // ARTP_NEGATIVE_ENERGY,
         _gen_good_res_artp, nullptr, 2, 4 },
     { "MR", ARTP_VAL_ANY, 50,       // ARTP_MAGIC_RESISTANCE,
@@ -1382,10 +1375,6 @@ static bool _randart_is_redundant(const item_def &item,
 
     case RING_FIRE:
         provides = ARTP_FIRE;
-        break;
-
-    case RING_POISON_RESISTANCE:
-        provides = ARTP_POISON;
         break;
 
     case RING_ICE:

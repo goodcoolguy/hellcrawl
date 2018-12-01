@@ -73,27 +73,6 @@ public:
 
     bool can_quaff(string *reason = nullptr) const override
     {
-        // cure status effects
-        if (you.duration[DUR_POISONING]
-            || you.disease
-            || player_rotted())
-        {
-            return true;
-        }
-        // heal
-        if (you.duration[DUR_DEATHS_DOOR])
-        {
-            if (reason)
-                *reason = "You can't heal while in Death's door.";
-            return false;
-        }
-        if (!you.can_device_heal()
-            || you.hp == you.hp_max && player_rotted() == 0)
-        {
-            if (reason)
-                *reason = "You have no ailments to cure.";
-            return false;
-        }
         return true;
     }
 
@@ -128,7 +107,6 @@ public:
             mpr("You feel queasy.");
         else if (you.can_device_heal()
                  || !is_device
-                 || you.duration[DUR_POISONING]
                  || you.duration[DUR_CONF]
                  || unrotted)
         {
@@ -138,10 +116,6 @@ public:
         }
         else
             mpr("That felt strangely inert.");
-        // need to redraw from yellow to green even if no hp was gained
-        if (you.duration[DUR_POISONING])
-            you.redraw_hit_points = true;
-        you.duration[DUR_POISONING] = 0;
         you.disease = 0;
         return true;
     }
@@ -406,34 +380,6 @@ public:
     }
 };
 
-#if TAG_MAJOR_VERSION == 34
-class PotionPoison : public PotionEffect
-{
-private:
-    PotionPoison() : PotionEffect(POT_POISON) { }
-    DISALLOW_COPY_AND_ASSIGN(PotionPoison);
-public:
-    static const PotionPoison &instance()
-    {
-        static PotionPoison inst; return inst;
-    }
-
-    bool effect(bool=true, int=40, bool=true) const override
-    {
-        mprf(MSGCH_WARN, "That liquid tasted very nasty...");
-        return poison_player(10 + random2avg(15, 2), "", "a potion of poison");
-    }
-
-    bool quaff(bool was_known) const override
-    {
-        if (player_res_poison() >= 1)
-            mpr("You feel slightly nauseous.");
-        else if (effect(was_known))
-            xom_is_stimulated(100 / _xom_factor(was_known));
-        return true;
-    }
-};
-#endif
 
 class PotionCancellation : public PotionEffect
 {
@@ -448,9 +394,6 @@ public:
 
     bool effect(bool=true, int=40, bool=true) const override
     {
-        if (you.duration[DUR_POISONING])
-            you.redraw_hit_points = true;
-        you.duration[DUR_POISONING] = 0;
         you.disease = 0;
         debuff_player();
         mpr("You feel magically purged.");
@@ -737,7 +680,7 @@ public:
             const cloud_type cloud = cloud_type_at(you.pos());
             if (is_damaging_cloud(cloud, false)
                 // Tree form is immune to these two.
-                && cloud != CLOUD_MEPHITIC && cloud != CLOUD_POISON
+                && cloud != CLOUD_MEPHITIC
                 && !yesno(make_stringf("Really become a tree while standing in "
                                        "a cloud of %s?",
                                        cloud_type_name(cloud).c_str()).c_str(),
@@ -1261,7 +1204,6 @@ static const PotionEffect* potion_effects[] =
 #endif
     &PotionFlight::instance(),
 #if TAG_MAJOR_VERSION == 34
-    &PotionPoison::instance(),
     &PotionSlowing::instance(),
 #endif
     &PotionCancellation::instance(),
@@ -1279,7 +1221,6 @@ static const PotionEffect* potion_effects[] =
     &PotionMagic::instance(),
 #if TAG_MAJOR_VERSION == 34
     &PotionRestoreAbilities::instance(),
-    &PotionPoison::instance(),
 #endif
     &PotionBerserk::instance(),
 #if TAG_MAJOR_VERSION == 34

@@ -23,13 +23,12 @@ enum spschool_flag_type
   SPTYP_NECROMANCY     = 1<<6,
   SPTYP_SUMMONING      = 1<<7,
   SPTYP_TRANSLOCATION  = 1<<8,
-  SPTYP_POISON         = 1<<9,
-  SPTYP_EARTH          = 1<<10,
-  SPTYP_AIR            = 1<<11,
+  SPTYP_EARTH          = 1<<9,
+  SPTYP_AIR            = 1<<10,
   SPTYP_LAST_SCHOOL    = SPTYP_AIR,
   SPTYP_RANDOM         = SPTYP_LAST_SCHOOL << 1,
 };
-DEF_BITFIELD(spschools_type, spschool_flag_type, 11);
+DEF_BITFIELD(spschools_type, spschool_flag_type, 10);
 const int SPTYP_LAST_EXPONENT = spschools_type::last_exponent;
 COMPILE_CHECK(spschools_type::exponent(SPTYP_LAST_EXPONENT)
               == SPTYP_LAST_SCHOOL);

@@ -657,9 +657,6 @@ string describe_mutations(bool center_title)
     if (species_is_draconian(you.species))
         result += "Your body does not fit into most forms of armour.\n";
 
-    if (player_res_poison(false, false, false) == 3)
-        result += "You are immune to poison.\n";
-
     result += "</lightblue>";
 
     // First add (non-removable) inborn abilities and demon powers.
@@ -1201,10 +1198,6 @@ bool physiology_mutation_conflict(mutation_type mutat)
         return true;
     }
 
-    // Only nagas can get upgraded poison spit.
-    if (you.species != SP_NAGA && mutat == MUT_SPIT_POISON)
-        return true;
-
     // Only Draconians (and gargoyles) can get wings.
     if (!species_is_draconian(you.species) && you.species != SP_GARGOYLE
         && mutat == MUT_BIG_WINGS)
@@ -1250,7 +1243,7 @@ bool physiology_mutation_conflict(mutation_type mutat)
     }
 
     // Already immune.
-    if (you.species == SP_GARGOYLE && mutat == MUT_POISON_RESISTANCE)
+    if (you.species == SP_GARGOYLE)
         return true;
 
     equipment_type eq_type = EQ_NONE;
@@ -1566,14 +1559,6 @@ bool mutate(mutation_type which_mutation, const string &reason, bool failMsg,
             }
             break;
 
-        case MUT_SPIT_POISON:
-            // Breathe poison replaces spit poison (so it takes the slot).
-            if (cur_base_level >= 2)
-                for (int i = 0; i < 52; ++i)
-                    if (you.ability_letter_table[i] == ABIL_SPIT_POISON)
-                        you.ability_letter_table[i] = ABIL_BREATHE_POISON;
-            break;
-
         default:
             break;
         }
@@ -1740,14 +1725,6 @@ static bool _delete_single_mutation_level(mutation_type mutat,
     case MUT_WEAK:   case MUT_CLUMSY: case MUT_DOPEY:
         mprf(MSGCH_MUTATION, "You feel %s.", _stat_mut_desc(mutat, false));
         lose_msg = false;
-        break;
-
-    case MUT_SPIT_POISON:
-        // Breathe poison replaces spit poison (so it takes the slot).
-        if (you.mutation[mutat] < 2)
-            for (int i = 0; i < 52; ++i)
-                if (you.ability_letter_table[i] == ABIL_SPIT_POISON)
-                    you.ability_letter_table[i] = ABIL_BREATHE_POISON;
         break;
 
     case MUT_NIGHTSTALKER:

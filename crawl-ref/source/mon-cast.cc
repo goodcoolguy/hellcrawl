@@ -474,9 +474,7 @@ static const map<spell_type, mons_spell_logic> spell_to_logic = {
         MSPELL_LOGIC_NONE, 10,
     } },
     { SPELL_DRAIN_MAGIC, _hex_logic(SPELL_DRAIN_MAGIC, nullptr, 6) },
-    { SPELL_VIRULENCE, _hex_logic(SPELL_VIRULENCE, [](const monster &caster) {
-        return caster.get_foe()->res_poison(false) < 3;
-    }, 6) },
+
     { SPELL_PHASE_SHIFT, {
         [](const monster &caster) { return !caster.has_ench(ENCH_PHASE_SHIFT); },
         _cast_phase_shift,
@@ -1076,7 +1074,6 @@ static int _mons_power_hd_factor(spell_type spell, bool random)
         case SPELL_MONSTROUS_MENAGERIE:
         case SPELL_BATTLESPHERE:
         case SPELL_SPECTRAL_WEAPON:
-        case SPELL_IGNITE_POISON:
         case SPELL_IOOD:
             return 6;
 
@@ -1282,7 +1279,6 @@ bolt mons_spell_beam(const monster* mons, spell_type spell_cast, int power,
     case SPELL_THROW_FROST:
     case SPELL_FLAME_TONGUE:
     case SPELL_VENOM_BOLT:
-    case SPELL_POISON_ARROW:
     case SPELL_BOLT_OF_MAGMA:
     case SPELL_BOLT_OF_FIRE:
     case SPELL_BOLT_OF_COLD:
@@ -1361,15 +1357,6 @@ bolt mons_spell_beam(const monster* mons, spell_type spell_cast, int power,
         beam.pierce   = true;
         break;
 
-    case SPELL_POISONOUS_CLOUD:
-        beam.name     = "blast of poison";
-        beam.damage   = dice_def(3, 3 + power / 25);
-        beam.colour   = LIGHTGREEN;
-        beam.flavour  = BEAM_POISON;
-        beam.hit      = 18 + power / 25;
-        beam.pierce   = true;
-        break;
-
     case SPELL_ENERGY_BOLT:        // eye of devastation
         beam.colour     = YELLOW;
         beam.name       = "bolt of energy";
@@ -1378,14 +1365,6 @@ bolt mons_spell_beam(const monster* mons, spell_type spell_cast, int power,
         beam.hit        = 15 + power / 30;
         beam.flavour    = BEAM_DEVASTATION; // DEVASTATION is BEAM_MMISSILE
         beam.pierce     = true;             // (except bloodier)
-        break;
-
-    case SPELL_SPIT_POISON:
-        beam.colour   = GREEN;
-        beam.name     = "splash of poison";
-        beam.damage   = dice_def(1, 4 + power / 10);
-        beam.hit      = 16 + power / 20;
-        beam.flavour  = BEAM_POISON;
         break;
 
     case SPELL_SPIT_ACID:
@@ -1860,7 +1839,6 @@ bool setup_mons_cast(const monster* mons, bolt &pbolt, spell_type spell_cast,
     case SPELL_SUMMON_VERMIN:
     case SPELL_TORNADO:
     case SPELL_DISCHARGE:
-    case SPELL_IGNITE_POISON:
 #if TAG_MAJOR_VERSION == 34
     case SPELL_EPHEMERAL_INFUSION:
 #endif
@@ -6727,10 +6705,6 @@ void mons_cast(monster* mons, bolt pbolt, spell_type spell_cast,
         return;
     }
 
-    case SPELL_IGNITE_POISON:
-        cast_ignite_poison(mons, splpow, false);
-        return;
-
     case SPELL_BLACK_MARK:
         _cast_black_mark(mons);
         return;
@@ -8150,8 +8124,6 @@ static bool _ms_waste_of_time(monster* mon, mon_spell_slot slot)
     case SPELL_OLGREBS_TOXIC_RADIANCE:
         return mon->has_ench(ENCH_TOXIC_RADIANCE)
                || cast_toxic_radiance(mon, 100, false, true) != SPRET_SUCCESS;
-    case SPELL_IGNITE_POISON:
-        return cast_ignite_poison(mon, 0, false, true) != SPRET_SUCCESS;
 
     case SPELL_GLACIATE:
         return !foe
@@ -8236,7 +8208,6 @@ static bool _ms_waste_of_time(monster* mon, mon_spell_slot slot)
         return true;
 
     case SPELL_CORPSE_ROT:
-    case SPELL_POISONOUS_CLOUD:
     case SPELL_FREEZING_CLOUD:
     case SPELL_MEPHITIC_CLOUD:
     case SPELL_NOXIOUS_CLOUD:
@@ -8259,7 +8230,6 @@ static bool _ms_waste_of_time(monster* mon, mon_spell_slot slot)
     case SPELL_ANIMATE_DEAD:
     case SPELL_SIMULACRUM:
     case SPELL_CHANT_FIRE_STORM:
-    case SPELL_IGNITE_POISON_SINGLE:
     case SPELL_CONDENSATION_SHIELD:
     case SPELL_STONESKIN:
     case SPELL_HUNTING_CRY:

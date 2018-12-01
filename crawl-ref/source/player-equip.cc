@@ -442,9 +442,6 @@ static void _equip_weapon_effect(item_def& item, bool showMsgs, bool unmeld)
                         mpr("You see sparks fly.");
                     break;
 
-                case SPWPN_VENOM:
-                    mprf("%s begins to drip with poison!", item_name.c_str());
-                    break;
 
                 case SPWPN_PROTECTION:
                     mpr("You feel protected!");
@@ -607,11 +604,6 @@ static void _unequip_weapon_effect(item_def& real_item, bool showMsgs,
                     mprf("%s stops crackling.", msg.c_str());
                 break;
 
-            case SPWPN_VENOM:
-                if (showMsgs)
-                    mprf("%s stops dripping with poison.", msg.c_str());
-                break;
-
             case SPWPN_PROTECTION:
                 if (showMsgs)
                     mpr("You feel less protected.");
@@ -722,11 +714,6 @@ static void _equip_armour_effect(item_def& arm, bool unmeld,
 
         case SPARM_COLD_RESISTANCE:
             mpr("You feel resistant to cold.");
-            break;
-
-        case SPARM_POISON_RESISTANCE:
-            if (player_res_poison(false, false, false) < 3)
-                mpr("You feel resistant to poison.");
             break;
 
         case SPARM_SEE_INVISIBLE:
@@ -885,11 +872,6 @@ static void _unequip_armour_effect(item_def& item, bool meld,
 
     case SPARM_COLD_RESISTANCE:
         mpr("You feel less resistant to cold.");
-        break;
-
-    case SPARM_POISON_RESISTANCE:
-        if (player_res_poison() <= 0)
-            mpr("You no longer feel resistant to poison.");
         break;
 
     case SPARM_SEE_INVISIBLE:
@@ -1158,7 +1140,6 @@ static void _unequip_jewellery_effect(item_def &item, bool mesg, bool meld,
     case RING_FIRE:
     case RING_ICE:
     case RING_LIFE_PROTECTION:
-    case RING_POISON_RESISTANCE:
     case RING_PROTECTION_FROM_MAGIC:
     case RING_SLAYING:
     case RING_WIZARDRY:

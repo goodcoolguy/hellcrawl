@@ -39,7 +39,6 @@ static spell_type search_order_aoe_conj[] =
     SPELL_CHAIN_LIGHTNING,
     SPELL_LRD,
     SPELL_FREEZING_CLOUD,
-    SPELL_POISONOUS_CLOUD,
     SPELL_METAL_SPLINTERS,
     SPELL_ENERGY_BOLT,
     SPELL_ORB_OF_ELECTRICITY,
@@ -58,7 +57,6 @@ static spell_type search_order_conj[] =
     SPELL_BOLT_OF_FIRE,
     SPELL_BOLT_OF_COLD,
     SPELL_IRON_SHOT,
-    SPELL_POISON_ARROW,
     SPELL_BOLT_OF_DRAINING,
     SPELL_LIGHTNING_BOLT,
 };
@@ -308,7 +306,6 @@ void ghost_demon::init_player_ghost(bool actual_ghost)
     set_resist(resists, MR_RES_COLD, player_res_cold());
     set_resist(resists, MR_RES_ELEC, player_res_electricity());
     // clones might lack innate rPois, copy it.  pghosts don't care.
-    set_resist(resists, MR_RES_POISON, player_res_poison());
     set_resist(resists, MR_RES_NEG, you.res_negative_energy());
     set_resist(resists, MR_RES_ACID, player_res_acid());
     // multi-level for players, boolean as an innate monster resistance
@@ -424,10 +421,6 @@ static attack_flavour _very_ugly_thing_flavour_upgrade(attack_flavour u_att_flav
         u_att_flav = AF_STICKY_FLAME;
         break;
 
-    case AF_POISON:
-        u_att_flav = AF_POISON_STRONG;
-        break;
-
     default:
         break;
     }
@@ -447,10 +440,6 @@ static attack_flavour _ugly_thing_colour_to_flavour(colour_t u_colour)
 
     case BROWN:
         u_att_flav = AF_ACID;
-        break;
-
-    case GREEN:
-        u_att_flav = AF_POISON;
         break;
 
     case CYAN:
@@ -550,10 +539,6 @@ static resists_t _ugly_thing_resists(bool very_ugly, attack_flavour u_att_flav)
 
     case AF_ACID:
         return MR_RES_ACID;
-
-    case AF_POISON:
-    case AF_POISON_STRONG:
-        return MR_RES_POISON * (very_ugly ? 2 : 1);
 
     case AF_ELEC:
         return MR_RES_ELEC * (very_ugly ? 2 : 1);

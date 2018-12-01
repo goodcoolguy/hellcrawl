@@ -317,7 +317,6 @@ static bool _missile_brand_is_prefix(special_missile_type brand)
 {
     switch (brand)
     {
-    case SPMSL_POISONED:
     case SPMSL_CURARE:
     case SPMSL_EXPLODING:
     case SPMSL_STEEL:
@@ -345,8 +344,6 @@ const char* missile_brand_name(const item_def &item, mbn_type t)
     case SPMSL_FROST:
         return "frost";
 #endif
-    case SPMSL_POISONED:
-        return t == MBN_NAME ? "poisoned" : "poison";
     case SPMSL_CURARE:
         return t == MBN_NAME ? "curare-tipped" : "curare";
     case SPMSL_EXPLODING:
@@ -529,7 +526,6 @@ const char* armour_ego_name(const item_def& item, bool terse)
                                       return "running";
         case SPARM_FIRE_RESISTANCE:   return "fire resistance";
         case SPARM_COLD_RESISTANCE:   return "cold resistance";
-        case SPARM_POISON_RESISTANCE: return "poison resistance";
 #if TAG_MAJOR_VERSION == 34
         case SPARM_SEE_INVISIBLE:     return "see invisible";
         case SPARM_INVISIBILITY:      return "invisibility";
@@ -565,7 +561,6 @@ const char* armour_ego_name(const item_def& item, bool terse)
         case SPARM_RUNNING:           return "run";
         case SPARM_FIRE_RESISTANCE:   return "rF+";
         case SPARM_COLD_RESISTANCE:   return "rC+";
-        case SPARM_POISON_RESISTANCE: return "rPois";
         case SPARM_SEE_INVISIBLE:     return "SInv";
 #if TAG_MAJOR_VERSION == 34
         case SPARM_INVISIBILITY:      return "obsolete";
@@ -653,14 +648,10 @@ const char* potion_type_name(int potiontype)
     case POT_GAIN_STRENGTH:     return "gain strength";
     case POT_GAIN_DEXTERITY:    return "gain dexterity";
     case POT_GAIN_INTELLIGENCE: return "gain intelligence";
-    case POT_STRONG_POISON:     return "strong poison";
     case POT_PORRIDGE:          return "porridge";
     case POT_SLOWING:           return "slowing";
 #endif
     case POT_FLIGHT:            return "flight";
-#if TAG_MAJOR_VERSION == 34
-    case POT_POISON:            return "poison";
-#endif
     case POT_CANCELLATION:      return "cancellation";
     case POT_AMBROSIA:          return "ambrosia";
     case POT_INVISIBILITY:      return "invisibility";
@@ -742,9 +733,6 @@ const char* jewellery_effect_name(int jeweltype, bool terse)
         case RING_PROTECTION:            return "protection";
 #if TAG_MAJOR_VERSION == 34
         case RING_PROTECTION_FROM_FIRE:  return "protection from fire";
-#endif
-        case RING_POISON_RESISTANCE:     return "poison resistance";
-#if TAG_MAJOR_VERSION == 34
         case RING_PROTECTION_FROM_COLD:  return "protection from cold";
 #endif
         case RING_STRENGTH:              return "strength";
@@ -807,9 +795,6 @@ const char* jewellery_effect_name(int jeweltype, bool terse)
         case RING_PROTECTION:            return "AC";
 #if TAG_MAJOR_VERSION == 34
         case RING_PROTECTION_FROM_FIRE:  return "rF+";
-#endif
-        case RING_POISON_RESISTANCE:     return "rPois";
-#if TAG_MAJOR_VERSION == 34
         case RING_PROTECTION_FROM_COLD:  return "rC+";
 #endif
         case RING_STRENGTH:              return "Str";
@@ -1130,7 +1115,6 @@ static const char* staff_type_name(int stafftype)
     case STAFF_FIRE:        return "fire";
     case STAFF_COLD:        return "cold";
 #if TAG_MAJOR_VERSION == 34
-    case STAFF_POISON:      return "poison";
     case STAFF_ENERGY:      return "energy";
 #endif
     case STAFF_DEATH:       return "death";
@@ -3078,11 +3062,6 @@ bool is_bad_item(const item_def &item, bool temp)
             return true;
         case POT_DECAY:
             return you.res_rotting(temp) <= 0;
-        case POT_STRONG_POISON:
-        case POT_POISON:
-            // Poison is not that bad if you're poison resistant.
-            return player_res_poison(false) <= 0
-                   || !temp && you.species == SP_VAMPIRE;
 #endif
         default:
             return false;
@@ -3377,10 +3356,6 @@ bool is_useless_item(const item_def &item, bool temp)
             return you.species != SP_VAMPIRE;
         case POT_DECAY:
             return you.res_rotting(temp) > 0;
-        case POT_STRONG_POISON:
-        case POT_POISON:
-            // If you're poison resistant, poison is only useless.
-            return !is_bad_item(item, temp);
         case POT_SLOWING:
 #endif
         case POT_AMBROSIA:
@@ -3446,10 +3421,6 @@ bool is_useless_item(const item_def &item, bool temp)
         case RING_SEE_INVISIBLE:
             return you.innate_sinv();
 #endif
-
-        case RING_POISON_RESISTANCE:
-            return player_res_poison(false, temp, false) > 0
-                   && (temp || you.species != SP_VAMPIRE);
 
         case RING_WIZARDRY:
             return you_worship(GOD_TROG);

@@ -800,9 +800,6 @@ void monster::equip_weapon(item_def &item, bool msg)
         case SPWPN_ELECTROCUTION:
             mprf(MSGCH_SOUND, "You hear the crackle of electricity.");
             break;
-        case SPWPN_VENOM:
-            mpr("It begins to drip with poison!");
-            break;
         case SPWPN_DRAINING:
             mpr("You sense an unholy aura.");
             break;
@@ -942,10 +939,6 @@ void monster::unequip_weapon(item_def &item, bool msg)
 
         case SPWPN_ELECTROCUTION:
             mpr("It stops crackling.");
-            break;
-
-        case SPWPN_VENOM:
-            mpr("It stops dripping with poison.");
             break;
 
         case SPWPN_DISTORTION:
@@ -1585,11 +1578,6 @@ static int _get_monster_armour_value(const monster *mon,
     if (get_armour_res_magic(item, true) > 0)
         value++;
 
-    // Poison becomes much less valuable if the monster is
-    // intrinsically resistant.
-    if (get_mons_resist(*mon, MR_RES_POISON) <= 0)
-        value += get_armour_res_poison(item, true);
-
     // Same for life protection.
     if (mon->holiness() & MH_NATURAL)
         value += get_armour_life_protection(item, true);
@@ -1744,11 +1732,6 @@ static int _get_monster_jewellery_value(const monster *mon,
     // Give a simple bonus, no matter the size of the MR bonus.
     if (get_jewellery_res_magic(item, true) > 0)
         value++;
-
-    // Poison becomes much less valuable if the monster is
-    // intrinsically resistant.
-    if (get_mons_resist(*mon, MR_RES_POISON) <= 0)
-        value += get_jewellery_res_poison(item, true);
 
     // Same for life protection.
     if (mon->holiness() & MH_NATURAL)
@@ -3750,40 +3733,7 @@ int monster::res_water_drowning() const
 
 int monster::res_poison(bool temp) const
 {
-    int u = get_mons_resist(*this, MR_RES_POISON);
-
-    if (temp && has_ench(ENCH_POISON_VULN))
-        u--;
-
-    if (u > 0)
-        return u;
-
-    if (mons_itemuse(*this) >= MONUSE_STARTING_EQUIPMENT)
-    {
-        u += scan_artefacts(ARTP_POISON);
-
-        const int armour    = inv[MSLOT_ARMOUR];
-        const int shld      = inv[MSLOT_SHIELD];
-        const int jewellery = inv[MSLOT_JEWELLERY];
-
-        if (armour != NON_ITEM && mitm[armour].base_type == OBJ_ARMOUR)
-            u += get_armour_res_poison(mitm[armour], false);
-
-        if (shld != NON_ITEM && mitm[shld].base_type == OBJ_ARMOUR)
-            u += get_armour_res_poison(mitm[shld], false);
-
-        if (jewellery != NON_ITEM && mitm[jewellery].base_type == OBJ_JEWELLERY)
-            u += get_jewellery_res_poison(mitm[jewellery], false);
-    }
-
-    if (has_ench(ENCH_RESISTANCE))
-        u++;
-
-    // Monsters can have multiple innate levels of poison resistance, but
-    // like players, equipment doesn't stack.
-    if (u > 0)
-        return 1;
-    return u;
+    return 0;
 }
 
 bool monster::res_sticky_flame() const
@@ -4053,13 +4003,7 @@ monster_type monster::mons_species(bool zombie_base) const
 
 bool monster::poison(actor *agent, int amount, bool force)
 {
-    if (amount <= 0)
-        return false;
-
-    // Scale poison down for monsters.
-    amount = 1 + amount / 7;
-
-    return poison_monster(this, agent, amount, force);
+    return false;
 }
 
 int monster::skill(skill_type sk, int scale, bool real, bool drained) const
@@ -5683,7 +5627,6 @@ bool monster::should_drink_potion(potion_type ptype) const
 #if TAG_MAJOR_VERSION == 34
     case POT_CURING:
         return hit_points <= max_hit_points / 2
-               || has_ench(ENCH_POISON)
                || has_ench(ENCH_SICK)
                || has_ench(ENCH_CONFUSION);
 #endif
@@ -5736,7 +5679,7 @@ bool monster::drink_potion_effect(potion_type pot_eff, bool card)
 
         static const enchant_type cured_enchants[] =
         {
-            ENCH_POISON, ENCH_SICK, ENCH_CONFUSION
+            ENCH_SICK, ENCH_CONFUSION
         };
 
         for (enchant_type cured : cured_enchants)

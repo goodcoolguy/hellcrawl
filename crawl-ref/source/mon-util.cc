@@ -314,10 +314,6 @@ int get_mons_class_ev(monster_type mc)
 
 static resists_t _apply_holiness_resists(resists_t resists, mon_holy_type mh)
 {
-    // Undead and non-living beings get full poison resistance.
-    if (mh & (MH_UNDEAD | MH_NONLIVING))
-        resists = (resists & ~(MR_RES_POISON * 7)) | (MR_RES_POISON * 3);
-
     // Everything but natural creatures have full rNeg. Set here for the
     // benefit of the monster_info constructor. If you change this, also
     // change monster::res_negative_energy.
@@ -337,7 +333,6 @@ static resists_t _apply_holiness_resists(resists_t resists, mon_holy_type mh)
 static resists_t _beast_facet_resists(beast_facet facet)
 {
     static const map<beast_facet, resists_t> resists = {
-        { BF_STING, MR_RES_POISON },
         { BF_FIRE,  MR_RES_FIRE },
         { BF_SHOCK, MR_RES_ELEC },
         { BF_OX,    MR_RES_COLD },
@@ -395,11 +390,6 @@ int get_mons_resist(const monster& mon, mon_resist_flags res)
 // Returns true if the monster successfully resists this attempt to poison it.
 const bool monster_resists_this_poison(const monster& mons, bool force)
 {
-    const int res = mons.res_poison();
-    if (res >= 3)
-        return true;
-    if (!force && res >= 1 && x_chance_in_y(2, 3))
-        return true;
     return false;
 }
 
@@ -1973,7 +1963,7 @@ mon_attack_def mons_attack_spec(const monster& m, int attk_number,
         if (attk.flavour == AF_KLOWN)
         {
             attack_flavour flavours[] =
-                {AF_POISON_STRONG, AF_PAIN, AF_DRAIN_SPEED, AF_FIRE,
+                {AF_PAIN, AF_DRAIN_SPEED, AF_FIRE,
                  AF_COLD, AF_ELEC, AF_ANTIMAGIC, AF_ACID};
 
             attk.flavour = RANDOM_ELEMENT(flavours);
@@ -3731,9 +3721,6 @@ bool mons_has_incapacitating_ranged_attack(const monster& mon, const actor& foe)
 
 	if (missile && missile->sub_type == MI_DART_CURARE)
     {
-        // Not actually incapacitating, but marked as such so that
-        // assassins will prefer using it while ammo remains
-        if (foe.res_poison() <= 0)
             return true;
     }
 
@@ -4824,8 +4811,6 @@ void debug_mondata()
             MR = md->HD * -MR * 4 / 3;
         if (md->resist_magic > 200 && md->resist_magic != MAG_IMMUNE)
             fails += make_stringf("%s has MR %d > 200\n", name, MR);
-        if (get_resist(md->resists, MR_RES_POISON) == 2)
-            fails += make_stringf("%s has rPois++\n", name);
         if (get_resist(md->resists, MR_RES_ELEC) == 2)
             fails += make_stringf("%s has rElec++\n", name);
 

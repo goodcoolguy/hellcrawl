@@ -99,7 +99,6 @@ LUARET2(you_hp, number, you.hp, you.hp_max)
 LUARET2(you_mp, number, you.magic_points, you.max_magic_points)
 LUARET1(you_base_mp, number, get_real_mp(false))
 LUARET1(you_rot, number, player_rotted())
-LUARET1(you_poison_survival, number, poison_survival())
 LUARET1(you_corrosion, number, you.props["corrosion_amount"].get_int())
 LUARET1(you_xl, number, you.experience_level)
 LUARET1(you_xl_progress, number, get_exp_progress())
@@ -112,7 +111,6 @@ LUARET1(you_can_train_skill, boolean,
                             : false)
 LUARET1(you_best_skill, string,
         skill_name(best_skill(SK_FIRST_SKILL, SK_LAST_SKILL)))
-LUARET1(you_res_poison, number, player_res_poison(false))
 LUARET1(you_res_fire, number, player_res_fire(false))
 LUARET1(you_res_cold, number, player_res_cold(false))
 LUARET1(you_res_draining, number, player_prot_life(false))
@@ -139,7 +137,6 @@ LUARET1(you_exhausted, boolean, you.duration[DUR_EXHAUSTED])
 LUARET1(you_teleporting, boolean, you.duration[DUR_TELEPORT])
 LUARET1(you_anchored, boolean, you.duration[DUR_DIMENSION_ANCHOR])
 LUARET1(you_rooted, boolean, you.duration[DUR_GRASPING_ROOTS])
-LUARET1(you_poisoned, boolean, you.duration[DUR_POISONING])
 LUARET1(you_invisible, boolean, you.duration[DUR_INVIS] 
                                    || you.attribute[ATTR_PERMAINVIS])
 LUARET1(you_mesmerised, boolean, you.duration[DUR_MESMERISED])
@@ -610,7 +607,6 @@ static const struct luaL_reg you_clib[] =
     { "set_training_target", you_set_training_target },
     { "xl"          , you_xl },
     { "xl_progress" , you_xl_progress },
-    { "res_poison"  , you_res_poison },
     { "res_fire"    , you_res_fire   },
     { "res_cold"    , you_res_cold   },
     { "res_draining", you_res_draining },
@@ -637,8 +633,6 @@ static const struct luaL_reg you_clib[] =
     { "teleporting",  you_teleporting },
     { "anchored",     you_anchored },
     { "rooted",       you_rooted },
-    { "poisoned",     you_poisoned },
-    { "poison_survival", you_poison_survival },
     { "corrosion",    you_corrosion },
     { "invisible",    you_invisible },
     { "mesmerised",   you_mesmerised },

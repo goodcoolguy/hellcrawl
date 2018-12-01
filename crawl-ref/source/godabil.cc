@@ -1378,7 +1378,6 @@ void elyvilon_purification()
     mpr("You feel purified!");
 
     you.disease = 0;
-    you.duration[DUR_POISONING] = 0;
     you.duration[DUR_CONF] = 0;
     you.duration[DUR_SLOW] = 0;
     you.duration[DUR_PETRIFYING] = 0;
@@ -1440,7 +1439,6 @@ bool vehumet_supports_spell(spell_type spell)
         || spell == SPELL_AIRSTRIKE
         || spell == SPELL_TORNADO
         || spell == SPELL_FREEZE
-        || spell == SPELL_IGNITE_POISON
         || spell == SPELL_OZOCUBUS_REFRIGERATION
         || spell == SPELL_OLGREBS_TOXIC_RADIANCE
         || spell == SPELL_VIOLENT_UNRAVELLING

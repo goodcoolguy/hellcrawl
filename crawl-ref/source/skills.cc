@@ -99,7 +99,6 @@ static const char *skill_titles[NUM_SKILLS][6] =
     {"Ice Magic",      "Chiller",       "Frost Mage",      "Gelid",           "Cryomancer",     "Englaciator"},
     {"Air Magic",      "Gusty",         "Zephyrmancer",    "Stormcaller",     "Cloud Mage",     "Meteorologist"},
     {"Earth Magic",    "Digger",        "Geomancer",       "Earth Mage",      "Metallomancer",  "Petrodigitator"},
-    {"Poison Magic",   "Stinger",       "Tainter",         "Polluter",        "Contaminator",   "Envenomancer"},
 
     // These titles apply to atheists only, worshippers of the various gods
     // use the god titles instead, depending on piety or, in Gozag's case, gold.

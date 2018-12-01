@@ -479,8 +479,7 @@ static special_missile_type _determine_missile_brand(const item_def& item,
         rc = random_choose_weighted(30, SPMSL_SLEEP,
                                     30, SPMSL_CONFUSION,
                                     10, SPMSL_PARALYSIS,
-                                    10, SPMSL_FRENZY,
-                                    nw, SPMSL_POISONED);
+                                    10, SPMSL_FRENZY);
         break;
 #endif
     case MI_JAVELIN:
@@ -489,8 +488,7 @@ static special_missile_type _determine_missile_brand(const item_def& item,
                                     nw, SPMSL_NORMAL);
         break;
     case MI_TOMAHAWK:
-        rc = random_choose_weighted(15, SPMSL_POISONED,
-                                    12, SPMSL_DISPERSAL,
+        rc = random_choose_weighted(12, SPMSL_DISPERSAL,
                                     15, SPMSL_EXPLODING,
                                     nw, SPMSL_NORMAL);
         break;
@@ -523,12 +521,6 @@ bool is_missile_brand_ok(int type, int brand, bool strict)
     // And all of these brands save poison are unique to needles.
     switch (brand)
     {
-    case SPMSL_POISONED:
-#if TAG_MAJOR_VERSION == 34
-        if (type == MI_NEEDLE)
-            return true;
-        break;
-#endif
 
     case SPMSL_CURARE:
     case SPMSL_PARALYSIS:
@@ -571,8 +563,6 @@ bool is_missile_brand_ok(int type, int brand, bool strict)
     // Specifics
     switch (brand)
     {
-    case SPMSL_POISONED:
-        return type == MI_JAVELIN || type == MI_TOMAHAWK;
     case SPMSL_CHAOS:
         return type == MI_TOMAHAWK || type == MI_JAVELIN;
     case SPMSL_PENETRATION:
@@ -605,8 +595,7 @@ static void _generate_missile_item(item_def& item, int force_type,
     else
     {
         item.sub_type =
-            random_choose_weighted(4,  MI_DART_POISONED,
-                                   3,  MI_TOMAHAWK,
+            random_choose_weighted(3,  MI_TOMAHAWK,
                                    2,  MI_JAVELIN,
                                    1,  MI_DART_CURARE,
                                    2,  MI_DART_FRENZY,
@@ -724,14 +713,12 @@ static special_armour_type _generate_armour_type_ego(armour_type type,
         return random_choose_weighted(1, SPARM_RESISTANCE,
                                       3, SPARM_FIRE_RESISTANCE,
                                       3, SPARM_COLD_RESISTANCE,
-                                      3, SPARM_POISON_RESISTANCE,
                                       3, SPARM_POSITIVE_ENERGY,
                                       6, SPARM_REFLECTION,
                                       12, SPARM_PROTECTION);
 
     case ARM_CLOAK:
-        return random_choose(SPARM_POISON_RESISTANCE,
-                             SPARM_MAGIC_RESISTANCE,
+        return random_choose(SPARM_MAGIC_RESISTANCE,
 							 SPARM_STEALTH,
                              SPARM_MAGICAL_POWER);
 
@@ -767,7 +754,6 @@ static special_armour_type _generate_armour_type_ego(armour_type type,
     case ARM_PLATE_ARMOUR:
         return random_choose_weighted(26, SPARM_FIRE_RESISTANCE,
                                       26, SPARM_COLD_RESISTANCE,
-                                      19, SPARM_POISON_RESISTANCE,
                                       15, SPARM_MAGIC_RESISTANCE,
                                        7, SPARM_POSITIVE_ENERGY,
                                        7, SPARM_PONDEROUSNESS);
@@ -789,7 +775,6 @@ static special_armour_type _generate_armour_type_ego(armour_type type,
 
     return random_choose_weighted(7, SPARM_FIRE_RESISTANCE,
                                   7, SPARM_COLD_RESISTANCE,
-                                  5, SPARM_POISON_RESISTANCE,
                                   4, SPARM_MAGIC_RESISTANCE,
                                   2, SPARM_POSITIVE_ENERGY);
 }
@@ -895,7 +880,6 @@ bool is_armour_brand_ok(int type, int brand, bool strict)
         if (type == ARM_HAT || type == ARM_HELMET)
             return true;
         // deliberate fall-through
-    case SPARM_POISON_RESISTANCE:
     case SPARM_POSITIVE_ENERGY:
         if (type == ARM_PEARL_DRAGON_ARMOUR && brand == SPARM_POSITIVE_ENERGY)
             return false; // contradictory or redundant
@@ -1334,8 +1318,7 @@ static void _generate_book_item(item_def& item, bool allow_uniques,
                                                      random2(NUM_SKILLS -
                                                              SK_SPELLCASTING));
             }
-		        while (item.skill == SK_POISON_MAGIC
-                   || item.skill == SK_CONJURATIONS
+		        while (item.skill == SK_CONJURATIONS
                    || item.skill == SK_SPELLCASTING);
         }
         else

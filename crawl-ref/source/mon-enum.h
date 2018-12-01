@@ -84,12 +84,6 @@ enum attack_flavour
     AF_FIRE,
     AF_MUTATE,
     AF_PARALYSE,
-    AF_POISON,
-#if TAG_MAJOR_VERSION == 34
-    AF_POISON_NASTY,
-    AF_POISON_MEDIUM,
-#endif
-    AF_POISON_STRONG,
 #if TAG_MAJOR_VERSION == 34
     AF_POISON_STR,
     AF_POISON_INT,
@@ -199,7 +193,6 @@ enum mon_resist_flags
     // Notes:
     // - negative energy is mostly handled via monster::res_negative_energy()
     MR_RES_ELEC          = 1 << 0,
-    MR_RES_POISON        = 1 << 3,
     MR_RES_FIRE          = 1 << 6,
     MR_RES_COLD          = 1 << 9,
     MR_RES_NEG           = 1 << 12,
@@ -223,7 +216,6 @@ enum mon_resist_flags
     // vulnerabilities
     MR_VUL_WATER         = 1 << 29,
     MR_VUL_ELEC          = mrd(MR_RES_ELEC, -1),
-    MR_VUL_POISON        = mrd(MR_RES_POISON, -1),
     MR_VUL_FIRE          = mrd(MR_RES_FIRE, -1),
     MR_VUL_COLD          = mrd(MR_RES_COLD, -1),
 };

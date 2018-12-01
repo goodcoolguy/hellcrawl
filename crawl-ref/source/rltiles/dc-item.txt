@@ -471,7 +471,6 @@ boots4_green
 i-running BRAND_ARM_RUNNING BRAND_ARM_FIRST
 i-fire-res BRAND_ARM_FIRE_RESISTANCE
 i-cold-res BRAND_ARM_COLD_RESISTANCE
-i-poison-res BRAND_ARM_POISON_RESISTANCE
 i-see-invis BRAND_ARM_SEE_INVISIBLE
 i-invisibility BRAND_ARM_INVISIBILITY
 i-strength BRAND_ARM_STRENGTH
@@ -653,7 +652,6 @@ snake
 i-protection RING_REGENERATION RING_ID_FIRST
 i-protection RING_PROTECTION
 i-r-fire RING_PROTECTION_FROM_FIRE
-i-r-poison RING_POISON_RESISTANCE
 i-r-cold RING_PROTECTION_FROM_COLD
 i-str RING_STRENGTH
 i-slaying RING_SLAYING
@@ -779,8 +777,6 @@ i-gain-strength POT_REMOVEME2
 i-gain-dexterity POT_REMOVEME3
 i-gain-intelligence POT_REMOVEME4
 i-flight POT_FLIGHT
-# please remove POT_POISON when TAG_MAJOR_VERSION is bumped
-i-poison POT_POISON
 i-slowing POT_SLOWING
 i-cancel POT_CANCELLATION
 i-ambrosia POT_AMBROSIA
@@ -794,7 +790,6 @@ i-experience POT_EXPERIENCE
 i-magic POT_MAGIC
 # remove these 2 when TAG_MAJOR_VERSION is bumped
 i-restore-abilities POT_REMOVEME6
-i-strong-poison POT_REMOVEME7
 i-berserk-rage POT_BERSERK_RAGE
 # please remove POT_CURE_MUTATION when TAG_MAJOR_VERSION is bumped
 i-cure-mutation POT_REMOVEME8
@@ -872,7 +867,6 @@ i-staff_wizardry STAFF_WIZARDRY STAFF_ID_FIRST
 i-staff_power STAFF_POWER
 i-staff_fire STAFF_FIRE
 i-staff_cold STAFF_COLD
-i-staff_poison STAFF_POISON
 i-staff_energy STAFF_ENERGY
 i-staff_death STAFF_DEATH
 i-staff_conjuration STAFF_CONJURATION

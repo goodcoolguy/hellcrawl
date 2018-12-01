@@ -181,9 +181,6 @@ enum jewellery_type
     RING_FIRST_RING = RING_PROTECTION,
 #if TAG_MAJOR_VERSION == 34
     RING_PROTECTION_FROM_FIRE,
-#endif
-    RING_POISON_RESISTANCE,
-#if TAG_MAJOR_VERSION == 34
     RING_PROTECTION_FROM_COLD,
 #endif
     RING_STRENGTH,
@@ -364,7 +361,6 @@ enum missile_type
 #endif
     MI_TOMAHAWK,
 
-    MI_DART_POISONED,
     MI_DART_CURARE,
     MI_DART_FRENZY,
 
@@ -453,7 +449,6 @@ enum special_armour_type
     SPARM_RUNNING,
     SPARM_FIRE_RESISTANCE,
     SPARM_COLD_RESISTANCE,
-    SPARM_POISON_RESISTANCE,
 #if TAG_MAJOR_VERSION == 34
     SPARM_SEE_INVISIBLE,
     SPARM_INVISIBILITY,
@@ -490,7 +485,6 @@ enum special_missile_type // to separate from weapons in general {dlb}
     SPMSL_NORMAL,
     SPMSL_FLAME,
     SPMSL_FROST,
-    SPMSL_POISONED,
     SPMSL_CURARE,                      // Needle-only brand
 #if TAG_MAJOR_VERSION == 34    
 	SPMSL_RETURNING,
@@ -531,7 +525,6 @@ enum stave_type
     STAFF_FIRE,
     STAFF_COLD,
 #if TAG_MAJOR_VERSION == 34
-    STAFF_POISON,
     STAFF_ENERGY,
 #endif
     STAFF_DEATH,

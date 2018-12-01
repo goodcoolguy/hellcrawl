@@ -1149,7 +1149,7 @@ item_def trap_def::generate_trap_item()
     case TRAP_ARROW:  base = OBJ_MISSILES; sub = MI_ARROW;         break;
     case TRAP_BOLT:   base = OBJ_MISSILES; sub = MI_ARROW;         break;
     case TRAP_SPEAR:  base = OBJ_WEAPONS;  sub = WPN_SPEAR;        break;
-    case TRAP_NEEDLE: base = OBJ_MISSILES; sub = MI_DART_POISONED; break;
+    case TRAP_NEEDLE: base = OBJ_MISSILES; sub = MI_DART_CURARE; break;
 #if TAG_MAJOR_VERSION == 34
     case TRAP_NET:    base = OBJ_MISSILES; sub = MI_THROWING_NET;  break;
 #endif
@@ -1170,112 +1170,7 @@ item_def trap_def::generate_trap_item()
 // Shoot a single piece of ammo at the relevant actor.
 void trap_def::shoot_ammo(actor& act, bool was_known)
 {
-    if (ammo_qty <= 0)
-    {
-        if (was_known && act.is_player())
-            mpr("The trap is out of ammunition!");
-        else if (player_can_hear(pos) && you.see_cell(pos))
-            mpr("You hear a soft click.");
-
-        destroy();
-        return;
-    }
-
-    if (act.is_player())
-    {
-        if (one_chance_in(5) || was_known && !one_chance_in(4))
-        {
-            mprf("You avoid triggering %s.", name(DESC_A).c_str());
-            return;
-        }
-    }
-    else if (one_chance_in(5))
-    {
-        if (was_known && you.see_cell(pos) && you.can_see(act))
-        {
-            mprf("%s avoids triggering %s.", act.name(DESC_THE).c_str(),
-                 name(DESC_A).c_str());
-        }
-        return;
-    }
-
-    item_def shot = generate_trap_item();
-
-    int trap_hit = (20 + (difficulty()*2)) * random2(200) / 100;
-    if (int defl = act.missile_deflection())
-        trap_hit = random2(trap_hit / defl);
-
-    const int con_block = random2(20 + act.shield_block_penalty());
-    const int pro_block = act.shield_bonus();
-    dprf("%s: hit %d EV %d, shield hit %d block %d", name(DESC_PLAIN).c_str(),
-         trap_hit, act.evasion(), con_block, pro_block);
-
-    // Determine whether projectile hits.
-    if (trap_hit < act.evasion())
-    {
-        if (act.is_player())
-            mprf("%s shoots out and misses you.", shot.name(DESC_A).c_str());
-        else if (you.see_cell(act.pos()))
-        {
-            mprf("%s misses %s!", shot.name(DESC_A).c_str(),
-                 act.name(DESC_THE).c_str());
-        }
-    }
-    else if (pro_block >= con_block
-             && you.see_cell(act.pos()))
-    {
-        string owner;
-        if (act.is_player())
-            owner = "your";
-        else if (you.can_see(act))
-            owner = apostrophise(act.name(DESC_THE));
-        else // "its" sounds abysmal; animals don't use shields
-            owner = "someone's";
-        mprf("%s shoots out and hits %s shield.", shot.name(DESC_A).c_str(),
-             owner.c_str());
-
-        act.shield_block_succeeded(0);
-    }
-    else // OK, we've been hit.
-    {
-        bool force_poison = (env.markers.property_at(pos, MAT_ANY,
-                                "poisoned_needle_trap") == "true");
-
-        bool poison = (type == TRAP_NEEDLE
-                       && (x_chance_in_y(50 - (3*act.armour_class()) / 2, 100)
-                            || force_poison));
-
-        int damage_taken = act.apply_ac(shot_damage(act));
-
-        if (act.is_player())
-        {
-            mprf("%s shoots out and hits you!", shot.name(DESC_A).c_str());
-
-            string n = name(DESC_A);
-
-            // Needle traps can poison.
-            if (poison)
-                poison_player(1 + roll_dice(2, 9), "", n);
-
-            ouch(damage_taken, KILLED_BY_TRAP, MID_NOBODY, n.c_str());
-        }
-        else
-        {
-            if (you.see_cell(act.pos()))
-            {
-                mprf("%s hits %s%s!",
-                     shot.name(DESC_A).c_str(),
-                     act.name(DESC_THE).c_str(),
-                     (damage_taken == 0 && !poison) ?
-                         ", but does no damage" : "");
-            }
-
-            if (poison)
-                act.poison(nullptr, 3 + roll_dice(2, 5));
-            act.hurt(nullptr, damage_taken);
-        }
-    }
-    ammo_qty--;
+    return;
 }
 
 // returns appropriate trap symbol

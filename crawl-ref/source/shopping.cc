@@ -110,10 +110,6 @@ int artefact_value(const item_def &item)
     if (prop[ARTP_STEALTH] > 0)
         ret += 2 * prop[ARTP_STEALTH];
 
-    // only one meaningful level:
-    if (prop[ ARTP_POISON ])
-        ret += 6;
-
     // only one meaningful level (hard to get):
     if (prop[ ARTP_ELECTRICITY ])
         ret += 10;
@@ -300,8 +296,7 @@ unsigned int item_value(item_def item, bool ident)
                 valued *= 25;
                 break;
 
-            case SPMSL_EXPLODING:
-            case SPMSL_POISONED:          
+            case SPMSL_EXPLODING:     
 #if TAG_MAJOR_VERSION == 34
 			case SPMSL_RETURNING:
             case SPMSL_SLOW:
@@ -352,7 +347,6 @@ unsigned int item_value(item_def item, bool ident)
                 break;
 
             case SPARM_POSITIVE_ENERGY:
-            case SPARM_POISON_RESISTANCE:
             case SPARM_REFLECTION:
                 valued += 20;
                 break;
@@ -504,8 +498,6 @@ unsigned int item_value(item_def item, bool ident)
                 break;
 
 #if TAG_MAJOR_VERSION == 34
-            case POT_POISON:
-            case POT_STRONG_POISON:
             case POT_PORRIDGE:
             case POT_SLOWING:
             case POT_DECAY:
@@ -656,7 +648,6 @@ unsigned int item_value(item_def item, bool ident)
                 case RING_MAGICAL_POWER:
 #endif
                 case RING_LIFE_PROTECTION:
-                case RING_POISON_RESISTANCE:
                 case RING_RESIST_CORROSION:
                     valued += 200;
                     break;
@@ -803,7 +794,6 @@ bool is_worthless_consumable(const item_def &item)
         case POT_BLOOD_COAGULATED:
         case POT_SLOWING:
         case POT_DECAY:
-        case POT_POISON:
 #endif
         case POT_DEGENERATION:
             return true;

@@ -133,11 +133,6 @@ spret_type cast_big_c(int pow, spell_type spl, const actor *caster, bolt &beam,
     //XXX: there should be a better way to specify beam cloud types
     switch (spl)
     {
-        case SPELL_POISONOUS_CLOUD:
-            beam.flavour = BEAM_POISON;
-            beam.name = "blast of poison";
-            cty = CLOUD_POISON;
-            break;
         case SPELL_HOLY_BREATH:
             beam.flavour = BEAM_HOLY;
             beam.origin_spell = SPELL_HOLY_BREATH;
@@ -315,7 +310,6 @@ random_pick_entry<cloud_type> cloud_cone_clouds[] =
   { 0,   50, 200, FALL, CLOUD_MEPHITIC },
   { 0,  100, 125, PEAK, CLOUD_FIRE },
   { 0,  100, 125, PEAK, CLOUD_COLD },
-  { 0,  100, 125, PEAK, CLOUD_POISON },
   { 30, 100, 125, RISE, CLOUD_NEGATIVE_ENERGY },
   { 40, 100, 135, RISE, CLOUD_STORM },
   { 50, 100, 175, RISE, CLOUD_ACID },

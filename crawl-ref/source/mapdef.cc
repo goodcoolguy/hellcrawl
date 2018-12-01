@@ -4770,7 +4770,6 @@ static int _str_to_ego(item_spec &spec, string ego_str)
         "running",
         "fire_resistance",
         "cold_resistance",
-        "poison_resistance",
         "see_invisible",
         "invisibility",
         "strength",
@@ -4841,7 +4840,6 @@ static int _str_to_ego(item_spec &spec, string ego_str)
     {
         "flame",
         "frost",
-        "poisoned",
         "curare",
 #if TAG_MAJOR_VERSION == 34	
         "returning",
