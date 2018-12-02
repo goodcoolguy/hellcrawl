@@ -925,7 +925,7 @@ static void _print_stats_hp(int x, int y)
     if (you.species == SP_DJINNI)
         EP_Bar.draw(19, y, you.hp, you.hp_max);
     else
-        HP_Bar.draw(19, y, you.hp, you.hp_max, false, you.hp);
+        HP_Bar.draw(19, y, you.hp, you.hp_max, false, 0);
 #else
         HP_Bar.draw(19, y, you.hp, you.hp_max, you.hp);
 #endif
