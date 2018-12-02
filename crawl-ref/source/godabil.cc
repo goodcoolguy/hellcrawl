@@ -2532,43 +2532,6 @@ int fedhas_fungal_bloom()
     return processed_count;
 }
 
-static bool _create_plant(coord_def& target, int hp_adjust = 0)
-{
-    if (actor_at(target) || !mons_class_can_pass(MONS_PLANT, grd(target)))
-        return 0;
-
-    if (monster *plant = create_monster(mgen_data(MONS_PLANT,
-                                            BEH_FRIENDLY,
-                                            target,
-                                            MHITNOT,
-                                            MG_FORCE_PLACE,
-                                            GOD_FEDHAS)
-                                        .set_summoned(&you, 0, 0)))
-    {
-        plant->flags |= MF_NO_REWARD;
-        plant->flags |= MF_ATT_CHANGE_ATTEMPT;
-
-        mons_make_god_gift(*plant, GOD_FEDHAS);
-
-        plant->max_hit_points += hp_adjust;
-        plant->hit_points += hp_adjust;
-
-        if (you.see_cell(target))
-        {
-            if (hp_adjust)
-            {
-                mprf("A plant, strengthened by %s, grows up from the ground.",
-                     god_name(GOD_FEDHAS).c_str());
-            }
-            else
-                mpr("A plant grows up from the ground.");
-        }
-        return true;
-    }
-
-    return false;
-}
-
 #define SUNLIGHT_DURATION 80
 
 spret_type fedhas_sunlight(bool fail)
@@ -2861,42 +2824,6 @@ bool prioritise_adjacent(const coord_def &target, vector<coord_def>& candidates)
     return true;
 }
 
-static bool _prompt_amount(int max, int& selected, const string& prompt)
-{
-    selected = max;
-    while (true)
-    {
-        msg::streams(MSGCH_PROMPT) << prompt << " (" << max << " max) " << endl;
-
-        const int keyin = get_ch();
-
-        // Cancel
-        if (key_is_escape(keyin) || keyin == ' ' || keyin == '0')
-        {
-            canned_msg(MSG_OK);
-            return false;
-        }
-
-        // Default is max
-        if (keyin == '\n' || keyin == '\r')
-        {
-            selected = max;
-            return true;
-        }
-
-        // Otherwise they should enter a digit
-        if (isadigit(keyin))
-        {
-            selected = keyin - '0';
-            if (selected > 0 && selected <= max)
-                return true;
-        }
-        // else they entered some garbage?
-    }
-
-    return false;
-}
-
 // Create a ring or partial ring around the caster. The user is
 // prompted to select a stack of fruit, and then plants are placed on open
 // squares adjacent to the user. Of course, one piece of fruit is
@@ -3148,15 +3075,6 @@ bool fedhas_check_evolve_flora(bool quiet)
     if (!quiet)
         mpr("No evolvable flora in sight.");
     return false;
-}
-
-static vector<string> _evolution_name(const monster_info& mon)
-{
-    auto conv = map_find(conversions, mon.type);
-    if (conv && !mon.has_trivial_ench(ENCH_PETRIFIED))
-        return { "can evolve into " + mons_type_name(conv->new_type, DESC_A) };
-    else
-        return { "cannot be evolved" };
 }
 
 spret_type fedhas_evolve_flora(bool fail)

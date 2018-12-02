@@ -408,16 +408,6 @@ void ash_init_bondage(player *y)
         y->bondage[i] = 0;
 }
 
-static bool _two_handed()
-{
-    const item_def* wpn = you.slot_item(EQ_WEAPON, true);
-    if (!wpn)
-        return false;
-
-    hands_reqd_type wep_type = you.hands_reqd(*wpn, true);
-    return wep_type == HANDS_TWO;
-}
-
 void ash_check_bondage(bool msg)
 {
     return;
@@ -509,9 +499,6 @@ bool god_id_item(item_def& item, bool silent)
 
     if (have_passive(passive_t::identify_items))
     {
-        // Ashenzari (and other gods with both identify_items and want_curses)
-        // ties identification of weapon/armour plusses to cursed slots.
-        const bool ash = have_passive(passive_t::want_curses);
 
         // Don't identify runes or the orb, since this has no gameplay purpose
         // and might mess up other things.

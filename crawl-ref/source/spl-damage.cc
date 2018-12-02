@@ -1558,33 +1558,6 @@ spret_type cast_irradiate(int powc, actor* who, bool fail)
     return SPRET_SUCCESS;
 }
 
-// How much work can we consider we'll have done by igniting a cloud here?
-// Considers a cloud under a susceptible ally bad, a cloud under a a susceptible
-// enemy good, and other clouds relatively unimportant.
-static int _ignite_tracer_cloud_value(coord_def where, actor *agent)
-{
-    actor* act = actor_at(where);
-    if (act)
-    {
-        const int dam = resist_adjust_damage(act, BEAM_FIRE, 40);
-        return mons_aligned(act, agent) ? -dam : dam;
-    }
-    // We've done something, but its value is indeterminate
-    else
-        return 1;
-}
-
-/**
- * Let the player choose to abort a casting of ignite poison, if it seems
- * like a bad idea. (If they'd ignite themself.)
- *
- * @return      Whether the player chose to abort the casting.
- */
-static bool maybe_abort_ignite()
-{
-    return false;
-}
-
 static void _ignition_square(const actor *agent, bolt beam, coord_def square, bool center)
 {
     // HACK: bypass visual effect

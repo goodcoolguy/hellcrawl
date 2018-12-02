@@ -648,7 +648,7 @@ static void _print_stats_equip(int x, int y)
 }
 
 
-void _draw_stat_titles()
+static void _draw_stat_titles()
 {
 	int one_pos = 5;
     int two_pos = 6;

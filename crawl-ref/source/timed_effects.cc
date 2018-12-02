@@ -803,12 +803,6 @@ static void _handle_magic_contamination(int /*time_delta*/)
     }
 }
 
-// Exercise armour *xor* stealth skill: {dlb}
-static void _wait_practice(int /*time_delta*/)
-{
-    return;
-}
-
 static void _lab_change(int /*time_delta*/)
 {
     if (player_in_branch(BRANCH_LABYRINTH))

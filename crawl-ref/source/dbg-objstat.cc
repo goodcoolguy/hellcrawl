@@ -543,20 +543,6 @@ static bool _item_track_piles(item_base_type base_type)
     }
 }
 
-static bool _item_track_curse(item_base_type base_type)
-{
-    switch (base_type)
-    {
-    case ITEM_WEAPONS:
-    case ITEM_STAVES:
-    case ITEM_ARMOUR:
-    case ITEM_JEWELLERY:
-        return true;
-    default:
-        return false;
-    }
-}
-
 static bool _item_track_plus(item_base_type base_type)
 {
     switch (base_type)

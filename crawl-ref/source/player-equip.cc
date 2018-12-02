@@ -1032,8 +1032,6 @@ static void _equip_jewellery_effect(item_def &item, bool unmeld,
                                     equipment_type slot)
 {
     const bool artefact     = is_artefact(item);
-    const bool known_bad    = (item_type_known(item)
-                               && item_value(item) <= 2);
 
     switch (item.sub_type)
     {

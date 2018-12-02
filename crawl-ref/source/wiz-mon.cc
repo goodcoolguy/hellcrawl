@@ -489,7 +489,7 @@ void debug_stethoscope(int mon)
                    : ""));
 
     // Print resistances.
-    mprf(MSGCH_DIAGNOSTICS, "resist: fire=%d cold=%d elec=%d pois=%d neg=%d "
+    mprf(MSGCH_DIAGNOSTICS, "resist: fire=%d cold=%d elec=%d neg=%d "
                             "acid=%d sticky=%s rot=%s",
          mons.res_fire(),
          mons.res_cold(),
