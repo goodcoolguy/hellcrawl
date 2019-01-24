@@ -48,5 +48,6 @@ vector<ability_type> get_god_abilities(bool ignore_silence = true,
                                        bool ignore_piety = true,
                                        bool ignore_penance = true);
 void swap_ability_slots(int index1, int index2, bool silent = false);
+bool meets_stat_requirements(const ability_type ability);
 
 #endif

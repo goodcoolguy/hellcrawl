@@ -46,6 +46,7 @@ struct spell_desc
     const char  *title;
     spschools_type disciplines;
     unsigned int flags;       // bitfield
+	map<stat_type, int> stat_requirements;
     unsigned int level;
 
     // Usually in the range 0..200 (0 means uncapped).
