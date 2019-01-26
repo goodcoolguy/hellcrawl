@@ -245,9 +245,6 @@ static string _get_seen_branches(bool display)
     {
         const branch_type branch = it->id;
 
-        if (branch == BRANCH_ZIGGURAT)
-            continue;
-
         if (branch == root_branch
             || stair_level.count(branch))
         {
@@ -298,8 +295,6 @@ static string _get_unseen_branches()
             continue;
 
         if (branch == BRANCH_VESTIBULE || !is_connected_branch(branch)
-            || branch == BRANCH_TEMPLE || branch == BRANCH_LAIR
-            || branch == BRANCH_CRYPT  || branch == BRANCH_TOMB
             || branch == BRANCH_ELF)
             continue;
 

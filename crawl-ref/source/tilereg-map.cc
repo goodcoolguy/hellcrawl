@@ -308,8 +308,7 @@ bool MapRegion::update_tip_text(string& tip)
     tip = "[L-Click] Enable map mode";
 #else
     tip = "[L-Click] Travel / [R-Click] View";
-    if (!player_in_branch(BRANCH_LABYRINTH)
-        && i_feel_safe())
+    if (i_feel_safe())
     {
         tip += "\n[Shift + L-Click] Autoexplore";
     }

@@ -1087,8 +1087,6 @@ static bool _leave_level(dungeon_feature_type stair_taken,
     }
     else if (stair_taken == DNGN_TRANSIT_PANDEMONIUM
              || stair_taken == DNGN_EXIT_THROUGH_ABYSS
-             || stair_taken == DNGN_STONE_STAIRS_DOWN_I
-             && old_level.branch == BRANCH_ZIGGURAT
              || old_level.branch == BRANCH_ABYSS)
     {
         env.level_state |= LSTATE_DELETED;
@@ -1515,22 +1513,6 @@ bool load_level(dungeon_feature_type stair_taken, load_mode_type load_mode,
     // exited it, have monsters lose track of where they are
     if (you.position != env.old_player_pos)
        shake_off_monsters(you.as_player());
-
-#if TAG_MAJOR_VERSION == 34
-    if (make_changes && you.props.exists("zig-fixup")
-        && you.where_are_you == BRANCH_TOMB
-        && you.depth == brdepth[BRANCH_TOMB])
-    {
-        if (!just_created_level)
-        {
-            int obj = items(false, OBJ_MISCELLANY, MISC_ZIGGURAT, 0);
-            ASSERT(obj != NON_ITEM);
-            bool success = move_item_to_grid(&obj, you.pos(), true);
-            ASSERT(success);
-        }
-        you.props.erase("zig-fixup");
-    }
-#endif
 
     return just_created_level;
 }
@@ -2319,7 +2301,6 @@ void save_ghost(bool force)
 
     // No ghosts on D:1, D:2, the Temple, or the Abyss.
     if (!force && (you.depth < 3 && player_in_branch(BRANCH_DUNGEON)
-                   || player_in_branch(BRANCH_TEMPLE)
                    || player_in_branch(BRANCH_ABYSS)))
     {
         return;

@@ -407,16 +407,6 @@ static void _new_level_amuses_xom(dungeon_feature_type feat,
             xom_is_stimulated(10);
         break;
 
-    case BRANCH_ZIGGURAT:
-        // The best way to die currently.
-        xom_is_stimulated(50);
-        break;
-
-    case BRANCH_LABYRINTH:
-        // Finding the way out of a labyrinth interests Xom.
-        xom_is_stimulated(75);
-        break;
-
     case BRANCH_PANDEMONIUM:
         xom_is_stimulated(100);
         break;
@@ -882,10 +872,6 @@ level_id stair_destination(coord_def pos, bool for_real)
 level_id stair_destination(dungeon_feature_type feat, const string &dst,
                            bool for_real)
 {
-#if TAG_MAJOR_VERSION == 34
-    if (feat == DNGN_ESCAPE_HATCH_UP && player_in_branch(BRANCH_LABYRINTH))
-        feat = DNGN_EXIT_LABYRINTH;
-#endif
     if (branches[you.where_are_you].exit_stairs == feat
         && parent_branch(you.where_are_you) < NUM_BRANCHES
         && feat != DNGN_EXIT_ZIGGURAT)
@@ -1096,7 +1082,4 @@ void new_level(bool restore)
         return;
 
     cancel_tornado();
-
-    if (player_in_branch(BRANCH_ZIGGURAT))
-        you.zig_max = max(you.zig_max, you.depth);
 }

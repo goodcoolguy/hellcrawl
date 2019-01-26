@@ -220,7 +220,6 @@ static void _sdump_transform(dump_params &par)
 
 static branch_type single_portals[] =
 {
-    BRANCH_LABYRINTH,
     BRANCH_TROVE,
     BRANCH_SEWER,
     BRANCH_OSSUARY,
@@ -288,27 +287,6 @@ static void _sdump_visits(dump_params &par)
                              have.c_str(), place_info.num_visits);
         if (place_info.num_visits > 1)
             text += "s";
-        text += ".\n";
-    }
-
-    place_info = you.get_place_info(BRANCH_ZIGGURAT);
-    if (place_info.num_visits > 0)
-    {
-        int num_zigs = place_info.num_visits;
-        text += make_stringf("You %s%s %d ziggurat",
-                             have.c_str(),
-                             (num_zigs == you.zigs_completed) ? "completed"
-                                                              : "visited",
-                             num_zigs);
-        if (num_zigs > 1)
-            text += "s";
-        if (num_zigs != you.zigs_completed && you.zigs_completed)
-            text += make_stringf(" (completing %d)", you.zigs_completed);
-        text += make_stringf(", and %s %d of %s levels",
-                             seen.c_str(), place_info.levels_seen,
-                             num_zigs > 1 ? "their" : "its");
-        if (num_zigs != 1 && !you.zigs_completed)
-            text += make_stringf(" (deepest: %d)", you.zig_max);
         text += ".\n";
     }
 

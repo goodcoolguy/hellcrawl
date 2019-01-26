@@ -18,14 +18,6 @@ const Branch branches[NUM_BRANCHES] =
       LIGHTGREY, BROWN,
       'D', {}, 0 },
 
-    { BRANCH_TEMPLE, BRANCH_DUNGEON, -1, -1, 1, 5,
-      BFLAG_NO_ITEMS,
-      DNGN_ENTER_TEMPLE, DNGN_EXIT_TEMPLE, NUM_FEATURES,
-      "Temple", "the Ecumenical Temple", "Temple",
-      nullptr,
-      LIGHTGREY, BROWN,
-      'T', {}, 0 },
-
     { BRANCH_ORC, BRANCH_DUNGEON, 15, 15, 2, 10,
       BFLAG_SPOTTY,
       DNGN_ENTER_ORC, DNGN_EXIT_ORC, NUM_FEATURES,
@@ -41,25 +33,6 @@ const Branch branches[NUM_BRANCHES] =
       "You enter the Elven Halls!",
       WHITE, ETC_ELVEN_BRICK,
       'E', {}, 0 },
-
-#if TAG_MAJOR_VERSION == 34
-    { BRANCH_DWARF, BRANCH_VAULTS, -1, -1, 0, 17,
-      BFLAG_NONE,
-      DNGN_ENTER_DWARF, DNGN_EXIT_DWARF, NUM_FEATURES,
-      "Dwarven Hall", "the Dwarven Hall", "Dwarf",
-      nullptr,
-      BROWN, BROWN,
-      'K', {}, 0 },
-
-
-    { BRANCH_LAIR, BRANCH_DUNGEON, -1, -1, 6, 10,
-      BFLAG_NONE,
-      DNGN_ENTER_LAIR, DNGN_EXIT_LAIR, NUM_FEATURES,
-      "Lair", "the Lair of Beasts", "Lair",
-      nullptr,
-      GREEN, BROWN,
-      'L', {}, 0 },
-#endif
 
     { BRANCH_SWAMP, BRANCH_ORC, 2, 2, 3, 15,
       BFLAG_DANGEROUS_END | BFLAG_SPOTTY,
@@ -108,33 +81,7 @@ const Branch branches[NUM_BRANCHES] =
       nullptr,
       LIGHTGREY, BROWN,
       'V', { RUNE_VAULTS }, 0 },
-#if TAG_MAJOR_VERSION == 34
-    { BRANCH_BLADE, BRANCH_VAULTS, 3, 4, 1, 21,
-      BFLAG_NO_ITEMS,
-      DNGN_ENTER_BLADE, DNGN_EXIT_BLADE, NUM_FEATURES,
-      "Hall of Blades", "the Hall of Blades", "Blade",
-      nullptr,
-      LIGHTGREY, BROWN,
-      'B', {}, 0 },
 
-
-    { BRANCH_CRYPT, BRANCH_VAULTS, -1, -1, 3, 19,
-      BFLAG_DANGEROUS_END,
-      DNGN_ENTER_CRYPT, DNGN_EXIT_CRYPT, NUM_FEATURES,
-      "Crypt", "the Crypt", "Crypt",
-      nullptr,
-      LIGHTGREY, BROWN,
-      'C', {}, 0 },
-
-    { BRANCH_TOMB, BRANCH_VAULTS, -1, -1, 3, 21,
-      BFLAG_ISLANDED | BFLAG_DANGEROUS_END | BFLAG_NO_SHAFTS,
-      DNGN_ENTER_TOMB, DNGN_EXIT_TOMB, NUM_FEATURES,
-      "Tomb", "the Tomb of the Ancients", "Tomb",
-      nullptr,
-      BROWN, BROWN,
-      'W', { RUNE_TOMB }, 0 },
-#endif
-	  
     { BRANCH_VESTIBULE, NUM_BRANCHES, 27, 27, 1, 27,
       BFLAG_NO_ITEMS,
       DNGN_ENTER_HELL, DNGN_EXIT_HELL, NUM_FEATURES,
@@ -182,15 +129,6 @@ const Branch branches[NUM_BRANCHES] =
       nullptr,
       BLACK, BLACK, // set per-map
       'Z', {}, 0 },
-#if TAG_MAJOR_VERSION == 34
-    { BRANCH_FOREST, BRANCH_VAULTS, 2, 3, 5, 19,
-      BFLAG_SPOTTY,
-      DNGN_ENTER_FOREST, DNGN_EXIT_FOREST, NUM_FEATURES,
-      "Forest", "the Enchanted Forest", "Forest",
-      nullptr,
-      BROWN, BROWN,
-      'F', {}, 0 },
-#endif
 
     { BRANCH_ABYSS, NUM_BRANCHES, -1, -1, 5, 24,
       BFLAG_NO_XLEV_TRAVEL | BFLAG_NO_MAP | BFLAG_NO_ITEMS,
@@ -209,28 +147,6 @@ const Branch branches[NUM_BRANCHES] =
       BLACK, BLACK, // set specially
       'R', { RUNE_DEMONIC, RUNE_MNOLEG, RUNE_LOM_LOBON, RUNE_CEREBOV,
              RUNE_GLOORX_VLOQ }, 0 },
-			 
-#if TAG_MAJOR_VERSION == 34
-    { BRANCH_ZIGGURAT, BRANCH_DEPTHS, -1, -1, 27, 27,
-      BFLAG_NO_XLEV_TRAVEL | BFLAG_NO_ITEMS,
-      DNGN_ENTER_ZIGGURAT, DNGN_EXIT_ZIGGURAT, DNGN_FLOOR,
-      "Ziggurat", "a ziggurat", "Zig",
-      "You land on top of a ziggurat so tall you cannot make out the ground.",
-      BLACK, BLACK,
-      'Q', {}, 0 },
-#endif	  
-
-    { BRANCH_LABYRINTH, NUM_BRANCHES, -1, -1, 1, 15,
-      BFLAG_NO_XLEV_TRAVEL | BFLAG_NO_ITEMS | BFLAG_NO_MAP,
-      DNGN_ENTER_LABYRINTH, DNGN_EXIT_LABYRINTH, DNGN_EXIT_THROUGH_ABYSS,
-      "Labyrinth", "a labyrinth", "Lab",
-      // XXX: Ideally, we want to hint at the wall rule (rock > metal),
-      //      and that the walls can shift occasionally.
-      // Are these too long?
-      "As you enter the labyrinth, previously moving walls settle noisily into place.\n"
-      "You hear the metallic echo of a distant snort before it fades into the rock.",
-      BLACK, BLACK,
-      '0', {}, 0 },
 
     { BRANCH_BAZAAR, NUM_BRANCHES, 27, 27, 1, 18,
       BFLAG_NO_ITEMS,

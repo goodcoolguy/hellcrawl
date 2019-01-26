@@ -153,96 +153,6 @@ static void _use_overflow_temple(vector<god_type> temple_gods)
 // overflow temples, and on what level the overflow temples are.
 void initialise_temples()
 {
-    //////////////////////////////////////////
-    // First determine main temple map to use.
-    level_id ecumenical(BRANCH_TEMPLE, 1);
-
-    map_def *main_temple = nullptr;
-    for (int i = 0; i < 10; i++)
-    {
-        int altar_count = 0;
-
-        main_temple
-            = const_cast<map_def*>(random_map_for_place(ecumenical, false));
-
-        if (main_temple == nullptr)
-            end(1, false, "No temples?!");
-
-        if (main_temple->has_tag("temple_variable"))
-        {
-            vector<int> sizes;
-            for (string &tag : main_temple->get_tags())
-            {
-                if (starts_with(tag, "temple_altars_"))
-                {
-                    sizes.push_back(
-                        atoi(strip_tag_prefix(tag, "temple_altars_").c_str()));
-                }
-            }
-            if (sizes.empty())
-            {
-                mprf(MSGCH_ERROR,
-                     "Temple %s set as variable but has no sizes.",
-                     main_temple->name.c_str());
-                main_temple = nullptr;
-                continue;
-            }
-            altar_count =
-                you.props[TEMPLE_SIZE_KEY].get_int() =
-                    sizes[random2(sizes.size())];
-        }
-
-        dgn_map_parameters mp(make_stringf("temple_altars_%d", altar_count));
-
-        // Without all this find_glyph() returns 0.
-        string err;
-        main_temple->load();
-        main_temple->reinit();
-        err = main_temple->run_lua(true);
-
-        if (!err.empty())
-        {
-            mprf(MSGCH_ERROR, "Temple %s: %s", main_temple->name.c_str(),
-                 err.c_str());
-            main_temple = nullptr;
-            you.props.erase(TEMPLE_SIZE_KEY);
-            continue;
-        }
-
-              main_temple->fixup();
-        err = main_temple->resolve();
-
-        if (!err.empty())
-        {
-            mprf(MSGCH_ERROR, "Temple %s: %s", main_temple->name.c_str(),
-                 err.c_str());
-            main_temple = nullptr;
-            you.props.erase(TEMPLE_SIZE_KEY);
-            continue;
-        }
-        break;
-    }
-
-    if (main_temple == nullptr)
-        end(1, false, "No valid temples.");
-
-    you.props[TEMPLE_MAP_KEY] = main_temple->name;
-
-    const vector<coord_def> altar_coords
-        = main_temple->find_glyph('B');
-    const unsigned int main_temple_size = altar_coords.size();
-
-    if (main_temple_size == 0)
-    {
-        end(1, false, "Main temple '%s' has no altars",
-            main_temple->name.c_str());
-    }
-
-#ifdef DEBUG_TEMPLES
-    mprf(MSGCH_DIAGNOSTICS, "Chose main temple %s, size %u",
-         main_temple->name.c_str(), main_temple_size);
-#endif
-
     ///////////////////////////////////
     // Now set up the overflow temples.
 
@@ -260,12 +170,6 @@ void initialise_temples()
 #ifdef DEBUG_TEMPLES
     mprf(MSGCH_DIAGNOSTICS, "%u overflow altars", (unsigned int)overflow_gods.size());
 #endif
-
-    CrawlVector &temple_gods
-        = you.props[TEMPLE_GODS_KEY].new_vector(SV_BYTE);
-
-    for (unsigned int i = 0; i < main_temple_size; i++)
-        temple_gods.push_back((char) god_list[i]);
 
     CrawlVector &overflow_temples
         = you.props[OVERFLOW_TEMPLES_KEY].new_vector(SV_VEC);

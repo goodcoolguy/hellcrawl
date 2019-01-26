@@ -582,14 +582,7 @@ monster_type resolve_monster_type(monster_type mon_type,
         {
             const level_id orig_place = *place;
 
-            if (_find_mon_place_near_stairs(*pos, stair_type, *place))
-            {
-                // No monsters spawned in the Temple.
-                if (branches[place->branch].id == BRANCH_TEMPLE)
-                    proximity = PROX_AWAY_FROM_PLAYER;
-            }
-            else
-                proximity = PROX_AWAY_FROM_PLAYER;
+            proximity = PROX_AWAY_FROM_PLAYER;
             if (proximity == PROX_NEAR_STAIRS)
             {
                 dprf(DIAG_MONPLACE, "foreign monster from %s",
@@ -1845,18 +1838,9 @@ monster_type pick_local_zombifiable_monster(level_id place,
 {
     const bool really_in_d = place.branch == BRANCH_DUNGEON;
 
-    if (place.branch == BRANCH_ZIGGURAT)
-    {
-        // Get Zigs something reasonable to work with, if there's no place
-        // explicitly defined.
-        place = level_id(BRANCH_DEPTHS, 14 - (27 - place.depth) / 3);
-    }
-    else
-    {
-        // Zombies tend to be weaker than their normal counterparts;
-        // thus, make them OOD proportional to the current dungeon depth.
-        place.depth += 1 + div_rand_round(place.absdepth(), 5);
-    }
+    // Zombies tend to be weaker than their normal counterparts;
+    // thus, make them OOD proportional to the current dungeon depth.
+    place.depth += 1 + div_rand_round(place.absdepth(), 5);
 
     zombie_picker picker = zombie_picker(pos, cs);
 
@@ -2225,10 +2209,6 @@ static band_type _choose_band(monster_type mon_type, int *band_size_p,
         const static map<branch_type, band_weights> band_pick =
         {
             // branch              band             #min #max weight
-            { BRANCH_LAIR,   { { { BAND_YAKS,          2, 5 },  3 },
-                               { { BAND_DEATH_YAKS,    1, 2 },  1 },
-                               { { BAND_DREAM_SHEEP,   2, 4 },  1 },
-                             } },
             { BRANCH_SPIDER, { { { BAND_REDBACK,       2, 4 },  1 },
                                { { BAND_RANDOM_SINGLE, 1, 1 },  1 },
                              } },

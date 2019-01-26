@@ -785,12 +785,6 @@ static void _do_wizard_command(int wiz_command)
         break;
     // case CONTROL('J'): break;
 
-    case 'k':
-        if (player_in_branch(BRANCH_LABYRINTH))
-            change_labyrinth(true);
-        else
-            mpr("This only makes sense in a labyrinth!");
-        break;
     // case 'K': break;
     case CONTROL('K'): wizard_clear_used_vaults(); break;
 
@@ -1741,19 +1735,6 @@ static bool _prompt_stairs(dungeon_feature_type ygrd, bool down, bool shaft)
     // Toll portals, eg. troves, ziggurats. (Using vetoes like this is hacky.)
     if (_marker_vetoes_stair())
         return false;
-
-    // Exiting Ziggurats early.
-    if (ygrd == DNGN_EXIT_ZIGGURAT
-        && you.depth < brdepth[BRANCH_ZIGGURAT])
-    {
-        // "unsafe", as often you bail at single-digit hp and a wasted turn to
-        // an overeager prompt cancellation might be nasty.
-        if (!yesno("Are you sure you want to leave this ziggurat?", false, 'n'))
-        {
-            canned_msg(MSG_OK);
-            return false;
-        }
-    }
 
     // Leaving runes behind. Make sure it's not a side-portal to prevent unnecessary warnings.
 	// Currently, only icecaves and bazaars can spawn on rune floors.

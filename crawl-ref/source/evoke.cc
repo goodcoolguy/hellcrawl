@@ -1050,26 +1050,7 @@ static bool _sack_of_spiders(item_def &sack)
 
 static bool _make_zig(item_def &zig)
 {
-    if (feat_is_critical(grd(you.pos())))
-    {
-        mpr("You can't place a gateway to a ziggurat here.");
-        return false;
-    }
-    for (int lev = 1; lev <= brdepth[BRANCH_ZIGGURAT]; lev++)
-    {
-        if (is_level_on_stack(level_id(BRANCH_ZIGGURAT, lev))
-            || you.where_are_you == BRANCH_ZIGGURAT)
-        {
-            mpr("Finish your current ziggurat first!");
-            return false;
-        }
-    }
-
-    ASSERT(in_inventory(zig));
-    dec_inv_item_quantity(zig.link, 1);
-    dungeon_terrain_changed(you.pos(), DNGN_ENTER_ZIGGURAT);
-    mpr("You set the figurine down, and a mystic portal to a ziggurat forms.");
-    return true;
+    return false;
 }
 
 static bool _ball_of_energy()

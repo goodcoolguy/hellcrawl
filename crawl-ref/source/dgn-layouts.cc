@@ -436,8 +436,7 @@ static bool _octa_room(dgn_region& region, int oblique_max,
     coord_def br = region.end();
 
     // Hack - avoid lava in the crypt {gdl}
-    if ((player_in_branch(BRANCH_CRYPT) || player_in_branch(BRANCH_TOMB)
-         || player_in_branch(BRANCH_COCYTUS))
+    if ((player_in_branch(BRANCH_COCYTUS))
          && type_floor == DNGN_LAVA)
     {
         type_floor = DNGN_SHALLOW_WATER;
@@ -631,13 +630,6 @@ static int _box_room_doors(int bx1, int bx2, int by1, int by2, int new_doors)
 static void _box_room(int bx1, int bx2, int by1, int by2,
                       dungeon_feature_type wall_type)
 {
-    // Hack -- avoid lava in the crypt. {gdl}
-    if ((player_in_branch(BRANCH_CRYPT) || player_in_branch(BRANCH_TOMB))
-         && wall_type == DNGN_LAVA)
-    {
-        wall_type = DNGN_SHALLOW_WATER;
-    }
-
     int new_doors, doors_placed;
 
     // Do top & bottom walls.
@@ -740,16 +732,6 @@ static void _big_room(int level_number)
 
     if (type_floor == DNGN_FLOOR)
         type_2 = _random_wall();
-
-    // No lava in the Crypt or Tomb, thanks!
-    if (player_in_branch(BRANCH_CRYPT) || player_in_branch(BRANCH_TOMB))
-    {
-        if (type_floor == DNGN_LAVA)
-            type_floor = DNGN_SHALLOW_WATER;
-
-        if (type_2 == DNGN_LAVA)
-            type_2 = DNGN_SHALLOW_WATER;
-    }
 
     // Sometimes make it a chequerboard.
     if (one_chance_in(4))
@@ -980,13 +962,6 @@ static void _place_pool(dungeon_feature_type pool_type, uint8_t pool_x1,
     int i, j;
     uint8_t left_edge, right_edge;
 
-    // Don't place LAVA pools in crypt... use shallow water instead.
-    if (pool_type == DNGN_LAVA
-        && (player_in_branch(BRANCH_CRYPT) || player_in_branch(BRANCH_TOMB)))
-    {
-        pool_type = DNGN_SHALLOW_WATER;
-    }
-
     if (pool_x1 >= pool_x2 - 4 || pool_y1 >= pool_y2 - 4)
         return;
 
@@ -1032,8 +1007,6 @@ static void _many_pools(dungeon_feature_type pool_type)
         pool_type = DNGN_DEEP_WATER;
     else if (player_in_branch(BRANCH_GEHENNA))
         pool_type = DNGN_LAVA;
-    else if (player_in_branch(BRANCH_CRYPT))
-        return;
 
     const int num_pools = 20 + random2avg(9, 2);
     int pools = 0;
@@ -1083,9 +1056,6 @@ static bool _may_overwrite_pos(coord_def c)
 
 static void _build_river(dungeon_feature_type river_type) //mv
 {
-    if (player_in_branch(BRANCH_CRYPT) || player_in_branch(BRANCH_TOMB))
-        return;
-
     // TODO: Attach this information to the vault name string
     //       instead of the build method string.
     env.level_build_method += make_stringf(" river [%s]",
@@ -1132,9 +1102,6 @@ static void _build_lake(dungeon_feature_type lake_type) //mv
 {
     int i, j;
     int x1, y1, x2, y2;
-
-    if (player_in_branch(BRANCH_CRYPT) || player_in_branch(BRANCH_TOMB))
-        return;
 
         // TODO: Attach this information to the vault name string
         //       instead of the build method string.

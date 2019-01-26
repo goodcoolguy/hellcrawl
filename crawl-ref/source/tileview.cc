@@ -98,21 +98,6 @@ void tile_default_flv(branch_type br, int depth, tile_flavour &flv)
         flv.floor = TILE_FLOOR_VAULT;
         return;
 
-    case BRANCH_TEMPLE:
-        flv.wall  = TILE_WALL_VINES;
-        flv.floor = TILE_FLOOR_VINES;
-        return;
-
-#if TAG_MAJOR_VERSION == 34
-    case BRANCH_DWARF:
-        flv.wall  = TILE_WALL_HALL;
-        flv.floor = TILE_FLOOR_LIMESTONE;
-        return;
-#endif
-
-#if TAG_MAJOR_VERSION == 34
-    case BRANCH_BLADE:
-#endif
     case BRANCH_ELF:
         flv.wall  = TILE_WALL_HALL;
         flv.floor = TILE_FLOOR_HALL;
@@ -121,16 +106,6 @@ void tile_default_flv(branch_type br, int depth, tile_flavour &flv)
     case BRANCH_TARTARUS:
         flv.wall  = TILE_WALL_COBALT_ROCK;
         flv.floor = TILE_FLOOR_BLACK_COBALT;
-        return;
-
-    case BRANCH_CRYPT:
-        flv.wall  = TILE_WALL_BRICK_GRAY;
-        flv.floor = TILE_FLOOR_CRYPT;
-        return;
-
-    case BRANCH_TOMB:
-        flv.wall  = TILE_WALL_UNDEAD;
-        flv.floor = TILE_FLOOR_TOMB;
         return;
 
     case BRANCH_VESTIBULE:
@@ -156,11 +131,6 @@ void tile_default_flv(branch_type br, int depth, tile_flavour &flv)
     case BRANCH_ORC:
         flv.wall  = TILE_WALL_ORC;
         flv.floor = TILE_FLOOR_ORC;
-        return;
-
-    case BRANCH_LAIR:
-        flv.wall  = TILE_WALL_LAIR;
-        flv.floor = TILE_FLOOR_LAIR;
         return;
 
     case BRANCH_SLIME:
@@ -193,12 +163,6 @@ void tile_default_flv(branch_type br, int depth, tile_flavour &flv)
         flv.floor = TILE_FLOOR_TOMB;
         return;
 
-#if TAG_MAJOR_VERSION == 34
-    case BRANCH_FOREST:
-        flv.wall  = TILE_WALL_LAIR;
-        flv.floor = TILE_FLOOR_GRASS;
-        return;
-#endif
     case BRANCH_ABYSS:
         flv.floor = tile_dngn_coloured(TILE_FLOOR_NERVES, env.floor_colour);
         switch (random2(6))
@@ -229,16 +193,10 @@ void tile_default_flv(branch_type br, int depth, tile_flavour &flv)
             flv.wall = tile_dngn_coloured(TILE_WALL_BARS, env.rock_colour);
         break;
 
-    case BRANCH_ZIGGURAT:
     case BRANCH_BAZAAR:
     case BRANCH_TROVE:
         flv.wall  = TILE_WALL_VAULT;
         flv.floor = TILE_FLOOR_VAULT;
-        return;
-
-    case BRANCH_LABYRINTH:
-        flv.wall  = TILE_WALL_LAB_ROCK;
-        flv.floor = TILE_FLOOR_LABYRINTH;
         return;
 
     case BRANCH_SEWER:
@@ -1225,33 +1183,7 @@ void apply_variations(const tile_flavour &flv, tileidx_t *bg,
     tileidx_t orig = (*bg) & TILE_FLAG_MASK;
     tileidx_t flag = (*bg) & (~TILE_FLAG_MASK);
 
-    // TODO: allow the stone type to be set in a cleaner way.
-    if (player_in_branch(BRANCH_LABYRINTH))
-    {
-        if (orig == TILE_DNGN_STONE_WALL)
-            orig = TILE_WALL_LAB_STONE;
-        else if (orig == TILE_DNGN_METAL_WALL)
-            orig = TILE_WALL_LAB_METAL;
-        else if (orig == TILE_WALL_PERMAROCK)
-            orig = TILE_WALL_PERMAROCK_BROWN;
-    }
-    else if (player_in_branch(BRANCH_CRYPT))
-    {
-        if (orig == TILE_DNGN_STONE_WALL)
-            orig = TILE_WALL_CRYPT;
-        else if (orig == TILE_DNGN_METAL_WALL)
-            orig = TILE_WALL_CRYPT_METAL;
-        else if (orig == TILE_DNGN_OPEN_DOOR)
-            orig = TILE_DNGN_OPEN_DOOR_CRYPT;
-        else if (orig == TILE_DNGN_CLOSED_DOOR)
-            orig = TILE_DNGN_CLOSED_DOOR_CRYPT;
-    }
-    else if (player_in_branch(BRANCH_TOMB))
-    {
-        if (orig == TILE_DNGN_STONE_WALL)
-            orig = TILE_WALL_TOMB;
-    }
-    else if (player_in_branch(BRANCH_DIS))
+    if (player_in_branch(BRANCH_DIS))
     {
         if (orig == TILE_DNGN_METAL_WALL)
             orig = TILE_DNGN_METAL_IRON;

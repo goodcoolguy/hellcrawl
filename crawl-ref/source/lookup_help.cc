@@ -1114,7 +1114,7 @@ static string _branch_entry_runes(branch_type br)
     {
         desc = make_stringf("\n\nThis %s can only be entered while carrying "
                             "at least %d rune%s of Zot.",
-                            br == BRANCH_ZIGGURAT ? "portal" : "branch",
+                            "branch",
                             num_runes, num_runes > 1 ? "s" : "");
     }
 
@@ -1129,9 +1129,7 @@ static string _branch_depth(branch_type br)
     // Abyss depth is explained in the description.
     if (depth > 1 && br != BRANCH_ABYSS)
     {
-        desc = make_stringf("\n\nThis %s is %d levels deep.",
-                            br == BRANCH_ZIGGURAT ? "portal"
-                                                  : "branch",
+        desc = make_stringf("\n\nThis %s is %d levels deep.", "branch",
                             depth);
     }
 
@@ -1146,7 +1144,7 @@ static string _branch_location(branch_type br)
     const int max = branches[br].maxdepth;
 
     // Ziggurat locations are explained in the description.
-    if (parent != NUM_BRANCHES && br != BRANCH_ZIGGURAT)
+    if (parent != NUM_BRANCHES)
     {
         desc = "\n\nThe entrance to this branch can be found ";
         if (min == max)
@@ -1175,7 +1173,7 @@ static string _branch_subbranches(branch_type br)
             subbranch_names.push_back(it->longname);
 
     // Lair's random branches are explained in the description.
-    if (!subbranch_names.empty() && br != BRANCH_LAIR)
+    if (!subbranch_names.empty())
     {
         desc += make_stringf("\n\nThis branch contains the entrance%s to %s.",
                              subbranch_names.size() > 1 ? "s" : "",

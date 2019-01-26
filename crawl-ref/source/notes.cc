@@ -414,17 +414,16 @@ void Note::check_milestone() const
 
             if (dep == 1)
             {
-                mark_milestone(br == BRANCH_ZIGGURAT ? "zig.enter" : "br.enter",
+                mark_milestone("br.enter",
                                "entered " + branch + ".", "parent");
             }
-            else if (dep == _dungeon_branch_depth(br)
-                     || br == BRANCH_ZIGGURAT)
+            else if (dep == _dungeon_branch_depth(br))
             {
                 string level = place.describe(true, true);
                 if (starts_with(level, "Level "))
                     level[0] = tolower(level[0]);
 
-                mark_milestone(br == BRANCH_ZIGGURAT ? "zig" : "br.end",
+                mark_milestone("br.end",
                                "reached " + level + ".");
             }
         }

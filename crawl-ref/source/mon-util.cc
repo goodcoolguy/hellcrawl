@@ -928,14 +928,6 @@ bool mons_is_native_in_branch(const monster& mons,
     case BRANCH_VAULTS:
         return mons_genus(mons.type) == MONS_HUMAN;
 
-    case BRANCH_CRYPT:
-        return mons.holiness() == MH_UNDEAD;
-
-    case BRANCH_TOMB:
-        return mons_genus(mons.type) == MONS_MUMMY
-              || mons.type == MONS_USHABTI
-              || mons.type == MONS_DEATH_SCARAB;
-
     case BRANCH_SPIDER:
         return mons_genus(mons.type) == MONS_SPIDER;
 

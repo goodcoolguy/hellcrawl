@@ -999,8 +999,6 @@ static dungeon_feature_type rewrite_feature(dungeon_feature_type x,
         x = DNGN_CLOSED_DOOR;
     if (x == DNGN_BADLY_SEALED_DOOR)
         x = DNGN_SEALED_DOOR;
-    if (x == DNGN_ESCAPE_HATCH_UP && player_in_branch(BRANCH_LABYRINTH))
-        x = DNGN_EXIT_LABYRINTH;
     if (x == DNGN_DEEP_WATER && player_in_branch(BRANCH_SHOALS)
         && minor_version < TAG_MINOR_SHOALS_LITE)
     {
@@ -1609,7 +1607,7 @@ static void tag_construct_you(writer &th)
     marshall_level_id(th, abyssal_state.level);
 
 #if TAG_MAJOR_VERSION == 34
-    if (abyssal_state.level.branch == BRANCH_DWARF || !abyssal_state.level.is_valid())
+    if (!abyssal_state.level.is_valid())
         abyssal_state.level = level_id(static_cast<branch_type>(BRANCH_DUNGEON), 19);
 #endif
 
@@ -3853,15 +3851,10 @@ static branch_type old_entries[] =
     /* Elf */    BRANCH_ORC,
     /* Dwarf */  BRANCH_VAULTS,
     /* Lair */   BRANCH_DUNGEON,
-    /* Swamp */  BRANCH_LAIR,
-    /* Shoals */ BRANCH_LAIR,
-    /* Snake */  BRANCH_LAIR,
-    /* Spider */ BRANCH_LAIR,
-    /* Slime */  BRANCH_LAIR,
     /* Vaults */ BRANCH_DUNGEON,
     /* Blade */  BRANCH_VAULTS,
     /* Crypt */  BRANCH_VAULTS,
-    /* Tomb */   BRANCH_CRYPT, // or Forest
+    /* Tomb */   NUM_BRANCHES,
     /* Hell */   NUM_BRANCHES,
     /* Dis */    BRANCH_VESTIBULE,
     /* Geh */    BRANCH_VESTIBULE,
@@ -3934,14 +3927,6 @@ static void tag_read_you_dungeon(reader &th)
 
     // Root of the dungeon; usually BRANCH_DUNGEON.
     root_branch = static_cast<branch_type>(unmarshallInt(th));
-#if TAG_MAJOR_VERSION == 34
-    if (th.getMinorVersion() < TAG_MINOR_BRANCH_ENTRY)
-    {
-        brentry[root_branch].clear();
-        if (brentry[BRANCH_FOREST].is_valid())
-            brentry[BRANCH_TOMB].branch = BRANCH_FOREST;
-    }
-#endif
 
     unmarshallMap(th, stair_level,
                   unmarshall_int_as<branch_type>,

@@ -1336,10 +1336,6 @@ static void _give_shield(monster* mon, int level)
         break;
 
     case MONS_MINOTAUR:
-        // Don't pre-equip the Lab minotaur.
-        if (player_in_branch(BRANCH_LABYRINTH) && !(mon->flags & MF_NO_REWARD))
-            break;
-        // deliberate fall-through
 
     case MONS_NAGA_WARRIOR:
     case MONS_VAULT_GUARD:
@@ -1577,10 +1573,6 @@ static void _give_armour(monster* mon, int level, bool spectral_orcs)
         break;
 
     case MONS_MINOTAUR:
-        // Don't pre-equip the Lab minotaur.
-        if (player_in_branch(BRANCH_LABYRINTH) && !(mon->flags & MF_NO_REWARD))
-            break;
-        // deliberate fall through
 
     case MONS_ORC_WARLORD:
     case MONS_SAINT_ROKA:

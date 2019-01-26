@@ -16,10 +16,6 @@ branch_type root_branch;
 /// A save-compat ordering for branches.
 static const branch_type logical_branch_order[] = {
     BRANCH_DUNGEON,
-    BRANCH_TEMPLE,
-#if TAG_MAJOR_VERSION == 34
-    BRANCH_LAIR,
-#endif
     BRANCH_SWAMP,
     BRANCH_SHOALS,
     BRANCH_SNAKE,
@@ -27,16 +23,7 @@ static const branch_type logical_branch_order[] = {
     BRANCH_SLIME,
     BRANCH_ORC,
     BRANCH_ELF,
-#if TAG_MAJOR_VERSION == 34
-    BRANCH_DWARF,
-#endif
     BRANCH_VAULTS,
-#if TAG_MAJOR_VERSION == 34
-    BRANCH_BLADE,
-    BRANCH_FOREST,
-    BRANCH_CRYPT,
-    BRANCH_TOMB,
-#endif
     BRANCH_DEPTHS,
     BRANCH_VESTIBULE,
     BRANCH_DIS,
@@ -46,8 +33,6 @@ static const branch_type logical_branch_order[] = {
     BRANCH_ZOT,
     BRANCH_ABYSS,
     BRANCH_PANDEMONIUM,
-    BRANCH_ZIGGURAT,
-    BRANCH_LABYRINTH,
     BRANCH_BAZAAR,
     BRANCH_TROVE,
     BRANCH_SEWER,
@@ -62,19 +47,14 @@ COMPILE_CHECK(ARRAYSZ(logical_branch_order) == NUM_BRANCHES);
 
 /// Branches ordered loosely by challenge level.
 static const branch_type danger_branch_order[] = {
-    BRANCH_TEMPLE,
     BRANCH_BAZAAR,
     BRANCH_TROVE,
     BRANCH_DUNGEON,
     BRANCH_SEWER,
     BRANCH_OSSUARY,
     BRANCH_BAILEY,
-#if TAG_MAJOR_VERSION == 34
-    BRANCH_LAIR,
-#endif
     BRANCH_ICE_CAVE,
     BRANCH_VOLCANO,
-    BRANCH_LABYRINTH,
     BRANCH_ORC,
     BRANCH_SWAMP,
     BRANCH_SHOALS,
@@ -82,7 +62,6 @@ static const branch_type danger_branch_order[] = {
     BRANCH_SPIDER,
     BRANCH_VAULTS,
     BRANCH_ELF,
-    BRANCH_CRYPT,
     BRANCH_DESOLATION,
     BRANCH_ABYSS,
     BRANCH_WIZLAB,
@@ -95,13 +74,6 @@ static const branch_type danger_branch_order[] = {
     BRANCH_GEHENNA,
     BRANCH_COCYTUS,
     BRANCH_DIS,
-    BRANCH_TOMB,
-    BRANCH_ZIGGURAT,
-#if TAG_MAJOR_VERSION == 34
-    BRANCH_DWARF,
-    BRANCH_BLADE,
-    BRANCH_FOREST,
-#endif
 };
 COMPILE_CHECK(ARRAYSZ(danger_branch_order) == NUM_BRANCHES);
 
@@ -177,8 +149,10 @@ bool is_hell_subbranch(branch_type branch)
 
 bool is_random_subbranch(branch_type branch)
 {
-    return parent_branch(branch) == BRANCH_LAIR
-           && branch != BRANCH_SLIME;
+    return branch == BRANCH_SWAMP
+                || branch == BRANCH_SNAKE
+                || branch == BRANCH_SPIDER
+                || branch == BRANCH_SHOALS;
 }
 
 bool is_connected_branch(const Branch *branch)
@@ -227,14 +201,6 @@ branch_type get_branch_at(const coord_def& pos)
 
 bool branch_is_unfinished(branch_type branch)
 {
-#if TAG_MAJOR_VERSION == 34
-    if (branch == BRANCH_DWARF
-        || branch == BRANCH_FOREST
-        || branch == BRANCH_BLADE)
-    {
-        return true;
-    }
-#endif
     return false;
 }
 
@@ -251,7 +217,6 @@ int runes_for_branch(branch_type branch)
     switch (branch)
     {
     case BRANCH_VAULTS:   return VAULTS_ENTRY_RUNES;
-    case BRANCH_ZIGGURAT: return ZIG_ENTRY_RUNES;
     case BRANCH_ZOT:      return ZOT_ENTRY_RUNES;
     default:              return 0;
     }

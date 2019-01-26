@@ -352,9 +352,6 @@ static bool _build_level_vetoable(bool enable_random_maps,
 
     dgn_reset_level(enable_random_maps);
 
-    if (player_in_branch(BRANCH_TEMPLE))
-        _setup_temple_altars(you.props);
-
     try
     {
         _build_dungeon_level(dest_stairs_type);
@@ -1271,9 +1268,7 @@ void dgn_reset_level(bool enable_random_maps)
 
     // Set default random monster generation rate (smaller is more often,
     // except that 0 == no random monsters).
-    if (player_in_branch(BRANCH_TEMPLE)
-        && !player_on_orb_run() // except for the Orb run
-        || crawl_state.game_is_tutorial())
+    if (crawl_state.game_is_tutorial())
     {
         // No random monsters in tutorial or ecu temple
         env.spawn_random_rate = 0;
@@ -1378,10 +1373,6 @@ static void _fixup_walls()
         }
         break;
     }
-
-    case BRANCH_CRYPT:
-        wall_type = DNGN_STONE_WALL;
-        break;
 
     case BRANCH_SLIME:
         wall_type = DNGN_SLIMY_WALL;
@@ -1941,7 +1932,7 @@ static bool _branch_entrances_are_connected()
 static bool _branch_needs_stairs()
 {
     // Irrelevant for branches with a single level and all encompass maps.
-    return !player_in_branch(BRANCH_ZIGGURAT);
+    return true;
 }
 
 static void _dgn_verify_connectivity(unsigned nvaults)
@@ -2314,9 +2305,6 @@ static void _build_dungeon_level(dungeon_feature_type dest_stairs_type)
 {
     bool place_vaults = _builder_by_type();
 
-    if (player_in_branch(BRANCH_LABYRINTH))
-        return;
-
     if (player_in_branch(BRANCH_SLIME))
         _slime_connectivity_fixup();
 
@@ -2611,14 +2599,7 @@ static bool _bazaar_level()
 // to place more vaults after this
 static bool _builder_by_type()
 {
-    if (player_in_branch(BRANCH_LABYRINTH))
-    {
-        dgn_build_labyrinth_level();
-        // Labs placed their minivaults already
-        _fixup_branch_stairs();
-        return false;
-    }
-    else if (player_in_branch(BRANCH_ABYSS))
+    if (player_in_branch(BRANCH_ABYSS))
     {
         generate_abyss();
         // Should place some vaults in abyss because
@@ -2642,25 +2623,6 @@ static bool _builder_by_type()
 
 static const map_def *_dgn_random_map_for_place(bool minivault)
 {
-    if (!minivault && player_in_branch(BRANCH_TEMPLE))
-    {
-        // Temple vault determined at new game time.
-        const string name = you.props[TEMPLE_MAP_KEY];
-
-        // Tolerate this for a little while, for old games.
-        if (!name.empty())
-        {
-            const map_def *vault = find_map_by_name(name);
-
-            if (vault)
-                return vault;
-
-            mprf(MSGCH_ERROR, "Unable to find Temple vault '%s'",
-                 name.c_str());
-
-            // Fall through and use a different Temple map instead.
-        }
-    }
 	
     if(player_in_branch(BRANCH_BAZAAR))
     {
@@ -3205,8 +3167,6 @@ static void _place_traps()
         max_webs /= 2;
         place_webs(max_webs + random2(max_webs));
     }
-    else if (player_in_branch(BRANCH_CRYPT))
-        place_webs(random2(20));
 }
 
 static void _dgn_place_feature_at_random_floor_square(dungeon_feature_type feat,
@@ -3703,8 +3663,6 @@ bool door_vetoed(const coord_def pos)
 
 static void _builder_monsters()
 {
-    if (player_in_branch(BRANCH_TEMPLE))
-        return;
 
     int mon_wanted = _num_mons_wanted();
 
@@ -3732,10 +3690,7 @@ static void _builder_monsters()
         place_monster(mg);
     }
 
-    if (!player_in_branch(BRANCH_CRYPT)) // No water creatures in the Crypt.
-        _place_aquatic_monsters();
-    else
-        _place_assorted_zombies();
+    _place_aquatic_monsters();
 }
 
 /**
@@ -5283,23 +5238,12 @@ static dungeon_feature_type _pick_temple_altar(vault_placement &place)
 static dungeon_feature_type _pick_an_altar()
 {
     god_type god;
-
-    if (player_in_branch(BRANCH_TEMPLE)
-        || player_in_branch(BRANCH_LABYRINTH))
-    {
-        // No extra altars in Temple, none at all in Labyrinth.
-        god = GOD_NO_GOD;
-    }
-    // Xom can turn up anywhere
-    else if (one_chance_in(27))
+    if (one_chance_in(27))
         god = GOD_XOM;
     else
     {
         switch (you.where_are_you)
         {
-        case BRANCH_CRYPT:
-            god = coinflip() ? GOD_KIKUBAAQUDGHA : GOD_YREDELEMNUL;
-            break;
 
         case BRANCH_ORC: // There are a few heretics
             if (one_chance_in(5))
@@ -5314,10 +5258,6 @@ static dungeon_feature_type _pick_an_altar()
 
         case BRANCH_SLIME:
             god = GOD_JIYVA;
-            break;
-
-        case BRANCH_TOMB:
-            god = GOD_KIKUBAAQUDGHA;
             break;
 
         case BRANCH_VESTIBULE:
@@ -5684,9 +5624,6 @@ static bool _spotty_seed_ok(const coord_def& p)
 static bool _feat_is_wall_floor_liquid(dungeon_feature_type feat)
 {
     return feat_is_water(feat)
-#if TAG_MAJOR_VERSION == 34
-           || player_in_branch(BRANCH_FOREST) && feat == DNGN_TREE
-#endif
            || player_in_branch(BRANCH_SWAMP) && feat == DNGN_TREE
            || feat_is_lava(feat)
            || feat_is_wall(feat)
@@ -5913,17 +5850,6 @@ coord_def dgn_find_nearby_stair(dungeon_feature_type stair_to_find,
         const coord_def pos(dgn_find_feature_marker(stair_to_find));
         if (in_bounds(pos) && grd(pos) == stair_to_find)
             return pos;
-    }
-
-    if (player_in_branch(BRANCH_LABYRINTH))
-    {
-        const coord_def pos(_dgn_find_labyrinth_entry_point());
-        if (in_bounds(pos))
-            return pos;
-
-        // Couldn't find a good place, warn, and use old behaviour.
-        dprf(DIAG_DNGN, "Oops, couldn't find labyrinth entry marker.");
-        stair_to_find = DNGN_FLOOR;
     }
 
     if (stair_to_find == your_branch().exit_stairs)

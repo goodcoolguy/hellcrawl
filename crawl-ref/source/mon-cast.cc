@@ -5098,15 +5098,13 @@ static const pop_entry _invitation_crypt[] =
 
 static branch_summon_pair _invitation_summons[] =
 {
-  { BRANCH_LAIR,   _invitation_lair },
   { BRANCH_SNAKE,  _invitation_snake },
   { BRANCH_SPIDER, _invitation_spider },
   { BRANCH_SWAMP,  _invitation_swamp },
   { BRANCH_SHOALS, _invitation_shoals },
   { BRANCH_ORC,    _invitation_orc },
   { BRANCH_ELF,    _invitation_elf },
-  { BRANCH_VAULTS, _invitation_vaults },
-  { BRANCH_CRYPT,  _invitation_crypt }
+  { BRANCH_VAULTS, _invitation_vaults }
 };
 
 static const pop_entry _planerend_snake[] =
@@ -5206,8 +5204,6 @@ static branch_summon_pair _planerend_summons[] =
   { BRANCH_SLIME,  _planerend_slime },
   { BRANCH_ELF,    _planerend_elf },
   { BRANCH_VAULTS, _planerend_vaults },
-  { BRANCH_CRYPT,  _planerend_crypt },
-  { BRANCH_TOMB,   _planerend_tomb },
   { BRANCH_ABYSS,  _planerend_abyss },
   { BRANCH_ZOT,    _planerend_zot }
 };

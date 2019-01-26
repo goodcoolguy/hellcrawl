@@ -1922,10 +1922,6 @@ bool is_boring_terrain(dungeon_feature_type feat)
        || feat == DNGN_STONE_STAIRS_UP_III || feat == DNGN_ESCAPE_HATCH_UP)
         return true;
 
-    // Altars in the temple are boring.
-    if (feat_is_altar(feat) && player_in_branch(BRANCH_TEMPLE))
-        return true;
-
     // Only note the first entrance to the Abyss/Pan/Hell
     // which is found.
     if ((feat == DNGN_ENTER_ABYSS || feat == DNGN_ENTER_PANDEMONIUM

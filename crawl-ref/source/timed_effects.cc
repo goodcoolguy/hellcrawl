@@ -805,8 +805,7 @@ static void _handle_magic_contamination(int /*time_delta*/)
 
 static void _lab_change(int /*time_delta*/)
 {
-    if (player_in_branch(BRANCH_LABYRINTH))
-        change_labyrinth();
+    return;
 }
 
 // Update the abyss speed. This place is unstable and the speed can
@@ -995,7 +994,7 @@ void handle_time()
     }
 
     // Labyrinth and Abyss maprot.
-    if (player_in_branch(BRANCH_LABYRINTH) || player_in_branch(BRANCH_ABYSS))
+    if (player_in_branch(BRANCH_ABYSS))
         forget_map(true);
 
     // Magic contamination from spells and Orb.
