@@ -141,11 +141,6 @@ static void _use_overflow_temple(vector<god_type> temple_gods)
 
     CrawlHashTable temple;
 
-    CrawlVector &gods = temple[TEMPLE_GODS_KEY].new_vector(SV_BYTE);
-
-    for (unsigned int i = 0; i < temple_gods.size(); i++)
-        gods.push_back((char) temple_gods[i]);
-
     level_temples.push_back(temple);
 }
 
@@ -159,16 +154,8 @@ void initialise_temples()
     vector<god_type> god_list = temple_god_list();
     shuffle_array(god_list);
 
-    vector<god_type> overflow_gods;
-
-    while (god_list.size() > 0)
-    {
-        overflow_gods.push_back(god_list.back());
-        god_list.pop_back();
-    }
-
 #ifdef DEBUG_TEMPLES
-    mprf(MSGCH_DIAGNOSTICS, "%u overflow altars", (unsigned int)overflow_gods.size());
+    mprf(MSGCH_DIAGNOSTICS, "%u overflow altars", (unsigned int)god_list.size());
 #endif
 
     CrawlVector &overflow_temples
@@ -202,12 +189,12 @@ void initialise_temples()
     // altar; they can contain any number of altars, so long as there's
     // at least one vault definition with the tag "overflow_temple_num"
     // (where "num" is the number of altars).
-    for (unsigned int i = 0, size = overflow_gods.size(); i < size; i++)
+    for (unsigned int i = 0, size = god_list.size(); i < size; i++)
     {
         unsigned int remaining_size = size - i;
         // At least one god.
         vector<god_type> this_temple_gods;
-        this_temple_gods.push_back(overflow_gods[i]);
+        this_temple_gods.push_back(god_list[i]);
 
         // Maybe place a larger overflow temple.
         if (remaining_size > 1 && one_chance_in(remaining_size + 1))
@@ -225,7 +212,7 @@ void initialise_temples()
 
             // Add any extra gods (the first was added already).
             for (; num_gods > 1; i++, num_gods--)
-                this_temple_gods.push_back(overflow_gods[i + 1]);
+                this_temple_gods.push_back(god_list[i + 1]);
         }
 
         _use_overflow_temple(this_temple_gods);
