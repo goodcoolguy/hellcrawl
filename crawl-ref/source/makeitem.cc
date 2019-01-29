@@ -208,10 +208,10 @@ static bool _try_make_weapon_artefact(item_def& item, int force_type,
         }
 
         // Mean enchantment +6.
-        item.plus = 12 - biased_random2(7,2) - biased_random2(7,2) - biased_random2(7,2);
+        item.plus = 0;
 
         // On weapons, an enchantment of less than 0 is never viable.
-        item.plus = max(static_cast<int>(item.plus), random2(2));
+        item.plus = 0;
 
         // The rest are normal randarts.
         make_item_randart(item);
@@ -401,7 +401,7 @@ static void _generate_weapon_item(item_def& item, bool allow_uniques,
             set_item_ego_type(item, OBJ_WEAPONS,
                 _determine_weapon_brand(item, 2 + 2 * env.absdepth0));
         }
-        item.plus -= 1 + random2(3);
+        item.plus = 0;
     }
     else if ((force_good || is_demonic(item) || forced_ego
                     || x_chance_in_y(51 + item_level, 200))
@@ -413,26 +413,8 @@ static void _generate_weapon_item(item_def& item, bool allow_uniques,
             set_item_ego_type(item, OBJ_WEAPONS,
                               _determine_weapon_brand(item, item_level));
         }
-
-        // if acquired item still not ego... enchant it up a bit.
-        if (force_good && item.brand == SPWPN_NORMAL)
-            item.plus += 2 + random2(3);
-
-        const int chance = (force_good ? 200 : item_level);
-
-        // Odd-looking, but this is how the algorithm compacts {dlb}.
-        for (int i = 0; i < 4; ++i)
-        {
-            item.plus += random2(3);
-
-            if (random2(425) > 35 + chance)
-                break;
-        }
-
-        // squash boring items.
-        if (!force_good && item.brand == SPWPN_NORMAL && item.plus < 3)
-            item.plus = 0;
     }
+    item.plus = 0;
 }
 
 // Current list is based on dpeg's original post to the Wiki, found at the
@@ -655,6 +637,8 @@ static bool _try_make_armour_artefact(item_def& item, int force_type,
             if (_try_make_item_unrand(item, force_type, agent))
                 return true;
         }
+		
+        item.plus = 0;
 
         // The rest are normal randarts.
 
@@ -664,28 +648,9 @@ static bool _try_make_armour_artefact(item_def& item, int force_type,
             item.sub_type = ARM_NAGA_BARDING;
         }
 
-        int max_plus = armour_max_enchant(item);
-        item.plus = random2(max_plus + 1);
-
-        if (one_chance_in(5))
-            item.plus += random2(max_plus + 6) / 2;
-
-        if (one_chance_in(6))
-            item.plus -= random2(max_plus + 6);
-        
-
-        // On body armour, an enchantment of less than 0 is never viable.
-        if (get_armour_slot(item) == EQ_BODY_ARMOUR)
-            item.plus = max(static_cast<int>(item.plus), random2(2));
-
         // Needs to be done after the barding chance else we get randart
         // bardings named Boots of xy.
         make_item_randart(item);
-
-        // Don't let quicksilver dragon armour get minuses.
-        if (item.sub_type == ARM_QUICKSILVER_DRAGON_ARMOUR)
-            item.plus = 0;
-
         return true;
     }
 
@@ -1065,51 +1030,24 @@ static void _generate_armour_item(item_def& item, bool allow_uniques,
             set_item_ego_type(item, OBJ_ARMOUR,
                 _generate_armour_ego(item, 2 + 2 * env.absdepth0));
         }
-
-        item.plus -= 1 + random2(3);
     }
     else if ((forced_ego || item.sub_type == ARM_HAT
                     || x_chance_in_y(51 + item_level, 250))
                 && !item.is_mundane() || force_good)
     {
-        // Make a good item...
-        item.plus += random2(3);
-
-        if (item.sub_type <= ARM_PLATE_ARMOUR
-            && x_chance_in_y(21 + item_level, 300))
-        {
-            item.plus += random2(3);
-        }
-
         if (!no_ego && x_chance_in_y(41 + item_level, 350))
         {
             // ...an ego item, in fact.
             set_item_ego_type(item, OBJ_ARMOUR,
                               _generate_armour_ego(item, item_level));
-
-            if (get_armour_ego_type(item) == SPARM_PONDEROUSNESS)
-                item.plus += 3 + random2(8);
         }
     }
-
-    // Don't overenchant items.
-    if (item.plus > armour_max_enchant(item))
-        item.plus = armour_max_enchant(item);
-
-    // Don't let quicksilver dragon armour get minuses.
-    if (item.sub_type == ARM_QUICKSILVER_DRAGON_ARMOUR)
-        item.plus = 0;
 
     // Never give brands to scales or hides, in case of misbehaving vaults.
     if (armour_type_is_hide(static_cast<armour_type>(item.sub_type)))
         set_item_ego_type(item, OBJ_ARMOUR, SPARM_NORMAL);
-
-    // squash boring items.
-    if (!force_good && item.brand == SPARM_NORMAL && item.plus > 0
-        && item.plus < _armour_plus_threshold(get_armour_slot(item)))
-    {
-        item.plus = 0;
-    }
+	
+    item.plus = 0;
 }
 
 /**
