@@ -16,10 +16,10 @@
 # This layout needs a home.  See devwiki for possible ideas.
 #
 NAME:   layout_twisted_forest
-DEPTH:  D:1, Forest
+DEPTH:  D:1
 # TAG_MAJOR_VERSION == 34
 # Remove Forest weighting on version bump
-WEIGHT: 0 (D), 100 (Forest)
+WEIGHT: 0 (D)
 ORIENT: encompass
 TAGS:   overwritable layout allow_dup unrand layout_type_forest
 {{
@@ -35,18 +35,7 @@ TAGS:   overwritable layout allow_dup unrand layout_type_forest
   local tree_feature = 't'
   local fill = 'x'
   local plant_mons = "plant"
-  if you.in_branch("forest") then
-    fill = 't'
-    scale = 0.55 - 0.05 * you.depth()
-  elseif you.in_branch("crypt") then
-    streams = false
-    scale = 0.5
-    plant_mons = "withered plant"
-    colour("t = w:5 lightgrey / w:5 darkgrey / brown")
-    set_feature_name("tree", "dead tree")
-    lakes = false
-    -- TODO: Graves instead of lakes
-  end
+
   mons(plant_mons)
 
   local gxm,gym = dgn.max_bounds()
@@ -127,9 +116,6 @@ TAGS:   overwritable layout allow_dup unrand layout_type_forest
 
   zonify.map_fill_zones(_G, 1, fill)
 
-  if you.in_branch("crypt") then
-    tile("t = dngn_tree_dead")
-  end
   theme.D.caves(_G)
   kmask("1 = vault")
 }}

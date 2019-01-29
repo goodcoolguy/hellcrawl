@@ -94,10 +94,6 @@ function sroom_beehive(e)
 
     local level = you.absdepth()
 
-    if you.in_branch("Lair") then
-        level = you.absdepth() - 2
-    end
-
     fill_special_room(e, "patrolling killer bee",
                       "patrolling queen bee", true)
 
@@ -160,7 +156,7 @@ function sroom_morgue(e)
         bodies = "iron dragon corpse / iron dragon skeleton / "
                  .. "iron troll corpse / iron troll skeleton"
         bodies_chance = 40
-    elseif you.in_branch("Tar") or you.in_branch("Crypt") then
+    elseif you.in_branch("Tar") then
         mons[5] = "eidolon w:6 / jiangshi w:6"
         mons[6] = "mummy priest w:2 / revenant w:6"
         bodies = "shadow dragon corpse / base draconian corpse / "
@@ -184,7 +180,7 @@ function sroom_morgue(e)
     end
 
     fill_special_room(e, mons, lord_mon, true)
-    if you.in_branch("Depths") or you.in_branch("Crypt") then
+    if you.in_branch("Depths") then
          e.kitem('2 = randbook disc:necromancy')
     else
          e.nsubst('1. = 1:})]>.')
@@ -207,9 +203,7 @@ function sroom_jelly_pit(e)
 
     local level = you.absdepth()
 
-    if you.in_branch("Lair") then
-        level = you.absdepth() - 7
-    elseif you.in_branch("Slime") then
+    if you.in_branch("Slime") then
         level = you.absdepth() + 10
     end
 
@@ -244,8 +238,6 @@ function sroom_mythical_zoo(e)
 
     if you.in_branch("Elf") then
         Z = Z + 5
-    elseif you.in_branch("Lair") then
-        Z = Z - 2
     end
 
     local mons = {}
@@ -348,15 +340,15 @@ MAP
 ENDMAP
 
 NAME:   special_room_bee
-DEPTH:  D:9-, Lair, Orc, !Orc:$, Spider
+DEPTH:  D:9-, Orc, !Orc:$, Spider
 TAGS:   special_room unrand uniq_beehive
-WEIGHT: 30 (D:9-12, Orc, Lair:1-3), 24 (D:13-, Lair:4-), 20
+WEIGHT: 30 (D:9-12, Orc), 24 (D:13-), 20
 : sroom_beehive(_G)
 MAP
 ENDMAP
 
 NAME:   special_room_morgue
-DEPTH:  Depths, Crypt, Dis, Tar, Coc, Geh
+DEPTH:  Depths, Dis, Tar, Coc, Geh
 TAGS:   special_room allow_dup unrand
 WEIGHT: 29 (Depths:1-3), 34
 : sroom_morgue(_G)
@@ -364,17 +356,17 @@ MAP
 ENDMAP
 
 NAME:   special_room_jelly
-DEPTH:  Depths, Lair:$, Slime
+DEPTH:  Depths, Slime
 TAGS:   special_room allow_dup unrand
-WEIGHT: 9 (Lair:$), 13 (Depths:1-3), 40
+WEIGHT: 13 (Depths:1-3), 40
 : sroom_jelly_pit(_G)
 MAP
 ENDMAP
 
 NAME:   special_room_mythical_zoo
-DEPTH:  D:14-, Depths, Lair:4-, Elf
+DEPTH:  D:14-, Depths, Elf
 TAGS:   special_room allow_dup unrand
-WEIGHT: 20 (D:14-, Lair:4-5), 25 (Depths:1-3, Lair:$, Elf), 28
+WEIGHT: 20 (D:14-), 25 (Depths:1-3, Elf), 28
 : sroom_mythical_zoo(_G)
 MAP
 ENDMAP

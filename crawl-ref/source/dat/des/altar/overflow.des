@@ -635,7 +635,7 @@ ENDMAP
 ### Kikubaaqudgha overflow altars #############################################
 
 NAME:   lemuel_zombie_altar_kikubaaqudgha
-DEPTH:  D:2-, Crypt
+DEPTH:  D:2-
 TAGS:   no_pool_fixup uniq_zombie_altar no_monster_gen temple_overflow_1
 TAGS:   temple_overflow_kikubaaqudgha
 KFEAT:  _ = altar_kikubaaqudgha
@@ -654,7 +654,7 @@ ENDMAP
 NAME:   lemuel_mausoleum_altar_kikubaaqudgha
 TAGS:   uniq_altar_kikubaaqudgha temple_overflow_1
 TAGS:   temple_overflow_kikubaaqudgha uniq_mausoleum_altar
-DEPTH:  D:7-, Crypt
+DEPTH:  D:7-
 MONS:   w:50 human zombie/orc zombie/elf zombie/w:5 ogre zombie/w:5 troll zombie
 MONS:   w:50 human skeleton/orc skeleton/elf skeleton/w:5 ogre skeleton/\
         w:5 troll skeleton
@@ -2041,7 +2041,7 @@ MAP
 ENDMAP
 
 NAME:   lemuel_zombie_altar_yredelemnul
-DEPTH:  D:2-, Crypt
+DEPTH:  D:2-
 TAGS:   no_pool_fixup uniq_zombie_altar no_monster_gen temple_overflow_1
 TAGS:   temple_overflow_yredelemnul
 KFEAT:  _ = altar_yredelemnul
@@ -2060,7 +2060,7 @@ ENDMAP
 NAME:   lemuel_mausoleum_altar_yredelemnul
 TAGS:   uniq_altar_yredelemnul temple_overflow_1 temple_overflow_yredelemnul
 TAGS:   uniq_mausoleum_altar decor
-DEPTH:  D:7-, Crypt
+DEPTH:  D:7-
 MONS:   w:50 human zombie/orc zombie/elf zombie/w:5 ogre zombie/w:5 troll zombie
 MONS:   w:50 human skeleton/orc skeleton/elf skeleton/w:5 ogre skeleton/\
         w:5 troll skeleton
@@ -2839,7 +2839,7 @@ ENDMAP
 
 NAME:    lemuel_doored_altar
 TAGS:    transparent decor temple_overflow_generic_1
-DEPTH:   D:1-, Vaults, Lair, Elf, Crypt
+DEPTH:   D:1-, Vaults, Elf
 SHUFFLE: XY
 SUBST:   X = .
 SUBST:   Y = +

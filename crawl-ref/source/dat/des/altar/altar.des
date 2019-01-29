@@ -71,9 +71,9 @@ NAME:   basic_altar
 TAGS:   allow_dup extra no_monster_gen transparent decor
 DEPTH:  5-
 CHANCE: 20% (Orc)
-CHANCE: 10% (Snake, Forest)
+CHANCE: 10% (Snake)
 CHANCE: 8% (D, Elf)
-CHANCE: 5% (Lair, Slime, Vaults, Crypt)
+CHANCE: 5% (Slime, Vaults)
 CHANCE: 1% (Zot)
 CHANCE: 0
 MAP
@@ -260,7 +260,7 @@ ENDMAP
 # Note: This altar is too deep to be of use as a Xom overflow altar.
 #
 NAME:       due_chaos_kobolds
-DEPTH:      Depths, Vaults, Elf, Crypt
+DEPTH:      Depths, Vaults, Elf
 TAGS:       no_rotate
 ORIENT:     float
 SUBST:      y  = c.

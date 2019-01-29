@@ -32,9 +32,9 @@ KFEAT:   n = iron_grate
 COLOUR:  deBCDFG = lightblue
 RTILE:   c = wall_vines
 FTILE:   dBCDFG = tutorial_pad
-ITEM:    quarterstaff mundane not_cursed
+ITEM:    whip
 SHUFFLE: 34
-MONS:    training dummy hp:10 ; whip mundane not_cursed
+MONS:    training dummy hp:10 ; whip
 MONS:    rat always_corpse
 MONS:    wyvern
 MONS:    ooze hp:10
@@ -98,7 +98,7 @@ MONS:    training dummy hp:2 ; large rock q:10
 MONS:    rat always_corpse
 MONS:    dart slug
 ITEM:    tomahawk mundane q:10
-ITEM:    shortbow mundane not_cursed
+ITEM:    shortbow mundane
 MARKER:  d = lua:tutorial2.msg("tomahawks")
 MARKER:  A = lua:tutorial2.msg("throwing")
 MARKER:  B = lua:tutorial2.msg("resting_reminder")

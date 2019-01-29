@@ -87,7 +87,7 @@
 #       and previous TODO are in, add to Elf with weight 10.
 #
 NAME:   layout_hall_layers
-DEPTH:  Lair
+DEPTH:  Pan
 WEIGHT: 7
 ORIENT: encompass
 TAGS:   overwritable layout allow_dup unrand central layout_type_narrow_caves
@@ -184,7 +184,6 @@ TAGS:   overwritable layout allow_dup unrand central layout_type_narrow_caves
   }
 
   local cave = you.in_branch("D") and crawl.coinflip()
-               or you.in_branch("Lair") and crawl.x_chance_in_y(2,3)
 
   if cave then
     width = crawl.random_range(4,6)
@@ -277,8 +276,8 @@ ENDMAP
 #       way, like particle diffusion.
 #
 NAME:   layout_catacombs
-DEPTH:  Crypt, !Crypt:$, Tar
-WEIGHT: 10 (Crypt), 10 (Tar)
+DEPTH:  Tar
+WEIGHT: 10
 ORIENT: encompass
 TAGS:   overwritable layout allow_dup unrand layout_type_open_caves
 {{
@@ -302,7 +301,7 @@ TAGS:   overwritable layout allow_dup unrand layout_type_open_caves
   --  procedural.abs(procedural.simplex3d { scale = 4, unit = false })
   --)
 
-  local use_water = you.in_branch("crypt") and crawl.one_chance_in(4)
+  local use_water = false
 
   -- Pick a connector function to link up the rooms
   local fconnect

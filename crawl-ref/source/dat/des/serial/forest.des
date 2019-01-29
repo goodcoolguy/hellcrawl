@@ -33,9 +33,7 @@
 function init_forest(e, base_weight, lair_weight)
   e.tags('allow_dup')
   e.tags('serial_forest')
-  if you.in_branch("Lair") then
-    e.weight(lair_weight)
-  elseif you.absdepth() == 1 then
+  if you.absdepth() == 1 then
     e.weight(base_weight * 3)
   elseif you.absdepth() == 2 then
     e.weight(base_weight * 2)
@@ -54,16 +52,9 @@ function init_forest(e, base_weight, lair_weight)
   e.kmask('E = no_monster_gen')
   e.kmask('D = no_monster_gen')
   e.kmask('" = no_monster_gen')
-  if you.in_branch("Lair") then
-    e.subst('E = tt12222_')
-    e.subst('D = t1222222____')
-    e.subst('" = 2:25 _:50')
-    e.subst('t : tt12')
-  else
-    e.subst('E = tt1_')
-    e.subst('D = tt11122_____')
-    e.subst('" = 1:5 2:10 _:60')
-  end
+  e.subst('E = tt1_')
+  e.subst('D = tt11122_____')
+  e.subst('" = 1:5 2:10 _:60')
   e.subst('! = @')
   e.subst('_ = .')
 end
@@ -76,8 +67,8 @@ end
 #
 NAME:   serial_forest
 TAGS:   allow_dup extra luniq_serial nolayout_encompass
-DEPTH:  D:1-4, Lair
-CHANCE: 3% (D:1), 2% (D:2), 1% (D:3-4), 1% (Lair)
+DEPTH:  D:1-4
+CHANCE: 3% (D:1), 2% (D:2), 1% (D:3-4)
 {{
   -- between 5 and 11 forests
   local c = 4 + crawl.random2(4) + crawl.random2(4)

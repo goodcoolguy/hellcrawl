@@ -49,7 +49,7 @@ COLOUR:  "MN = green
 LFLOORTILE: floor_grass
 veto {{
   return crawl.game_started()
-         and (dgn.br_exists("Forest") or you.uniques("the Enchantress"))
+         and (you.uniques("the Enchantress"))
 }}
 MAP
 tttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt
@@ -141,7 +141,7 @@ NSUBST: 3 = 6:3 / 4:6 / * = 36., 7 = 4:7 / * = 77., 1 = 1:8 / 2 = 118 / *:1
 FTILE: .O1234678+T%*| = floor_marble
 veto {{
   return crawl.game_started()
-         and (dgn.br_exists("Forest") or you.uniques("the Enchantress"))
+         and (you.uniques("the Enchantress"))
 }}
 MAP
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -216,7 +216,7 @@ NSUBST: 2 = 1:3 / 1:223 / *:2
 : old_forest_ends(_G)
 veto {{
   return crawl.game_started()
-         and (dgn.br_exists("Forest") or you.uniques("the Enchantress"))
+         and (you.uniques("the Enchantress"))
 }}
 MAP
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -273,7 +273,7 @@ FTILE:  ._@2345Gtx = floor_grass
 : old_forest_ends(_G)
 veto {{
   return crawl.game_started()
-         and (dgn.br_exists("Forest") or you.uniques("the Enchantress"))
+         and (you.uniques("the Enchantress"))
 }}
 MAP
   TTTTTTTTTTTTT

@@ -109,7 +109,7 @@
 #       2 (Lair), 5 (Zot), 10 (Pan)
 #
 NAME:   layout_cellular_growth
-DEPTH:  Lair, Zot, Pan
+DEPTH:  Zot, Pan
 WEIGHT: 0
 ORIENT: encompass
 TAGS:   overwritable layout allow_dup unrand layout_type_passages
@@ -344,8 +344,8 @@ ENDMAP
 # TODO: Only place lava rooms in Depths, Zot, and Pan
 #
 NAME:   layout_gridlike
-DEPTH:  Elf, Lair, Snake, Crypt, Depths, Zot, Pan
-WEIGHT: 20 (Elf), 10 (Lair), 10 (Snake), 15 (Crypt)
+DEPTH:  Elf, Snake, Depths, Zot, Pan
+WEIGHT: 20 (Elf), 10 (Snake)
 WEIGHT: 20 (Depths), 20 (Zot), 15 (Pan)
 ORIENT: encompass
 TAGS:   overwritable layout allow_dup unrand layout_type_rooms
@@ -381,12 +381,6 @@ TAGS:   no_rotate no_vmirror no_hmirror
 
   if you.in_branch("D") then
     fills = crawl.coinflip()
-  elseif you.in_branch("Crypt") then
-    corners = true
-    regular_grid = true
-    collapse_rooms = false
-    big_corridors = true
-    maxcorridor = crawl.random_range(2,3)
   elseif you.in_branch("Elf") then
     corners = true
     doors = false
@@ -399,12 +393,6 @@ TAGS:   no_rotate no_vmirror no_hmirror
     corridor_doors = crawl.coinflip()
     random_rooms = crawl.coinflip()
     maxcorridor = crawl.random_range(1,4)
-  elseif you.in_branch("Lair") then
-    doors = false
-    corridor_doors = false
-    corners = crawl.coinflip()
-    maxcorridor = 4
-    random_rooms = true
   elseif you.in_branch("Pan") then
     regular_grid = crawl.coinflip()
     doors = false

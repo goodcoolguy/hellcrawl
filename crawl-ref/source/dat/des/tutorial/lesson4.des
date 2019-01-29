@@ -35,8 +35,8 @@ KFEAT:   ABCDEF = .
 COLOUR:  ABCDEFdefg = lightblue
 FTILE:   ABCDEFdefg = tutorial_pad
 ITEM:    randbook numspells:2 spells:magic_dart&mephitic_cloud title:Introduction_to_Spellcasting owner:player
-ITEM:    ring of wizardry not_cursed
-ITEM:    staff of wizardry not_cursed
+ITEM:    ring of wizardry 
+ITEM:    staff of wizardry 
 ITEM:    large rock
 MONS:    training dummy ; large rock q:20
 MONS:    bat skeleton, goblin skeleton
@@ -105,8 +105,8 @@ ITEM:    scroll of amnesia ident:type
 ITEM:    randbook numspells:1 spells:pain title:Necromancy_for_Newbies owner:player
 ITEM:    never_decay bat skeleton / never_decay goblin; nothing skeleton
 ITEM:    never_decay ball python skeleton / never_decay jackal skeleton
-ITEM:    shield not_cursed
-ITEM:    ring mail not_cursed
+ITEM:    shield 
+ITEM:    ring mail 
 MONS:    hobgoblin
 MONS:    rat
 MONS:    goblin

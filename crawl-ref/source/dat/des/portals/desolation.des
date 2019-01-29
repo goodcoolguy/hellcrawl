@@ -44,8 +44,8 @@ function desolation_portal(e)
         msg = messager })
   e.tags("uniq_desolation no_monster_gen chance_desolation")
   e.kfeat("O = enter_desolation")
-  e.depth("Crypt")
-  e.chance(500)
+  e.depth("Pan")
+  e.chance(0)
 end
 
 function desolation_ruins_setup(e)

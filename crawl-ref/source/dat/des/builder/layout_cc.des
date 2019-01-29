@@ -12,8 +12,8 @@
 # TODO: Fill disconnected areas as per [Mantis->9044].
 #
 NAME:   layout_basic
-DEPTH:  D, Snake, Crypt, Depths, Zot, Pan
-WEIGHT: 35 (D), 15 (Snake), 10 (Crypt), 20 (Depths), 20 (Zot), 15 (Pan)
+DEPTH:  D, Snake, Depths, Zot, Pan
+WEIGHT: 35 (D), 15 (Snake), 20 (Depths), 20 (Zot), 15 (Pan)
 ORIENT: encompass
 TAGS:   overwritable layout allow_dup unrand layout_type_rooms
 TAGS:   no_rotate no_vmirror no_hmirror
@@ -29,7 +29,7 @@ ENDMAP
 # Disabled until we can annoy the player less with water monsters.
 #
 NAME:   layout_bigger_room
-DEPTH:  D:9-, Lair, !Lair:$
+DEPTH:  D:9-
 WEIGHT: 0
 ORIENT: encompass
 TAGS:   overwritable layout no_primary_vault allow_dup unrand layout_type_open
@@ -49,8 +49,8 @@ ENDMAP
 #       for the whole branch.
 #
 NAME:   layout_chaotic_city
-DEPTH:  Lair:1-3, Crypt, Dis
-WEIGHT: 10, 15 (Crypt)
+DEPTH:  Dis
+WEIGHT: 10
 ORIENT: encompass
 TAGS:   overwritable layout allow_dup unrand layout_type_city
 TAGS:   no_rotate no_vmirror no_hmirror
