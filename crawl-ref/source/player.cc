@@ -3536,18 +3536,6 @@ void dec_mp(int mp_loss, bool silent)
 
 void drain_mp(int loss)
 {
-#if TAG_MAJOR_VERSION == 34
-    if (you.species == SP_DJINNI)
-    {
-
-        if (loss <= 0)
-            return;
-
-        you.duration[DUR_ANTIMAGIC] = min(you.duration[DUR_ANTIMAGIC] + loss * 3,
-                                           1000); // so it goes away after one '5'
-    }
-    else
-#endif
     return dec_mp(loss);
 }
 
