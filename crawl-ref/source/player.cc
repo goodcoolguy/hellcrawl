@@ -3464,10 +3464,7 @@ void calc_hp()
 {
     int oldhp = you.hp, oldmax = you.hp_max;
     you.hp_max = get_real_hp(true, false);
-#if TAG_MAJOR_VERSION == 34
-    if (you.species == SP_DJINNI)
-        you.hp_max += get_real_mp(true);
-#endif
+
     deflate_hp(you.hp_max, false);
     if (oldhp != you.hp || oldmax != you.hp_max)
         dprf("HP changed: %d/%d -> %d/%d", oldhp, oldmax, you.hp, you.hp_max);
@@ -3500,14 +3497,6 @@ void dec_hp(int hp_loss, bool fatal, const char *aux)
 
 void calc_mp()
 {
-#if TAG_MAJOR_VERSION == 34
-    if (you.species == SP_DJINNI)
-    {
-        you.magic_points = you.max_magic_points = 0;
-        return calc_hp();
-    }
-#endif
-
     you.max_magic_points = get_real_mp(true);
     you.magic_points = min(you.magic_points, you.max_magic_points);
     you.redraw_magic_points = true;
@@ -3860,41 +3849,10 @@ int get_real_hp(bool trans, bool rotted)
 
 int get_real_mp(bool include_items, bool frozen)
 {
-    // Base formula for Hellcrawl is XL + int*(xl/27)
-    // you.intel() * you.experience_level / 27;
-    const int scale = 100;
-    //int enp = (1 + you.experience_level) * scale
-    //          + (max(0, you.intel()) * you.experience_level * scale / 27);
-
-    // Analogous to ROBUST/FRAIL
-    //enp *= 100  + (you.get_mutation_level(MUT_HIGH_MAGIC) * 10)
-    //         + (you.attribute[ATTR_DIVINE_VIGOUR] * 5)
-    //         - (you.get_mutation_level(MUT_LOW_MAGIC) * 10);
-    //enp /= 100 * scale;
-//    enp = stepdown_value(enp, 9, 18, 45, 100)
-    //enp += species_mp_modifier(you.species);
-
-    // This is our "rotted" base, applied after multipliers
-    //enp += you.mp_max_adj;
-
-    // Now applied after scaling so that power items are more useful -- bwr
-    //if (include_items)
-    //{
-    //  if(you.wearing_ego(EQ_CLOAK, SPARM_MAGICAL_POWER))
-    //      enp += 9;
-    //  if(you.wearing_ego(EQ_HELMET, SPARM_MAGICAL_POWER))
-    //      enp += 9;
-    //  enp +=      you.scan_artefacts(ARTP_MAGICAL_POWER);  
-    //}
-
-    //if (include_items && you.wearing_ego(EQ_WEAPON, SPWPN_ANTIMAGIC))
-    //   enp /= 3;
-	
-    //if (!frozen)
-    //   enp -= you.mp_frozen;
-    //enp = max(enp, 0);
-
-    return 0;
+    int blm = you.stat(STAT_BLACK_MAGIC,true);
+    int elm = you.stat(STAT_ELEMENTAL,true);
+    int thm = you.stat(STAT_THAUMATURGY,true);
+    return 1 + you.experience_level / 2 + max(max(blm,elm),thm);
 }
 
 bool player_regenerates_hp()

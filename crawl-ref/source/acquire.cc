@@ -1340,11 +1340,9 @@ int acquirement_create_item(object_class_type class_wanted,
 
             if (agent == GOD_TROG || agent == GOD_OKAWARU)
             {
-                if (agent == GOD_TROG)
-                    acq_item.plus += random2(3);
 
                 // On a weapon, an enchantment of less than 0 is never viable.
-                acq_item.plus = max(static_cast<int>(acq_item.plus), random2(2));
+                acq_item.plus = 0;
             }
         }
 
