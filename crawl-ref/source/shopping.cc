@@ -131,6 +131,9 @@ int artefact_value(const item_def &item)
 
     if (prop[ ARTP_BLINK ])
         ret += 10;
+	
+    if (prop[ ARTP_SPIRE ])
+        ret += 10;
 
     if (prop[ ARTP_BERSERK ])
         ret += 5;

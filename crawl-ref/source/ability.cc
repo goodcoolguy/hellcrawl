@@ -3516,6 +3516,11 @@ vector<talent> your_talents(bool check_confused, bool include_unusable)
                 _add_talent(talents, ABIL_STOP_FLYING, check_confused);
         }
     }
+	
+    if (you.scan_artefacts(ARTP_SPIRE))
+    {
+        _add_talent(talents, ABIL_LIGHTNING_SPIRE, check_confused);
+    }
 
     // Find hotkeys for the non-hotkeyed talents.
     for (talent &tal : talents)
