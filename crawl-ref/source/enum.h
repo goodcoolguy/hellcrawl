@@ -500,6 +500,10 @@ enum ability_type
     ABIL_END_SERVITOR,
     ABIL_END_PPROJ,
 	ABIL_END_PIERCE,
+	
+    //abilities that cast spells
+    ABIL_LIGHTNING_SPIRE,
+
     NUM_ABILITIES
 };
 

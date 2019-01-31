@@ -930,51 +930,16 @@ spret_type cast_conjure_ball_lightning(int pow, god_type god, bool fail)
     return SPRET_SUCCESS;
 }
 
-spret_type cast_summon_lightning_spire(int pow, const coord_def& where, god_type god, bool fail)
+spret_type cast_summon_lightning_spire(int pow, god_type god, bool fail)
 {
-    const int dur = 2;
-
-    if (grid_distance(where, you.pos()) > spell_range(SPELL_SUMMON_LIGHTNING_SPIRE,
-                                                      pow)
-        || !in_bounds(where))
-    {
-        mpr("That's too far away.");
-        return SPRET_ABORT;
-    }
-
-    if (!monster_habitable_grid(MONS_HUMAN, grd(where)))
-    {
-        mpr("You can't construct there.");
-        return SPRET_ABORT;
-    }
-
-    monster* mons = monster_at(where);
-    if (mons)
-    {
-        if (you.can_see(*mons))
-        {
-            mpr("That space is already occupied.");
-            return SPRET_ABORT;
-        }
-
-        fail_check();
-
-        // invisible monster
-        mpr("Something you can't see is blocking your construction!");
-        return SPRET_SUCCESS;
-    }
-
-    fail_check();
-
-    mgen_data spire(MONS_LIGHTNING_SPIRE, BEH_FRIENDLY, where, MHITYOU,
-                    MG_FORCE_BEH | MG_FORCE_PLACE | MG_AUTOFOE);
-    spire.set_summoned(&you, dur, SPELL_SUMMON_LIGHTNING_SPIRE,  god);
-    spire.hd = max(1, div_rand_round(pow, 10));
+    mgen_data spire = _pal_data(MONS_LIGHTNING_SPIRE, 2, god, SPELL_SUMMON_LIGHTNING_SPIRE);
+	spire.flags |= MG_FORCE_BEH | MG_AUTOFOE;
+    spire.set_summoned(&you, 2, SPELL_SUMMON_LIGHTNING_SPIRE,  god);
+    spire.hd = max(1, pow);
 
     if (create_monster(spire))
     {
-        if (!silenced(where))
-            mpr("An electric hum fills the air.");
+        mpr("An electric hum fills the air.");
     }
     else
         canned_msg(MSG_NOTHING_HAPPENS);

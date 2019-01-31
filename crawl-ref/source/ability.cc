@@ -336,6 +336,7 @@ static const ability_def Ability_List[] =
     // use or train Evocations (the others do).  -- bwr
     { ABIL_EVOKE_BLINK, "Evoke Blink",
       1, 0, {{STAT_BLACK_MAGIC, 1}}, 0, {FAIL_EVO, 40, 2}, abflag::NONE },
+    { ABIL_LIGHTNING_SPIRE, "Lightning Spire", 4, 0, {{STAT_ELEMENTAL, 1}}, 0, {FAIL_XL, -1}, abflag::NONE },
     { ABIL_RECHARGING, "Device Recharging",
       1, 0, {}, 0, {FAIL_XL, 45, 2}, abflag::PERMANENT_MP },
 
@@ -1896,6 +1897,10 @@ static spret_type _do_ability(const ability_def& abil, bool fail)
         // deliberate fall-through
     case ABIL_BLINK:            // mutation
         return cast_blink(fail);
+        break;
+		
+    case ABIL_LIGHTNING_SPIRE:
+        return cast_summon_lightning_spire(you.stat(STAT_ELEMENTAL), GOD_NO_GOD, fail);
         break;
 
     case ABIL_EVOKE_BERSERK:    // amulet of rage, randarts
