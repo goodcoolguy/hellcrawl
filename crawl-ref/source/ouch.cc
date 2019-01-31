@@ -588,7 +588,7 @@ static void _powered_by_pain(int dam)
         && (random2(dam) > 3 + div_rand_round(you.experience_level, 5)
             || dam >= you.hp_max / 4))
     {
-        switch (random2(4))
+        switch (random2(3))
         {
         case 0:
         case 1:
@@ -606,10 +606,6 @@ static void _powered_by_pain(int dam)
         case 2:
             mpr("You focus on the pain.");
             potionlike_effect(POT_MIGHT, level * 20);
-            break;
-        case 3:
-            mpr("You focus on the pain.");
-            potionlike_effect(POT_AGILITY, level * 20);
             break;
         }
     }

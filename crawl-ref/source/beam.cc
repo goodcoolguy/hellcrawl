@@ -3541,7 +3541,7 @@ void bolt::affect_player_enchantment(bool resistible)
     }
 
     case BEAM_AGILITY:
-        potionlike_effect(POT_AGILITY, ench_power);
+        mpr("nothing happens");
         obvious_effect = true;
         nasty = false;
         nice  = true;

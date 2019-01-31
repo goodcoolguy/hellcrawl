@@ -963,7 +963,7 @@ static void _note_potion_effect(potion_type pot)
 /// Feed the player a notionally-good potion effect.
 static void _xom_do_potion(int /*sever*/)
 {
-    potion_type pot = POT_CURING;
+    potion_type pot = POT_HASTE;
     do
     {
         pot = random_choose_weighted(10, POT_HEAL_WOUNDS,

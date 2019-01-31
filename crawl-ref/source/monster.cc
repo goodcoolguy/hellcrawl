@@ -5591,23 +5591,13 @@ bool monster::can_drink_potion(potion_type ptype) const
 
     switch (ptype)
     {
-#if TAG_MAJOR_VERSION == 34
-        case POT_CURING:
-#endif
         case POT_HEAL_WOUNDS:
             return !(holiness() & (MH_NONLIVING | MH_PLANT));
-#if TAG_MAJOR_VERSION == 34
-        case POT_BLOOD:
-        case POT_BLOOD_COAGULATED:
-#endif
             return mons_species() == MONS_VAMPIRE;
         case POT_BERSERK_RAGE:
             return can_go_berserk();
         case POT_HASTE:
         case POT_MIGHT:
-#if TAG_MAJOR_VERSION == 34
-        case POT_AGILITY:
-#endif
         case POT_INVISIBILITY:
         case POT_RESISTANCE:
             // If there are any item using monsters that are permanently

@@ -766,40 +766,18 @@ sky_blue
 %sdir item/potion
 %back i-label
 # These must be in the same order as the enum in enum.h!
-i-curing POT_CURING POT_ID_FIRST
-i-heal-wounds POT_HEAL_WOUNDS
+i-heal-wounds POT_HEAL_WOUNDS POT_ID_FIRST
 i-haste POT_HASTE
 i-might POT_MIGHT
-i-brilliance POT_BRILLIANCE
-i-agility POT_AGILITY
-# please remove these 3 when TAG_MAJOR_VERSION is bumped
-i-gain-strength POT_REMOVEME2
-i-gain-dexterity POT_REMOVEME3
-i-gain-intelligence POT_REMOVEME4
 i-flight POT_FLIGHT
-i-slowing POT_SLOWING
 i-cancel POT_CANCELLATION
 i-ambrosia POT_AMBROSIA
 i-invisibility POT_INVISIBILITY
-i-porridge POT_PORRIDGE
-i-degeneration POT_DEGENERATION
-# please remove these 2 when TAG_MAJOR_VERSION is bumped
-i-decay POT_REMOVEME5
-i-confusion POT_REMOVE_ME
-i-experience POT_EXPERIENCE
 i-magic POT_MAGIC
-# remove these 2 when TAG_MAJOR_VERSION is bumped
-i-restore-abilities POT_REMOVEME6
 i-berserk-rage POT_BERSERK_RAGE
-# please remove POT_CURE_MUTATION when TAG_MAJOR_VERSION is bumped
-i-cure-mutation POT_REMOVEME8
 i-mutation POT_MUTATION
 i-resistance POT_RESISTANCE
-i-blood POT_BLOOD
-i-coagulated-blood POT_BLOOD_COAGULATED
-i-lignify POT_LIGNIFY
-# please remove POT_BENEFICIAL_MUTATION when TAG_MAJOR_VERSION is bumped
-i-good-mutation POT_REMOVEME9 POT_ID_LAST
+i-lignify POT_LIGNIFY POT_ID_LAST
 %back none
 %rim 1
 

@@ -636,48 +636,18 @@ const char* potion_type_name(int potiontype)
 {
     switch (static_cast<potion_type>(potiontype))
     {
-#if TAG_MAJOR_VERSION == 34
-    case POT_CURING:            return "curing";
-#endif
     case POT_HEAL_WOUNDS:       return "heal wounds";
     case POT_HASTE:             return "haste";
     case POT_MIGHT:             return "augmentation";
-#if TAG_MAJOR_VERSION == 34
-    case POT_AGILITY:           return "agility";
-    case POT_BRILLIANCE:        return "brilliance";
-    case POT_GAIN_STRENGTH:     return "gain strength";
-    case POT_GAIN_DEXTERITY:    return "gain dexterity";
-    case POT_GAIN_INTELLIGENCE: return "gain intelligence";
-    case POT_PORRIDGE:          return "porridge";
-    case POT_SLOWING:           return "slowing";
-#endif
     case POT_FLIGHT:            return "flight";
     case POT_CANCELLATION:      return "cancellation";
     case POT_AMBROSIA:          return "ambrosia";
     case POT_INVISIBILITY:      return "invisibility";
-#if TAG_MAJOR_VERSION == 34
-	case POT_DEGENERATION:      return "degeneration";
-    case POT_DECAY:             return "decay";
-	case POT_EXPERIENCE:        return "experience";
-#endif
     case POT_MAGIC:             return "magic";
-#if TAG_MAJOR_VERSION == 34
-    case POT_RESTORE_ABILITIES: return "restore abilities";
-#endif
     case POT_BERSERK_RAGE:      return "berserk rage";
-#if TAG_MAJOR_VERSION == 34
-    case POT_CURE_MUTATION:     return "cure mutation";
-#endif
     case POT_MUTATION:          return "mutation";
-#if TAG_MAJOR_VERSION == 34
-    case POT_BLOOD:             return "blood";
-    case POT_BLOOD_COAGULATED:  return "coagulated blood";
-#endif
     case POT_RESISTANCE:        return "resistance";
     case POT_LIGNIFY:           return "lignification";
-#if TAG_MAJOR_VERSION == 34
-    case POT_BENEFICIAL_MUTATION: return "beneficial mutation";
-#endif
     default:                    return "bugginess";
     }
 }
@@ -3009,18 +2979,6 @@ bool is_good_item(const item_def &item)
             return false;
         switch (item.sub_type)
         {
-#if TAG_MAJOR_VERSION == 34
-        case POT_CURE_MUTATION:
-        case POT_GAIN_STRENGTH:
-        case POT_GAIN_INTELLIGENCE:
-        case POT_GAIN_DEXTERITY:
-		case POT_EXPERIENCE:
-#endif
-            return true;
-#if TAG_MAJOR_VERSION == 34
-        case POT_BENEFICIAL_MUTATION:
-            return you.species != SP_GHOUL; // Mummies are already handled
-#endif
         default:
             return false;
         }
@@ -3055,14 +3013,6 @@ bool is_bad_item(const item_def &item, bool temp)
 
         switch (item.sub_type)
         {
-#if TAG_MAJOR_VERSION == 34
-        case POT_SLOWING:
-            return !you.stasis();
-        case POT_DEGENERATION:
-            return true;
-        case POT_DECAY:
-            return you.res_rotting(temp) <= 0;
-#endif
         default:
             return false;
         }
@@ -3327,13 +3277,6 @@ bool is_useless_item(const item_def &item, bool temp)
         case POT_HASTE:
             return you.species == SP_FORMICID;
 
-#if TAG_MAJOR_VERSION == 34
-        case POT_CURE_MUTATION:
-        case POT_BENEFICIAL_MUTATION:
-        case POT_GAIN_STRENGTH:
-        case POT_GAIN_INTELLIGENCE:
-        case POT_GAIN_DEXTERITY:
-#endif
         case POT_MUTATION:
             return !you.can_safely_mutate(temp);
 
@@ -3345,19 +3288,6 @@ bool is_useless_item(const item_def &item, bool temp)
             return you.permanent_flight()
                    || you.racial_permanent_flight();
 
-#if TAG_MAJOR_VERSION == 34
-        case POT_PORRIDGE:
-            return you.species == SP_VAMPIRE
-                    || you.get_mutation_level(MUT_CARNIVOROUS) == 3;
-        case POT_BLOOD_COAGULATED:
-#endif
-#if TAG_MAJOR_VERSION == 34
-        case POT_BLOOD:
-            return you.species != SP_VAMPIRE;
-        case POT_DECAY:
-            return you.res_rotting(temp) > 0;
-        case POT_SLOWING:
-#endif
         case POT_AMBROSIA:
             return you.species == SP_FORMICID;
         case POT_HEAL_WOUNDS:

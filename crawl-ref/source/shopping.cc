@@ -441,24 +441,6 @@ unsigned int item_value(item_def item, bool ident)
         {
             switch (item.sub_type)
             {
-#if TAG_MAJOR_VERSION == 34
-            case POT_EXPERIENCE:
-                valued += 500;
-                break;
-#endif
-
-#if TAG_MAJOR_VERSION == 34
-            case POT_GAIN_DEXTERITY:
-            case POT_GAIN_INTELLIGENCE:
-            case POT_GAIN_STRENGTH:
-            case POT_BENEFICIAL_MUTATION:
-                valued += 350;
-                break;
-
-            case POT_CURE_MUTATION:
-                valued += 250;
-                break;
-#endif
 
             case POT_RESISTANCE:
             case POT_HASTE:
@@ -476,41 +458,14 @@ unsigned int item_value(item_def item, bool ident)
             case POT_BERSERK_RAGE:
             case POT_HEAL_WOUNDS:
             case POT_MIGHT:
-#if TAG_MAJOR_VERSION == 34
-            case POT_RESTORE_ABILITIES:
-#endif
                 valued += 50;
                 break;
 
             
-#if TAG_MAJOR_VERSION == 34
-            case POT_AGILITY:
-            case POT_BRILLIANCE:
-                valued += 40;
-                break;
-#endif
-#if TAG_MAJOR_VERSION == 34			
-            case POT_CURING:
-#endif
             case POT_LIGNIFY:
             case POT_FLIGHT:
                 valued += 30;
                 break;
-
-#if TAG_MAJOR_VERSION == 34
-            case POT_PORRIDGE:
-            case POT_SLOWING:
-            case POT_DECAY:
-            case POT_BLOOD:
-            case POT_DEGENERATION:
-                valued += 10;
-                break;
-#endif
-#if TAG_MAJOR_VERSION == 34
-            case POT_BLOOD_COAGULATED:
-                valued += 5;
-                break;
-#endif
             }
         }
         break;
@@ -786,20 +741,7 @@ bool is_worthless_consumable(const item_def &item)
     switch (item.base_type)
     {
     case OBJ_POTIONS:
-        switch (item.sub_type)
-        {
-#if TAG_MAJOR_VERSION == 34
-        // Blood potions are worthless because they are easy to make.
-        case POT_BLOOD:
-        case POT_BLOOD_COAGULATED:
-        case POT_SLOWING:
-        case POT_DECAY:
-#endif
-        case POT_DEGENERATION:
-            return true;
-        default:
             return false;
-        }
     case OBJ_SCROLLS:
         switch (item.sub_type)
         {

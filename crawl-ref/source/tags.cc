@@ -4269,12 +4269,6 @@ void unmarshallItem(reader &th, item_def &item)
             item.flags |= ISFLAG_KNOW_TYPE;
     }
 
-    if (item.is_type(OBJ_POTIONS, POT_CURE_MUTATION)
-        || item.is_type(OBJ_POTIONS, POT_BENEFICIAL_MUTATION))
-    {
-        item.sub_type = POT_MUTATION;
-    }
-
     if (item.is_type(OBJ_STAVES, STAFF_CHANNELING))
         item.sub_type = STAFF_ENERGY;
 
