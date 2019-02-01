@@ -503,6 +503,7 @@ enum ability_type
 	
     //abilities that cast spells
     ABIL_LIGHTNING_SPIRE,
+    ABIL_MANA_VIPER,
 
     NUM_ABILITIES
 };
@@ -4024,6 +4025,7 @@ enum artefact_prop_type
     ARTP_FRAGILE,
     ARTP_SHIELDING,
     ARTP_SPIRE,
+    ARTP_VIPER,
     ARTP_NUM_PROPERTIES
 };
 

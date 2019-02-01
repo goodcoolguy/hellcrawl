@@ -248,6 +248,7 @@ static vector<string> _randart_propnames(const item_def& item,
         { ARTP_FLY,                   PROPN_PLAIN },
         { ARTP_FOG,                   PROPN_PLAIN },
         { ARTP_SPIRE,                 PROPN_PLAIN },
+        { ARTP_VIPER,                 PROPN_PLAIN },
 
         // Resists, also really important
         { ARTP_ELECTRICITY,           PROPN_PLAIN },
@@ -514,6 +515,7 @@ static string _randart_descrip(const item_def &item)
         { ARTP_FRAGILE, "It will be destroyed if unequipped.", false },
         { ARTP_SHIELDING, "It affects your SH (%d).", false},
         { ARTP_SPIRE, "It lets you summon a lightning spire.", false},
+        { ARTP_VIPER, "It lets you summon a mana viper.", false},
     };
 
     // Give a short description of the base type, for base types with no
