@@ -339,6 +339,7 @@ static const ability_def Ability_List[] =
     { ABIL_LIGHTNING_SPIRE, "Lightning Spire", 4, 0, {{STAT_ELEMENTAL, 1}}, 0, {FAIL_XL, -1}, abflag::NONE },
     { ABIL_MANA_VIPER, "Mana Viper", 4, 0, {{STAT_THAUMATURGY, 1}}, 0, {FAIL_XL, -1}, abflag::NONE },
     { ABIL_DDOOR, "Death's Door", 10, 0, {{STAT_BLACK_MAGIC, 8}}, 0, {FAIL_XL, -1}, abflag::NONE },
+    { ABIL_SPECTRAL_WEAPON, "Spectral Weapon", 4, 0, {{STAT_THAUMATURGY, 1}}, 0, {FAIL_XL, -1}, abflag::NONE },
     { ABIL_RECHARGING, "Device Recharging",
       1, 0, {}, 0, {FAIL_XL, 45, 2}, abflag::PERMANENT_MP },
 
@@ -1911,6 +1912,10 @@ static spret_type _do_ability(const ability_def& abil, bool fail)
 		
     case ABIL_DDOOR:
         return cast_deaths_door(you.stat(STAT_BLACK_MAGIC), fail);
+        break;
+		
+    case ABIL_SPECTRAL_WEAPON:
+        return cast_spectral_weapon(&you, you.stat(STAT_THAUMATURGY), GOD_NO_GOD, fail);
         break;
 
     case ABIL_EVOKE_BERSERK:    // amulet of rage, randarts
@@ -3540,6 +3545,11 @@ vector<talent> your_talents(bool check_confused, bool include_unusable)
     if (you.scan_artefacts(ARTP_DDOOR))
     {
 		_add_talent(talents, ABIL_DDOOR, check_confused);
+    }
+	
+    if (you.scan_artefacts(ARTP_SPECTRAL))
+    {
+		_add_talent(talents, ABIL_SPECTRAL_WEAPON, check_confused);
     }
 
     // Find hotkeys for the non-hotkeyed talents.

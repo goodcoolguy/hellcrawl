@@ -137,6 +137,12 @@ int artefact_value(const item_def &item)
 	
     if (prop[ ARTP_VIPER ])
         ret += 10;
+	
+    if (prop[ ARTP_DDOOR ])
+        ret += 10;
+	
+    if (prop[ ARTP_SPECTRAL ])
+        ret += 10;
 
     if (prop[ ARTP_BERSERK ])
         ret += 5;

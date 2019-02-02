@@ -2110,6 +2110,8 @@ int spell_mp_freeze (spell_type spell)
 	    return 0;
     else 
     {
+        //testing placeholder while I convert spells to abilities; will want to use the ability mp cost eventually
+        return 2;
         // divide by the square of the success rate to prevent dumb shit like casting 99% fail charms
 		double success = 1 - _get_true_fail_rate(raw_spell_fail(spell));
         // and max out an absurdly high value to avoid weird behaviors 
