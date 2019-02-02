@@ -502,41 +502,6 @@ static bool _can_target_prev()
     return !(you.prev_targ == MHITNOT || you.prev_targ == MHITYOU);
 }
 
-/// Prompt the player to issue orders. Returns the key pressed.
-static int _issue_orders_prompt()
-{
-    mprf(MSGCH_PROMPT, "What are your orders?");
-    if (!you.cannot_speak())
-    {
-        string cap_shout = you.shout_verb(false);
-        cap_shout[0] = toupper(cap_shout[0]);
-        mprf(" t - %s!", cap_shout.c_str());
-    }
-
-    if (!you.berserk())
-    {
-        string previous;
-        if (_can_target_prev())
-        {
-            const monster* target = &menv[you.prev_targ];
-            if (target->alive() && you.can_see(*target))
-                previous = "   p - Attack previous target.";
-        }
-
-        mprf("Orders for allies: a - Attack new target.%s", previous.c_str());
-        mpr("                   r - Retreat!             s - Stop attacking.");
-        mpr("                   g - Guard the area.      f - Follow me.");
-    }
-    mpr(" Anything else - Cancel.");
-
-    if (you.berserk())
-        flush_prev_message(); // buffer doesn't get flushed otherwise
-
-    const int keyn = get_ch();
-    clear_messages();
-    return keyn;
-}
-
 /**
  * Issue the order specified by the given key.
  *
@@ -660,43 +625,6 @@ static bool _issue_order(int keyn, int &mons_targd)
     }
 
     return true;
-}
-
-/**
- * Prompt the player to either change their allies' orders or to shout.
- *
- * XXX: it'd be nice if shouting was a separate command.
- * XXX: this should maybe be in another file.
- */
-void issue_orders()
-{
-    ASSERT(!crawl_state.game_is_arena());
-
-    if (you.cannot_speak() && you.berserk())
-    {
-        mpr("You're too berserk to give orders, and you can't shout!");
-        return;
-    }
-
-    const int keyn = _issue_orders_prompt();
-    if (keyn == '!' || keyn == 't') // '!' for [very] old keyset
-    {
-        yell();
-        you.turn_is_over = true;
-        return;
-    }
-
-    int mons_targd = MHITNOT; // XXX: just use you.pet_target directly?
-    if (!_issue_order(keyn, mons_targd))
-        return;
-
-    you.turn_is_over = true;
-    you.pet_target = mons_targd;
-    // Allow patrolling for "Stop fighting!" and "Wait here!"
-    _set_friendly_foes(keyn == 's' || keyn == 'w');
-
-    if (mons_targd != MHITNOT && mons_targd != MHITYOU)
-        mpr("Attack!");
 }
 
 /**
