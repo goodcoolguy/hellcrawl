@@ -3840,7 +3840,13 @@ int get_real_mp(bool include_items, bool frozen)
     int blm = you.stat(STAT_BLACK_MAGIC,true);
     int elm = you.stat(STAT_ELEMENTAL,true);
     int thm = you.stat(STAT_THAUMATURGY,true);
-    return 1 + you.experience_level / 2 + max(max(blm,elm),thm);
+    int enp = 1 + you.experience_level / 2 + max(max(blm,elm),thm);
+	
+    if (!frozen)
+       enp -= you.mp_frozen;
+    enp = max(enp, 0);
+
+    return enp;
 }
 
 bool player_regenerates_hp()
