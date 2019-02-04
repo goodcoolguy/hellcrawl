@@ -590,21 +590,10 @@ static string _randart_descrip(const item_def &item)
 
 static const char *trap_names[] =
 {
-#if TAG_MAJOR_VERSION == 34
-    "dart",
-#endif
-    "arrow", "spear",
-#if TAG_MAJOR_VERSION > 34
     "teleport",
-#endif
     "permanent teleport",
-    "alarm", "blade",
-    "bolt", "net", "Zot", "needle",
+    "alarm", "Zot", 
     "shaft", "passage", "pressure plate", "web",
-#if TAG_MAJOR_VERSION == 34
-    "gas", "teleport",
-    "shadow", "dormant shadow",
-#endif
 };
 
 string trap_name(trap_type trap)

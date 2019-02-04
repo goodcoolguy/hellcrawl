@@ -73,28 +73,14 @@ static tileidx_t _tileidx_trap(trap_type type)
 {
     switch (type)
     {
-    case TRAP_ARROW:
-        return TILE_DNGN_TRAP_ARROW;
-    case TRAP_SPEAR:
-        return TILE_DNGN_TRAP_SPEAR;
     case TRAP_TELEPORT:
         return TILE_DNGN_TRAP_TELEPORT;
     case TRAP_TELEPORT_PERMANENT:
         return TILE_DNGN_TRAP_TELEPORT_PERMANENT;
     case TRAP_ALARM:
         return TILE_DNGN_TRAP_ALARM;
-    case TRAP_BLADE:
-        return TILE_DNGN_TRAP_BLADE;
-    case TRAP_BOLT:
-        return TILE_DNGN_TRAP_BOLT;
-#if TAG_MAJOR_VERSION == 34
-    case TRAP_NET:
-        return TILE_DNGN_TRAP_NET;
-#endif
     case TRAP_ZOT:
         return TILE_DNGN_TRAP_ZOT;
-    case TRAP_NEEDLE:
-        return TILE_DNGN_TRAP_NEEDLE;
     case TRAP_SHAFT:
         return TILE_DNGN_TRAP_SHAFT;
     case TRAP_GOLUBRIA:
@@ -199,7 +185,7 @@ tileidx_t tileidx_feature_base(dungeon_feature_type feat)
     case DNGN_OPEN_DOOR:
         return TILE_DNGN_OPEN_DOOR;
     case DNGN_TRAP_MECHANICAL:
-        return TILE_DNGN_TRAP_ARROW;
+        return TILE_DNGN_TRAP_PLATE;
     case DNGN_TRAP_TELEPORT:
         return TILE_DNGN_TRAP_TELEPORT;
     case DNGN_TRAP_ALARM:

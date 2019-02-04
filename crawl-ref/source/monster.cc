@@ -4430,14 +4430,7 @@ void monster::uglything_mutate(colour_t force_colour)
 // Randomise potential damage.
 static int _estimated_trap_damage(trap_type trap)
 {
-    switch (trap)
-    {
-        case TRAP_BLADE: return 10 + random2(30);
-        case TRAP_ARROW: return random2(7);
-        case TRAP_SPEAR: return random2(10);
-        case TRAP_BOLT:  return random2(13);
-        default:         return 0;
-    }
+    return 0;
 }
 
 /**
@@ -4463,11 +4456,6 @@ bool monster::is_trap_safe(const coord_def& where, bool just_check) const
     // Known shafts are safe. Unknown ones are unknown.
     if (trap.type == TRAP_SHAFT)
         return true;
-
-#if TAG_MAJOR_VERSION == 34
-    if (trap.type == TRAP_SHADOW_DORMANT || trap.type == TRAP_SHADOW)
-        return true;
-#endif
 
     // No friendly monsters will ever enter a Zot trap you know.
     if (player_knows_trap && friendly() && trap.type == TRAP_ZOT)
