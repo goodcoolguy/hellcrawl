@@ -277,47 +277,6 @@ const char* card_name(card_type card)
     case CARD_DEGEN:           return "Degeneration";
     case CARD_FAMINE:          return "Famine";
 
-#if TAG_MAJOR_VERSION == 34
-    // Removed cards.
-    case CARD_MERCENARY:       return "the Mercenary";
-    case CARD_ALCHEMIST:       return "the Alchemist";
-    case CARD_CURSE:           return "the Curse";
-    case CARD_VENOM:           return "Venom";
-    case CARD_FORTITUDE:       return "Fortitude";
-    case CARD_HAMMER:          return "the Hammer";
-    case CARD_XOM:             return "Xom";
-    case CARD_FEAST:           return "the Feast";
-    case CARD_WARPWRIGHT:      return "Warpwright";
-    case CARD_SUMMON_UGLY:     return "Repulsiveness";
-    case CARD_PLACID_MAGIC:    return "Placid Magic";
-    case CARD_CRUSADE:         return "the Crusade";
-    case CARD_HELM:            return "the Helm";
-    case CARD_BLADE:           return "the Blade";
-    case CARD_SHADOW:          return "the Shadow";
-    case CARD_POTION:          return "the Potion";
-    case CARD_FOCUS:           return "Focus";
-    case CARD_HELIX:           return "the Helix";
-    case CARD_DOWSING:         return "Dowsing";
-    case CARD_BANSHEE:         return "the Banshee";
-    case CARD_SOLITUDE:        return "Solitude";
-    case CARD_PORTAL:          return "the Portal";
-    case CARD_WARP:            return "the Warp";
-    case CARD_BATTLELUST:      return "Battlelust";
-    case CARD_METAMORPHOSIS:   return "Metamorphosis";
-    case CARD_SHUFFLE:         return "Shuffle";
-    case CARD_EXPERIENCE:      return "Experience";
-    case CARD_SAGE:            return "the Sage";
-    case CARD_TROWEL:          return "the Trowel";
-    case CARD_MINEFIELD:       return "the Minefield";
-    case CARD_GENIE:           return "the Genie";
-    case CARD_GLASS:           return "Vitrification";
-    case CARD_BARGAIN:         return "the Bargain";
-    case CARD_SUMMON_ANIMAL:   return "the Herd";
-    case CARD_SUMMON_SKELETON: return "the Bones";
-    case CARD_WATER:           return "Water";
-    case CARD_SWAP:            return "Swap";
-#endif
-
     case NUM_CARDS:            return "a buggy card";
     }
     return "a very buggy card";
@@ -2231,48 +2190,6 @@ void card_effect(card_type which_card, deck_rarity_type rarity,
         else
             mpr("You feel a momentary urge to oink.");
         break;
-
-#if TAG_MAJOR_VERSION == 34
-    case CARD_VENOM:
-    case CARD_HAMMER:
-    case CARD_FORTITUDE:
-    case CARD_WATER:
-    case CARD_BANSHEE:
-    case CARD_ALCHEMIST:
-    case CARD_CRUSADE:
-    case CARD_SUMMON_UGLY:
-    case CARD_WARPWRIGHT:
-    case CARD_SWAP:
-    case CARD_SOLITUDE:
-    case CARD_HELM:
-    case CARD_BLADE:
-    case CARD_SHADOW:
-    case CARD_POTION:
-    case CARD_SHUFFLE:
-    case CARD_EXPERIENCE:
-    case CARD_SAGE:
-    case CARD_GLASS:
-    case CARD_TROWEL:
-    case CARD_MINEFIELD:
-    case CARD_PORTAL:
-    case CARD_WARP:
-    case CARD_GENIE:
-    case CARD_BATTLELUST:
-    case CARD_BARGAIN:
-    case CARD_METAMORPHOSIS:
-    case CARD_SUMMON_ANIMAL:
-    case CARD_SUMMON_SKELETON:
-    case CARD_PLACID_MAGIC:
-    case CARD_FOCUS:
-    case CARD_HELIX:
-    case CARD_MERCENARY:
-    case CARD_XOM:
-    case CARD_FEAST:
-    case CARD_CURSE:
-    case CARD_DOWSING:
-        mpr("This type of card no longer exists!");
-        break;
-#endif
 
     case NUM_CARDS:
         // The compiler will complain if any card remains unhandled.
