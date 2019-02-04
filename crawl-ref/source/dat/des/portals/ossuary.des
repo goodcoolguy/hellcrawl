@@ -358,8 +358,8 @@ NAME:    ossuary_tomb_2
 WEIGHT:  40
 ORIENT:  encompass
 TAGS:    no_item_gen no_monster_gen no_rotate
-KFEAT:   ~ = known arrow trap w:2 / known needle trap
-KFEAT:   ^ = known arrow trap / floor w:5
+KFEAT:   ~ = floor
+KFEAT:   ^ = floor
 # Number of 1's is 53, number of ~'s is 57.
 : if crawl.one_chance_in(10) then
 SUBST:   ~ = 1
@@ -605,7 +605,7 @@ NSUBST:  B = 1:+ / *:n
 NSUBST:  C = 1:+ / *:n
 NSUBST:  D = 1:+ / *:n
 NSUBST:  E = 1:+ / *:n
-KFEAT:   ~ = known needle trap / known arrow trap / known spear trap
+KFEAT:   ~ = floor
 SUBST:   ~ = ~.
 NSUBST:  X = 1:< / *:.
 : ossuary_setup_features(_G)
@@ -793,7 +793,7 @@ KFEAT:   ~ = known alarm trap w:5 / floor w:40
 KFEAT:   T = known alarm trap w:20 / floor w:70
 KFEAT:   ^ = known alarm trap w:5 / floor w:20
 COLOUR:  ^ = red
-KFEAT:   W = known arrow trap / floor w:20
+KFEAT:   W = floor
 : ossuary_setup_features(_G)
 MAP
            cccccccccccccccccccc
@@ -884,7 +884,7 @@ SUBST:   X = x2
 KITEM:   x = any scroll / any potion
 KMONS:   x = mummy
 NSUBST:  ' = 10:^ / *:.
-KFEAT:   ^ = known arrow trap
+KFEAT:   ^ = floor
 KITEM:   y = any scroll w:5 / any potion w:5 / nothing w:10
 KMONS:   y = rat skeleton
 : ossuary_setup_features(_G)
@@ -925,7 +925,7 @@ KMONS:   4 = Menkaure, mummy
 # Loot: 1-16 items
 ITEM:    any scroll / any potion / w:5 nothing
 KFEAT:   ^ = floor
-KFEAT:   m = known spear trap
+KFEAT:   m = floor
 KFEAT:   ~ = known alarm trap
 NSUBST:  ' = 2:m / 25:1 / 25:2 / 30:^ / .
 # 1KB: what's the point of these shortcuts?  Removed for now...
@@ -989,7 +989,7 @@ ITEM:   any potion / any scroll / nothing w:1
 #
 # There are not always traps in corridors but they are guaranteed near the loot:
 KFEAT:  ' = known alarm trap w:15 / floor w:85
-KFEAT:  " = known spear trap w:1 / known arrow trap w:15
+KFEAT:  " = floor
 #
 : ossuary_setup_features(_G)
 MAP
