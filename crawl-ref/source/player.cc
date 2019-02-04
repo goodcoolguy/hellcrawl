@@ -5570,11 +5570,6 @@ int player::armour_class(bool /*calc_unid*/) const
               // +1, +2, +3
     AC += get_mutation_level(MUT_IRIDESCENT_SCALES, mutation_activity_type::FULL) * 200;
               // +2, +4, +6
-#if TAG_MAJOR_VERSION == 34
-    AC += get_mutation_level(MUT_ROUGH_BLACK_SCALES, mutation_activity_type::FULL)
-          ? -100 + get_mutation_level(MUT_ROUGH_BLACK_SCALES, mutation_activity_type::FULL) * 300 : 0;
-              // +2, +5, +8
-#endif
     AC += get_mutation_level(MUT_RUGGED_BROWN_SCALES, mutation_activity_type::FULL) * 100;
               // +1, +2, +3
     AC += get_mutation_level(MUT_ICY_BLUE_SCALES, mutation_activity_type::FULL)

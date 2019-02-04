@@ -205,16 +205,6 @@ static const mutation_def mut_data[] =
   {"", "", ""},
 },
 
-#if TAG_MAJOR_VERSION == 34
-{ MUT_TELEPORT_CONTROL, 0, 1, mutflag::GOOD, false,
-  "teleport control",
-
-  {"You can control translocations.", "", ""},
-  {"You feel controlled.", "", ""},
-  {"You feel random.", "", ""},
-},
-#endif
-
 { MUT_TELEPORT, 3, 3, mutflag::BAD, false,
   "teleportitis",
 
@@ -297,39 +287,7 @@ static const mutation_def mut_data[] =
   {"Your body's shape seems more normal.", "", ""},
 },
 
-#if TAG_MAJOR_VERSION == 34
-{ MUT_BREATHE_FLAMES, 0, 3, mutflag::GOOD, false,
-  "breathe flames",
 
-  {"You can breathe flames.",
-   "You can breathe fire.",
-   "You can breathe blasts of fire."},
-
-  {"Your throat feels hot.",
-   "Your throat feels hot.",
-   "Your throat feels hot."},
-
-  {"A chill runs up and down your throat.",
-   "A chill runs up and down your throat.",
-   "A chill runs up and down your throat."},
-},
-
-{ MUT_JUMP, 0, 3, mutflag::GOOD, false,
-  "jump",
-
-  {"You can jump attack at a short distance.",
-   "You can jump attack at a medium distance.",
-   "You can jump attack at a long distance."},
-
-  {"You feel more sure on your feet.",
-   "You feel more sure on your feet.",
-   "You feel more sure on your feet."},
-
-  {"You feel less sure on your feet.",
-   "You feel less sure on your feet.",
-   "You feel less sure on your feet."},
-},
-#endif
 { MUT_BLINK, 3, 1, mutflag::GOOD, false,
   "blink",
 
@@ -337,40 +295,6 @@ static const mutation_def mut_data[] =
   {"You feel jittery.", "", ""},
   {"You no longer feel jittery.", "", ""},
 },
-
-#if TAG_MAJOR_VERSION == 34
-{ MUT_STRONG_STIFF, 0, 3, mutflag::GOOD, false,
-  "strong stiff",
-
-  {"Your muscles are strong, but stiff. (Str +1, Dex -1)",
-   "Your muscles are very strong, but stiff. (Str +2, Dex -2)",
-   "Your muscles are extremely strong, but stiff. (Str +3, Dex -3)"},
-
-  {"Your muscles feel sore.",
-   "Your muscles feel sore.",
-   "Your muscles feel sore."},
-
-  {"Your muscles feel loose.",
-   "Your muscles feel loose.",
-   "Your muscles feel loose."},
-},
-
-{ MUT_FLEXIBLE_WEAK, 0, 3, mutflag::GOOD, false,
-  "flexible weak",
-
-  {"Your muscles are flexible, but weak (Str -1, Dex +1).",
-   "Your muscles are very flexible, but weak (Str -2, Dex +2).",
-   "Your muscles are extremely flexible, but weak (Str -3, Dex +3)."},
-
-  {"Your muscles feel loose.",
-   "Your muscles feel loose.",
-   "Your muscles feel loose."},
-
-  {"Your muscles feel sore.",
-   "Your muscles feel sore.",
-   "Your muscles feel sore."},
-},
-#endif
 
 { MUT_SCREAM, 6, 3, mutflag::BAD | mutflag::XOM, false,
   "screaming",
@@ -536,22 +460,6 @@ static const mutation_def mut_data[] =
    "You feel less resistant to negative energy.",
    "You feel less resistant to negative energy."},
 },
-
-#if TAG_MAJOR_VERSION == 34
-{ MUT_MUMMY_RESTORATION, 0, 1, mutflag::GOOD, false,
-  "restore body",
-
-  {"You can restore your body by infusing magical energy.",
-   "",
-   ""},
-
-  {"You can now infuse your body with magic to restore decomposition.",
-   "",
-   ""},
-
-  {"", "", ""},
-},
-#endif
 
 { MUT_NECRO_ENHANCER, 0, 2, mutflag::GOOD, false,
   "in touch with death",
@@ -827,16 +735,6 @@ static const mutation_def mut_data[] =
   {"You feel vulnerable to rotting.", "", ""},
 },
 
-#if TAG_MAJOR_VERSION == 34
-{ MUT_GOURMAND, 0, 1, mutflag::GOOD, false,
-  "gourmand",
-
-  {"You like to eat raw meat.", "", ""},
-  {"", "", ""},
-  {"", "", ""},
-},
-#endif
-
 { MUT_HOP, 0, 2, mutflag::GOOD, true,
   "stiff legs",
 
@@ -941,16 +839,6 @@ static const mutation_def mut_data[] =
    "Your connection to magic feels less subdued."},
 },
 
-#if TAG_MAJOR_VERSION == 34
-{ MUT_FORLORN, 0, 1, mutflag::BAD, false,
-  "forlorn",
-
-  {"You have difficulty communicating with the divine.","",""},
-  {"You feel forlorn.","",""},
-  {"You feel more spiritual.","",""},
-},
-#endif
-
 // No longer stochastic because that was dumb
 // Not bothering to rename the mutation though, sorry
 { MUT_STOCHASTIC_TORMENT_RESISTANCE, 0, 1, mutflag::GOOD, false,
@@ -980,24 +868,6 @@ static const mutation_def mut_data[] =
    "Your icy envelope grows thicker.", ""},
   {"", "", ""},
 },
-
-#if TAG_MAJOR_VERSION == 34
-{ MUT_CONSERVE_SCROLLS, 0, 1, mutflag::GOOD, false,
-  "conserve scrolls",
-
-  {"You are very good at protecting items from fire.", "", ""},
-  {"You feel less concerned about heat.", "", ""},
-  {"", "", ""},
-},
-
-{ MUT_CONSERVE_POTIONS, 0, 1, mutflag::GOOD, false,
-  "conserve potions",
-
-  {"You are very good at protecting items from cold.", "", ""},
-  {"You feel less concerned about cold.", "", ""},
-  {"", "", ""},
-},
-#endif
 
 { MUT_PASSIVE_FREEZE, 3, 1, mutflag::GOOD, false,
   "passive freeze",
@@ -1297,24 +1167,6 @@ static const mutation_def mut_data[] =
    "Your molten scales recede somewhat."},
 },
 
-#if TAG_MAJOR_VERSION == 34
-{ MUT_ROUGH_BLACK_SCALES, 0, 3, mutflag::GOOD, true,
-  "rough black scales",
-
-  {"You are partially covered in rough black scales. (AC +2, Dex -1)",
-   "You are mostly covered in rough black scales. (AC +5, Dex -2)",
-   "You are completely covered in rough black scales. (AC +8, Dex -3)"},
-
-  {"Rough black scales grow over part of your body.",
-   "Rough black scales spread over more of your body.",
-   "Rough black scales cover your body completely."},
-
-  {"Your rough black scales disappear.",
-   "Your rough black scales recede somewhat.",
-   "Your rough black scales recede somewhat."},
-},
-#endif
-
 { MUT_RUGGED_BROWN_SCALES, 0, 3, mutflag::GOOD, true,
   "rugged brown scales",
 
@@ -1488,48 +1340,6 @@ static const mutation_def mut_data[] =
   {"You briefly stop moving.", "", ""},
 },
 
-#if TAG_MAJOR_VERSION == 34
-{ MUT_TRAMPLE_RESISTANCE, 0, 1, mutflag::GOOD, false,
-  "trample resistance",
-
-  {"You are resistant to trampling.", "", ""},
-  {"You feel steady.", "", ""},
-  {"You feel unsteady..", "", ""},
-},
-
-{ MUT_CLING, 0, 1, mutflag::GOOD, true,
-  "cling",
-
-  {"You can cling to walls.", "", ""},
-  {"You feel sticky.", "", ""},
-  {"You feel slippery.", "", ""},
-},
-
-{ MUT_EXOSKELETON, 0, 2, mutflag::GOOD, true,
-  "exoskeleton",
-
-  {"Your body is surrounded by an exoskeleton. (buggy)",
-   "Your body is surrounded by a tough exoskeleton. (buggy)",
-   ""},
-
-  {"Your exoskeleton hardens.",
-   "Your exoskeleton becomes even harder.",
-   ""},
-
-  {"Your exoskeleton softens.",
-   "Your exoskeleton softens.",
-   ""},
-},
-
-{ MUT_FUMES, 0, 2, mutflag::GOOD, false,
-  "fuming",
-
-  {"You emit clouds of smoke.", "You frequently emit clouds of smoke.", ""},
-  {"You fume.", "You fume more.", ""},
-  {"You stop fuming.", "You fume less.", ""},
-},
-#endif
-
 { MUT_BLACK_MARK, 0, 2, mutflag::GOOD, false,
   "black mark",
 
@@ -1563,16 +1373,6 @@ static const mutation_def mut_data[] =
   {"You feel less concerned about cold.", "", ""},
   {"", "", ""},
 },
-
-#if TAG_MAJOR_VERSION == 34
-{ MUT_SUSTAIN_ATTRIBUTES, 0, 1, mutflag::GOOD, false,
-    "sustain attributes",
-
-    {"Your attributes are resistant to harm.", "", ""},
-    {"", "", ""},
-    {"", "", ""},
-},
-#endif
 
 { MUT_NO_DRINK, 0, 1, mutflag::BAD, false,
   "inability to drink while threatened",

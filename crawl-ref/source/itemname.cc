@@ -3319,13 +3319,7 @@ bool is_useless_item(const item_def &item, bool temp)
 
         case RING_RESIST_CORROSION:
             return you.res_corr(false, false);
-#if TAG_MAJOR_VERSION == 34
-		case AMU_THE_GOURMAND:
-            return player_likes_chunks(true) == 3
-                   || you.get_mutation_level(MUT_GOURMAND) > 0
-                   || you.get_mutation_level(MUT_HERBIVOROUS) == 3
-                   || you.undead_state(temp);
-#endif
+
         case AMU_FAITH:
             return ((you.species == SP_DEMIGOD || you.species == SP_TITAN) && !you.religion)
                     || you_worship(GOD_GOZAG)

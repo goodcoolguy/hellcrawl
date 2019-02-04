@@ -2875,7 +2875,6 @@ static void tag_read_you(reader &th)
     }
     you.mutation[MUT_FAST] = you.innate_mutation[MUT_FAST];
     you.mutation[MUT_SLOW] = you.innate_mutation[MUT_SLOW];
-    you.mutation[MUT_BREATHE_FLAMES] = 0;
 #endif
 
     for (int j = count; j < NUM_MUTATIONS; ++j)
@@ -2887,22 +2886,9 @@ static void tag_read_you(reader &th)
         // was, so when TAG_MINOR_NO_DEVICE_HEAL was added
         // these were all moved to only apply to previous
         // tags.
-        if (you.mutation[MUT_TELEPORT_CONTROL] == 1)
-            you.mutation[MUT_TELEPORT_CONTROL] = 0;
-        if (you.mutation[MUT_TRAMPLE_RESISTANCE] > 0)
-            you.mutation[MUT_TRAMPLE_RESISTANCE] = 0;
-        if (you.mutation[MUT_CLING] == 1)
-            you.mutation[MUT_CLING] = 0;
-        if (you.species == SP_DJINNI)
-        {
-            you.mutation[MUT_NEGATIVE_ENERGY_RESISTANCE] =
-            you.innate_mutation[MUT_NEGATIVE_ENERGY_RESISTANCE] = 3;
-        }
         if (you.species == SP_FORMICID)
         {
             you.mutation[MUT_ANTENNAE] = you.innate_mutation[MUT_ANTENNAE] = 3;
-            you.mutation[MUT_EXOSKELETON] =
-            you.innate_mutation[MUT_EXOSKELETON] = 0;
         }
     }
 
@@ -2954,38 +2940,6 @@ static void tag_read_you(reader &th)
         }
     }
 
-    if (th.getMinorVersion() < TAG_MINOR_FOUL_STENCH
-        && you.species == SP_DEMONSPAWN
-        && you.innate_mutation[MUT_SAPROVOROUS])
-    {
-        you.mutation[MUT_ROT_IMMUNITY] =
-        you.innate_mutation[MUT_ROT_IMMUNITY] = 1;
-    }
-
-    you.mutation[MUT_SAPROVOROUS] =
-    you.innate_mutation[MUT_SAPROVOROUS] = 0;
-
-    if (th.getMinorVersion() < TAG_MINOR_DS_CLOUD_MUTATIONS
-        && you.species == SP_DEMONSPAWN)
-    {
-        if (you.innate_mutation[MUT_CONSERVE_POTIONS])
-        {
-            you.mutation[MUT_CONSERVE_POTIONS] =
-            you.innate_mutation[MUT_CONSERVE_POTIONS] = 0;
-
-            you.mutation[MUT_FREEZING_CLOUD_IMMUNITY] =
-            you.innate_mutation[MUT_FREEZING_CLOUD_IMMUNITY] = 1;
-        }
-        if (you.innate_mutation[MUT_CONSERVE_SCROLLS])
-        {
-            you.mutation[MUT_CONSERVE_SCROLLS] =
-            you.innate_mutation[MUT_CONSERVE_SCROLLS] = 0;
-
-            you.mutation[MUT_FLAME_CLOUD_IMMUNITY] =
-            you.innate_mutation[MUT_FLAME_CLOUD_IMMUNITY] = 1;
-        }
-    }
-
     if (th.getMinorVersion() < TAG_MINOR_METABOLISM)
     {
         you.mutation[MUT_FAST_METABOLISM] =
@@ -3003,12 +2957,6 @@ static void tag_read_you(reader &th)
     {
         for (int xl = 2; xl <= you.experience_level; ++xl)
             give_level_mutations(you.species, xl);
-    }
-
-    if (th.getMinorVersion() < TAG_MINOR_NO_FORLORN)
-    {
-        if (you.mutation[MUT_FORLORN])
-            you.mutation[MUT_FORLORN] = 0;
     }
 
     if (th.getMinorVersion() < TAG_MINOR_MP_WANDS)
@@ -3038,14 +2986,6 @@ static void tag_read_you(reader &th)
             you.mutation[MUT_BLINK] = 1;
     }
 
-    if (th.getMinorVersion() < TAG_MINOR_MUMMY_RESTORATION)
-    {
-        if (you.mutation[MUT_MUMMY_RESTORATION])
-            you.mutation[MUT_MUMMY_RESTORATION] = 0;
-        if (you.mutation[MUT_SUSTAIN_ATTRIBUTES])
-            you.mutation[MUT_SUSTAIN_ATTRIBUTES] = 0;
-    }
-
     // Fixup for Sacrifice XP from XL 27 (#9895). No minor tag, but this
     // should still be removed on a major bump.
     const int xl_remaining = you.get_max_xl() - you.experience_level;
@@ -3061,12 +3001,6 @@ static void tag_read_you(reader &th)
         dt.level_gained = unmarshallByte(th);
         ASSERT_RANGE(dt.level_gained, 1, 28);
         dt.mutation = static_cast<mutation_type>(unmarshallShort(th));
-#if TAG_MAJOR_VERSION == 34
-        if (dt.mutation == MUT_CONSERVE_POTIONS)
-            dt.mutation = MUT_FREEZING_CLOUD_IMMUNITY;
-        else if (dt.mutation == MUT_CONSERVE_SCROLLS)
-            dt.mutation = MUT_FLAME_CLOUD_IMMUNITY;
-#endif
         ASSERT_RANGE(dt.mutation, 0, NUM_MUTATIONS);
         you.demonic_traits.push_back(dt);
     }
