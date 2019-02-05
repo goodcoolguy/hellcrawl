@@ -3538,13 +3538,6 @@ tileidx_t tileidx_known_brand(const item_def &item)
             break;
         }
     }
-#if TAG_MAJOR_VERSION == 34
-    else if (item.base_type == OBJ_RODS)
-    {
-        // Technically not a brand, but still handled here
-        return TILE_ROD_ID_FIRST + item.sub_type;
-    }
-#endif
     return 0;
 }
 

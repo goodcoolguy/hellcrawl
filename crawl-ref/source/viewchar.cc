@@ -26,9 +26,6 @@ static const char32_t dchar_table[NUM_CSET][NUM_DCHAR_TYPES] =
         '0', 0x03C6, ')', '[', '/', '?', '=', '!', '(',
     //                       †       ÷               §     ♣       ©
         ':', '|', 
-#if TAG_MAJOR_VERSION == 34
-         '\\',
-#endif		
 		'}', 0x2020, 0xF7, '$', '"', 0xA7, 0x2663, 0xA9,
     //                 ÷
         ' ', '#', '*', 0xF7, 'X', '`', '#',  // space .. explosion
@@ -42,7 +39,7 @@ static const char32_t dchar_table[NUM_CSET][NUM_DCHAR_TYPES] =
         '#', '#', '*', '.', ',', '\'', '+', '^', '>', '<',  // wall .. stairs up
         '#', '_', '\\', '}', '~', '8', '{', '{',       // grate .. item detect
         '{', '}', ')', '[', '/', '%', '?', '=', '!', '(',   // orb .. missile
-        ':', '|', '|', '}', '%', '$', '"', '0', '7', '^', // book .. teleporter
+        ':', '|', '}', '%', '$', '"', '0', '7', '^', // book .. teleporter
         ' ', '#', '*', '+', 'X', '`', '#', // space .. explosion
         '-', '|', '+', '+', '+', '+', '-', '|', '/',
         '\\', '*', '*', '*', '*', 'V', '^', '>', '<'
@@ -63,9 +60,6 @@ dungeon_char_type dchar_by_name(const string &name)
         "item_orb", "item_rune", "item_weapon", "item_armour", "item_wand",
         "item_scroll", "item_ring", "item_potion", "item_missile", "item_book",
         "item_staff",
-#if TAG_MAJOR_VERSION == 34
-        "item_rod",
-#endif
         "item_miscellany", "item_corpse", "item_skeleton",
         "item_gold", "item_amulet", "cloud", "tree", "teleporter",
         "space", "fired_bolt", "fired_zap", "fired_burst", "fired_debug",

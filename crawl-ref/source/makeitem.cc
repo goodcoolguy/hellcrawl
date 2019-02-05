@@ -1581,7 +1581,7 @@ int items(bool allow_uniques,
                 || item.base_type == OBJ_WANDS)
             && random2(7) >= item_level)
         {
-	  item.base_type = OBJ_GOLD; /* try drying out early game to compensate
+	    item.base_type = OBJ_GOLD; /* try drying out early game to compensate
 				      * for id removal --mps */
 	  //item.base_type = coinflip() ? OBJ_POTIONS : OBJ_SCROLLS;
         }
