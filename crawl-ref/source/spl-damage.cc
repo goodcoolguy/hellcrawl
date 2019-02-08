@@ -10,6 +10,7 @@
 
 #include "act-iter.h"
 #include "areas.h"
+#include "beam.h"
 #include "butcher.h"
 #include "cloud.h"
 #include "colour.h"
@@ -24,6 +25,7 @@
 #include "invent.h"
 #include "itemname.h"
 #include "items.h"
+#include "los.h"
 #include "losglobal.h"
 #include "macro.h"
 #include "message.h"
@@ -2142,6 +2144,101 @@ spret_type cast_fragmentation(int pow, const actor *caster,
 
     beam.explode(true, hole);
 
+    return SPRET_SUCCESS;
+}
+
+static void _forceblast_knockback(monster* mons)
+{
+	if (!mons || mons->is_stationary())
+        return;
+
+    // this shouldn't happen, but just in case...
+    if (you.pos() == mons->pos())
+        return;
+
+    bolt beam;
+    beam.name = "force blast";
+    beam.flavour = BEAM_VISUAL;
+    beam.set_agent(&you);
+    beam.range = LOS_DEFAULT_RANGE;
+	beam.pierce = true;
+    beam.source = you.pos();
+    beam.target = mons->pos();
+    beam.hit = AUTOMATIC_HIT;
+	
+    ray_def ray;
+	
+    const coord_def oldpos = mons->pos();
+    if(!find_ray(you.pos(), oldpos, ray, opc_no_trans))
+    {
+        return;
+    }
+
+    coord_def newpos = mons->pos();
+    for (int dist_travelled = 0; dist_travelled < 5; ++dist_travelled)
+    {
+        const ray_def oldray(ray);
+
+        ray.advance();
+
+        newpos = ray.pos();
+        if (newpos == oldray.pos()
+            || cell_is_solid(newpos)
+            || !mons->can_pass_through(newpos)
+            || !mons->is_habitable(newpos))
+        {
+            ray = oldray;
+            dprf("can't move");
+            break;
+        }
+
+        mons->move_to_pos(newpos);
+    }
+
+    if (newpos == oldpos)
+        return;
+
+    if (you.can_see(*mons))
+    {
+        mprf("%s %s knocked back by the blast of force.",
+                 mons->name(DESC_THE).c_str(),
+                 mons->conj_verb("are").c_str());   
+    }
+	
+    mons->apply_location_effects(oldpos, KILL_YOU);
+}
+
+spret_type force_blast(int pow, bool fail)
+{
+    //handle visuals
+	bolt beam;
+    beam.name = "force blast";
+    beam.flavour = BEAM_VISUAL;
+    beam.set_agent(&you);
+    beam.colour = LIGHTRED;
+    beam.glyph = dchar_glyph(DCHAR_EXPLOSION);
+    beam.range = 1;
+    beam.ex_size = 2;
+    beam.is_explosion = true;
+    beam.source = you.pos();
+    beam.target = you.pos();
+    beam.hit = AUTOMATIC_HIT;
+    beam.loudness = 7;
+    beam.explode();
+	
+    for(radius_iterator ai(you.pos(), 2, C_SQUARE, LOS_SOLID); ai; ++ai)
+    {
+        monster* mons = monster_at(*ai);
+        if (mons == nullptr)
+            continue;
+        //placeholder, plug in a real damage formula here
+        int dam = 1 + random2(10 + 5 * pow);
+        dam = mons->apply_ac(dam);
+        mprf("The force blast hits %s (%d)!", mons->name(DESC_THE).c_str(), dam);
+        _player_hurt_monster(*mons, dam, BEAM_MMISSILE);
+        _forceblast_knockback(mons);
+    }
+	
     return SPRET_SUCCESS;
 }
 

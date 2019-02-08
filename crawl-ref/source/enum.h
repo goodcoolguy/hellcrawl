@@ -506,6 +506,7 @@ enum ability_type
     ABIL_MANA_VIPER,
     ABIL_DDOOR,
     ABIL_SPECTRAL_WEAPON,
+    ABIL_FORCEBLAST,
 
     NUM_ABILITIES
 };
@@ -3989,6 +3990,7 @@ enum artefact_prop_type
     ARTP_VIPER,
     ARTP_DDOOR,
     ARTP_SPECTRAL,
+    ARTP_FORCEBLAST,
     ARTP_NUM_PROPERTIES
 };
 

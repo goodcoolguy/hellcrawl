@@ -1282,7 +1282,6 @@ bool direction_chooser::select(bool allow_out_of_range, bool endpoint)
 
 bool direction_chooser::pickup_item()
 {
-	dprf("directn");
     item_info *ii = 0;
     if (in_bounds(target()))
         ii = env.map_knowledge(target()).item();
