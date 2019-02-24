@@ -194,9 +194,6 @@ void ghost_demon::init_pandemonium_lord()
     see_invis = true;
 
     resists = 0;
-    resists |= mrd(MR_RES_FIRE, _panlord_random_resist_level());
-    resists |= mrd(MR_RES_COLD, _panlord_random_resist_level());
-    resists |= mrd(MR_RES_ELEC, _panlord_random_elec_resist_level());
     // Demons, like ghosts, automatically get poison res. and life prot.
 
     // HTH damage:
@@ -302,16 +299,6 @@ void ghost_demon::init_player_ghost(bool actual_ghost)
 
     see_invis      = you.can_see_invisible();
     resists        = 0;
-    set_resist(resists, MR_RES_FIRE, player_res_fire());
-    set_resist(resists, MR_RES_COLD, player_res_cold());
-    set_resist(resists, MR_RES_ELEC, player_res_electricity());
-    // clones might lack innate rPois, copy it.  pghosts don't care.
-    set_resist(resists, MR_RES_NEG, you.res_negative_energy());
-    set_resist(resists, MR_RES_ACID, player_res_acid());
-    // multi-level for players, boolean as an innate monster resistance
-    set_resist(resists, MR_RES_STEAM, player_res_steam() ? 1 : 0);
-    set_resist(resists, MR_RES_STICKY_FLAME, player_res_sticky_flame());
-    set_resist(resists, MR_RES_ROTTING, you.res_rotting());
     set_resist(resists, MR_RES_PETRIFY, you.res_petrify());
 
     move_energy = _player_ghost_movement_energy();
@@ -531,24 +518,7 @@ void ghost_demon::ugly_thing_to_very_ugly_thing()
 
 static resists_t _ugly_thing_resists(bool very_ugly, attack_flavour u_att_flav)
 {
-    switch (u_att_flav)
-    {
-    case AF_FIRE:
-    case AF_STICKY_FLAME:
-        return MR_RES_FIRE * (very_ugly ? 2 : 1) | MR_RES_STICKY_FLAME;
-
-    case AF_ACID:
-        return MR_RES_ACID;
-
-    case AF_ELEC:
-        return MR_RES_ELEC * (very_ugly ? 2 : 1);
-
-    case AF_COLD:
-        return MR_RES_COLD * (very_ugly ? 2 : 1);
-
-    default:
-        return 0;
-    }
+    return 0;
 }
 
 void ghost_demon::ugly_thing_add_resistance(bool very_ugly,
@@ -774,8 +744,6 @@ bool debug_check_ghosts()
         if (ghost.xl < 1 || ghost.xl > 27)
             return false;
         if (ghost.ev > MAX_GHOST_EVASION)
-            return false;
-        if (get_resist(ghost.resists, MR_RES_ELEC) < 0)
             return false;
         if (ghost.brand < SPWPN_NORMAL || ghost.brand > MAX_GHOST_BRAND)
             return false;

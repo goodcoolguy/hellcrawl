@@ -2992,7 +2992,7 @@ void mons_check_pool(monster* mons, const coord_def &oldpos,
     }
 
     // Even fire resistant monsters perish in lava.
-    if (grid == DNGN_LAVA && mons->res_fire() < 2)
+    if (grid == DNGN_LAVA)
     {
         simple_monster_message(*mons, " is incinerated.",
                                MSGCH_MONSTER_DAMAGE, MDAM_DEAD);

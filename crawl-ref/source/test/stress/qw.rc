@@ -1419,7 +1419,7 @@ end
 
 function meph_immune()
   -- should also check clarity and unbreathing
-  return (you.res_poison() >= 1)
+  return false
 end
 
 function miasma_immune()
@@ -2723,13 +2723,13 @@ end
 
 function cloud_is_dangerous(cloud)
   if cloud == "flame" or cloud == "fire" then
-    return (you.res_fire() < 1)
+    return true
   elseif cloud == "noxious fumes" then
     return (not meph_immune())
   elseif cloud == "freezing vapour" then
-    return (you.res_cold() < 1)
+    return true
   elseif cloud == "poison gas" then
-    return (you.res_poison() < 1)
+    return true
   elseif cloud == "calcifying dust" then
     return (you.race() ~= "Gargoyle")
   elseif cloud == "foul pestilence" then
@@ -3032,11 +3032,7 @@ function want_to_orbrun_might()
 end
 
 function want_resistance()
-  return (check_monsters(LOS, fire_resistance_monsters) and you.res_fire() < 3
-          or check_monsters(LOS, cold_resistance_monsters) and you.res_cold() < 3
-          or check_monsters(LOS, elec_resistance_monsters) and you.res_shock() < 1
-          or check_monsters(LOS, pois_resistance_monsters) and
-             you.res_poison() < 1)
+  return false
 end
 
 function want_to_hand()

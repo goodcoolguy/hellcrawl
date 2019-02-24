@@ -488,17 +488,6 @@ void debug_stethoscope(int mon)
                                   summoner->mindex()).c_str()
                    : ""));
 
-    // Print resistances.
-    mprf(MSGCH_DIAGNOSTICS, "resist: fire=%d cold=%d elec=%d neg=%d "
-                            "acid=%d sticky=%s rot=%s",
-         mons.res_fire(),
-         mons.res_cold(),
-         mons.res_elec(),
-         mons.res_negative_energy(),
-         mons.res_acid(),
-         mons.res_sticky_flame() ? "yes" : "no",
-         mons.res_rotting() ? "yes" : "no");
-
     mprf(MSGCH_DIAGNOSTICS, "ench: %s",
          mons.describe_enchantments().c_str());
 

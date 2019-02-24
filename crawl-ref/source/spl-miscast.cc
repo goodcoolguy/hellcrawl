@@ -938,8 +938,7 @@ void MiscastEffect::_necromancy(int severity)
         mon_msg_seen = "@The_monster@ is engulfed in negative energy!";
         do_msg();
         target->drain_exp(act_source, false, 30);
-        if (!target->res_rotting())
-            target->rot(act_source, 1, true);
+        target->rot(act_source, 1, true);
         break;
 
     case 3:         // even nastier
@@ -1025,11 +1024,8 @@ void MiscastEffect::_fire(int severity)
     case 1:         // a bit less harmless stuff
         you_msg      = "Flames sear your flesh.";
         mon_msg_seen = "Flames sear @the_monster@.";
-        if (target->res_fire() < 0)
-        {
-            if (!_ouch(2 + random2avg(13, 2)))
-                return;
-        }
+        if (!_ouch(2 + random2avg(13, 2)))
+            return;
         else
             do_msg();
         if (target->alive())
@@ -1084,11 +1080,8 @@ void MiscastEffect::_ice(int severity)
     case 1:         // a bit less harmless stuff
         you_msg      = "You are covered in a thin layer of ice.";
         mon_msg_seen = "@The_monster@ is covered in a thin layer of ice.";
-        if (target->res_cold() < 0)
-        {
-            if (!_ouch(4 + random2avg(5, 2)))
-                return;
-        }
+        if (!_ouch(4 + random2avg(5, 2)))
+            return;
         else
             do_msg();
         if (target->alive())

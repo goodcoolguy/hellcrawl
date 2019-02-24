@@ -2867,20 +2867,6 @@ static const char* _get_resist_name(mon_resist_flags res_type)
 {
     switch (res_type)
     {
-    case MR_RES_ELEC:
-        return "electricity";
-    case MR_RES_FIRE:
-        return "fire";
-    case MR_RES_STEAM:
-        return "steam";
-    case MR_RES_COLD:
-        return "cold";
-    case MR_RES_ACID:
-        return "acid";
-    case MR_RES_ROTTING:
-        return "rotting";
-    case MR_RES_NEG:
-        return "negative energy";
     case MR_RES_DAMNATION:
         return "damnation";
     case MR_RES_TORNADO:
@@ -3270,9 +3256,7 @@ static string _monster_stat_description(const monster_info& mi)
 
     const mon_resist_flags resists[] =
     {
-        MR_RES_ELEC,    MR_RES_FIRE,
-        MR_RES_STEAM,   MR_RES_COLD,   MR_RES_ACID,
-        MR_RES_ROTTING, MR_RES_NEG,    MR_RES_DAMNATION,
+        MR_RES_DAMNATION,
         MR_RES_TORNADO,
     };
 
@@ -3360,13 +3344,6 @@ static string _monster_stat_description(const monster_info& mi)
         && !mons_is_tentacle_or_tentacle_segment(mi.type))
     {
         result << uppercase_first(pronoun) << " cannot move.\n";
-    }
-
-    if (mons_class_flag(mi.type, M_COLD_BLOOD)
-        && get_resist(resist, MR_RES_COLD) <= 0)
-    {
-        result << uppercase_first(pronoun) << " is cold-blooded and may be "
-                                              "slowed by cold attacks.\n";
     }
 
     // Seeing invisible.

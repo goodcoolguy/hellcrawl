@@ -955,7 +955,7 @@ bool zin_recite_to_single_monster(const coord_def& where)
         if (check < 5)
         {
             // nastier -- fallthrough if immune
-            if (coinflip() && mon->res_rotting() <= 1)
+            if (coinflip())
                 effect = ZIN_ROT;
             else
                 effect = ZIN_SMITE;
@@ -984,7 +984,7 @@ bool zin_recite_to_single_monster(const coord_def& where)
         // immune, of course.
         if (check < 5)
         {
-            if (coinflip() && mon->res_rotting() <= 1)
+            if (coinflip())
                 effect = ZIN_ROT;
             else
                 effect = ZIN_SMITE;
@@ -1184,8 +1184,7 @@ bool zin_recite_to_single_monster(const coord_def& where)
     case ZIN_ROT:
         // FIXME: no message (other than "You kill X!") is produced if the
         // rotting kills the monster.
-        if (mon->res_rotting() <= 1
-            && mon->rot(&you, 1 + roll_dice(2, degree), true))
+        if (mon->rot(&you, 1 + roll_dice(2, degree), true))
         {
             mon->add_ench(mon_enchant(ENCH_SICK, degree, &you,
                           (degree + random2(spellpower)) * BASELINE_DELAY));

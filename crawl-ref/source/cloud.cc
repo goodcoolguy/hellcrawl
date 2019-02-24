@@ -894,35 +894,23 @@ bool actor_cloud_immune(const actor *act, const cloud_struct &cloud)
     case CLOUD_FIRE:
     case CLOUD_FOREST_FIRE:
         if (!player)
-            return act->res_fire() >= 3;
+            return false;
         return you.duration[DUR_FIRE_SHIELD]
                || you.has_mutation(MUT_FLAME_CLOUD_IMMUNITY)
                || you.has_mutation(MUT_IGNITE_BLOOD)
                || player_equip_unrand(UNRAND_FIRESTARTER)
                || you.attribute[ATTR_FIRE_SHIELD];
-    case CLOUD_HOLY:
-        return act->res_holy_energy() >= 3;
     case CLOUD_COLD:
         if (!player)
-            return act->res_cold() >= 3;
+            return false;
         return you.has_mutation(MUT_FREEZING_CLOUD_IMMUNITY)
                || player_equip_unrand(UNRAND_FROSTBITE);
     case CLOUD_MEPHITIC:
         return act->is_unbreathing();
-    case CLOUD_STEAM:
-        return act->res_steam() > 0;
-    case CLOUD_MIASMA:
-        return act->res_rotting() > 0;
     case CLOUD_PETRIFY:
         return act->res_petrify();
     case CLOUD_SPECTRAL:
         return bool(act->holiness() & MH_UNDEAD);
-    case CLOUD_ACID:
-        return act->res_acid() > 0;
-    case CLOUD_STORM:
-        return act->res_elec() >= 3;
-    case CLOUD_NEGATIVE_ENERGY:
-        return act->res_negative_energy() >= 3;
     case CLOUD_TORNADO:
         return act->res_tornado();
     case CLOUD_RAIN:
@@ -943,21 +931,8 @@ static int _actor_cloud_resist(const actor *act, const cloud_struct &cloud)
     {
     case CLOUD_RAIN:
         return act->is_fiery()? 0 : MAG_IMMUNE;
-    case CLOUD_FIRE:
-    case CLOUD_FOREST_FIRE:
-        return act->res_fire();
-    case CLOUD_HOLY:
-        return act->res_holy_energy();
-    case CLOUD_COLD:
-        return act->res_cold();
     case CLOUD_PETRIFY:
         return act->res_petrify();
-    case CLOUD_ACID:
-        return act->res_acid();
-    case CLOUD_STORM:
-        return act->res_elec();
-    case CLOUD_NEGATIVE_ENERGY:
-        return act->res_negative_energy();
 
     default:
         return 0;

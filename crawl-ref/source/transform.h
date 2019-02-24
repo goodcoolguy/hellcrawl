@@ -116,14 +116,6 @@ public:
     virtual string transform_message(transformation_type previous_trans) const;
     virtual string get_untransform_message() const;
 
-    virtual int res_fire() const;
-    virtual int res_cold() const;
-    int res_neg() const;
-    bool res_elec() const;
-    int res_pois() const;
-    bool res_rot() const;
-    bool res_acid() const;
-    bool res_sticky_flame() const;
     bool res_petrify() const;
 
     /**

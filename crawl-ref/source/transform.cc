@@ -285,70 +285,6 @@ string Form::get_uc_attack_name(string default_name) const
 }
 
 /**
- * How many levels of resistance against fire does this form provide?
- */
-int Form::res_fire() const
-{
-    return get_resist(resists, MR_RES_FIRE);
-}
-
-/**
- * How many levels of resistance against cold does this form provide?
- */
-int Form::res_cold() const
-{
-    return get_resist(resists, MR_RES_COLD);
-}
-
-/**
- * How many levels of resistance against negative energy does this form give?
- */
-int Form::res_neg() const
-{
-    return get_resist(resists, MR_RES_NEG);
-}
-
-/**
- * Does this form provide resistance to electricity?
- */
-bool Form::res_elec() const
-{
-    return get_resist(resists, MR_RES_ELEC);
-}
-
-/**
- * How many levels of resistance against poison does this form give?
- */
-int Form::res_pois() const
-{
-    return 0;
-}
-
-/**
- * Does this form provide resistance to rotting?
- */
-bool Form::res_rot() const
-{
-    return get_resist(resists, MR_RES_ROTTING);
-}
-
-/**
- * Does this form provide resistance against acid?
- */
-bool Form::res_acid() const
-{
-    return get_resist(resists, MR_RES_ACID);
-}
-
-/**
- * Does this form provide resistance to sticky flame?
- */
-bool Form::res_sticky_flame() const
-{
-    return get_resist(resists, MR_RES_STICKY_FLAME);
-}
-
-/**
  * Does this form provide resistance to petrification?
  */
 bool Form::res_petrify() const
@@ -670,38 +606,6 @@ public:
         if (species_is_draconian(you.species))
             return 1000;
         return Form::get_ac_bonus();
-    }
-
-    /**
-     * How many levels of resistance against fire does this form provide?
-     */
-    int res_fire() const override
-    {
-        switch (dragon_form_dragon_type())
-        {
-            case MONS_FIRE_DRAGON:
-                return 2;
-            case MONS_ICE_DRAGON:
-                return -1;
-            default:
-                return 0;
-        }
-    }
-
-    /**
-     * How many levels of resistance against cold does this form provide?
-     */
-    int res_cold() const override
-    {
-        switch (dragon_form_dragon_type())
-        {
-            case MONS_ICE_DRAGON:
-                return 2;
-            case MONS_FIRE_DRAGON:
-                return -1;
-            default:
-                return 0;
-        }
     }
 
     bool can_offhand_punch() const override { return true; }

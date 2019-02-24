@@ -222,15 +222,6 @@ int check_your_resists(int hurted, beam_type flavour, string source,
             canned_msg(MSG_YOU_RESIST);
         break;
 
-    case BEAM_MIASMA:
-        if (you.res_rotting())
-        {
-            if (doEffects)
-                canned_msg(MSG_YOU_RESIST);
-            hurted = 0;
-        }
-        break;
-
     case BEAM_HOLY:
     {
         hurted = resist_adjust_damage(&you, flavour, hurted);
@@ -276,8 +267,7 @@ void expose_player_to_element(beam_type flavour, int strength, bool slow_cold_bl
     qazlal_element_adapt(flavour, strength);
 
     if (flavour == BEAM_COLD && slow_cold_blooded
-        && you.get_mutation_level(MUT_COLD_BLOODED)
-        && you.res_cold() <= 0 && coinflip())
+        && you.get_mutation_level(MUT_COLD_BLOODED) && coinflip())
     {
         you.slow_down(0, strength);
     }
@@ -357,22 +347,6 @@ bool drain_player(int power, bool announce_full, bool ignore_protection, bool pr
 {
     if (crawl_state.disables[DIS_AFFLICTIONS])
         return false;
-
-    const int protection = ignore_protection ? 0 : player_prot_life();
-
-    if (protection == 3)
-    {
-        if (announce_full)
-            canned_msg(MSG_YOU_RESIST);
-
-        return false;
-    }
-
-    if (protection > 0)
-    {
-        canned_msg(MSG_YOU_PARTIALLY_RESIST);
-        power /= (protection * 2);
-    }
 
     if (power > 0)
     {

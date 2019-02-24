@@ -482,28 +482,10 @@ static int _beam_to_resist(const actor* defender, beam_type flavour)
 {
     switch (flavour)
     {
-        case BEAM_FIRE:
-        case BEAM_LAVA:
-            return defender->res_fire();
         case BEAM_DAMNATION:
             return defender->res_damnation();
-        case BEAM_STEAM:
-            return defender->res_steam();
-        case BEAM_COLD:
-        case BEAM_ICE:
-            return defender->res_cold();
         case BEAM_WATER:
             return defender->res_water_drowning();
-        case BEAM_ELECTRICITY:
-            return defender->res_elec();
-        case BEAM_NEG:
-        case BEAM_PAIN:
-        case BEAM_MALIGN_OFFERING:
-            return defender->res_negative_energy();
-        case BEAM_ACID:
-            return defender->res_acid();
-        case BEAM_HOLY:
-            return defender->res_holy_energy();
         default:
             return 0;
     }

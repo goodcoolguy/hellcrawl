@@ -361,25 +361,14 @@ public:
     bool is_unbreathing() const override;
     bool is_insubstantial() const override;
     bool res_damnation() const override;
-    int res_fire() const override;
-    int res_steam() const override;
-    int res_cold() const override;
-    int res_elec() const override;
-    int res_poison(bool temp = true) const override;
-    int res_rotting(bool /*temp*/ = true) const override;
     int res_water_drowning() const override;
-    bool res_sticky_flame() const override;
-    int res_holy_energy() const override;
-    int res_negative_energy(bool intrinsic_only = false) const override;
     bool res_torment() const override;
-    int res_acid(bool calc_unid = true) const override;
     bool res_tornado() const override;
     bool res_petrify(bool /*temp*/ = true) const override;
     int res_constrict() const override;
     int res_magic(bool calc_unid = true) const override;
     bool no_tele(bool calc_unid = true, bool permit_id = true,
                  bool blink = false) const override;
-    bool res_corr(bool calc_unid = true, bool items = true) const override;
     bool antimagic_susceptible() const override;
 
     bool stasis(bool calc_unid = true, bool items = true) const override;

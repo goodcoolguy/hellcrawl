@@ -3317,9 +3317,6 @@ bool is_useless_item(const item_def &item, bool temp)
                    || you.species == SP_FORMICID
                    || you.get_mutation_level(MUT_NO_ARTIFICE);
 
-        case RING_RESIST_CORROSION:
-            return you.res_corr(false, false);
-
         case AMU_FAITH:
             return ((you.species == SP_DEMIGOD || you.species == SP_TITAN) && !you.religion)
                     || you_worship(GOD_GOZAG)
@@ -3327,9 +3324,6 @@ bool is_useless_item(const item_def &item, bool temp)
 
         case AMU_GUARDIAN_SPIRIT:
             return you.spirit_shield(false, false);
-
-        case RING_LIFE_PROTECTION:
-            return player_prot_life(false, temp, false) == 3;
 
         case AMU_REGENERATION:
             return you.get_mutation_level(MUT_NO_REGENERATION) > 0

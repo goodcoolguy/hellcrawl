@@ -116,7 +116,6 @@ static function<void(bolt&, const monster&, int)>
 static void _setup_minor_healing(bolt &beam, const monster &caster,
                                  int = -1);
 static void _setup_heal_other(bolt &beam, const monster &caster, int = -1);
-static bool _foe_should_res_negative_energy(const actor* foe);
 static bool _caster_sees_foe(const monster &caster);
 static bool _foe_can_sleep(const monster &caster);
 static bool _foe_not_teleporting(const monster &caster);
@@ -227,7 +226,6 @@ static const map<spell_type, mons_spell_logic> spell_to_logic = {
                                               caster.max_hit_points / 3);
             return foe
                    && adjacent(caster.pos(), foe->pos())
-                   && !_foe_should_res_negative_energy(foe)
                    && low_hp;
         },
         _mons_vampiric_drain,
@@ -255,8 +253,7 @@ static const map<spell_type, mons_spell_logic> spell_to_logic = {
         [](const monster &caster) {
             return _los_spell_worthwhile(caster, SPELL_DRAIN_LIFE)
                    && (!caster.friendly()
-                       || !you.visible_to(&caster)
-                       || player_prot_life(false) >= 3);
+                       || !you.visible_to(&caster));
         },
         [](monster &caster, mon_spell_slot slot, bolt&) {
             const int splpow = _mons_spellpower(slot.spell, caster);
@@ -1969,28 +1966,6 @@ static bool _ms_direct_nasty(spell_type monspell)
              || spell_typematch(monspell, SPTYP_SUMMONING));
 }
 
-// Checks if the foe *appears* to be immune to negative energy. We
-// can't just use foe->res_negative_energy(), because that'll mean
-// monsters will just "know" whether a player is fully life-protected.
-static bool _foe_should_res_negative_energy(const actor* foe)
-{
-    if (foe->is_player())
-    {
-        switch (you.undead_state())
-        {
-        case US_ALIVE:
-        case US_SEMI_UNDEAD:
-            // Demonspawn are not demons, and statue form grants only
-            // partial resistance.
-            return false;
-        default:
-            return true;
-        }
-    }
-
-    return !(foe->holiness() & MH_NATURAL);
-}
-
 static bool _valid_blink_ally(const monster* caster, const monster* target)
 {
     return mons_aligned(caster, target) && caster != target
@@ -3170,7 +3145,7 @@ static bool _torment_vulnerable(actor* victim)
 
 static bool _elec_vulnerable(actor* victim)
 {
-    return victim->res_elec() < 3;
+    return true;
 }
 
 static bool _mutation_vulnerable(actor* victim)
@@ -3329,7 +3304,7 @@ static coord_def _mons_conjure_flame_pos(const monster &mons)
     actor* foe = mon->get_foe();
     // Don't bother if our target is sufficiently fire-resistant,
     // or doesn't exist.
-    if (!foe || foe->res_fire() >= 3)
+    if (!foe)
         return coord_def();
 
     const coord_def foe_pos = foe->pos();
@@ -4571,13 +4546,6 @@ static bool _mons_cast_freeze(monster* mons)
     if (target->alive())
     {
         target->expose_to_element(BEAM_COLD, damage);
-
-        if (target->is_monster() && target->res_cold() <= 0)
-        {
-            const int stun = (1 - target->res_cold())
-                             * random2(min(7, 2 + pow/24));
-            target->as_monster()->speed_increment -= stun;
-        }
     }
 
     return true;
@@ -7821,13 +7789,13 @@ static bool _ms_waste_of_time(monster* mon, mon_spell_slot slot)
     case SPELL_BOLT_OF_DRAINING:
     case SPELL_MALIGN_OFFERING:
     case SPELL_GHOSTLY_FIREBALL:
-        return !foe || _foe_should_res_negative_energy(foe);
+        return !foe;
 
     case SPELL_DEATH_RATTLE:
-        return !foe || _foe_should_res_negative_energy(foe) || no_clouds;
+        return !foe || no_clouds;
 
     case SPELL_MIASMA_BREATH:
-        return !foe || foe->res_rotting() || no_clouds;
+        return !foe || no_clouds;
 
     case SPELL_DISPEL_UNDEAD:
         // [ds] How is dispel undead intended to interact with vampires?
@@ -8045,7 +8013,7 @@ static bool _ms_waste_of_time(monster* mon, mon_spell_slot slot)
 
     case SPELL_CONJURE_BALL_LIGHTNING:
         return friendly
-               && (you.res_elec() <= 0 || you.hp <= 50)
+               && (you.hp <= 50)
                && !(mon->holiness() & MH_DEMONIC); // rude demons
 
     case SPELL_SEAL_DOORS:
@@ -8114,8 +8082,7 @@ static bool _ms_waste_of_time(monster* mon, mon_spell_slot slot)
 
     case SPELL_ENGLACIATION:
         return !foe
-               || !mon->see_cell_no_trans(foe->pos())
-               || foe->res_cold() > 0;
+               || !mon->see_cell_no_trans(foe->pos());
 
     case SPELL_OLGREBS_TOXIC_RADIANCE:
         return mon->has_ench(ENCH_TOXIC_RADIANCE)

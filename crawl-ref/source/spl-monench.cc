@@ -25,8 +25,7 @@ int englaciate(coord_def where, int pow, actor *agent)
 
     monster* mons = victim->as_monster();
 
-    if (victim->res_cold() > 0
-        || victim->is_stationary())
+    if (victim->is_stationary())
     {
         if (!mons)
             canned_msg(MSG_YOU_UNAFFECTED);

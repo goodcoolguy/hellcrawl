@@ -2152,7 +2152,7 @@ string mutation_desc(mutation_type mut, int level, bool colour,
             const bool demonspawn = (you.species == SP_DEMONSPAWN);
             const bool extra = you.get_base_mutation_level(mut, false, true, true) > 0;
 
-            if (fully_inactive || (mut == MUT_COLD_BLOODED && player_res_cold(false) > 0))
+            if (fully_inactive || (mut == MUT_COLD_BLOODED))
                 colourname = "darkgrey";
             else if (is_sacrifice)
                 colourname = "lightred";

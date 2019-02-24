@@ -1930,9 +1930,6 @@ void melee_attack::attacker_sustain_passive_damage()
     if (!mons_class_flag(defender->type, M_ACID_SPLASH))
         return;
 
-    if (attacker->res_acid() >= 3)
-        return;
-
     if (!adjacent(attacker->pos(), defender->pos()) || is_riposte)
         return;
 
@@ -2237,9 +2234,6 @@ bool melee_attack::mons_do_poison()
 
 void melee_attack::mons_do_napalm()
 {
-    if (defender->res_sticky_flame())
-        return;
-
     if (one_chance_in(3))
     {
         if (needs_message)

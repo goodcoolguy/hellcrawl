@@ -21,10 +21,6 @@ typedef uint32_t armflags_t;
 enum armour_flag
 {
     ARMF_NO_FLAGS           = 0,
-    // multilevel resistances
-    ARMF_RES_FIRE           = 1 << 0,
-    ARMF_RES_COLD           = 1 << 3,
-    ARMF_RES_NEG            = 1 << 6,
     // misc (multilevel)
     ARMF_STEALTH            = 1 << 9,
     ARMF_REGENERATION       = 1 << 13,
@@ -33,12 +29,6 @@ enum armour_flag
 
     // boolean resists
     ARMF_RES_MAGIC          = 1 << 17,
-    ARMF_RES_ELEC           = 1 << 18,
-    ARMF_RES_CORR           = 1 << 20,
-    ARMF_RES_STEAM          = 1 << 21,
-    // vulnerabilities
-    ARMF_VUL_FIRE           = ard(ARMF_RES_FIRE, -1),
-    ARMF_VUL_COLD           = ard(ARMF_RES_COLD, -1),
 };
 
 /// Removed items that have item knowledge.
@@ -175,21 +165,9 @@ bool ring_has_stackable_effect(const item_def &item) PURE;
 
 // generic item property functions:
 int armour_type_prop(const uint8_t arm, const armour_flag prop) PURE;
-
-int get_armour_res_fire(const item_def &arm, bool check_artp) PURE;
-int get_armour_res_cold(const item_def &arm, bool check_artp) PURE;
-int get_armour_res_poison(const item_def &arm, bool check_artp) PURE;
-int get_armour_res_elec(const item_def &arm, bool check_artp) PURE;
-int get_armour_life_protection(const item_def &arm, bool check_artp) PURE;
 int get_armour_res_magic(const item_def &arm, bool check_artp) PURE;
-int get_armour_res_corr(const item_def &arm) PURE;
 bool get_armour_see_invisible(const item_def &arm, bool check_artp) PURE;
 
-int get_jewellery_res_fire(const item_def &ring, bool check_artp) PURE;
-int get_jewellery_res_cold(const item_def &ring, bool check_artp) PURE;
-int get_jewellery_res_poison(const item_def &ring, bool check_artp) PURE;
-int get_jewellery_res_elec(const item_def &ring, bool check_artp) PURE;
-int get_jewellery_life_protection(const item_def &ring, bool check_artp) PURE;
 int get_jewellery_res_magic(const item_def &ring, bool check_artp) PURE;
 bool get_jewellery_see_invisible(const item_def &ring, bool check_artp) PURE;
 

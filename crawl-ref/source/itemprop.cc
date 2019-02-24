@@ -111,25 +111,25 @@ static const armour_def Armour_prop[] =
        EQ_BODY_ARMOUR, SIZE_LITTLE, SIZE_GIANT, false, ARMF_REGENERATION, 50 },
 
     DRAGON_ARMOUR(STEAM,       "steam",                   5,   0,   400,
-        ARMF_RES_STEAM),
+        ARMF_RES_MAGIC),
     DRAGON_ARMOUR(ACID,        "acid",                    6,  -50,  400,
-        ARMF_RES_CORR),
+        ARMF_RES_MAGIC),
     DRAGON_ARMOUR(QUICKSILVER, "quicksilver",             9,  -70,  600,
         ARMF_RES_MAGIC),
     DRAGON_ARMOUR(SWAMP,       "swamp",                   7,  -70,  500,
-	ARMF_RES_STEAM),
+	    ARMF_RES_MAGIC),
     DRAGON_ARMOUR(FIRE,        "fire",                    8, -110,  600,
-        ard(ARMF_RES_FIRE, 2) | ARMF_VUL_COLD),
+        ARMF_RES_MAGIC),
     DRAGON_ARMOUR(ICE,         "ice",                     9, -110,  600,
-        ard(ARMF_RES_COLD, 2) | ARMF_VUL_FIRE),
+        ARMF_RES_MAGIC),
     DRAGON_ARMOUR(PEARL,       "pearl",                  10, -110, 1000,
-        ARMF_RES_NEG),
+        ARMF_RES_MAGIC),
     DRAGON_ARMOUR(STORM,       "storm",                  10, -150,  800,
-        ARMF_RES_ELEC),
+        ARMF_RES_MAGIC),
     DRAGON_ARMOUR(SHADOW,      "shadow",                 10, -150,  800,
         ard(ARMF_STEALTH, 4)),
     DRAGON_ARMOUR(GOLD,        "gold",                   12, -230,  800,
-        ARMF_RES_FIRE | ARMF_RES_COLD),
+        ARMF_RES_MAGIC),
 
 #undef DRAGON_HIDE
 
@@ -2006,86 +2006,6 @@ bool ring_has_stackable_effect(const item_def &item)
 //
 // Generic item functions:
 //
-int get_armour_res_fire(const item_def &arm, bool check_artp)
-{
-    ASSERT(arm.base_type == OBJ_ARMOUR);
-
-    int res = 0;
-
-    // intrinsic armour abilities
-    res += armour_type_prop(arm.sub_type, ARMF_RES_FIRE);
-
-    // check ego resistance
-    const int ego = get_armour_ego_type(arm);
-    if (ego == SPARM_FIRE_RESISTANCE || ego == SPARM_RESISTANCE)
-        res += 1;
-
-    if (check_artp && is_artefact(arm))
-        res += artefact_property(arm, ARTP_FIRE);
-
-    return res;
-}
-
-int get_armour_res_cold(const item_def &arm, bool check_artp)
-{
-    ASSERT(arm.base_type == OBJ_ARMOUR);
-
-    int res = 0;
-
-    // intrinsic armour abilities
-    res += armour_type_prop(arm.sub_type, ARMF_RES_COLD);
-
-    // check ego resistance
-    const int ego = get_armour_ego_type(arm);
-    if (ego == SPARM_COLD_RESISTANCE || ego == SPARM_RESISTANCE)
-        res += 1;
-
-    if (check_artp && is_artefact(arm))
-        res += artefact_property(arm, ARTP_COLD);
-
-    return res;
-}
-
-int get_armour_res_poison(const item_def &arm, bool check_artp)
-{
-    ASSERT(arm.base_type == OBJ_ARMOUR);
-
-    return 0;
-}
-
-int get_armour_res_elec(const item_def &arm, bool check_artp)
-{
-    ASSERT(arm.base_type == OBJ_ARMOUR);
-
-    int res = 0;
-
-    // intrinsic armour abilities
-    res += armour_type_prop(arm.sub_type, ARMF_RES_ELEC);
-
-    if (check_artp && is_artefact(arm))
-        res += artefact_property(arm, ARTP_ELECTRICITY);
-
-    return res;
-}
-
-int get_armour_life_protection(const item_def &arm, bool check_artp)
-{
-    ASSERT(arm.base_type == OBJ_ARMOUR);
-
-    int res = 0;
-
-    // intrinsic armour abilities
-    res += armour_type_prop(arm.sub_type, ARMF_RES_NEG);
-
-    // check for ego resistance
-    if (get_armour_ego_type(arm) == SPARM_POSITIVE_ENERGY)
-        res += 1;
-
-    if (check_artp && is_artefact(arm))
-        res += artefact_property(arm, ARTP_NEGATIVE_ENERGY);
-
-    return res;
-}
 
 int get_armour_res_magic(const item_def &arm, bool check_artp)
 {
@@ -2118,92 +2038,6 @@ bool get_armour_see_invisible(const item_def &arm, bool check_artp)
         return artefact_property(arm, ARTP_SEE_INVISIBLE);
 
     return false;
-}
-
-int get_armour_res_corr(const item_def &arm)
-{
-    ASSERT(arm.base_type == OBJ_ARMOUR);
-
-    // intrinsic armour abilities
-    return armour_type_prop(arm.sub_type, ARMF_RES_CORR);
-}
-
-int get_jewellery_res_fire(const item_def &ring, bool check_artp)
-{
-    ASSERT(ring.base_type == OBJ_JEWELLERY);
-
-    int res = 0;
-
-    // intrinsic jewellery abilities
-    switch (ring.sub_type)
-    {
-    case RING_FIRE:
-        res += 1;
-        break;
-    default:
-        break;
-    }
-
-    if (check_artp && is_artefact(ring))
-        res += artefact_property(ring, ARTP_FIRE);
-
-    return res;
-}
-
-int get_jewellery_res_cold(const item_def &ring, bool check_artp)
-{
-    ASSERT(ring.base_type == OBJ_JEWELLERY);
-
-    int res = 0;
-
-    // intrinsic jewellery abilities
-    switch (ring.sub_type)
-    {
-    case RING_ICE:
-        res += 1;
-        break;
-    default:
-        break;
-    }
-
-    if (check_artp && is_artefact(ring))
-        res += artefact_property(ring, ARTP_COLD);
-
-    return res;
-}
-
-int get_jewellery_res_poison(const item_def &ring, bool check_artp)
-{
-    ASSERT(ring.base_type == OBJ_JEWELLERY);
-    return 0;
-}
-
-int get_jewellery_res_elec(const item_def &ring, bool check_artp)
-{
-    ASSERT(ring.base_type == OBJ_JEWELLERY);
-
-    int res = 0;
-
-    if (check_artp && is_artefact(ring))
-        res += artefact_property(ring, ARTP_ELECTRICITY);
-
-    return res;
-}
-
-int get_jewellery_life_protection(const item_def &ring, bool check_artp)
-{
-    ASSERT(ring.base_type == OBJ_JEWELLERY);
-
-    int res = 0;
-
-    // check for ego resistance
-    if (ring.sub_type == RING_LIFE_PROTECTION)
-        res += 1;
-
-    if (check_artp && is_artefact(ring))
-        res += artefact_property(ring, ARTP_NEGATIVE_ENERGY);
-
-    return res;
 }
 
 int get_jewellery_res_magic(const item_def &ring, bool check_artp)

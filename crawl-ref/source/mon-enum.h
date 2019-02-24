@@ -190,34 +190,16 @@ enum mon_resist_flags
     MR_NO_FLAGS          = 0,
 
     // resistances
-    // Notes:
-    // - negative energy is mostly handled via monster::res_negative_energy()
-    MR_RES_ELEC          = 1 << 0,
-    MR_RES_FIRE          = 1 << 6,
-    MR_RES_COLD          = 1 << 9,
-    MR_RES_NEG           = 1 << 12,
-    MR_RES_ROTTING       = 1 << 15,
-    MR_RES_ACID          = 1 << 18,
 
     MR_LAST_MULTI, // must be >= any multi, < any boolean, exact value doesn't matter
 
     MR_RES_TORMENT       = 1 << 22,
     MR_RES_PETRIFY       = 1 << 23,
     MR_RES_DAMNATION     = 1 << 24,
-#if TAG_MAJOR_VERSION == 34
-    MR_OLD_RES_ACID      = 1 << 25,
-#else
-    // unused 1 << 25,
-#endif
-    MR_RES_STICKY_FLAME  = 1 << 26,
     MR_RES_TORNADO       = 1 << 27,
-    MR_RES_STEAM         = 1 << 28,
 
     // vulnerabilities
     MR_VUL_WATER         = 1 << 29,
-    MR_VUL_ELEC          = mrd(MR_RES_ELEC, -1),
-    MR_VUL_FIRE          = mrd(MR_RES_FIRE, -1),
-    MR_VUL_COLD          = mrd(MR_RES_COLD, -1),
 };
 
 enum shout_type

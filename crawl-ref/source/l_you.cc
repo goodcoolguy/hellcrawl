@@ -111,17 +111,12 @@ LUARET1(you_can_train_skill, boolean,
                             : false)
 LUARET1(you_best_skill, string,
         skill_name(best_skill(SK_FIRST_SKILL, SK_LAST_SKILL)))
-LUARET1(you_res_fire, number, player_res_fire(false))
-LUARET1(you_res_cold, number, player_res_cold(false))
-LUARET1(you_res_draining, number, player_prot_life(false))
-LUARET1(you_res_shock, number, player_res_electricity(false))
 LUARET1(you_res_drowning, boolean, you.res_water_drowning())
 LUARET1(you_res_mutation, number, you.rmut_from_item(false) ? 1 : 0)
 LUARET1(you_see_invisible, boolean, you.can_see_invisible(false))
 // Returning a number so as not to break existing scripts.
 LUARET1(you_spirit_shield, number, you.spirit_shield(false) ? 1 : 0)
 LUARET1(you_gourmand, boolean, you.gourmand(false))
-LUARET1(you_res_corr, boolean, you.res_corr(false))
 LUARET1(you_like_chunks, number, player_likes_chunks(true))
 LUARET1(you_flying, boolean, you.airborne())
 LUARET1(you_transform, string, you.form ? transform_name() : "")
@@ -604,17 +599,12 @@ static const struct luaL_reg you_clib[] =
     { "set_training_target", you_set_training_target },
     { "xl"          , you_xl },
     { "xl_progress" , you_xl_progress },
-    { "res_fire"    , you_res_fire   },
-    { "res_cold"    , you_res_cold   },
-    { "res_draining", you_res_draining },
-    { "res_shock"   , you_res_shock },
     { "res_drowning", you_res_drowning },
     { "res_mutation", you_res_mutation },
     { "see_invisible", you_see_invisible },
     { "spirit_shield", you_spirit_shield },
     { "like_chunks",  you_like_chunks },
     { "gourmand",     you_gourmand },
-    { "res_corr",     you_res_corr },
     { "flying",       you_flying },
     { "transform",    you_transform },
     { "berserk",      you_berserk },

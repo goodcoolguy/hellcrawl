@@ -1774,7 +1774,6 @@ static void _ancient_zyme_sicken(monster* mons)
         return;
 
     if (!is_sanctuary(you.pos())
-        && you.res_rotting() <= 0
         && !you.duration[DUR_DIVINE_STAMINA]
         && cell_see_cell(you.pos(), mons->pos(), LOS_SOLID_SEE))
     {

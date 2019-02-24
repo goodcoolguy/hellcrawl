@@ -314,31 +314,7 @@ int get_mons_class_ev(monster_type mc)
 
 static resists_t _apply_holiness_resists(resists_t resists, mon_holy_type mh)
 {
-    // Everything but natural creatures have full rNeg. Set here for the
-    // benefit of the monster_info constructor. If you change this, also
-    // change monster::res_negative_energy.
-    if (!(mh & MH_NATURAL))
-        resists = (resists & ~(MR_RES_NEG * 7)) | (MR_RES_NEG * 3);
-
-    return resists;
-}
-
-/**
- * What special resistances does the given mutant beast facet provide?
- *
- * @param facet     The beast_facet in question, e.g. BF_FIRE.
- * @return          A bitfield of resists corresponding to the given facet;
- *                  e.g. MR_RES_FIRE for BF_FIRE.
- */
-static resists_t _beast_facet_resists(beast_facet facet)
-{
-    static const map<beast_facet, resists_t> resists = {
-        { BF_FIRE,  MR_RES_FIRE },
-        { BF_SHOCK, MR_RES_ELEC },
-        { BF_OX,    MR_RES_COLD },
-    };
-
-    return lookup(resists, facet, 0);
+    return 0;
 }
 
 resists_t get_mons_class_resists(monster_type mc)
@@ -372,10 +348,6 @@ resists_t get_mons_resists(const monster& m)
         if (subspecies != mon.type)
             resists |= get_mons_class_resists(subspecies);
     }
-
-    if (mon.props.exists(MUTANT_BEAST_FACETS))
-        for (auto facet : mon.props[MUTANT_BEAST_FACETS].get_vector())
-            resists |= _beast_facet_resists((beast_facet)facet.get_int());
 
     // This is set from here in case they're undead due to the
     // MF_FAKE_UNDEAD flag. See the comment in get_mons_class_resists.
@@ -4803,8 +4775,6 @@ void debug_mondata()
             MR = md->HD * -MR * 4 / 3;
         if (md->resist_magic > 200 && md->resist_magic != MAG_IMMUNE)
             fails += make_stringf("%s has MR %d > 200\n", name, MR);
-        if (get_resist(md->resists, MR_RES_ELEC) == 2)
-            fails += make_stringf("%s has rElec++\n", name);
 
         // Tests below apply only to real monsters.
         if (md->bitfields & M_CANT_SPAWN)

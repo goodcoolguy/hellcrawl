@@ -1568,19 +1568,11 @@ static int _get_monster_armour_value(const monster *mon,
 {
     // Each resistance/property counts as much as 1 point of AC.
     // Steam has been excluded because of its general uselessness.
-    int value = item.armour_rating()
-              + get_armour_res_fire(item, true)
-              + get_armour_res_cold(item, true)
-              + get_armour_res_elec(item, true)
-              + get_armour_res_corr(item);
+    int value = item.armour_rating();
 
     // Give a simple bonus, no matter the size of the MR bonus.
     if (get_armour_res_magic(item, true) > 0)
         value++;
-
-    // Same for life protection.
-    if (mon->holiness() & MH_NATURAL)
-        value += get_armour_life_protection(item, true);
 
     // See invisible also is only useful if not already intrinsic.
     if (!mons_class_flag(mon->type, M_SEE_INVIS))
@@ -1724,26 +1716,15 @@ static int _get_monster_jewellery_value(const monster *mon,
     {
         value += item.plus;
     }
-
-    value += get_jewellery_res_fire(item, true);
-    value += get_jewellery_res_cold(item, true);
-    value += get_jewellery_res_elec(item, true);
-
+	
     // Give a simple bonus, no matter the size of the MR bonus.
     if (get_jewellery_res_magic(item, true) > 0)
         value++;
-
-    // Same for life protection.
-    if (mon->holiness() & MH_NATURAL)
-        value += get_jewellery_life_protection(item, true);
 
     // See invisible also is only useful if not already intrinsic.
     if (!mons_class_flag(mon->type, M_SEE_INVIS))
         value += get_jewellery_see_invisible(item, true);
 
-    // If we're not naturally corrosion-resistant.
-    if (item.sub_type == RING_RESIST_CORROSION && !mon->res_corr(false, false))
-        value++;
 
     return value;
 }
@@ -2711,8 +2692,7 @@ void monster::expose_to_element(beam_type flavour, int strength,
     switch (flavour)
     {
     case BEAM_COLD:
-        if (slow_cold_blood && mons_class_flag(type, M_COLD_BLOOD)
-            && res_cold() <= 0 && coinflip())
+        if (slow_cold_blood && mons_class_flag(type, M_COLD_BLOOD) && coinflip())
         {
             do_slow_monster(*this, this, (strength + random2(5)) * BASELINE_DELAY);
         }
@@ -3586,134 +3566,6 @@ bool monster::res_damnation() const
     return get_mons_resist(*this, MR_RES_DAMNATION);
 }
 
-int monster::res_fire() const
-{
-    int u = get_mons_resist(*this, MR_RES_FIRE);
-
-    if (mons_itemuse(*this) >= MONUSE_STARTING_EQUIPMENT)
-    {
-        u += scan_artefacts(ARTP_FIRE);
-
-        const int armour    = inv[MSLOT_ARMOUR];
-        const int shld      = inv[MSLOT_SHIELD];
-        const int jewellery = inv[MSLOT_JEWELLERY];
-
-        if (armour != NON_ITEM && mitm[armour].base_type == OBJ_ARMOUR)
-            u += get_armour_res_fire(mitm[armour], false);
-
-        if (shld != NON_ITEM && mitm[shld].base_type == OBJ_ARMOUR)
-            u += get_armour_res_fire(mitm[shld], false);
-
-        if (jewellery != NON_ITEM && mitm[jewellery].base_type == OBJ_JEWELLERY)
-            u += get_jewellery_res_fire(mitm[jewellery], false);
-
-        const item_def *w = primary_weapon();
-        if (w && w->is_type(OBJ_STAVES, STAFF_FIRE))
-            u++;
-    }
-
-    if (has_ench(ENCH_FIRE_VULN))
-        u--;
-
-    if (has_ench(ENCH_RESISTANCE))
-        u++;
-
-    if (u < -3)
-        u = -3;
-    else if (u > 3)
-        u = 3;
-
-    return u;
-}
-
-int monster::res_steam() const
-{
-    int res = get_mons_resist(*this, MR_RES_STEAM);
-    if (wearing(EQ_BODY_ARMOUR, ARM_STEAM_DRAGON_ARMOUR))
-        res += 3;
-
-    res += (res_fire() + 1) / 2;
-
-    if (res > 3)
-        res = 3;
-
-    return res;
-}
-
-int monster::res_cold() const
-{
-    int u = get_mons_resist(*this, MR_RES_COLD);
-
-    if (mons_itemuse(*this) >= MONUSE_STARTING_EQUIPMENT)
-    {
-        u += scan_artefacts(ARTP_COLD);
-
-        const int armour    = inv[MSLOT_ARMOUR];
-        const int shld      = inv[MSLOT_SHIELD];
-        const int jewellery = inv[MSLOT_JEWELLERY];
-
-        if (armour != NON_ITEM && mitm[armour].base_type == OBJ_ARMOUR)
-            u += get_armour_res_cold(mitm[armour], false);
-
-        if (shld != NON_ITEM && mitm[shld].base_type == OBJ_ARMOUR)
-            u += get_armour_res_cold(mitm[shld], false);
-
-        if (jewellery != NON_ITEM && mitm[jewellery].base_type == OBJ_JEWELLERY)
-            u += get_jewellery_res_cold(mitm[jewellery], false);
-
-        const item_def *w = primary_weapon();
-        if (w && w->is_type(OBJ_STAVES, STAFF_COLD))
-            u++;
-    }
-
-    if (has_ench(ENCH_RESISTANCE))
-        u++;
-
-    if (u < -3)
-        u = -3;
-    else if (u > 3)
-        u = 3;
-
-    return u;
-}
-
-int monster::res_elec() const
-{
-    // This is a variable, not a player_xx() function, so can be above 1.
-    int u = 0;
-
-    u += get_mons_resist(*this, MR_RES_ELEC);
-
-    // Don't bother checking equipment if the monster can't use it.
-    if (mons_itemuse(*this) >= MONUSE_STARTING_EQUIPMENT)
-    {
-        u += scan_artefacts(ARTP_ELECTRICITY);
-
-        // No ego armour, but storm dragon.
-        // Also no non-artefact rings at present,
-        // but it doesn't hurt to be thorough.
-        const int armour    = inv[MSLOT_ARMOUR];
-        const int jewellery = inv[MSLOT_JEWELLERY];
-
-        if (armour != NON_ITEM && mitm[armour].base_type == OBJ_ARMOUR)
-            u += get_armour_res_elec(mitm[armour], false);
-
-        if (jewellery != NON_ITEM && mitm[jewellery].base_type == OBJ_JEWELLERY)
-            u += get_jewellery_res_elec(mitm[jewellery], false);
-
-        const item_def *w = primary_weapon();
-        if (w && w->is_type(OBJ_STAVES, STAFF_AIR))
-            u++;
-    }
-
-    if (has_ench(ENCH_RESISTANCE))
-        u++;
-
-    // Monsters can legitimately get multiple levels of electricity resistance.
-
-    return u;
-}
-
 int monster::res_water_drowning() const
 {
     int rw = 0;
@@ -3729,98 +3581,6 @@ int monster::res_water_drowning() const
         rw--;
 
     return sgn(rw);
-}
-
-int monster::res_poison(bool temp) const
-{
-    return 0;
-}
-
-bool monster::res_sticky_flame() const
-{
-    return is_insubstantial() || get_mons_resist(*this, MR_RES_STICKY_FLAME) > 0;
-}
-
-int monster::res_rotting(bool /*temp*/) const
-{
-    int res = 0;
-    const mon_holy_type holi = holiness();
-
-    // handle undead first so that multi-holiness undead get their due
-    if (holi & MH_UNDEAD)
-    {
-        if (mons_genus(type) == MONS_GHOUL || type == MONS_ZOMBIE)
-            res = 1;
-        else
-            res = 3;
-    }
-    else if (holi & (MH_NATURAL | MH_PLANT))
-        res = 0; // was 1 for plants before. Gardening shows it should be -1
-    else if (holi & (MH_HOLY | MH_DEMONIC))
-        res = 1;
-    else if (is_nonliving())
-        res = 3;
-
-    if (is_insubstantial())
-        res = 3;
-    if (get_mons_resist(*this, MR_RES_ROTTING))
-        res += 1;
-
-    return min(3, res);
-}
-
-int monster::res_holy_energy() const
-{
-    if (type == MONS_PROFANE_SERVITOR)
-        return 3;
-
-    if (undead_or_demonic())
-        return -1;
-
-    if (is_holy()
-        || is_good_god(god)
-        || is_good_god(you.religion) && is_follower(*this))
-    {
-        return 3;
-    }
-
-    return 0;
-}
-
-int monster::res_negative_energy(bool intrinsic_only) const
-{
-    // If you change this, also change get_mons_resists.
-    if (!(holiness() & MH_NATURAL))
-        return 3;
-
-    int u = get_mons_resist(*this, MR_RES_NEG);
-
-    if (mons_itemuse(*this) >= MONUSE_STARTING_EQUIPMENT && !intrinsic_only)
-    {
-        u += scan_artefacts(ARTP_NEGATIVE_ENERGY);
-
-        const int armour    = inv[MSLOT_ARMOUR];
-        const int shld      = inv[MSLOT_SHIELD];
-        const int jewellery = inv[MSLOT_JEWELLERY];
-
-        if (armour != NON_ITEM && mitm[armour].base_type == OBJ_ARMOUR)
-            u += get_armour_life_protection(mitm[armour], false);
-
-        if (shld != NON_ITEM && mitm[shld].base_type == OBJ_ARMOUR)
-            u += get_armour_life_protection(mitm[shld], false);
-
-        if (jewellery != NON_ITEM && mitm[jewellery].base_type == OBJ_JEWELLERY)
-            u += get_jewellery_life_protection(mitm[jewellery], false);
-
-        const item_def *w = primary_weapon();
-        if (w && w->is_type(OBJ_STAVES, STAFF_DEATH))
-            u++;
-    }
-
-    if (u > 3)
-        u = 3;
-
-    return u;
 }
 
 bool monster::res_torment() const
@@ -3852,24 +3612,6 @@ int monster::res_constrict() const
         return 3;
 
     return 0;
-}
-
-bool monster::res_corr(bool calc_unid, bool items) const
-{
-    if (get_mons_resist(*this, MR_RES_ACID) > 0)
-        return true;
-
-    return actor::res_corr(calc_unid, items);
-}
-
-int monster::res_acid(bool calc_unid) const
-{
-    int u = max(get_mons_resist(*this, MR_RES_ACID), (int)actor::res_corr(calc_unid));
-
-    if (has_ench(ENCH_RESISTANCE))
-        u++;
-
-    return u;
 }
 
 /**
@@ -4104,9 +3846,6 @@ god_type monster::deity() const
 
 bool monster::drain_exp(actor *agent, bool quiet, int pow)
 {
-    if (res_negative_energy() >= 3)
-        return false;
-
     if (!quiet && you.can_see(*this))
         mprf("%s is drained!", name(DESC_THE).c_str());
 
@@ -4118,9 +3857,6 @@ bool monster::drain_exp(actor *agent, bool quiet, int pow)
         int dur = min(200 + random2(100),
                       300 - get_ench(ENCH_DRAINED).duration - random2(50));
 
-        if (res_negative_energy())
-            dur /= (res_negative_energy() * 2);
-
         const mon_enchant drain_ench = mon_enchant(ENCH_DRAINED, 1, agent,
                                                    dur);
         add_ench(drain_ench);
@@ -4131,9 +3867,6 @@ bool monster::drain_exp(actor *agent, bool quiet, int pow)
 
 bool monster::rot(actor *agent, int amount, bool quiet, bool no_cleanup)
 {
-    if (res_rotting() || amount <= 0)
-        return false;
-
     if (!quiet && you.can_see(*this))
         mprf("%s looks less resilient!", name(DESC_THE).c_str());
 
@@ -4158,20 +3891,6 @@ bool monster::corrode_equipment(const char* corrosion_source, int degree)
     // Don't corrode spectral weapons or temporary items.
     if (mons_is_avatar(type) || type == MONS_PLAYER_SHADOW)
         return false;
-
-    // rCorr protects against 50% of corrosion.
-    // As long as degree is at least 1, we'll apply the status once, because
-    // it doesn't look to me like applying it more times does anything.
-    // If I'm wrong, we should fix that.
-    if (res_corr())
-    {
-        degree = binomial(degree, 50);
-        if (!degree)
-        {
-            dprf("rCorr protects.");
-            return false;
-        }
-    }
 
     if (you.see_cell(pos()))
     {
@@ -4804,9 +4523,6 @@ kill_category monster::kill_alignment() const
 
 bool monster::sicken(int amount)
 {
-    if (res_rotting() || (amount /= 2) < 1)
-        return false;
-
     if (!has_ench(ENCH_SICK) && you.can_see(*this))
     {
         // Yes, could be confused with poisoning.
@@ -5679,13 +5395,7 @@ void monster::react_to_damage(const actor *oppressor, int damage,
         return;
 
 
-    if (mons_species() == MONS_BUSH
-        && res_fire() < 0 && flavour == BEAM_FIRE
-        && damage > 8 && x_chance_in_y(damage, 20))
-    {
-        place_cloud(CLOUD_FIRE, pos(), 20 + random2(15), oppressor, 5);
-    }
-    else if (type == MONS_SPRIGGAN_RIDER)
+    if (type == MONS_SPRIGGAN_RIDER)
     {
         if (hit_points + damage > max_hit_points / 2)
             damage = max_hit_points / 2 - hit_points;

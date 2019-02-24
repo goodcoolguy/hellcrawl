@@ -116,29 +116,7 @@ static bool _ASMODEUS_evoke(item_def *item, bool* did_work, bool* unevokable)
 static void _CEREBOV_melee_effects(item_def* weapon, actor* attacker,
                                    actor* defender, bool mondied, int dam)
 {
-    if (dam)
-    {
-        if (defender->is_player()
-            && defender->res_fire() <= 3
-            && !you.duration[DUR_FIRE_VULN])
-        {
-            mpr("The sword of Cerebov burns away your fire resistance.");
-            you.increase_duration(DUR_FIRE_VULN, 3 + random2(dam), 50);
-        }
-        if (defender->is_monster()
-            && !mondied
-            && !defender->as_monster()->has_ench(ENCH_FIRE_VULN))
-        {
-            if (you.can_see(*attacker))
-            {
-                mprf("The sword of Cerebov burns away %s fire resistance.",
-                     defender->name(DESC_ITS).c_str());
-            }
-            defender->as_monster()->add_ench(
-                mon_enchant(ENCH_FIRE_VULN, 1, attacker,
-                            (3 + random2(dam)) * BASELINE_DELAY));
-        }
-    }
+    return;
 }
 
 ////////////////////////////////////////////////////

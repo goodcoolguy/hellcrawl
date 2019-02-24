@@ -79,13 +79,6 @@ static int moninf_get_pos(lua_State *ls)
         return 1; \
     }
 
-// Named for consistency with the player resists.
-MIRES1(res_fire, MR_RES_FIRE)
-MIRES1(res_cold, MR_RES_COLD)
-MIRES1(res_draining, MR_RES_NEG)
-MIRES1(res_shock, MR_RES_ELEC)
-MIRES1(res_corr, MR_RES_ACID)
-
 LUAFN(moninf_get_holiness)
 {
     MONINF(ls, 1, mi);
@@ -365,11 +358,6 @@ static const struct luaL_reg moninf_lib[] =
     MIREG(has_known_ranged_attack),
     MIREG(speed_description),
     MIREG(spells),
-    MIREG(res_fire),
-    MIREG(res_cold),
-    MIREG(res_draining),
-    MIREG(res_shock),
-    MIREG(res_corr),
     MIREG(x_pos),
     MIREG(y_pos),
     MIREG(pos),

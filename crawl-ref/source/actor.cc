@@ -148,14 +148,6 @@ bool actor::can_hibernate(bool holi_only, bool intrinsic_only) const
 
     if (!holi_only)
     {
-        // The monster is cold-resistant and can't be hibernated.
-        if (intrinsic_only && is_monster()
-                ? get_mons_resist(*as_monster(), MR_RES_COLD) > 0
-                : res_cold() > 0)
-        {
-            return false;
-        }
-
         // The monster has slept recently.
         if (is_monster() && !intrinsic_only
             && static_cast<const monster* >(this)->has_ench(ENCH_SLEEP_WARY))
@@ -206,16 +198,9 @@ bool actor::gourmand(bool calc_unid, bool items) const
     return false;
 }
 
-bool actor::res_corr(bool calc_unid, bool items) const
-{
-    return items && (wearing(EQ_RINGS, RING_RESIST_CORROSION, calc_unid)
-                     || wearing(EQ_BODY_ARMOUR, ARM_ACID_DRAGON_ARMOUR, calc_unid)
-                     || scan_artefacts(ARTP_RCORR, calc_unid));
-}
-
 bool actor::holy_wrath_susceptible() const
 {
-    return res_holy_energy() < 0;
+    return false;
 }
 
 // This is a bit confusing. This is not the function that determines whether or
@@ -377,9 +362,7 @@ int actor::apply_ac(int damage, int max_damage, ac_type ac_rule,
 
 bool actor_slime_wall_immune(const actor *act)
 {
-    return
-       act->is_player() && you_worship(GOD_JIYVA) && !you.penance[GOD_JIYVA]
-       || act->res_acid() == 3;
+    return !act->is_player();
 }
 
 /**

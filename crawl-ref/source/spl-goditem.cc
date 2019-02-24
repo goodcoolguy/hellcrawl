@@ -981,7 +981,7 @@ void torment_player(actor *attacker, torment_source_type taux)
     if (!player_res_torment())
     {
         // Negative energy resistance can alleviate torment.
-        hploss = max(0, you.hp * (50 - player_prot_life() * 5) / 100 - 1);
+        hploss = max(0, you.hp * 50 / 100 - 1);
         // Statue form is only partial petrification.
         if (you.form == TRAN_STATUE || you.species == SP_GARGOYLE)
             hploss /= 2;
@@ -1090,7 +1090,7 @@ void torment_cell(coord_def where, actor *attacker, torment_source_type taux)
     else if (att && attacker->is_monster() && mons_aligned( mons, att))
         return;
 		
-    int hploss = max(0, mons->hit_points * (50 - mons->res_negative_energy() * 5) / 100 - 1);
+    int hploss = max(0, mons->hit_points * (50) / 100 - 1);
 
     if (hploss)
     {

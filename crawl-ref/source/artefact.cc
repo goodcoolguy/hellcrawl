@@ -338,11 +338,6 @@ void set_unique_item_status(const item_def& item,
 static void _populate_armour_intrinsic_artps(const armour_type arm,
                                              artefact_properties_t &proprt)
 {
-    proprt[ARTP_FIRE] += armour_type_prop(arm, ARMF_RES_FIRE);
-    proprt[ARTP_COLD] += armour_type_prop(arm, ARMF_RES_COLD);
-    proprt[ARTP_NEGATIVE_ENERGY] += armour_type_prop(arm, ARMF_RES_NEG);
-    proprt[ARTP_ELECTRICITY] += armour_type_prop(arm, ARMF_RES_ELEC);
-    proprt[ARTP_RCORR] += armour_type_prop(arm, ARMF_RES_CORR);
     proprt[ARTP_MAGIC_RESISTANCE] += armour_type_prop(arm, ARMF_RES_MAGIC);
     proprt[ARTP_STEALTH] += armour_type_prop(arm, ARMF_STEALTH);
     proprt[ARTP_REGENERATION] += armour_type_prop(arm, ARMF_REGENERATION);

@@ -376,7 +376,7 @@ static bool _refrigerateable(const actor *agent, const actor *act)
 {
     // Inconsistency: monsters suffer no damage at rC+++, players suffer
     // considerable damage.
-    return act->is_player() || act->res_cold() < 3;
+    return true;
 }
 
 static bool _refrigerateable_hitfunc(const actor *act)
@@ -498,8 +498,6 @@ static int _refrigerate_monster(const actor* agent, monster* target, int pow,
 
 static bool _drain_lifeable(const actor* agent, const actor* act)
 {
-    if (act->res_negative_energy() >= 3)
-        return false;
 
     if (!agent)
         return true;
@@ -1682,7 +1680,7 @@ int discharge_monsters(coord_def where, int pow, actor *agent)
     beam.draw_delay = 0;
 
     dprf("Static discharge on (%d,%d) pow: %d", where.x, where.y, pow);
-    if (victim->is_player() || victim->res_elec() <= 0)
+    if (victim->is_player())
         beam.draw(where);
 
     if (victim->is_player())
@@ -1698,8 +1696,6 @@ int discharge_monsters(coord_def where, int pow, actor *agent)
         if (damage > 0)
             victim->expose_to_element(BEAM_ELECTRICITY, 2);
     }
-    else if (victim->res_elec() > 0)
-        return 0;
     else
     {
         monster* mons = victim->as_monster();
@@ -1758,10 +1754,6 @@ static bool _safe_discharge(coord_def where, vector<const monster *> &exclude)
 
         if (find(exclude.begin(), exclude.end(), mon) == exclude.end())
         {
-            // Harmless to these monsters, so don't prompt about hitting them
-            if (mon->res_elec() > 0)
-                continue;
-
             if (stop_attack_prompt(mon, false, where))
                 return false;
 
@@ -2264,11 +2256,6 @@ spret_type cast_sandblast(int pow, bolt &beam, bool fail)
     return ret;
 }
 
-static bool _elec_not_immune(const actor *act)
-{
-    return act->res_elec() < 3;
-}
-
 spret_type cast_thunderbolt(actor *caster, int pow, coord_def aim, bool fail)
 {
     coord_def prev;
@@ -2281,12 +2268,6 @@ spret_type cast_thunderbolt(actor *caster, int pow, coord_def aim, bool fail)
     targetter_thunderbolt hitfunc(caster, spell_range(SPELL_THUNDERBOLT, pow),
                                   prev);
     hitfunc.set_aim(aim);
-
-    if (caster->is_player())
-    {
-        if (stop_attack_prompt(hitfunc, "zap", _elec_not_immune))
-            return SPRET_ABORT;
-    }
 
     fail_check();
 
@@ -2488,11 +2469,7 @@ vector<bolt> get_spray_rays(const actor *caster, coord_def aim, int range,
             //Don't aim secondary rays at friendlies
             if (mons_aligned(caster, monster_at(*di)))
                 continue;
-
-            //Don't aim at fire immune enemies
-            if(monster_at(*di)->res_fire() >= 3)
-                continue;
-
+			
             if (!caster->can_see(*monster_at(*di)))
                 continue;
 
