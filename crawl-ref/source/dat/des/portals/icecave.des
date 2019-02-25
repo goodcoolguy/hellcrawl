@@ -190,8 +190,8 @@ end
 function ice_cave_item_attributes(e)
   freezeweap = "ego:freezing ident:type"
   goodfreezeweap = "ego:freezing good_item ident:type"
-  coldres = "ego:cold_resistance ident:type"
-  goodcoldres = "ego:cold_resistance good_item ident:type"
+  coldres = "ident:type"
+  goodcoldres = "good_item ident:type"
 end
 
 -- : ice_cave_caverns_undead_demon_loot(_G)

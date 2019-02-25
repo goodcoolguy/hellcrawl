@@ -161,7 +161,7 @@ end
 function make_fiery_armour (e, armour)
     local armour_string = ""
     for _, at in ipairs(armour) do
-        armour_string = armour_string .. " / " .. at .. " ego:fire_resistance ident:type good_item"
+        armour_string = armour_string .. " / " .. at .. " ident:type good_item"
     end
     return string.gsub(armour_string, "%s*/$", "")
 end
@@ -220,7 +220,7 @@ end
 function fiery_guardians (e, intelligent, village)
     local humanweight = 5
     local flame = "ego:flaming ident:type"
-    local res = "ego:fire_resistance ident:type"
+    local res = "ident:type"
 
     -- Weighings back and forth with humanoids or not.
     if crawl.x_chance_in_y(humanweight, "10") or village or intelligent then
@@ -1105,7 +1105,7 @@ TAGS:       no_item_gen no_monster_gen no_rotate
 :           volcano_setup(_G)
 KITEM:      h = large rock q:1
 COLOUR:     m = blue
-MONS:       human ; mace ego:flaming . robe ego:fire_resistance ident:type
+MONS:       human ; mace ego:flaming . robe ident:type
 MONS:       toenail golem
 MONS:       dancing weapon ; mace ego:flaming
 :           place_chained_volcano(_G)

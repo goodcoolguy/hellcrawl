@@ -1715,94 +1715,6 @@ MAP
 ...................................
 ENDMAP
 
-##############################################################################
-# Elemental Laboratory (by Mu.)
-#
-NAME:   mu_elemental_laboratory
-TAGS:   no_monster_gen no_item_gen no_pool_fixup
-DEPTH:  Depths, Elf, !Elf:$
-ORIENT: float
-MARKER: ! = lua:fog_machine { \
-                pow_max = 10, delay_min = 10, delay_max = 40, \
-                size = 2, size_buildup_amnt = 5, \
-                size_buildup_time = 25, cloud_type = "flame" \
-            }
-MARKER: ? = lua:fog_machine { \
-                pow_max = 10, delay_min = 10, delay_max = 40, \
-                size = 2, size_buildup_amnt = 5, \
-                size_buildup_time = 25, cloud_type = "thin mist" \
-            }
-MARKER: * = lua:fog_machine { \
-                pow_max = 10, delay_min = 10, delay_max = 40, \
-                size = 2, size_buildup_amnt = 5, \
-                size_buildup_time = 25, cloud_type = "black smoke" \
-            }
-KMONS:  1 = fire elemental
-NSUBST: ; = 3:2 / *=l
-KMONS:  2 = molten gargoyle
-KFEAT:  2 = l
-KMONS:  e = earth elemental
-SUBST:  E = exxx....
-NSUBST: ' = 2:3 / 3:W / *:.
-KMONS:  3 = thorn hunter
-NSUBST: w = 3:4 / *:w
-KMONS:  4 = water elemental
-KFEAT:  4 = deep_water
-NSUBST: " = 3:5 / *:.
-KMONS:  5 = wind drake
-KMONS:  6 = air elemental
-KMONS:  7 = fire vortex
-KFEAT:  Z = <
-#
-: if you.in_branch("elf") then
-KMONS:  Z = deep elf elementalist ; \
-        robe ego:fire_resistance | \
-        robe ego:cold_resistance | \
-        robe ego:resistance . dagger ego:freezing | \
-        dagger ego:flaming | dagger ego:electrocution
-: else
-KMONS:  Z = col:flash wizard hd:15 tile:mons_master_elementalist \
-        name:master_elementalist n_rpl n_des n_noc \
-        spells:iron_shot.11.wizard;summon_air_elementals.11.wizard;\
-               sticky_flame_range.11.wizard;\
-               summon_water_elementals.11.wizard;\
-               haste.11.wizard;blink.11.wizard \
-        ; robe ego:fire_resistance | robe ego:cold_resistance | \
-        robe ego:resistance \
-        . dagger ego:freezing | dagger ego:flaming | \
-        dagger ego:electrocution
-: end
-
-KITEM:  B = randbook disc:air / randbook disc:fire / randbook disc:ice / \
-            randbook disc:earth
-KITEM:  | = staff of fire / staff of cold / staff of earth / staff of air / \
-            elemental_staff
-MAP
-       ccccccccc
-      ccE+'''cwcc
-     ccEEc'''cwwcc
-    ccEEEc'''cwwwcc
-   ccEEEEc'<'cwwwwcc
-  ccEEEEEc'''cwwwwwcc
- ccEEEEEEc''Wcwwwwwwcc
-ccEEEEEEEc'WW+wwwwwwwcc
-cEEEEEEEEcccccwwwwwwwwc
-ccccccc+ccB|Bcccccccc+c
-c;;;;;;;c$...$c"""""""c
-c;;;;;;;c$.Z.$c""?"?""c
-c;;;;;;;c$...$c"""""""c
-c+cccccccc...cc+ccccccc
-c........c+++c........c
-cc..!1.!1c...c.6..6..cc
- cc......c7.7c......cc
-  cc.....c...c.....cc
-   cc.1!.c.*.c.6..cc
-    cc...c...c...cc
-     cc..c.7.c..cc
-      cc.c...+.cc
-       c+ccccccc
-        @
-ENDMAP
 
 ##############################################################################
 # Guardian serpents guard a snake-like passage. (nrook)
@@ -2790,13 +2702,9 @@ TAGS:    transparent patrolling
 DEPTH:   Depths, !Depths:$
 ORIENT:  float
 MONS:    necromancer ; wand of iceblast . \
-         staff of fire w:15 | quarterstaff ego:flaming w:15 . \
-         robe ego:fire_resistance w:14 | robe ego:cold_resistance w:15 | \
-         robe ego:resistance w:1
+         staff of fire w:15 | quarterstaff ego:flaming w:15
 MONS:    necromancer ; wand of lightning . \
-         staff of cold ident:type | quarterstaff ego:freezing ident:type . \
-         robe ego:fire_resistance w:15 | robe ego:cold_resistance w:14 | \
-         robe ego:resistance w:1
+         staff of cold ident:type | quarterstaff ego:freezing ident:type 
 MONS:    fire giant ; battleaxe ego:freezing
 MONS:    frost giant ; great mace ego:flaming
 MONS:    ettin simulacrum, efreet, deep elf mage
@@ -2847,7 +2755,7 @@ KMONS:  5 = spark wasp / catoblepas
 KMONS:  6 = storm dragon / iron dragon / titan / war gargoyle
 KMONS:  7 = spriggan defender ; quick blade ego: flaming | \
                                 quick blade ego:freezing . \
-                                robe ego:resistance good_item ident:type
+                                robe ego:archmagi good_item ident:type
 KMONS:  8 = tengu reaver ; battleaxe ego:flaming | double sword ego:freezing | \
                            halberd ego:electrocution | morningstar ego:devastation . \
                            fire dragon scales | ice dragon scales
