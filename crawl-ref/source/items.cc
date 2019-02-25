@@ -3344,18 +3344,6 @@ zap_type item_def::zap() const
     case WAND_CLOUDS:
     case WAND_SCATTERSHOT:
     case NUM_WANDS:
-#if TAG_MAJOR_VERSION == 34
-    case WAND_HASTING:
-	case WAND_TELEPORTATION:
-    case WAND_INVISIBILITY_REMOVED:
-    case WAND_MAGIC_DARTS_REMOVED:
-    case WAND_FIRE_REMOVED:
-    case WAND_COLD_REMOVED:
-    case WAND_FROST_REMOVED:
-    case WAND_HEAL_WOUNDS_REMOVED:
-    case WAND_SLOWING:
-    case WAND_RANDOM_EFFECTS:  /* impossible */
-#endif
         break;
     }
     return result;

@@ -3108,15 +3108,6 @@ bool is_useless_item(const item_def &item, bool temp)
             return true;
         }
 
-        // haste wand is useless for Formicid if they can't get allies
-        if (item.sub_type == WAND_HASTING
-            && item_type_known(item)
-            && you.species == SP_FORMICID
-            && you.get_mutation_level(MUT_NO_LOVE))
-        {
-            return true;
-        }
-
         if (you.magic_points < wand_mp_cost() && temp)
             return true;
 

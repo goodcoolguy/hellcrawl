@@ -679,16 +679,6 @@ const set<pair<object_class_type, int> > removed_items =
     { OBJ_BOOKS,     BOOK_BUGGY_DESTRUCTION },
     { OBJ_BOOKS,     BOOK_ENVENOMATIONS },
     { OBJ_BOOKS,     BOOK_AKASHIC_RECORD },
-    { OBJ_WANDS,     WAND_MAGIC_DARTS_REMOVED },
-    { OBJ_WANDS,     WAND_FROST_REMOVED },
-    { OBJ_WANDS,     WAND_FIRE_REMOVED },
-    { OBJ_WANDS,     WAND_COLD_REMOVED },
-    { OBJ_WANDS,     WAND_INVISIBILITY_REMOVED },
-	{ OBJ_WANDS, 	 WAND_HASTING},
-	{ OBJ_WANDS,     WAND_TELEPORTATION },
-    { OBJ_WANDS,     WAND_HEAL_WOUNDS_REMOVED },
-    { OBJ_WANDS,     WAND_RANDOM_EFFECTS },
-    { OBJ_WANDS,     WAND_SLOWING },
 	{ OBJ_MISSILES,   MI_NEEDLE },
 #endif
     // Outside the #if because we probably won't remove these.
