@@ -575,9 +575,6 @@ unsigned int item_value(item_def item, bool ident)
                 switch (item.sub_type)
                 {
                 case AMU_FAITH:
-#if TAG_MAJOR_VERSION == 34
-                case AMU_RAGE:
-#endif
                     valued += 400;
                     break;
 
@@ -588,31 +585,10 @@ unsigned int item_value(item_def item, bool ident)
                     valued += 300;
                     break;
 
-                case RING_FIRE:
-                case RING_ICE:
                 case RING_PROTECTION_FROM_MAGIC:
                     valued += 250;
                     break;
-#if TAG_MAJOR_VERSION == 34
-                case RING_MAGICAL_POWER:
-#endif
-                case RING_LIFE_PROTECTION:
-                case RING_RESIST_CORROSION:
-                    valued += 200;
-                    break;
-#if TAG_MAJOR_VERSION == 34
-                case RING_STEALTH:
 
-                case RING_FLIGHT:
-                    valued += 175;
-                    break;
-                case RING_SEE_INVISIBLE:
-                    valued += 150;
-                    break;
-
-                case RING_LOUDNESS:
-                case RING_TELEPORTATION:
-#endif
                 case AMU_NOTHING:
                     valued += 75;
                     break;

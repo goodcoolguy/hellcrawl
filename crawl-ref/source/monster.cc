@@ -5319,55 +5319,22 @@ bool monster::can_evoke_jewellery(jewellery_type jtype) const
     if (mons_itemuse(*this) < MONUSE_STARTING_EQUIPMENT)
         return false;
 
-    switch (jtype)
-    {
-        case AMU_RAGE:
-            return can_go_berserk();
-        default:
-            break;
-    }
-
     return false;
 }
 
 bool monster::should_evoke_jewellery(jewellery_type jtype) const
 {
-    switch (jtype)
-    {
-    case AMU_RAGE:
-        // this implies !berserk()
-        return !has_ench(ENCH_MIGHT) && !has_ench(ENCH_HASTE)
-               && needs_berserk();
-    default:
-        break;
-    }
-
     return false;
 }
 
 // Return true if the jewellery should be identified.
 bool monster::evoke_jewellery_effect(jewellery_type jtype)
 {
-    // XXX: this is mostly to prevent a funny message order:
-    // "$foo evokes its amulet. $foo wields a great mace. $foo goes berserk!"
-    if (jtype == AMU_RAGE)
-        wield_melee_weapon();
-
     mprf("%s evokes %s %s.", name(DESC_THE).c_str(),
          pronoun(PRONOUN_POSSESSIVE).c_str(),
          jewellery_is_amulet(jtype) ? "amulet" : "ring");
 
-    switch (jtype)
-    {
-    case AMU_RAGE:
-        enchant_actor_with_flavour(this, this, BEAM_BERSERK);
-        break;
-
-    default:
-        return false;
-    }
-
-    return true;
+    return false;
 }
 
 void monster::react_to_damage(const actor *oppressor, int damage,

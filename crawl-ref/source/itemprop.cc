@@ -668,25 +668,6 @@ void init_properties()
 const set<pair<object_class_type, int> > removed_items =
 {
 #if TAG_MAJOR_VERSION == 34
-	{ OBJ_JEWELLERY, AMU_THE_GOURMAND },
-    { OBJ_JEWELLERY, AMU_CONTROLLED_FLIGHT },
-    { OBJ_JEWELLERY, AMU_CONSERVATION },
-	{ OBJ_JEWELLERY, AMU_DISMISSAL },
-	{ OBJ_JEWELLERY, AMU_HARM },
-	{ OBJ_JEWELLERY, AMU_INACCURACY },
-    { OBJ_JEWELLERY, AMU_RAGE },
-    { OBJ_JEWELLERY, AMU_MANA_REGENERATION },
-    { OBJ_JEWELLERY, RING_REGENERATION },
-    { OBJ_JEWELLERY, RING_SUSTAIN_ATTRIBUTES },
-    { OBJ_JEWELLERY, RING_TELEPORT_CONTROL },
-    { OBJ_JEWELLERY, RING_PROTECTION_FROM_FIRE },
-    { OBJ_JEWELLERY, RING_PROTECTION_FROM_COLD },
-    { OBJ_JEWELLERY, RING_TELEPORTATION },
-    { OBJ_JEWELLERY, RING_LOUDNESS },
-    { OBJ_JEWELLERY, RING_STEALTH },
-    { OBJ_JEWELLERY, RING_FLIGHT },
-    { OBJ_JEWELLERY, RING_MAGICAL_POWER },
-    { OBJ_JEWELLERY, RING_SEE_INVISIBLE },
     { OBJ_STAVES,    STAFF_ENCHANTMENT },
     { OBJ_STAVES,    STAFF_CHANNELING },
 	{ OBJ_STAVES, 	 STAFF_ENERGY },
@@ -1987,10 +1968,7 @@ bool ring_has_stackable_effect(const item_def &item)
 
     switch (item.sub_type)
     {
-    case RING_LIFE_PROTECTION:
     case RING_WIZARDRY:
-    case RING_FIRE:
-    case RING_ICE:
         return true;
 
     default:
@@ -2046,9 +2024,6 @@ int get_jewellery_res_magic(const item_def &ring, bool check_artp)
 bool get_jewellery_see_invisible(const item_def &ring, bool check_artp)
 {
     ASSERT(ring.base_type == OBJ_JEWELLERY);
-
-    if (ring.sub_type == RING_SEE_INVISIBLE)
-        return true;
 
     if (check_artp && is_artefact(ring))
         return artefact_property(ring, ARTP_SEE_INVISIBLE);
@@ -2146,12 +2121,6 @@ bool gives_ability(const item_def &item)
     {
     case OBJ_WEAPONS:
         break;
-    case OBJ_JEWELLERY:
-        if (item.sub_type == AMU_RAGE)
-        {
-            return true;
-        }
-        break;
     case OBJ_ARMOUR:
     {
         const equipment_type eq = get_armour_slot(item);
@@ -2196,19 +2165,10 @@ bool gives_resistance(const item_def &item)
     case OBJ_JEWELLERY:
         if (!jewellery_is_amulet(item))
         {
-            if (item.sub_type == RING_SEE_INVISIBLE
-                || item.sub_type == RING_LIFE_PROTECTION
-                || item.sub_type == RING_PROTECTION_FROM_MAGIC
-                || item.sub_type == RING_FIRE
-                || item.sub_type == RING_ICE)
+            if (item.sub_type == RING_PROTECTION_FROM_MAGIC)
             {
                 return true;
             }
-        }
-        else
-        {
-            if (item.sub_type != AMU_RAGE)
-                return true;
         }
         break;
     case OBJ_ARMOUR:

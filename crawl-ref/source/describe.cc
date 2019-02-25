@@ -165,34 +165,12 @@ const char* jewellery_base_ability_string(int subtype)
 {
     switch (subtype)
     {
-#if TAG_MAJOR_VERSION == 34
-    case RING_SUSTAIN_ATTRIBUTES: return "SustAt";
-#endif
     case RING_WIZARDRY:           return "Wiz";
-    case RING_FIRE:               return "Fire";
-    case RING_ICE:                return "Ice";
-#if TAG_MAJOR_VERSION == 34
-    case RING_TELEPORTATION:      return "*Tele";
-#endif
-    case RING_RESIST_CORROSION:   return "rCorr";
-#if TAG_MAJOR_VERSION == 34
-    case RING_TELEPORT_CONTROL:   return "+cTele";
-    case AMU_HARM:                return "Harm";
-    case AMU_DISMISSAL:           return "Dismiss";
-#endif
     case AMU_MANA_REGENERATION:   return "RegenMP";
-#if TAG_MAJOR_VERSION == 34
-	case AMU_THE_GOURMAND:		  return "Gourm";
-    case AMU_CONSERVATION:        return "Cons";
-    case AMU_CONTROLLED_FLIGHT:   return "cFly";
-#endif
     case AMU_DESTRUCTION:         return "Destruction";
     case AMU_GUARDIAN_SPIRIT:     return "Spirit";
     case AMU_FAITH:               return "Faith";
     case AMU_REFLECTION:          return "Reflect";
-#if TAG_MAJOR_VERSION == 34
-    case AMU_INACCURACY:          return "Inacc";
-#endif
     }
     return "";
 }
@@ -334,23 +312,6 @@ static vector<string> _randart_propnames(const item_def& item,
         {
             const int val = proprt[ann.prop];
 
-            // Don't show rF+/rC- for =Fire, or vice versa for =Ice.
-            if (item.base_type == OBJ_JEWELLERY)
-            {
-                if (item.sub_type == RING_FIRE
-                    && (ann.prop == ARTP_FIRE && val == 1
-                        || ann.prop == ARTP_COLD && val == -1))
-                {
-                    continue;
-                }
-                if (item.sub_type == RING_ICE
-                    && (ann.prop == ARTP_COLD && val == 1
-                        || ann.prop == ARTP_FIRE && val == -1))
-                {
-                    continue;
-                }
-            }
-
             ostringstream work;
             switch (ann.spell_out)
             {
@@ -415,34 +376,10 @@ static const char* _jewellery_base_ability_description(int subtype)
 {
     switch (subtype)
     {
-#if TAG_MAJOR_VERSION == 34
-    case RING_SUSTAIN_ATTRIBUTES:
-        return "It sustains your strength, intelligence and dexterity.";
-#endif
     case RING_WIZARDRY:
         return "It improves your spell success rate.";
-    case RING_FIRE:
-        return "It enhances your fire magic.";
-    case RING_ICE:
-        return "It enhances your ice magic.";
-    case RING_TELEPORTATION:
-        return "It may teleport you next to monsters.";
-#if TAG_MAJOR_VERSION == 34
-    case RING_TELEPORT_CONTROL:
-        return "It can be evoked for teleport control.";
-    case AMU_HARM:
-        return "It increases damage dealt and taken.";
-    case AMU_DISMISSAL:
-        return "It may teleport away creatures that harm you.";
-#endif
     case AMU_MANA_REGENERATION:
         return "It increases your magic regeneration.";
-#if TAG_MAJOR_VERSION == 34
-	case AMU_THE_GOURMAND:
-		return "It lets you eat chunks and shit";
-    case AMU_CONSERVATION:
-        return "It protects your inventory from destruction.";
-#endif
     case AMU_DESTRUCTION:
         return "It reduces the cost of successive casts of the same destructive "
                "spell.";
@@ -453,8 +390,6 @@ static const char* _jewellery_base_ability_description(int subtype)
         return "It allows you to gain divine favour quickly.";
     case AMU_REFLECTION:
         return "It shields you and reflects attacks.";
-    case AMU_INACCURACY:
-        return "It reduces the accuracy of all your attacks.";
     }
     return "";
 }

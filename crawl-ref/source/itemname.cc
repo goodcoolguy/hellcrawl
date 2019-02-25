@@ -667,50 +667,12 @@ const char* jewellery_effect_name(int jeweltype, bool terse)
     {
         switch (static_cast<jewellery_type>(jeweltype))
         {
-#if TAG_MAJOR_VERSION == 34
-        case RING_REGENERATION:          return "obsoleteness";
-#endif
         case RING_PROTECTION:            return "protection";
-#if TAG_MAJOR_VERSION == 34
-        case RING_PROTECTION_FROM_FIRE:  return "protection from fire";
-        case RING_PROTECTION_FROM_COLD:  return "protection from cold";
-#endif
         case RING_SLAYING:               return "slaying";
-#if TAG_MAJOR_VERSION == 34
-        case RING_SEE_INVISIBLE:         return "see invisible";
-#endif
-        case RING_RESIST_CORROSION:      return "resist corrosion";
-#if TAG_MAJOR_VERSION == 34
-        case RING_LOUDNESS:              return "loudness";
-        case RING_TELEPORTATION:         return "teleportation";
-#endif
         case RING_EVASION:               return "evasion";
-#if TAG_MAJOR_VERSION == 34
-        case RING_SUSTAIN_ATTRIBUTES:    return "sustain attributes";
-        case RING_STEALTH:               return "stealth";
-#endif
         case RING_WIZARDRY:              return "wizardry";
-#if TAG_MAJOR_VERSION == 34
-        case RING_MAGICAL_POWER:         return "magical power";
-        case RING_FLIGHT:                return "flight";
-#endif
-        case RING_LIFE_PROTECTION:       return "positive energy";
         case RING_PROTECTION_FROM_MAGIC: return "protection from magic";
-        case RING_FIRE:                  return "fire";
-        case RING_ICE:                   return "ice";
-#if TAG_MAJOR_VERSION == 34
-        case RING_TELEPORT_CONTROL:      return "teleport control";
-        case AMU_RAGE:              return "rage";
-        case AMU_HARM:              return "haram";
-        case AMU_DISMISSAL:         return "unfeature";
-#endif
         case AMU_MANA_REGENERATION: return "magic regeneration";
-#if TAG_MAJOR_VERSION == 34
-		case AMU_THE_GOURMAND:		return "gourmand";
-        case AMU_CONSERVATION:      return "conservation";
-        case AMU_CONTROLLED_FLIGHT: return "controlled flight";
-        case AMU_INACCURACY:        return "garbage";
-#endif
         case AMU_NOTHING:           return "nothing";
         case AMU_DESTRUCTION:       return "destruction";
         case AMU_GUARDIAN_SPIRIT:   return "guardian spirit";
@@ -726,35 +688,10 @@ const char* jewellery_effect_name(int jeweltype, bool terse)
             return jewellery_base_ability_string(jeweltype);
         switch (static_cast<jewellery_type>(jeweltype))
         {
-#if TAG_MAJOR_VERSION == 34
-        case RING_REGENERATION:          return "obsoleteness";
-#endif
         case RING_PROTECTION:            return "AC";
-#if TAG_MAJOR_VERSION == 34
-        case RING_PROTECTION_FROM_FIRE:  return "rF+";
-        case RING_PROTECTION_FROM_COLD:  return "rC+";
-#endif
         case RING_SLAYING:               return "Slay";
-#if TAG_MAJOR_VERSION == 34
-        case RING_SEE_INVISIBLE:         return "sInv";
-#endif
-        case RING_RESIST_CORROSION:      return "rCorr";
-#if TAG_MAJOR_VERSION == 34
-        case RING_LOUDNESS:              return "Stlth-";
-#endif
         case RING_EVASION:               return "EV";
-#if TAG_MAJOR_VERSION == 34
-        case RING_STEALTH:               return "Stlth+";
-#endif
-        case RING_MAGICAL_POWER:         return "MP+9";
-#if TAG_MAJOR_VERSION == 34
-        case RING_FLIGHT:                return "+Fly";
-#endif
-        case RING_LIFE_PROTECTION:       return "rN+";
         case RING_PROTECTION_FROM_MAGIC: return "MR+";
-#if TAG_MAJOR_VERSION == 34
-        case AMU_RAGE:                   return "+Rage";
-#endif
         case AMU_REGENERATION:           return "Regen";
         case AMU_REFLECTION:             return "Reflect";
         default: return "buggy";
@@ -776,11 +713,6 @@ static const char* _jewellery_effect_prefix(int jeweltype)
  */
 static const char* _jewellery_class_name(int jeweltype)
 {
-#if TAG_MAJOR_VERSION == 34
-    if (jeweltype == RING_REGENERATION)
-        return "ring of";
-#endif
-
     if (jeweltype < RING_FIRST_RING || jeweltype >= NUM_JEWELLERY
         || jeweltype >= NUM_RINGS && jeweltype < AMU_FIRST_AMULET)
     {
@@ -2987,13 +2919,6 @@ bool is_bad_item(const item_def &item, bool temp)
 
         switch (item.sub_type)
         {
-#if TAG_MAJOR_VERSION == 34
-        case AMU_INACCURACY:
-        case RING_LOUDNESS:
-            return true;
-        case RING_TELEPORTATION:
-            return !(you.stasis() || crawl_state.game_is_sprint());
-#endif
         case RING_EVASION:
         case RING_PROTECTION:
         case RING_SLAYING:
@@ -3272,11 +3197,6 @@ bool is_useless_item(const item_def &item, bool temp)
 
         switch (item.sub_type)
         {
-        case AMU_RAGE:
-            return you.undead_state(temp)
-                   && (you.species != SP_VAMPIRE)
-                   || you.species == SP_FORMICID
-                   || you.get_mutation_level(MUT_NO_ARTIFICE);
 
         case AMU_FAITH:
             return ((you.species == SP_DEMIGOD || you.species == SP_TITAN) && !you.religion)
@@ -3295,28 +3215,9 @@ bool is_useless_item(const item_def &item, bool temp)
 
         case AMU_MANA_REGENERATION:
             return you_worship(GOD_PAKELLAS);
-			
-#if TAG_MAJOR_VERSION == 34
-        case RING_SEE_INVISIBLE:
-            return you.innate_sinv();
-#endif
-
         case RING_WIZARDRY:
             return you_worship(GOD_TROG);
 			
-#if TAG_MAJOR_VERSION == 34
-        case RING_TELEPORTATION:
-            return !is_bad_item(item, temp);
-
-        case RING_FLIGHT:
-            return you.permanent_flight()
-                   || you.racial_permanent_flight()
-                   || you.get_mutation_level(MUT_NO_ARTIFICE);
-
-        case RING_STEALTH:
-            return you.get_mutation_level(MUT_NO_STEALTH);
-#endif
-
         default:
             return false;
         }
@@ -3328,9 +3229,6 @@ bool is_useless_item(const item_def &item, bool temp)
         switch (item.sub_type)
         {
         case STAFF_WIZARDRY:
-#if TAG_MAJOR_VERSION == 34
-        case STAFF_CONJURATION:
-#endif
         case STAFF_SUMMONING:
             return you_worship(GOD_TROG);
         }
@@ -3349,14 +3247,6 @@ bool is_useless_item(const item_def &item, bool temp)
     case OBJ_MISCELLANY:
         switch (item.sub_type)
         {
-#if TAG_MAJOR_VERSION == 34
-        case MISC_BUGGY_EBONY_CASKET:
-            return item_type_known(item);
-#endif
-        // These can always be used.
-#if TAG_MAJOR_VERSION == 34
-        case MISC_BUGGY_LANTERN_OF_SHADOWS:
-#endif
         case MISC_ZIGGURAT:
             return false;
 

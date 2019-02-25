@@ -54,38 +54,18 @@ private:
     bool seen_skills;
 };
 
-static uint8_t _jewellery_type_from_artefact_prop(const string &s
-#if TAG_MAJOR_VERSION == 34
-                                                  , bool is_amulet
-#endif
-                                                  )
+static uint8_t _jewellery_type_from_artefact_prop(const string &s)
 {
     if (s == "Regen")
-#if TAG_MAJOR_VERSION == 34
-        return is_amulet ? AMU_REGENERATION : RING_REGENERATION;
-#else
         return AMU_REGENERATION;
-#endif
-
-    if (s == "+Rage")
-        return AMU_RAGE;
     if (s == "Spirit")
         return AMU_GUARDIAN_SPIRIT;
     if (s == "Faith")
         return AMU_FAITH;
     if (s == "Reflect")
         return AMU_REFLECTION;
-
-    if (s == "rCorr")
-        return RING_RESIST_CORROSION;
-    if (s == "Fire")
-        return RING_FIRE;
-    if (s == "Ice")
-        return RING_ICE;
     if (s == "Wiz")
         return RING_WIZARDRY;
-    if (s == "SInv")
-        return RING_SEE_INVISIBLE;
 
     if (s.substr(0, 2) == "AC")
         return RING_PROTECTION;
@@ -95,10 +75,6 @@ static uint8_t _jewellery_type_from_artefact_prop(const string &s
         return RING_EVASION;
     if (s.substr(0, 2) == "MR")
         return RING_PROTECTION_FROM_MAGIC;
-
-
-    if (s.substr(0, 2) == "rN")
-        return RING_LIFE_PROTECTION;
 
     return NUM_JEWELLERY;
 }
@@ -158,12 +134,7 @@ static void _apply_randart_properties(item_def &item,
 
         if (item.is_type(OBJ_JEWELLERY, NUM_JEWELLERY))
         {
-            item.sub_type = _jewellery_type_from_artefact_prop(
-                brand_name
-#if TAG_MAJOR_VERSION == 34
-                , name.find("amulet") != string::npos
-#endif
-            );
+            item.sub_type = _jewellery_type_from_artefact_prop(brand_name);
         }
 
         string ins = artefact_inscription(item);

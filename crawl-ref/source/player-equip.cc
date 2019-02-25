@@ -949,19 +949,6 @@ static void _equip_jewellery_effect(item_def &item, bool unmeld,
 
     switch (item.sub_type)
     {
-    case RING_FIRE:
-        mpr("You feel more attuned to fire.");
-        break;
-
-    case RING_ICE:
-        mpr("You feel more attuned to ice.");
-        break;
-
-    case RING_SEE_INVISIBLE:
-        if (item_type_known(item))
-            autotoggle_autopickup(false);
-        break;
-
     case RING_PROTECTION:
     case AMU_REFLECTION:
         you.redraw_armour_class = true;
@@ -1037,17 +1024,10 @@ static void _unequip_jewellery_effect(item_def &item, bool mesg, bool meld,
     // The ring/amulet must already be removed from you.equip at this point.
     switch (item.sub_type)
     {
-    case RING_FIRE:
-    case RING_ICE:
-    case RING_LIFE_PROTECTION:
     case RING_PROTECTION_FROM_MAGIC:
     case RING_SLAYING:
     case RING_WIZARDRY:
     case AMU_REGENERATION:
-        break;
-
-    case RING_SEE_INVISIBLE:
-        _mark_unseen_monsters();
         break;
 
     case RING_PROTECTION:

@@ -289,9 +289,6 @@ bool is_hasty_item(const item_def& item)
         retval = (item_brand == SPARM_RUNNING);
         }
         break;
-    case OBJ_JEWELLERY:
-        retval = (item.sub_type == AMU_RAGE && !is_artefact(item));
-        break;
     case OBJ_POTIONS:
         retval = (item.sub_type == POT_HASTE
                   || item.sub_type == POT_BERSERK_RAGE);
@@ -546,8 +543,6 @@ bool god_likes_item_type(const item_def &item, god_type which_god)
             if (item.base_type == OBJ_WEAPONS)
                 return false;
 
-            if (item.is_type(OBJ_JEWELLERY, AMU_RAGE))
-                return false;
             break;
 
         case GOD_SHINING_ONE:
@@ -566,9 +561,7 @@ bool god_likes_item_type(const item_def &item, god_type which_god)
                 return false;
 
             if (item.base_type == OBJ_JEWELLERY
-                && (item.sub_type == RING_WIZARDRY
-                    || item.sub_type == RING_ICE
-                    || item.sub_type == RING_FIRE))
+                && (item.sub_type == RING_WIZARDRY))
             {
                 return false;
             }
@@ -577,8 +570,6 @@ bool god_likes_item_type(const item_def &item, god_type which_god)
         case GOD_CHEIBRIADOS:
             // Slow god: no berserking.
 
-            if (item.is_type(OBJ_JEWELLERY, AMU_RAGE))
-                return false;
             break;
 
         default:

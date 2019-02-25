@@ -356,11 +356,7 @@ static map<jewellery_type, vector<jewellery_fake_artp>> jewellery_artps = {
     { AMU_REGENERATION, { { ARTP_REGENERATION, 1 } } },
     { AMU_REFLECTION, { { ARTP_SHIELDING, 0 } } },
 
-    { RING_LIFE_PROTECTION, { { ARTP_NEGATIVE_ENERGY, 1 } } },
     { RING_PROTECTION_FROM_MAGIC, { { ARTP_MAGIC_RESISTANCE, 1 } } },
-
-    { RING_FIRE, { { ARTP_FIRE, 1 } } },
-    { RING_ICE, { { ARTP_COLD, 1 } } },
 
     { RING_PROTECTION, { { ARTP_AC, 0 } } },
     { RING_EVASION, { { ARTP_EVASION, 0 } } },
@@ -1354,14 +1350,6 @@ static bool _randart_is_redundant(const item_def &item,
         provides = ARTP_AC;
         break;
 
-    case RING_FIRE:
-        provides = ARTP_FIRE;
-        break;
-
-    case RING_ICE:
-        provides = ARTP_COLD;
-        break;
-
     case RING_SLAYING:
         provides  = ARTP_SLAYING;
         break;
@@ -1414,17 +1402,9 @@ static bool _randart_is_conflicting(const item_def &item,
     switch (item.sub_type)
     {
 
-    case RING_FIRE:
-    case RING_ICE:
     case RING_WIZARDRY:
         conflicts = ARTP_PREVENT_SPELLCASTING;
         break;
-
-    case RING_TELEPORTATION:
-    case RING_TELEPORT_CONTROL:
-        conflicts = ARTP_PREVENT_TELEPORTATION;
-        break;
-
     }
 
     if (conflicts == ARTP_NUM_PROPERTIES)
@@ -1589,9 +1569,9 @@ static void _make_faerie_armour(item_def &item)
 
 static jewellery_type octoring_types[8] =
 {
-    RING_PROTECTION_FROM_MAGIC, RING_FIRE, RING_ICE,
-    RING_RESIST_CORROSION, RING_PROTECTION_FROM_MAGIC, RING_WIZARDRY, 
-    RING_WIZARDRY, RING_LIFE_PROTECTION
+    RING_PROTECTION_FROM_MAGIC, RING_WIZARDRY, RING_WIZARDRY,
+    RING_WIZARDRY, RING_PROTECTION_FROM_MAGIC, RING_WIZARDRY, 
+    RING_WIZARDRY, RING_WIZARDRY
 };
 
 static void _make_octoring(item_def &item)

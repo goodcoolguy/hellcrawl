@@ -638,28 +638,11 @@ snake
 %sdir item/ring
 #### These must be in the same order as the enum in itemprop-enum.h!
 # Remove regeneration when TAG_MAJOR_VERSION > 34 (and mark protection as 1st)
-i-protection RING_REGENERATION RING_ID_FIRST
-i-protection RING_PROTECTION
-i-r-fire RING_PROTECTION_FROM_FIRE
-i-r-cold RING_PROTECTION_FROM_COLD
+i-protection RING_PROTECTION RING_ID_FIRST
 i-slaying RING_SLAYING
-i-see-invis RING_SEE_INVISIBLE
-i-r-corrosion RING_RESIST_CORROSION
-i-loudness RING_LOUDNESS
-i-teleport RING_TELEPORTATION
 i-evasion RING_EVASION
-# Remove sustat when TAG_MAJOR_VERSION > 34
-i-s-attr RING_SUSTAIN_ATTRIBUTES
-i-stealth RING_STEALTH
 i-wizardry RING_WIZARDRY
-i-magical-power RING_MAGICAL_POWER
-i-flight RING_FLIGHT
-i-life-protection RING_LIFE_PROTECTION
-i-r-magic RING_PROTECTION_FROM_MAGIC
-i-fire RING_FIRE
-i-ice RING_ICE
-# remove teleport control when TAG_MAJOR_VERSION > 34 and mark ice as last
-i-c-teleport RING_TELEPORT_CONTROL RING_ID_LAST
+i-r-magic RING_PROTECTION_FROM_MAGIC RING_ID_LAST
 
 ############amulets
 %sdir item/amulet
@@ -708,14 +691,7 @@ sun
 %sdir item/amulet
 # These must be in the same order as the enum in itemprop-enum.h!
 # remove REMOVEMEs when TAG_MAJOR_VERSION > 34
-i-rage AMU_RAGE AMU_ID_FIRST
-i-harm AMU_HARM
-i-dismissal AMU_DISMISSAL
-i-m-regeneration AMU_MANA_REGENERATION
-i-gourmand AMU_THE_GOURMAND
-i-rage AMU_REMOVEME1
-i-rage AMU_REMOVEME2
-i-inaccuracy AMU_INACCURACY
+i-m-regeneration AMU_MANA_REGENERATION AMU_ID_FIRST
 i-rage AMU_NOTHING
 i-spirit AMU_GUARDIAN_SPIRIT
 i-faith AMU_FAITH

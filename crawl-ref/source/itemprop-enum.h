@@ -174,41 +174,12 @@ enum hands_reqd_type
 
 enum jewellery_type
 {
-#if TAG_MAJOR_VERSION == 34
-    RING_REGENERATION,
-#endif
     RING_PROTECTION,
     RING_FIRST_RING = RING_PROTECTION,
-#if TAG_MAJOR_VERSION == 34
-    RING_PROTECTION_FROM_FIRE,
-    RING_PROTECTION_FROM_COLD,
-#endif
     RING_SLAYING,
-#if TAG_MAJOR_VERSION == 34
-    RING_SEE_INVISIBLE,
-#endif
-    RING_RESIST_CORROSION,
-#if TAG_MAJOR_VERSION == 34
-    RING_LOUDNESS,
-    RING_TELEPORTATION,
-#endif
     RING_EVASION,
-#if TAG_MAJOR_VERSION == 34
-    RING_SUSTAIN_ATTRIBUTES,
-    RING_STEALTH,
-#endif
     RING_WIZARDRY,
-#if TAG_MAJOR_VERSION == 34
-    RING_MAGICAL_POWER,
-    RING_FLIGHT,
-#endif
-    RING_LIFE_PROTECTION,
     RING_PROTECTION_FROM_MAGIC,
-    RING_FIRE,
-    RING_ICE,
-#if TAG_MAJOR_VERSION == 34
-    RING_TELEPORT_CONTROL,
-#endif
     NUM_RINGS,                         //   keep as last ring; should not overlap
                                        //   with amulets!
     // RINGS after num_rings are for unique types for artefacts
@@ -216,19 +187,8 @@ enum jewellery_type
     // Currently none.
     // XXX: trying to add one doesn't actually work
 
-    AMU_RAGE = 35,
-    AMU_FIRST_AMULET = AMU_RAGE,
-#if TAG_MAJOR_VERSION == 34
-    AMU_HARM,
-    AMU_DISMISSAL,
-#endif
-    AMU_MANA_REGENERATION,
-#if TAG_MAJOR_VERSION == 34
-	AMU_THE_GOURMAND,
-    AMU_CONSERVATION,
-    AMU_CONTROLLED_FLIGHT,
-    AMU_INACCURACY,
-#endif
+    AMU_MANA_REGENERATION = 35,
+    AMU_FIRST_AMULET = AMU_MANA_REGENERATION,
     AMU_NOTHING,
     AMU_GUARDIAN_SPIRIT,
     AMU_FAITH,

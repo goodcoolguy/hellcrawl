@@ -999,9 +999,6 @@ static void _give_weapon(monster* mon, int level, bool melee_only = false,
             item.sub_type = WPN_QUARTERSTAFF;
             set_item_ego_type(item, OBJ_WEAPONS, SPWPN_FREEZING);
         }
-        // this might not be the best place for this logic, but:
-        make_item_for_monster(mon, OBJ_JEWELLERY, RING_ICE,
-                                  0, 1, ISFLAG_KNOW_TYPE);
         item.flags |= ISFLAG_KNOW_TYPE;
         break;
 

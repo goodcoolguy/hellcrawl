@@ -1373,9 +1373,6 @@ int player_spec_fire()
     // staves:
     sf += you.wearing(EQ_SHIELD, STAFF_FIRE);
 
-    // rings of fire:
-    sf += you.wearing(EQ_RINGS, RING_FIRE);
-
 #if TAG_MAJOR_VERSION == 34
     if (you.species == SP_LAVA_ORC && temperature_effect(LORC_FIRE_BOOST))
         sf++;
@@ -1399,18 +1396,6 @@ int player_spec_cold()
 
     // demonspawn ice enhancer	
     sc += you.get_mutation_level(MUT_ICE_ENHANCER);
-
-    // rings of ice:
-    sc += you.wearing(EQ_RINGS, RING_ICE);
-
-#if TAG_MAJOR_VERSION == 34
-    if (you.species == SP_LAVA_ORC
-        && (temperature_effect(LORC_LAVA_BOOST)
-            || temperature_effect(LORC_FIRE_BOOST)))
-    {
-        sc--;
-    }
-#endif
 
     return sc;
 }
@@ -6167,9 +6152,7 @@ bool player::can_see_invisible(bool calc_unid) const
     if (crawl_state.game_is_arena())
         return true;
 
-    if (wearing(EQ_RINGS, RING_SEE_INVISIBLE, calc_unid)
-        // randart gear
-        || scan_artefacts(ARTP_SEE_INVISIBLE, calc_unid) > 0)
+    if (scan_artefacts(ARTP_SEE_INVISIBLE, calc_unid) > 0)
     {
         return true;
     }
