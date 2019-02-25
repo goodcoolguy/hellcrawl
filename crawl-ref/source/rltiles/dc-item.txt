@@ -532,16 +532,12 @@ scroll SCROLL UNSEEN_SCROLL
 
 #### These must be in the same order as the enum in itemprop-enum.h!
 %sdir item/scroll
-%back scroll-yellow
-i-identify SCR_IDENTIFY SCR_ID_FIRST
 %back scroll-purple
-i-teleportation SCR_TELEPORTATION
+i-teleportation SCR_TELEPORTATION SCR_ID_FIRST
 %back scroll-blue
 i-fear SCR_FEAR
 %back scroll-grey
 i-noise SCR_NOISE
-%back scroll-yellow
-i-remove_curse SCR_REMOVE_CURSE
 %back scroll-brown
 i-unholy_creation SCR_UNHOLY_CREATION
 %back scroll-green
@@ -550,11 +546,6 @@ i-enchant_armour SCR_ENCHANT_ARMOUR
 %back scroll-red
 i-torment SCR_TORMENT
 %back scroll-grey
-i-random_uselessness SCR_RANDOM_USELESSNESS
-%back scroll-grey
-#### Remove curse foo when TAG_MAJOR_VERSION > 34
-i-curse_weapon SCR_CURSE_WEAPON
-i-curse_armour SCR_CURSE_ARMOUR
 i-immolation SCR_IMMOLATION
 %back scroll-purple
 i-blinking SCR_BLINKING
@@ -565,21 +556,14 @@ i-fog SCR_FOG
 %back scroll-cyan
 i-acquirement SCR_ACQUIREMENT
 %back scroll-green
-#if TAG_MAJOR_VERSION == 34 # Remove the two i-enchant-weapon
-i-enchant-weapon SCR_ENCHANT_WEAPON_II
 i-brand-weapon SCR_BRAND_WEAPON
-i-recharging SCR_RECHARGING
-i-enchant-weapon SCR_ENCHANT_WEAPON_III
 %back scroll-red
 i-holy_word SCR_HOLY_WORD
 i-vulnerability SCR_VULNERABILITY
 %back scroll-red
 i-silence SCR_SILENCE
 %back scroll-yellow
-i-amnesia SCR_AMNESIA
-%back scroll-grey
-#### Remove curse foo when TAG_MAJOR_VERSION > 34
-i-curse-jewellery SCR_CURSE_JEWELLERY SCR_ID_LAST
+i-amnesia SCR_AMNESIA SCR_ID_LAST
 %back none
 
 ##################OBJ_JEWELLERY

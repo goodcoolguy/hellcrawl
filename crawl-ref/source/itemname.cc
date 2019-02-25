@@ -626,9 +626,6 @@ static const char* scroll_type_name(int scrolltype)
 {
     switch (static_cast<scroll_type>(scrolltype))
     {
-#if TAG_MAJOR_VERSION == 34
-    case SCR_IDENTIFY:           return "identify";
-#endif
     case SCR_TELEPORTATION:      return "teleportation";
     case SCR_FEAR:               return "fear";
     case SCR_NOISE:              return "noise";
@@ -636,16 +633,12 @@ static const char* scroll_type_name(int scrolltype)
     case SCR_ENCHANT_WEAPON:     return "enchant weapon";
     case SCR_ENCHANT_ARMOUR:     return "enchant armour";
     case SCR_TORMENT:            return "torment";
-#if TAG_MAJOR_VERSION == 34
-    case SCR_RANDOM_USELESSNESS: return "random uselessness";
-#endif
     case SCR_IMMOLATION:         return "immolation";
     case SCR_BLINKING:           return "blinking";
     case SCR_MAGIC_MAPPING:      return "magic mapping";
     case SCR_FOG:                return "fog";
     case SCR_ACQUIREMENT:        return "acquirement";
     case SCR_BRAND_WEAPON:       return "brand weapon";
-    case SCR_RECHARGING:         return "recharging";
     case SCR_HOLY_WORD:          return "holy word";
     case SCR_VULNERABILITY:      return "vulnerability";
     case SCR_SILENCE:            return "silence";
@@ -3085,10 +3078,6 @@ bool is_useless_item(const item_def &item, bool temp)
 
         switch (item.sub_type)
         {
-#if TAG_MAJOR_VERSION == 34
-        case SCR_RANDOM_USELESSNESS:
-            return true;
-#endif
         case SCR_TELEPORTATION:
             return you.species == SP_FORMICID
                    || crawl_state.game_is_sprint();
@@ -3102,8 +3091,6 @@ bool is_useless_item(const item_def &item, bool temp)
             return false;
         case SCR_SUMMONING:
             return you.get_mutation_level(MUT_NO_LOVE) > 0;
-        case SCR_RECHARGING:
-            return you.get_mutation_level(MUT_NO_ARTIFICE) > 0;
         case SCR_FOG:
             return env.level_state & LSTATE_STILL_WINDS;
         default:

@@ -2349,14 +2349,8 @@ static void _vulnerability_scroll()
 static bool _is_cancellable_scroll(scroll_type scroll)
 {
     return scroll == SCR_BLINKING
-#if TAG_MAJOR_VERSION == 34
-           || scroll == SCR_RECHARGING
-#endif
            || scroll == SCR_ENCHANT_ARMOUR
            || scroll == SCR_AMNESIA
-#if TAG_MAJOR_VERSION == 34
-		   || scroll == SCR_IDENTIFY
-#endif
            || scroll == SCR_BRAND_WEAPON
            || scroll == SCR_ENCHANT_WEAPON
            || scroll == SCR_MAGIC_MAPPING;
@@ -2431,12 +2425,6 @@ string cannot_read_item_reason(const item_def &item)
     if (you.duration[DUR_NO_SCROLLS])
         return "You cannot read scrolls in your current state!";
 
-#if TAG_MAJOR_VERSION == 34
-    // Prevent hot lava orcs reading scrolls
-    if (you.species == SP_LAVA_ORC && temperature_effect(LORC_NO_SCROLLS))
-        return "You'd burn any scroll you tried to read!";
-#endif
-
     // don't waste the player's time reading known scrolls in situations where
     // they'd be useless
 
@@ -2459,14 +2447,6 @@ string cannot_read_item_reason(const item_def &item)
 
         case SCR_ENCHANT_WEAPON:
             return _no_items_reason(OSEL_ENCHANTABLE_WEAPON, true);
-
-#if TAG_MAJOR_VERSION == 34
-        case SCR_IDENTIFY:
-            return _no_items_reason(OSEL_UNIDENT, true);
-
-        case SCR_RECHARGING:
-            return _no_items_reason(OSEL_RECHARGE);
-#endif
 
         default:
             return "";
@@ -2583,12 +2563,6 @@ void read_scroll(item_def& scroll)
 
     switch (which_scroll)
     {
-#if TAG_MAJOR_VERSION == 34
-    case SCR_RANDOM_USELESSNESS:
-        random_uselessness();
-        break;
-#endif
-
     case SCR_BLINKING:
     {
         const string reason = you.no_tele_reason(true, true);
@@ -2716,30 +2690,6 @@ void read_scroll(item_def& scroll)
 
         cancel_scroll = !_handle_brand_weapon(alreadyknown, pre_succ_msg);
         break;
-
-#if TAG_MAJOR_VERSION == 34
-    case SCR_IDENTIFY:
-        if (!alreadyknown)
-        {
-            mpr(pre_succ_msg);
-            mpr("It is a scroll of identify.");
-            // included in default force_more_message (to show it before menu)
-            // Do this here so it doesn't turn up in the ID menu.
-            set_ident_type(scroll, true);
-        }
-        cancel_scroll = !_identify(alreadyknown, pre_succ_msg);
-        break;
-
-    case SCR_RECHARGING:
-        if (!alreadyknown)
-        {
-            mpr(pre_succ_msg);
-            mpr("It is a scroll of recharging.");
-            // included in default force_more_message (to show it before menu)
-        }
-        cancel_scroll = (recharge_wand(alreadyknown, pre_succ_msg) == -1);
-        break;
-#endif
 
     case SCR_ENCHANT_ARMOUR:
         if (!alreadyknown)

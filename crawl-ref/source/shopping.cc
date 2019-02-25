@@ -513,16 +513,10 @@ unsigned int item_value(item_def item, bool ident)
                 break;
 
             case SCR_FOG:
-#if TAG_MAJOR_VERSION == 34
-            case SCR_IDENTIFY:
-#endif
                 valued += 20;
                 break;
 
             case SCR_NOISE:
-#if TAG_MAJOR_VERSION == 34
-            case SCR_RANDOM_USELESSNESS:
-#endif
                 valued += 10;
                 break;
             }
@@ -716,7 +710,6 @@ bool is_worthless_consumable(const item_def &item)
         switch (item.sub_type)
         {
         case SCR_NOISE:
-        case SCR_RANDOM_USELESSNESS:
             return true;
         default:
             return false;
