@@ -1308,9 +1308,6 @@ int acquirement_create_item(object_class_type class_wanted,
             switch (acq_item.sub_type)
             {
             case RING_PROTECTION:
-            case RING_STRENGTH:
-            case RING_INTELLIGENCE:
-            case RING_DEXTERITY:
             case RING_EVASION:
             case RING_SLAYING:
                 // Make sure plus is >= 1.

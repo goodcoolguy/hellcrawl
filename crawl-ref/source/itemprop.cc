@@ -1962,9 +1962,6 @@ bool jewellery_has_pluses(const item_def &item)
     case RING_SLAYING:
     case RING_PROTECTION:
     case RING_EVASION:
-    case RING_STRENGTH:
-    case RING_INTELLIGENCE:
-    case RING_DEXTERITY:
     case AMU_REFLECTION:
         return true;
 
@@ -2028,15 +2025,6 @@ int get_armour_res_magic(const item_def &arm, bool check_artp)
 
 bool get_armour_see_invisible(const item_def &arm, bool check_artp)
 {
-    ASSERT(arm.base_type == OBJ_ARMOUR);
-
-    // check for ego resistance
-    if (get_armour_ego_type(arm) == SPARM_SEE_INVISIBLE)
-        return true;
-
-    if (check_artp && is_artefact(arm))
-        return artefact_property(arm, ARTP_SEE_INVISIBLE);
-
     return false;
 }
 
@@ -2171,7 +2159,7 @@ bool gives_ability(const item_def &item)
             return false;
         const special_armour_type ego = get_armour_ego_type(item);
 
-        if (ego == SPARM_INVISIBILITY || ego == SPARM_FLYING)
+        if (ego == SPARM_FLYING)
             return true;
         break;
     }
@@ -2228,13 +2216,6 @@ bool gives_resistance(const item_def &item)
         const equipment_type eq = get_armour_slot(item);
         if (eq == EQ_NONE)
             return false;
-
-        const int ego = get_armour_ego_type(item);
-        if (ego >= SPARM_FIRE_RESISTANCE && ego <= SPARM_SEE_INVISIBLE
-            || ego == SPARM_RESISTANCE || ego == SPARM_POSITIVE_ENERGY)
-        {
-            return true;
-        }
         break;
     }
     case OBJ_STAVES:

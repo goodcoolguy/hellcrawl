@@ -538,33 +538,15 @@ rambutan
 En lille, men lækker tropisk frugt. Hvordan den er havnet her, er ikke til at
 vide.
 %%%%
-ring of dexterity
-
-Denne ring øger eller formindsker din behændighed, når du har den på, afhængigt
-af hvor meget, den er fortryllet.
-%%%%
 ring of evasion
 
 Denne ring gør enten sin ejer bedre eller dårligere til at undgå angreb,
 afhængigt af hvor meget, den er fortryllet.
 %%%%
-ring of intelligence
-
-Denne ring øger eller mindsker sin bærers mentale evner, afhængigt af hvor
-meget den er fortryllet.
-%%%%
-ring of poison resistance
-
-Denne ring beskytter sin bærer mod effekterne af gifte og edder.
-%%%%
 ring of protection
 
 Denne ring beskytter dig mod skade eller gør dig mere sårbar, afhængigt af
 fortryllelse, når du har den på.
-%%%%
-ring of protection from cold
-
-Denne ring beskytter mod kulde.
 %%%%
 ring of protection from magic
 
@@ -579,11 +561,6 @@ ring of slaying
 Denne ring øger eller mindsker brugerens effektivitet med skydevåben og
 nærkampsangreb. Den har to fortryllelser, som påvirker henholdsvis præcision og
 skade.
-%%%%
-ring of strength
-
-Denne ring øger eller mindsker sin bærers fysiske styrke, alt efter hvor
-fortryllet den er.
 %%%%
 ring of wizardry
 

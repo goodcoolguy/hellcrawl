@@ -4767,30 +4767,15 @@ static int _str_to_ego(item_spec &spec, string ego_str)
     const char* armour_egos[] =
     {
         "running",
-        "fire_resistance",
-        "cold_resistance",
-        "see_invisible",
-        "invisibility",
-        "strength",
-        "dexterity",
-        "intelligence",
         "ponderousness",
         "flying",
         "magic_resistance",
         "protection",
         "stealth",
-        "resistance",
-        "positive_energy",
         "archmagi",
-#if TAG_MAJOR_VERSION == 34
-        "preservation",
-#endif
         "reflection",
         "spirit_shield",
         "archery",
-#if TAG_MAJOR_VERSION == 34
-        "jumping",
-#endif
         "magical_power",
         nullptr
     };

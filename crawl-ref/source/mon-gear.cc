@@ -1669,7 +1669,6 @@ static void _give_armour(monster* mon, int level, bool spectral_orcs)
         item.base_type = OBJ_ARMOUR;
         item.sub_type  = ARM_ROBE;
         item.plus = 1 + coinflip();
-        set_item_ego_type(item, OBJ_ARMOUR, SPARM_COLD_RESISTANCE);
         item.flags |= ISFLAG_KNOW_TYPE;
         break;
     }

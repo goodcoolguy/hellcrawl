@@ -1394,23 +1394,7 @@ static bool _transformation_is_safe(transformation_type which_trans,
  */
 bool check_form_stat_safety(transformation_type new_form)
 {
-    const int str_mod = get_form(new_form)->str_mod - get_form()->str_mod;
-    const int dex_mod = get_form(new_form)->dex_mod - get_form()->dex_mod;
-
-    const bool bad_str = false; //you.strength() > 0 && str_mod + you.strength() <= 0;
-    const bool bad_dex = false; //you.dex() > 0 && dex_mod + you.dex() <= 0;
-    if (!bad_str && !bad_dex)
-        return true;
-
-    string prompt = make_stringf("%s will reduce your %s to zero. Continue?",
-                                 new_form == TRAN_NONE ? "Turning back"
-                                                       : "Transforming",
-                                 bad_str ? "strength" : "dexterity");
-    if (yesno(prompt.c_str(), false, 'n'))
-        return true;
-
-    canned_msg(MSG_OK);
-    return false;
+    return true;
 }
 
 static int _transform_duration(transformation_type which_trans, int pow)

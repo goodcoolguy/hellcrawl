@@ -524,15 +524,6 @@ const char* armour_ego_name(const item_def& item, bool terse)
                                       return "speedy slithering";
             else
                                       return "running";
-        case SPARM_FIRE_RESISTANCE:   return "fire resistance";
-        case SPARM_COLD_RESISTANCE:   return "cold resistance";
-#if TAG_MAJOR_VERSION == 34
-        case SPARM_SEE_INVISIBLE:     return "see invisible";
-        case SPARM_INVISIBILITY:      return "invisibility";
-#endif
-        case SPARM_STRENGTH:          return "strength";
-        case SPARM_DEXTERITY:         return "dexterity";
-        case SPARM_INTELLIGENCE:      return "intelligence";
         case SPARM_PONDEROUSNESS:     return "ponderousness";
         case SPARM_FLYING:            return "flying";
 
@@ -540,13 +531,7 @@ const char* armour_ego_name(const item_def& item, bool terse)
         case SPARM_PROTECTION:        return "protection";
         case SPARM_STEALTH:           return "stealth";
         case SPARM_MAGICAL_POWER:     return "magical power";
-        case SPARM_RESISTANCE:        return "resistance";
-        case SPARM_POSITIVE_ENERGY:   return "positive energy";
         case SPARM_ARCHMAGI:          return "the Archmagi";
-#if TAG_MAJOR_VERSION == 34
-        case SPARM_JUMPING:           return "jumping";
-        case SPARM_PRESERVATION:      return "preservation";
-#endif
         case SPARM_REFLECTION:        return "reflection";
         case SPARM_SPIRIT_SHIELD:     return "spirit shield";
         case SPARM_ARCHERY:           return "archery";
@@ -559,28 +544,13 @@ const char* armour_ego_name(const item_def& item, bool terse)
         {
         case SPARM_NORMAL:            return "";
         case SPARM_RUNNING:           return "run";
-        case SPARM_FIRE_RESISTANCE:   return "rF+";
-        case SPARM_COLD_RESISTANCE:   return "rC+";
-        case SPARM_SEE_INVISIBLE:     return "SInv";
-#if TAG_MAJOR_VERSION == 34
-        case SPARM_INVISIBILITY:      return "obsolete";
-#endif
-        case SPARM_STRENGTH:          return "Str+3";
-        case SPARM_DEXTERITY:         return "Dex+3";
-        case SPARM_INTELLIGENCE:      return "Int+3";
         case SPARM_PONDEROUSNESS:     return "ponderous";
         case SPARM_FLYING:            return "Fly";
         case SPARM_MAGIC_RESISTANCE:  return "MR+";
         case SPARM_PROTECTION:        return "AC+3";
         case SPARM_STEALTH:           return "Stlth+";
         case SPARM_MAGICAL_POWER:     return "MP+9";
-        case SPARM_RESISTANCE:        return "rC+ rF+";
-        case SPARM_POSITIVE_ENERGY:   return "rN+";
         case SPARM_ARCHMAGI:          return "Archmagi";
-#if TAG_MAJOR_VERSION == 34
-        case SPARM_JUMPING:           return "obsolete";
-        case SPARM_PRESERVATION:      return "obsolete";
-#endif
         case SPARM_REFLECTION:        return "reflect";
         case SPARM_SPIRIT_SHIELD:     return "Spirit";
         case SPARM_ARCHERY:           return "archery";
@@ -705,7 +675,6 @@ const char* jewellery_effect_name(int jeweltype, bool terse)
         case RING_PROTECTION_FROM_FIRE:  return "protection from fire";
         case RING_PROTECTION_FROM_COLD:  return "protection from cold";
 #endif
-        case RING_STRENGTH:              return "strength";
         case RING_SLAYING:               return "slaying";
 #if TAG_MAJOR_VERSION == 34
         case RING_SEE_INVISIBLE:         return "see invisible";
@@ -720,8 +689,6 @@ const char* jewellery_effect_name(int jeweltype, bool terse)
         case RING_SUSTAIN_ATTRIBUTES:    return "sustain attributes";
         case RING_STEALTH:               return "stealth";
 #endif
-        case RING_DEXTERITY:             return "dexterity";
-        case RING_INTELLIGENCE:          return "intelligence";
         case RING_WIZARDRY:              return "wizardry";
 #if TAG_MAJOR_VERSION == 34
         case RING_MAGICAL_POWER:         return "magical power";
@@ -767,7 +734,6 @@ const char* jewellery_effect_name(int jeweltype, bool terse)
         case RING_PROTECTION_FROM_FIRE:  return "rF+";
         case RING_PROTECTION_FROM_COLD:  return "rC+";
 #endif
-        case RING_STRENGTH:              return "Str";
         case RING_SLAYING:               return "Slay";
 #if TAG_MAJOR_VERSION == 34
         case RING_SEE_INVISIBLE:         return "sInv";
@@ -780,8 +746,6 @@ const char* jewellery_effect_name(int jeweltype, bool terse)
 #if TAG_MAJOR_VERSION == 34
         case RING_STEALTH:               return "Stlth+";
 #endif
-        case RING_DEXTERITY:             return "Dex";
-        case RING_INTELLIGENCE:          return "Int";
         case RING_MAGICAL_POWER:         return "MP+9";
 #if TAG_MAJOR_VERSION == 34
         case RING_FLIGHT:                return "+Fly";
@@ -3032,9 +2996,6 @@ bool is_bad_item(const item_def &item, bool temp)
 #endif
         case RING_EVASION:
         case RING_PROTECTION:
-        case RING_STRENGTH:
-        case RING_DEXTERITY:
-        case RING_INTELLIGENCE:
         case RING_SLAYING:
             return item_ident(item, ISFLAG_KNOW_PLUSES) && item.plus <= 0;
         default:

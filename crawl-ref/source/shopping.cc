@@ -81,9 +81,7 @@ int artefact_value(const item_def &item)
     // This should probably be more complex... but this isn't so bad:
     ret += 6 * prop[ ARTP_AC ] + 6 * prop[ ARTP_EVASION ]
             + 4 * prop[ ARTP_SHIELDING ]
-            + 6 * prop[ ARTP_SLAYING ]
-            + 3 * prop[ ARTP_STRENGTH ] + 3 * prop[ ARTP_INTELLIGENCE ]
-            + 3 * prop[ ARTP_DEXTERITY ];
+            + 6 * prop[ ARTP_SLAYING ];
 
     // These resistances have meaningful levels
     if (prop[ ARTP_FIRE ] > 0)
@@ -336,32 +334,19 @@ unsigned int item_value(item_def item, bool ident)
             {
             case SPARM_RUNNING:
             case SPARM_ARCHMAGI:
-            case SPARM_RESISTANCE:
                 valued += 250;
                 break;
 
-            case SPARM_COLD_RESISTANCE:
-            case SPARM_DEXTERITY:
-            case SPARM_FIRE_RESISTANCE:
-#if TAG_MAJOR_VERSION == 34
-            case SPARM_SEE_INVISIBLE:
-#endif
-            case SPARM_INTELLIGENCE:
             case SPARM_FLYING:
             case SPARM_STEALTH:
             case SPARM_MAGICAL_POWER:
             case SPARM_SPIRIT_SHIELD:
-            case SPARM_STRENGTH:
-#if TAG_MAJOR_VERSION == 34
-            case SPARM_INVISIBILITY:
-#endif
             case SPARM_MAGIC_RESISTANCE:
             case SPARM_PROTECTION:
             case SPARM_ARCHERY:
                 valued += 50;
                 break;
 
-            case SPARM_POSITIVE_ENERGY:
             case SPARM_REFLECTION:
                 valued += 20;
                 break;
@@ -553,10 +538,7 @@ unsigned int item_value(item_def item, bool ident)
             // Variable-strength rings.
             if (item_ident(item, ISFLAG_KNOW_PLUSES)
                 && (item.sub_type == RING_PROTECTION
-                    || item.sub_type == RING_STRENGTH
                     || item.sub_type == RING_EVASION
-                    || item.sub_type == RING_DEXTERITY
-                    || item.sub_type == RING_INTELLIGENCE
                     || item.sub_type == RING_SLAYING
                     || item.sub_type == AMU_REFLECTION))
             {
@@ -576,9 +558,6 @@ unsigned int item_value(item_def item, bool ident)
                 case RING_EVASION:
                     coefficient = 40;
                     break;
-                case RING_STRENGTH:
-                case RING_DEXTERITY:
-                case RING_INTELLIGENCE:
                 case AMU_REFLECTION:
                     coefficient = 30;
                     break;

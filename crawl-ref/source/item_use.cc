@@ -292,9 +292,6 @@ item_def* use_an_item(int item_type, operation_types oper, const char* prompt,
     }
 }
 
-static bool _safe_to_remove_or_wear(const item_def &item, bool remove,
-                                    bool quiet = false);
-
 // Rather messy - we've gathered all the can't-wield logic from wield_weapon()
 // here.
 bool can_wield(const item_def *weapon, bool say_reason,
@@ -496,10 +493,6 @@ bool wield_weapon(bool auto_wield, int slot, bool show_weff_messages,
                 }
             }
 
-            // check if you'd get stat-zeroed
-            if (!_safe_to_remove_or_wear(*wpn, true))
-                return false;
-
             if (!unwield_item(show_weff_messages))
                 return false;
 
@@ -544,8 +537,7 @@ bool wield_weapon(bool auto_wield, int slot, bool show_weff_messages,
 
     // At this point, we know it's possible to equip this item. However, there
     // might be reasons it's not advisable.
-    if (!check_warning_inscriptions(new_wpn, OPER_WIELD)
-        || !_safe_to_remove_or_wear(new_wpn, false))
+    if (!check_warning_inscriptions(new_wpn, OPER_WIELD))
     {
         canned_msg(MSG_OK);
         return false;
@@ -1064,12 +1056,6 @@ bool wear_armour(int item)
 
     you.turn_is_over = true;
 
-    // TODO: It would be nice if we checked this before taking off the item
-    // currently in the slot. But doing so is not quite trivial. Also applies
-    // to jewellery.
-    if (!_safe_to_remove_or_wear(invitem, false))
-        return false;
-
     const int delay = armour_equip_delay(invitem);
     if (delay)
         start_delay<ArmourOnDelay>(delay - (swapping ? 0 : 1), invitem);
@@ -1118,11 +1104,6 @@ bool takeoff_armour(int item)
         return false;
 
     item_def& invitem = you.inv[item];
-
-    // It's possible to take this thing off, but if it would drop a stat
-    // below 0, we should get confirmation.
-    if (!_safe_to_remove_or_wear(invitem, true))
-        return false;
 
     const equipment_type slot = get_armour_slot(invitem);
 
@@ -1285,109 +1266,6 @@ static int _prompt_ring_to_remove(int new_ring)
     return you.equip[eqslot];
 }
 
-// Checks whether a to-be-worn or to-be-removed item affects
-// character stats and whether wearing/removing it could be fatal.
-// If so, warns the player, or just returns false if quiet is true.
-static bool _safe_to_remove_or_wear(const item_def &item, bool remove, bool quiet)
-{
-    if (remove && !safe_to_remove(item, quiet))
-        return false;
-
-    int prop_str = 0;
-    int prop_dex = 0;
-    int prop_int = 0;
-    if (item.base_type == OBJ_JEWELLERY
-        && item_ident(item, ISFLAG_KNOW_PLUSES))
-    {
-        switch (item.sub_type)
-        {
-        case RING_STRENGTH:
-            if (item.plus != 0)
-                prop_str = item.plus;
-            break;
-        case RING_DEXTERITY:
-            if (item.plus != 0)
-                prop_dex = item.plus;
-            break;
-        case RING_INTELLIGENCE:
-            if (item.plus != 0)
-                prop_int = item.plus;
-            break;
-        default:
-            break;
-        }
-    }
-    else if (item.base_type == OBJ_ARMOUR && item_type_known(item))
-    {
-        switch (item.brand)
-        {
-        case SPARM_STRENGTH:
-            prop_str = 3;
-            break;
-        case SPARM_INTELLIGENCE:
-            prop_int = 3;
-            break;
-        case SPARM_DEXTERITY:
-            prop_dex = 3;
-            break;
-        default:
-            break;
-        }
-    }
-
-    if (is_artefact(item))
-    {
-        prop_str += artefact_known_property(item, ARTP_STRENGTH);
-        prop_int += artefact_known_property(item, ARTP_INTELLIGENCE);
-        prop_dex += artefact_known_property(item, ARTP_DEXTERITY);
-    }
-
-    if (!remove)
-    {
-        prop_str *= -1;
-        prop_int *= -1;
-        prop_dex *= -1;
-    }
-    stat_type red_stat = NUM_STATS;
-    //if (prop_str >= you.strength() && you.strength() > 0)
-    //    red_stat = STAT_STR;
-    //else if (prop_int >= you.intel() && you.intel() > 0)
-    //    red_stat = STAT_INT;
-    //else if (prop_dex >= you.dex() && you.dex() > 0)
-    //    red_stat = STAT_DEX;
-
-    if (red_stat == NUM_STATS)
-        return true;
-
-    if (quiet)
-        return false;
-
-    string verb = "";
-    if (remove)
-    {
-        if (item.base_type == OBJ_WEAPONS)
-            verb = "Unwield";
-        else
-            verb = "Remov"; // -ing, not a typo
-    }
-    else
-    {
-        if (item.base_type == OBJ_WEAPONS)
-            verb = "Wield";
-        else
-            verb = "Wear";
-    }
-
-    string prompt = make_stringf("%sing this item will reduce your %s to zero "
-                                 "or below. Continue?", verb.c_str(),
-                                 stat_desc(red_stat, SD_NAME));
-    if (!yesno(prompt.c_str(), true, 'n', true, false))
-    {
-        canned_msg(MSG_OK);
-        return false;
-    }
-    return true;
-}
 
 // Checks whether removing an item would cause flight to end and the
 // player to fall to their death.
@@ -1700,10 +1578,6 @@ static bool _puton_item(int item_slot, bool prompt_slot,
         if (!remove_ring(you.equip[EQ_AMULET], true))
             return false;
 
-        // Check for stat loss.
-        if (!_safe_to_remove_or_wear(item, false))
-            return false;
-
         // Put on the new amulet.
         start_delay<JewelleryOnDelay>(1, item);
 
@@ -1712,10 +1586,6 @@ static bool _puton_item(int item_slot, bool prompt_slot,
     }
     // At this point, we know there's an empty slot for the ring/amulet we're
     // trying to equip.
-
-    // Check for stat loss.
-    if (!_safe_to_remove_or_wear(item, false))
-        return false;
 
     equipment_type hand_used = EQ_NONE;
 
@@ -1909,10 +1779,6 @@ bool remove_ring(int slot, bool announce)
     }
 
     ring_wear_2 = you.equip[hand_used];
-
-    // Remove the ring.
-    if (!_safe_to_remove_or_wear(you.inv[ring_wear_2], true))
-        return false;
 
     mprf("You remove %s.", you.inv[ring_wear_2].name(DESC_YOUR).c_str());
 #ifdef USE_TILE_LOCAL

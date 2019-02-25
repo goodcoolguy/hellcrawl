@@ -268,9 +268,6 @@ static vector<string> _randart_propnames(const item_def& item,
         { ARTP_MAGICAL_POWER,         PROPN_NUMERAL },
         { ARTP_AC,                    PROPN_NUMERAL },
         { ARTP_EVASION,               PROPN_NUMERAL },
-        { ARTP_STRENGTH,              PROPN_NUMERAL },
-        { ARTP_INTELLIGENCE,          PROPN_NUMERAL },
-        { ARTP_DEXTERITY,             PROPN_NUMERAL },
         { ARTP_SLAYING,               PROPN_NUMERAL },
         { ARTP_SHIELDING,             PROPN_NUMERAL },
 
@@ -481,9 +478,6 @@ static string _randart_descrip(const item_def &item)
     {
         { ARTP_AC, "It affects your AC (%d).", false },
         { ARTP_EVASION, "It affects your evasion (%d).", false},
-        { ARTP_STRENGTH, "It affects your strength (%d).", false},
-        { ARTP_INTELLIGENCE, "It affects your intelligence (%d).", false},
-        { ARTP_DEXTERITY, "It affects your dexterity (%d).", false},
         { ARTP_SLAYING, "It affects your accuracy and damage with ranged "
                         "weapons and melee attacks (%d).", false},
         { ARTP_FIRE, "fire", true},
@@ -1601,29 +1595,6 @@ static string _describe_armour(const item_def &item, bool verbose)
             else
                 description += "It allows its wearer to run at a great speed.";
             break;
-        case SPARM_FIRE_RESISTANCE:
-            description += "It protects its wearer from heat.";
-            break;
-        case SPARM_COLD_RESISTANCE:
-            description += "It protects its wearer from cold.";
-            break;
-#if TAG_MAJOR_VERSION == 34
-        case SPARM_SEE_INVISIBLE:
-            description += "It allows its wearer to see invisible things.";
-            break;
-        case SPARM_INVISIBILITY:
-            description += "It does nothing special.";
-            break;
-#endif
-        case SPARM_STRENGTH:
-            description += "It increases the physical power of its wearer (+3 to strength).";
-            break;
-        case SPARM_DEXTERITY:
-            description += "It increases the dexterity of its wearer (+3 to dexterity).";
-            break;
-        case SPARM_INTELLIGENCE:
-            description += "It makes you more clever (+3 to intelligence).";
-            break;
         case SPARM_PONDEROUSNESS:
             description += "It is very cumbersome, thus slowing your movement.";
             break;
@@ -1644,25 +1615,10 @@ static string _describe_armour(const item_def &item, bool verbose)
         case SPARM_MAGICAL_POWER:
             description += "It increases the magical reserves of its wearer.";
             break;
-        case SPARM_RESISTANCE:
-            description += "It protects its wearer from the effects "
-                "of both cold and heat.";
-            break;
-
-        // These two are only for robes.
-        case SPARM_POSITIVE_ENERGY:
-            description += "It protects its wearer from "
-                "the effects of negative energy.";
-            break;
         case SPARM_ARCHMAGI:
             description += "It increases the power of its wearer's "
                 "magical spells.";
             break;
-#if TAG_MAJOR_VERSION == 34
-        case SPARM_PRESERVATION:
-            description += "It does nothing special.";
-            break;
-#endif
         case SPARM_REFLECTION:
             description += "It reflects blocked things back in the "
                 "direction they came from.";
@@ -1738,21 +1694,6 @@ static string _describe_jewellery(const item_def &item, bool verbose)
 
             case RING_EVASION:
                 description += make_stringf("\nIt affects your evasion (%+d).",
-                                            item.plus);
-                break;
-
-            case RING_STRENGTH:
-                description += make_stringf("\nIt affects your strength (%+d).",
-                                            item.plus);
-                break;
-
-            case RING_INTELLIGENCE:
-                description += make_stringf("\nIt affects your intelligence (%+d).",
-                                            item.plus);
-                break;
-
-            case RING_DEXTERITY:
-                description += make_stringf("\nIt affects your dexterity (%+d).",
                                             item.plus);
                 break;
 

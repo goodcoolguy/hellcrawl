@@ -108,7 +108,7 @@
       elseif s == "D" then i = { "book of death", "book of arcane marksmanship",
        "book of dreams", "book of the dragon", "dagger", "demon blade",
        "demon trident", "demon whip", "disc of storms",
-       "double sword", "ring of dexterity",
+       "double sword",
        "manual of dodging", "wand of disintegration", "staff of death",
        "wand of digging", "amulet of destruction" }
 
@@ -136,7 +136,7 @@
 
       elseif s == "I" then i = { "ring of ice",
        "scroll of immolation", "ice dragon scales", "book of ice",
-       "potion of invisibility", "ring of intelligence",
+       "potion of invisibility",
        "wand of iceblast", "manual of invocations",
        "manual of ice magic" }
 
@@ -175,8 +175,7 @@
 
       elseif s == "S" then i = { "scimitar",
        "scale mail", "book of summonings", "book of the sky",
-       "ring of slaying", "spear",
-       "ring of strength", "manual of stealth", "sack of spiders",
+       "ring of slaying", "spear", "manual of stealth", "sack of spiders",
        "scroll of summoning", "book of spatial translocations",
        "scroll of silence", "shield", "shortbow",
        "steam dragon scales", "shadow dragon scales",

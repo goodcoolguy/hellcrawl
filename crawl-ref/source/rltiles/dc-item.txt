@@ -469,13 +469,6 @@ boots4_green
 # in itemprop-enum.h.
 %sdir item/armour/brands
 i-running BRAND_ARM_RUNNING BRAND_ARM_FIRST
-i-fire-res BRAND_ARM_FIRE_RESISTANCE
-i-cold-res BRAND_ARM_COLD_RESISTANCE
-i-see-invis BRAND_ARM_SEE_INVISIBLE
-i-invisibility BRAND_ARM_INVISIBILITY
-i-strength BRAND_ARM_STRENGTH
-i-dexterity BRAND_ARM_DEXTERITY
-i-intelligence BRAND_ARM_INTELLIGENCE
 i-ponderous BRAND_ARM_PONDEROUSNESS
 i-flying BRAND_ARM_FLYING
 i-magic-res BRAND_ARM_MAGIC_RESISTANCE
@@ -483,14 +476,10 @@ i-protection BRAND_ARM_PROTECTION
 %rim 0
 i-stealth BRAND_ARM_STEALTH
 %rim 1
-i-resistance BRAND_ARM_RESISTANCE
-i-positive-energy BRAND_ARM_POSITIVE_ENERGY
 i-archmagi BRAND_ARM_ARCHMAGI
-i-preservation BRAND_ARM_PRESERVATION
 i-reflection BRAND_ARM_REFLECTION
 i-spirit BRAND_ARM_SPIRIT_SHIELD
 i-archery BRAND_ARM_ARCHERY
-i-jumping BRAND_ARM_JUMPING
 i-magical-power BRAND_ARM_MAGICAL_POWER BRAND_ARM_LAST
 
 ###########OBJ_WANDS
@@ -653,7 +642,6 @@ i-protection RING_REGENERATION RING_ID_FIRST
 i-protection RING_PROTECTION
 i-r-fire RING_PROTECTION_FROM_FIRE
 i-r-cold RING_PROTECTION_FROM_COLD
-i-str RING_STRENGTH
 i-slaying RING_SLAYING
 i-see-invis RING_SEE_INVISIBLE
 i-r-corrosion RING_RESIST_CORROSION
@@ -663,8 +651,6 @@ i-evasion RING_EVASION
 # Remove sustat when TAG_MAJOR_VERSION > 34
 i-s-attr RING_SUSTAIN_ATTRIBUTES
 i-stealth RING_STEALTH
-i-dex RING_DEXTERITY
-i-int RING_INTELLIGENCE
 i-wizardry RING_WIZARDRY
 i-magical-power RING_MAGICAL_POWER
 i-flight RING_FLIGHT

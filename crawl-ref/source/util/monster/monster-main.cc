@@ -966,12 +966,6 @@ int main(int argc, char* argv[])
                 case AF_CONFUSE:
                     monsterattacks += colour(LIGHTMAGENTA, "(confuse)");
                     break;
-                case AF_DRAIN_DEX:
-                    monsterattacks += colour(RED, "(drain dexterity)");
-                    break;
-                case AF_DRAIN_STR:
-                    monsterattacks += colour(RED, "(drain strength)");
-                    break;
                 case AF_DRAIN_XP:
                     monsterattacks += colour(LIGHTMAGENTA, "(drain)");
                     break;
@@ -1028,12 +1022,6 @@ int main(int argc, char* argv[])
                     break;
                 case AF_ANTIMAGIC:
                     monsterattacks += colour(LIGHTBLUE, "(antimagic)");
-                    break;
-                case AF_DRAIN_INT:
-                    monsterattacks += colour(BLUE, "(drain int)");
-                    break;
-                case AF_DRAIN_STAT:
-                    monsterattacks += colour(BLUE, "(drain stat)");
                     break;
                 case AF_STEAL:
                     monsterattacks += colour(CYAN, "(steal)");

@@ -675,11 +675,7 @@ static special_armour_type _generate_armour_type_ego(armour_type type,
     case ARM_SHIELD:
     case ARM_LARGE_SHIELD:
     case ARM_BUCKLER:
-        return random_choose_weighted(1, SPARM_RESISTANCE,
-                                      3, SPARM_FIRE_RESISTANCE,
-                                      3, SPARM_COLD_RESISTANCE,
-                                      3, SPARM_POSITIVE_ENERGY,
-                                      6, SPARM_REFLECTION,
+        return random_choose_weighted( 6, SPARM_REFLECTION,
                                       12, SPARM_PROTECTION);
 
     case ARM_CLOAK:
@@ -691,36 +687,27 @@ static special_armour_type _generate_armour_type_ego(armour_type type,
         return random_choose_weighted(8, SPARM_NORMAL,
                                       4, SPARM_MAGICAL_POWER,
                                       3, SPARM_MAGIC_RESISTANCE,
-                                      3, SPARM_INTELLIGENCE,
                                       1, SPARM_SPIRIT_SHIELD);
 
     case ARM_HELMET:
-        return coinflip() ? SPARM_MAGIC_RESISTANCE : SPARM_INTELLIGENCE;
+        return SPARM_MAGIC_RESISTANCE;
 
     case ARM_GLOVES:
-        return random_choose(SPARM_DEXTERITY, SPARM_STRENGTH, SPARM_ARCHERY);
+        return SPARM_ARCHERY;
 
     case ARM_BOOTS:
-        return random_choose(SPARM_DEXTERITY, SPARM_RUNNING, SPARM_FLYING, SPARM_STEALTH);
+        return random_choose(SPARM_RUNNING, SPARM_FLYING, SPARM_STEALTH);
 
     case ARM_NAGA_BARDING:
-        return random_choose(SPARM_FLYING, SPARM_STEALTH,
-                             SPARM_COLD_RESISTANCE, SPARM_FIRE_RESISTANCE);
+        return random_choose(SPARM_FLYING, SPARM_STEALTH);
 
     case ARM_ROBE:
-        return random_choose_weighted(1, SPARM_RESISTANCE,
-                                      1, SPARM_ARCHMAGI,
+        return random_choose_weighted(1, SPARM_ARCHMAGI,
                                       2, SPARM_NORMAL,
-                                      2, SPARM_COLD_RESISTANCE,
-                                      2, SPARM_FIRE_RESISTANCE,
-                                      2, SPARM_POSITIVE_ENERGY,
                                       4, SPARM_MAGIC_RESISTANCE);
 
     case ARM_PLATE_ARMOUR:
-        return random_choose_weighted(26, SPARM_FIRE_RESISTANCE,
-                                      26, SPARM_COLD_RESISTANCE,
-                                      15, SPARM_MAGIC_RESISTANCE,
-                                       7, SPARM_POSITIVE_ENERGY,
+        return random_choose_weighted(15, SPARM_MAGIC_RESISTANCE,
                                        7, SPARM_PONDEROUSNESS);
 
     // other body armour
@@ -738,10 +725,7 @@ static special_armour_type _generate_armour_type_ego(armour_type type,
         return SPARM_NORMAL;
     }
 
-    return random_choose_weighted(7, SPARM_FIRE_RESISTANCE,
-                                  7, SPARM_COLD_RESISTANCE,
-                                  4, SPARM_MAGIC_RESISTANCE,
-                                  2, SPARM_POSITIVE_ENERGY);
+    return SPARM_MAGIC_RESISTANCE;
 }
 
 /**
@@ -785,9 +769,6 @@ bool is_armour_brand_ok(int type, int brand, bool strict)
             return true;
         // deliberate fall-through
     case SPARM_RUNNING:
-#if TAG_MAJOR_VERSION == 34
-    case SPARM_JUMPING:
-#endif
         return slot == EQ_BOOTS;
 
 	case SPARM_STEALTH:
@@ -801,53 +782,18 @@ bool is_armour_brand_ok(int type, int brand, bool strict)
 
     case SPARM_PONDEROUSNESS:
         return true;
-#if TAG_MAJOR_VERSION == 34
-    case SPARM_PRESERVATION:
-        if (type == ARM_PLATE_ARMOUR && !strict)
-            return true;
-        // deliberate fall-through
-    case SPARM_INVISIBILITY:
-        return slot == EQ_CLOAK;
-#endif
 
     case SPARM_REFLECTION:
     case SPARM_PROTECTION:
         return slot == EQ_SHIELD;
 
-    case SPARM_STRENGTH:
-        if (!strict)
-            return true;
-        // deliberate fall-through
     case SPARM_ARCHERY:
         return slot == EQ_GLOVES;
-		
-	case SPARM_DEXTERITY:
-		if (!strict)
-            return true;
-		return slot == EQ_GLOVES || slot == EQ_BOOTS;
-
-    case SPARM_SEE_INVISIBLE:
-    case SPARM_INTELLIGENCE:
-        return slot == EQ_HELMET;
-
-    case SPARM_FIRE_RESISTANCE:
-    case SPARM_COLD_RESISTANCE:
-    case SPARM_RESISTANCE:
-        if (type == ARM_FIRE_DRAGON_ARMOUR
-            || type == ARM_ICE_DRAGON_ARMOUR
-            || type == ARM_GOLD_DRAGON_ARMOUR)
-        {
-            return false; // contradictory or redundant
-        }
-        return true; // in portal vaults, these can happen on every slot
 
     case SPARM_MAGIC_RESISTANCE:
         if (type == ARM_HAT || type == ARM_HELMET)
             return true;
         // deliberate fall-through
-    case SPARM_POSITIVE_ENERGY:
-        if (type == ARM_PEARL_DRAGON_ARMOUR && brand == SPARM_POSITIVE_ENERGY)
-            return false; // contradictory or redundant
 
         return slot == EQ_BODY_ARMOUR || slot == EQ_SHIELD || slot == EQ_CLOAK
                || !strict;
@@ -1363,15 +1309,8 @@ static bool _try_make_jewellery_unrandart(item_def& item, int force_type,
  */
 static int _good_jewellery_plus(int subtype)
 {
-	switch (subtype)
-    {
-        case RING_STRENGTH:
-        case RING_DEXTERITY:
-        case RING_INTELLIGENCE:
-            return 5;
-        default:
-            return 3 + (one_chance_in(6) ? 3 : 0);
-    }
+
+    return 3 + (one_chance_in(6) ? 3 : 0);
 }
 
 /**
@@ -1385,11 +1324,8 @@ static int _determine_ring_plus(int subtype)
     switch (subtype)
     {
     case RING_PROTECTION:
-    case RING_STRENGTH:
     case RING_SLAYING:
     case RING_EVASION:
-    case RING_DEXTERITY:
-    case RING_INTELLIGENCE:
     case AMU_REFLECTION:
         return _good_jewellery_plus(subtype);
 

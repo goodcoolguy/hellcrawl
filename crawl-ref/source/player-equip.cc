@@ -230,14 +230,6 @@ static void _equip_artefact_effect(item_def &item, bool *show_msgs, bool unmeld,
                                                   : MSG_MANA_DECREASE);
     }
 
-    // Modify ability scores.
-    //notify_stat_change(STAT_STR, proprt[ARTP_STRENGTH],
-    //                   !(msg && unknown_proprt(ARTP_STRENGTH)));
-    //notify_stat_change(STAT_INT, proprt[ARTP_INTELLIGENCE],
-    //                   !(msg && unknown_proprt(ARTP_INTELLIGENCE)));
-    //notify_stat_change(STAT_DEX, proprt[ARTP_DEXTERITY],
-    //                   !(msg && unknown_proprt(ARTP_DEXTERITY)));
-
     if (unknown_proprt(ARTP_CONTAM) && msg)
         mpr("You feel a build-up of mutagenic energy.");
 
@@ -288,10 +280,6 @@ static void _unequip_artefact_effect(item_def &item,
         canned_msg(proprt[ARTP_MAGICAL_POWER] > 0 ? MSG_MANA_DECREASE
                                                   : MSG_MANA_INCREASE);
     }
-
-    //notify_stat_change(STAT_STR, -proprt[ARTP_STRENGTH],     true);
-    //notify_stat_change(STAT_INT, -proprt[ARTP_INTELLIGENCE], true);
-    //notify_stat_change(STAT_DEX, -proprt[ARTP_DEXTERITY],    true);
 
     if (proprt[ARTP_FLY] != 0 && you.cancellable_flight()
         && !you.evokable_flight())
@@ -708,36 +696,6 @@ static void _equip_armour_effect(item_def& arm, bool unmeld,
                 mpr("You feel quick.");
             break;
 
-        case SPARM_FIRE_RESISTANCE:
-            mpr("You feel resistant to fire.");
-            break;
-
-        case SPARM_COLD_RESISTANCE:
-            mpr("You feel resistant to cold.");
-            break;
-
-        case SPARM_SEE_INVISIBLE:
-            mpr("You feel perceptive.");
-            autotoggle_autopickup(false);
-            break;
-
-        case SPARM_INVISIBILITY:
-            if (!you.duration[DUR_INVIS] && !you.attribute[ATTR_PERMAINVIS])
-                mpr("You become transparent for a moment.");
-            break;
-
-        case SPARM_STRENGTH:
-	  //notify_stat_change(STAT_STR, 3, false);
-            break;
-
-        case SPARM_DEXTERITY:
-	  //notify_stat_change(STAT_DEX, 3, false);
-            break;
-
-        case SPARM_INTELLIGENCE:
-	  //notify_stat_change(STAT_INT, 3, false);
-            break;
-
         case SPARM_PONDEROUSNESS:
             mpr("You feel rather ponderous.");
             break;
@@ -789,14 +747,6 @@ static void _equip_armour_effect(item_def& arm, bool unmeld,
         case SPARM_STEALTH:
             if (!you.get_mutation_level(MUT_NO_STEALTH))
                 mpr("You feel stealthy.");
-            break;
-
-        case SPARM_RESISTANCE:
-            mpr("You feel resistant to extremes of temperature.");
-            break;
-
-        case SPARM_POSITIVE_ENERGY:
-            mpr("You feel more protected from negative energy.");
             break;
 
         case SPARM_ARCHMAGI:
@@ -866,34 +816,6 @@ static void _unequip_armour_effect(item_def& item, bool meld,
             mpr("You feel rather sluggish.");
         break;
 
-    case SPARM_FIRE_RESISTANCE:
-        mpr("You feel less resistant to fire.");
-        break;
-
-    case SPARM_COLD_RESISTANCE:
-        mpr("You feel less resistant to cold.");
-        break;
-
-    case SPARM_SEE_INVISIBLE:
-        if (!you.can_see_invisible())
-        {
-            mpr("You feel less perceptive.");
-            _mark_unseen_monsters();
-        }
-        break;
-
-    case SPARM_STRENGTH:
-      //notify_stat_change(STAT_STR, -3, false);
-        break;
-
-    case SPARM_DEXTERITY:
-      //notify_stat_change(STAT_DEX, -3, false);
-        break;
-
-    case SPARM_INTELLIGENCE:
-      //notify_stat_change(STAT_INT, -3, false);
-        break;
-
     case SPARM_PONDEROUSNESS:
         mpr("That put a bit of spring back into your step.");
         break;
@@ -922,14 +844,6 @@ static void _unequip_armour_effect(item_def& item, bool meld,
     case SPARM_STEALTH:
         if (!you.get_mutation_level(MUT_NO_STEALTH))
             mpr("You feel less stealthy.");
-        break;
-
-    case SPARM_RESISTANCE:
-        mpr("You feel hot and cold all over.");
-        break;
-
-    case SPARM_POSITIVE_ENERGY:
-        mpr("You feel less protected from negative energy.");
         break;
 
     case SPARM_ARCHMAGI:
@@ -1057,18 +971,6 @@ static void _equip_jewellery_effect(item_def &item, bool unmeld,
         you.redraw_evasion = true;
         break;
 
-    case RING_STRENGTH:
-      //notify_stat_change(STAT_STR, item.plus, false);
-        break;
-
-    case RING_DEXTERITY:
-      //notify_stat_change(STAT_DEX, item.plus, false);
-        break;
-
-    case RING_INTELLIGENCE:
-      //notify_stat_change(STAT_INT, item.plus, false);
-        break;
-
     case AMU_FAITH:
         if (you.species == SP_DEMIGOD || you.species == SP_TITAN)
             mpr("You feel a surge of self-confidence.");
@@ -1155,18 +1057,6 @@ static void _unequip_jewellery_effect(item_def &item, bool mesg, bool meld,
 
     case RING_EVASION:
         you.redraw_evasion = true;
-        break;
-
-    case RING_STRENGTH:
-      //notify_stat_change(STAT_STR, -item.plus, false);
-        break;
-
-    case RING_DEXTERITY:
-      //notify_stat_change(STAT_DEX, -item.plus, false);
-        break;
-
-    case RING_INTELLIGENCE:
-      //notify_stat_change(STAT_INT, -item.plus, false);
         break;
 
     case AMU_FAITH:
