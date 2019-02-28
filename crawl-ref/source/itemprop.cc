@@ -668,11 +668,6 @@ void init_properties()
 const set<pair<object_class_type, int> > removed_items =
 {
 #if TAG_MAJOR_VERSION == 34
-    { OBJ_STAVES,    STAFF_ENCHANTMENT },
-    { OBJ_STAVES,    STAFF_CHANNELING },
-	{ OBJ_STAVES, 	 STAFF_ENERGY },
-    { OBJ_STAVES, 	 STAFF_CONJURATION },
-    { OBJ_STAVES, 	 STAFF_POWER },
 	{ OBJ_BOOKS, 	 BOOK_YOUNG_POISONERS },
     { OBJ_BOOKS,     BOOK_WIZARDRY },
     { OBJ_BOOKS,     BOOK_CONTROL },
