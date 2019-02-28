@@ -44,21 +44,12 @@ tileidx_t tilep_equ_weapon(const item_def &item)
     {
         switch (item.sub_type)
         {
-#if TAG_MAJOR_VERSION == 34
-        case MISC_BOTTLED_EFREET:             return TILEP_HAND1_BOTTLE;
-#endif
         case MISC_FAN_OF_GALES:               return TILEP_HAND1_FAN;
-#if TAG_MAJOR_VERSION == 34
-        case MISC_STONE_OF_TREMORS:           return TILEP_HAND1_STONE;
-#endif
         case MISC_DISC_OF_STORMS:             return TILEP_HAND1_DISC;
 
         case MISC_CRYSTAL_BALL_OF_ENERGY:     return TILEP_HAND1_CRYSTAL;
 
         case MISC_LAMP_OF_FIRE:               return TILEP_HAND1_LANTERN;
-#if TAG_MAJOR_VERSION == 34
-        case MISC_BUGGY_LANTERN_OF_SHADOWS:   return TILEP_HAND1_BONE_LANTERN;
-#endif
         case MISC_HORN_OF_GERYON:             return TILEP_HAND1_HORN;
         case MISC_BOX_OF_BEASTS:              return TILEP_HAND1_BOX;
 

@@ -834,29 +834,15 @@ static string misc_type_name(int type, bool known)
     {
     case MISC_CRYSTAL_BALL_OF_ENERGY:    return "crystal ball of energy";
     case MISC_BOX_OF_BEASTS:             return "box of beasts";
-#if TAG_MAJOR_VERSION == 34
-    case MISC_BUGGY_EBONY_CASKET:        return "removed ebony casket";
-#endif
     case MISC_FAN_OF_GALES:              return "fan of gales";
     case MISC_LAMP_OF_FIRE:              return "lamp of fire";
-#if TAG_MAJOR_VERSION == 34
-    case MISC_BUGGY_LANTERN_OF_SHADOWS:  return "removed lantern of shadows";
-#endif
     case MISC_HORN_OF_GERYON:            return "horn of Geryon";
     case MISC_DISC_OF_STORMS:            return "disc of storms";
-#if TAG_MAJOR_VERSION == 34
-    case MISC_BOTTLED_EFREET:            return "empty flask";
-    case MISC_RUNE_OF_ZOT:               return "obsolete rune of zot";
-    case MISC_STONE_OF_TREMORS:          return "removed stone of tremors";
-#endif
     case MISC_QUAD_DAMAGE:               return "quad damage";
     case MISC_PHIAL_OF_FLOODS:           return "phial of floods";
     case MISC_SACK_OF_SPIDERS:           return "sack of spiders";
     case MISC_PHANTOM_MIRROR:            return "phantom mirror";
     case MISC_ZIGGURAT:                  return "figurine of a ziggurat";
-#if TAG_MAJOR_VERSION == 34
-    case MISC_XOMS_CHESSBOARD:           return "removed chess piece";
-#endif
 
     default:
         return "buggy miscellaneous item";

@@ -1998,17 +1998,6 @@ bool item_is_evokable(const item_def &item, bool reach, bool known,
             mpr("That item cannot be evoked!");
         return false;
 
-#if TAG_MAJOR_VERSION == 34
-    case OBJ_MISCELLANY:
-        if (item.sub_type != MISC_BUGGY_LANTERN_OF_SHADOWS
-            && item.sub_type != MISC_BUGGY_EBONY_CASKET
-            )
-        {
-            return true;
-        }
-#endif
-        // removed items fallthrough to failure
-
     default:
         if (msg)
             mpr("That item cannot be evoked!");

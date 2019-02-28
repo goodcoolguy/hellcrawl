@@ -3853,16 +3853,8 @@ colour_t item_def::miscellany_colour() const
     {
         case MISC_FAN_OF_GALES:
             return CYAN;
-#if TAG_MAJOR_VERSION == 34
-        case MISC_BOTTLED_EFREET:
-            return RED;
-#endif
         case MISC_PHANTOM_MIRROR:
             return RED;
-#if TAG_MAJOR_VERSION == 34
-        case MISC_STONE_OF_TREMORS:
-            return BROWN;
-#endif
         case MISC_DISC_OF_STORMS:
             return LIGHTGREY;
         case MISC_PHIAL_OF_FLOODS:
@@ -3877,12 +3869,6 @@ colour_t item_def::miscellany_colour() const
             return YELLOW;
         case MISC_SACK_OF_SPIDERS:
             return WHITE;
-#if TAG_MAJOR_VERSION == 34
-        case MISC_BUGGY_LANTERN_OF_SHADOWS:
-        case MISC_BUGGY_EBONY_CASKET:
-        case MISC_XOMS_CHESSBOARD:
-            return DARKGREY;
-#endif
         case MISC_QUAD_DAMAGE:
             return ETC_DARK;
         case MISC_ZIGGURAT:

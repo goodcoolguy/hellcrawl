@@ -2327,11 +2327,6 @@ static tileidx_t _tileidx_misc(const item_def &item)
 
     switch (item.sub_type)
     {
-#if TAG_MAJOR_VERSION == 34
-    case MISC_BOTTLED_EFREET:
-        return TILE_MISC_BOTTLED_EFREET;
-#endif
-
     case MISC_FAN_OF_GALES:
         return evoker_is_charged(item) ? TILE_MISC_FAN_OF_GALES
                                        : TILE_MISC_FAN_OF_GALES_INERT;
@@ -2340,19 +2335,10 @@ static tileidx_t _tileidx_misc(const item_def &item)
         return evoker_is_charged(item) ? TILE_MISC_LAMP_OF_FIRE
                                        : TILE_MISC_LAMP_OF_FIRE_INERT;
 
-#if TAG_MAJOR_VERSION == 34
-    case MISC_STONE_OF_TREMORS:
-        return TILE_MISC_STONE_OF_TREMORS_INERT;
-#endif
 
     case MISC_PHIAL_OF_FLOODS:
         return evoker_is_charged(item) ? TILE_MISC_PHIAL_OF_FLOODS
                                        : TILE_MISC_PHIAL_OF_FLOODS_INERT;
-
-#if TAG_MAJOR_VERSION == 34
-    case MISC_BUGGY_LANTERN_OF_SHADOWS:
-        return TILE_MISC_LANTERN_OF_SHADOWS;
-#endif
 
     case MISC_HORN_OF_GERYON:
         return TILE_MISC_HORN_OF_GERYON;

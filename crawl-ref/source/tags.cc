@@ -4075,13 +4075,6 @@ void unmarshallItem(reader &th, item_def &item)
     item.sub_type    = unmarshallUByte(th);
     item.plus        = unmarshallShort(th);
 #if TAG_MAJOR_VERSION == 34
-    if (th.getMinorVersion() < TAG_MINOR_RUNE_TYPE
-        && item.is_type(OBJ_MISCELLANY, MISC_RUNE_OF_ZOT))
-    {
-        item.base_type = OBJ_RUNES;
-        item.sub_type = item.plus;
-        item.plus = 0;
-    }
     if (th.getMinorVersion() < TAG_MINOR_ZIGFIGS
         // enum was accidentally inserted in the middle
         && item.is_type(OBJ_MISCELLANY, MISC_ZIGGURAT))
@@ -4222,12 +4215,6 @@ void unmarshallItem(reader &th, item_def &item)
         // Give charges to box of beasts. If the player used it
         // already then, well, they got some freebies.
         item.plus = random_range(5, 15, 2);
-    }
-
-    if (item.is_type(OBJ_MISCELLANY, MISC_BUGGY_EBONY_CASKET))
-    {
-        item.sub_type = MISC_BOX_OF_BEASTS;
-        item.plus = 1;
     }
 
     // was spiked flail
