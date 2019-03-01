@@ -309,16 +309,11 @@ void jiyva_stat_action()
     }
 }
 
-static const char* descs[NUM_STATS][NUM_STAT_DESCS] =
-{
-    { "strength", "weakened", "weaker", "stronger" },
-    { "intelligence", "dopey", "stupid", "clever" },
-    { "dexterity", "clumsy", "clumsy", "agile" }
-};
+static const char* descs[NUM_STATS] = { "melee", "ranged", "defense", "stealth", "black magic", "elemental magic", "thaumaturgy" };
 
-const char* stat_desc(stat_type stat, stat_desc_type desc)
+const char* stat_desc(stat_type stat)
 {
-    return descs[stat][desc];
+    return descs[stat];
 }
 
 void modify_stat(stat_type which_stat, int amount, bool suppress_msg)
@@ -339,8 +334,8 @@ void modify_stat(stat_type which_stat, int amount, bool suppress_msg)
     if (!suppress_msg)
     {
         mprf((amount > 0) ? MSGCH_INTRINSIC_GAIN : MSGCH_WARN,
-             "You feel %s.",
-             stat_desc(which_stat, (amount > 0) ? SD_INCREASE : SD_DECREASE));
+             "Your %s %s.",
+             stat_desc(which_stat), amount > 0 ? "improves" : "worsens");
     }
 
     you.base_stats[which_stat] += amount;
@@ -366,8 +361,8 @@ void notify_stat_change(stat_type which_stat, int amount, bool suppress_msg)
     if (!suppress_msg)
     {
         mprf((amount > 0) ? MSGCH_INTRINSIC_GAIN : MSGCH_WARN,
-             "You feel %s.",
-             stat_desc(which_stat, (amount > 0) ? SD_INCREASE : SD_DECREASE));
+             "Your %s %s.",
+             stat_desc(which_stat), amount > 0 ? "improves" : "worsens");
     }
 
     _handle_stat_change(which_stat);
@@ -478,7 +473,7 @@ bool lose_stat(stat_type which_stat, int stat_loss, bool force)
     if (which_stat == STAT_RANDOM)
         which_stat = static_cast<stat_type>(random2(NUM_STATS));
 
-    mprf(MSGCH_WARN, "You feel %s.", stat_desc(which_stat, SD_LOSS));
+    mprf(MSGCH_WARN, "Your %s worsens.", stat_desc(which_stat));
 
     you.stat_loss[which_stat] = min<int>(100,
                                          you.stat_loss[which_stat] + stat_loss);

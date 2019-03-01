@@ -10,7 +10,7 @@ enum stat_desc_type
     NUM_STAT_DESCS
 };
 
-const char* stat_desc(stat_type stat, stat_desc_type desc);
+const char* stat_desc(stat_type stat);
 
 bool attribute_increase();
 

@@ -1290,7 +1290,7 @@ static const char* _stat_mut_desc(mutation_type mut, bool gain)
     //default:
     //    die("invalid stat mutation: %d", mut);
     //}
-    return stat_desc(stat, positive ? SD_INCREASE : SD_DECREASE);
+    return stat_desc(stat);
 }
 
 /**
