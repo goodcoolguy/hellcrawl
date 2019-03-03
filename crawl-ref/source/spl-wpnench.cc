@@ -111,14 +111,9 @@ spret_type cast_excruciating_wounds(int power, bool fail)
 spret_type cast_confusing_touch(int power, bool fail)
 {
     fail_check();
-    msg::stream << you.hands_act("begin", "to glow ")
-                << (you.duration[DUR_CONFUSING_TOUCH] ? "brighter" : "red")
-                << "." << endl;
+    mpr("You prepare to confuse enemies that you strike.");
 
-    you.set_duration(DUR_CONFUSING_TOUCH,
-                     max(10 + random2(power) / 5,
-                         you.duration[DUR_CONFUSING_TOUCH]),
-                     20, nullptr);
+    you.attribute[ATTR_CONFUSING_TOUCH] = 1;
 
     return SPRET_SUCCESS;
 }

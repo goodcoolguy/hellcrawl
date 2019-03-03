@@ -1359,7 +1359,7 @@ static const struct spell_desc spelldata[] =
 {
     SPELL_CONFUSING_TOUCH, "Confusing Touch",
     SPTYP_HEXES,
-    SPFLAG_NONE,
+    SPFLAG_PERMABUFF,
 	{},
     1,
     50,

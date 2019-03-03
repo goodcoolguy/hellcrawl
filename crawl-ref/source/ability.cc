@@ -64,6 +64,7 @@
 #include "spl-selfench.h"
 #include "spl-summoning.h"
 #include "spl-transloc.h"
+#include "spl-wpnench.h"
 #include "stairs.h"
 #include "state.h"
 #include "stepdown.h"
@@ -320,6 +321,8 @@ static const ability_def Ability_List[] =
       0, 0, {}, 0, {}, abflag::NONE },
     { ABIL_END_PIERCE, "End Piercing Shot",
       0, 0, {}, 0, {}, abflag::NONE },
+    { ABIL_END_CONFUSING_TOUCH, "End Confusing Touch",
+      0, 0, {}, 0, {}, abflag::NONE },
 
     { ABIL_DIG, "Dig", 0, 0, {}, 0, {}, abflag::INSTANT },
     { ABIL_SHAFT_SELF, "Shaft Self", 0, 0, {}, 0, {}, abflag::DELAY },
@@ -341,6 +344,7 @@ static const ability_def Ability_List[] =
     { ABIL_DDOOR, "Death's Door", 10, 0, {{STAT_BLACK_MAGIC, 8}}, 0, {FAIL_XL, -1}, abflag::NONE },
     { ABIL_SPECTRAL_WEAPON, "Spectral Weapon", 4, 0, {{STAT_THAUMATURGY, 1}}, 0, {FAIL_XL, -1}, abflag::NONE },
     { ABIL_FORCEBLAST, "Force Blast", 3, 0, {{STAT_ELEMENTAL, 1}}, 0, {FAIL_XL, -1}, abflag::NONE },
+    { ABIL_CONFUSING_TOUCH, "Confusing Touch", 4, 0, {{STAT_THAUMATURGY, 1}}, 0, {FAIL_XL, -1}, abflag::NONE },
     { ABIL_RECHARGING, "Device Recharging",
       1, 0, {}, 0, {FAIL_XL, 45, 2}, abflag::PERMANENT_MP },
 
@@ -1919,6 +1923,9 @@ static spret_type _do_ability(const ability_def& abil, bool fail)
         return cast_spectral_weapon(&you, you.stat(STAT_THAUMATURGY), GOD_NO_GOD, fail);
         break;
 		
+    case ABIL_CONFUSING_TOUCH:
+        return cast_confusing_touch(you.stat(STAT_THAUMATURGY), fail);
+		
     case ABIL_FORCEBLAST:
         return force_blast(you.stat(STAT_THAUMATURGY), fail);
         break;
@@ -2095,6 +2102,12 @@ static spret_type _do_ability(const ability_def& abil, bool fail)
         mpr("You stop readying your spectral weapon.");
         break;
     }
+	
+    case ABIL_END_CONFUSING_TOUCH:
+        fail_check();
+        you.attribute[ATTR_CONFUSING_TOUCH] = 0;
+        mpr("Your attacks no longer cause confusion.");
+        break;
 	
     case ABIL_END_BATTLESPHERE:
     {
@@ -3454,6 +3467,9 @@ vector<talent> your_talents(bool check_confused, bool include_unusable)
     if (you.attribute[ATTR_SPECTRAL_WEAPON])
        _add_talent(talents, ABIL_END_SPECTRAL_WEAPON, check_confused);
    
+     if (you.attribute[ATTR_CONFUSING_TOUCH])
+       _add_talent(talents, ABIL_END_CONFUSING_TOUCH, check_confused);
+   
     if (you.attribute[ATTR_BATTLESPHERE])
        _add_talent(talents, ABIL_END_BATTLESPHERE, check_confused);
    
@@ -3560,6 +3576,11 @@ vector<talent> your_talents(bool check_confused, bool include_unusable)
     if (you.scan_artefacts(ARTP_FORCEBLAST))
     {
 		_add_talent(talents, ABIL_FORCEBLAST, check_confused);
+    }
+	
+    if (you.scan_artefacts(ARTP_CONFUSING_TOUCH))
+    {
+		_add_talent(talents, ABIL_CONFUSING_TOUCH, check_confused);
     }
 
     // Find hotkeys for the non-hotkeyed talents.
@@ -3748,6 +3769,7 @@ int find_ability_slot(const ability_type abil, char firstletter)
     case ABIL_END_BATTLESPHERE:
     case ABIL_END_SERVITOR:
     case ABIL_END_PPROJ:
+    case ABIL_END_CONFUSING_TOUCH:
         first_slot = letter_to_index('A');
         break;
     default:

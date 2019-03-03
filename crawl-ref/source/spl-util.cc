@@ -1512,7 +1512,12 @@ string spell_uselessness_reason(spell_type spell, bool temp, bool prevent,
 		
     case SPELL_RING_OF_FLAMES:
         if (temp && you.attribute[ATTR_FIRE_SHIELD])
-            return "you are already surrounded by a ring of flames";
+            return "you are already surrounded by a ring of flames.";
+        break;
+    
+    case SPELL_CONFUSING_TOUCH:
+        if (temp && you.attribute[ATTR_CONFUSING_TOUCH])
+            return "your touch is confusing enough already.";
         break;
 
     case SPELL_CIGOTUVIS_EMBRACE:

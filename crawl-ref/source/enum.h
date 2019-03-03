@@ -500,6 +500,7 @@ enum ability_type
     ABIL_END_SERVITOR,
     ABIL_END_PPROJ,
 	ABIL_END_PIERCE,
+    ABIL_END_CONFUSING_TOUCH,
 	
     //abilities that cast spells
     ABIL_LIGHTNING_SPIRE,
@@ -507,6 +508,7 @@ enum ability_type
     ABIL_DDOOR,
     ABIL_SPECTRAL_WEAPON,
     ABIL_FORCEBLAST,
+    ABIL_CONFUSING_TOUCH,
 
     NUM_ABILITIES
 };
@@ -648,6 +650,7 @@ enum attribute_type
     ATTR_YRED_SOUL_TIMEOUT,    // enslaved soul timeout
     ATTR_WALL_JUMP_READY,      // Ready to perform a wall jump.
 	ATTR_PIERCING_SHOT,        // Piercing shot
+    ATTR_CONFUSING_TOUCH,      // Confusing Touch
     NUM_ATTRIBUTES
 };
 
@@ -3988,6 +3991,7 @@ enum artefact_prop_type
     ARTP_DDOOR,
     ARTP_SPECTRAL,
     ARTP_FORCEBLAST,
+    ARTP_CONFUSING_TOUCH,
     ARTP_NUM_PROPERTIES
 };
 

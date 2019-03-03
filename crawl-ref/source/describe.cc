@@ -230,6 +230,7 @@ static vector<string> _randart_propnames(const item_def& item,
         { ARTP_DDOOR,                 PROPN_PLAIN },
         { ARTP_SPECTRAL,              PROPN_PLAIN },
         { ARTP_FORCEBLAST,            PROPN_PLAIN },
+        { ARTP_CONFUSING_TOUCH,       PROPN_PLAIN },
 
         // Resists, also really important
         { ARTP_ELECTRICITY,           PROPN_PLAIN },
@@ -451,6 +452,7 @@ static string _randart_descrip(const item_def &item)
         { ARTP_DDOOR, "It lets you cast Death's Door.", false},
         { ARTP_SPECTRAL, "It lets you draw out your weapon's spirit.", false},
         { ARTP_FORCEBLAST, "It lets you emit a blast of repulsive force.", false},
+        { ARTP_CONFUSING_TOUCH, "It lets you confuse enemies you strike.", false},
     };
 
     // Give a short description of the base type, for base types with no

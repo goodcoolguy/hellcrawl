@@ -1751,6 +1751,9 @@ static spret_type _handle_buff_spells(spell_type spell, int powc, bolt& beam, go
             return cast_portal_projectile(powc, false);
         case SPELL_PIERCING_SHOT:
             return cast_piercing_shot(powc, false);
+        case SPELL_CONFUSING_TOUCH:
+            return cast_confusing_touch(powc, false);
+
         default:
 		    return SPRET_NONE;
     }
@@ -1975,9 +1978,6 @@ static spret_type _do_cast(spell_type spell, int powc,
         return cast_haunt(powc, beam.target, god, fail);
 
     // Enchantments.
-    case SPELL_CONFUSING_TOUCH:
-        return cast_confusing_touch(powc, fail);
-
     case SPELL_CAUSE_FEAR:
         return mass_enchantment(ENCH_FEAR, powc, fail);
 

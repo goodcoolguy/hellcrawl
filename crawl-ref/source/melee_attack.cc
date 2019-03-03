@@ -364,6 +364,14 @@ bool melee_attack::handle_phase_hit()
 		}
     }
 	
+    if (attacker->is_player() && you.attribute[ATTR_CONFUSING_TOUCH])
+    {
+        //for now I'm plugging in to the old mr code here with arbitrary values. Adjust as needed.
+        int pow = 5 + you.stat(STAT_THAUMATURGY, true) * 5;
+        if(defender->check_res_magic(pow) < 0)
+            defender->confuse(attacker, 1 + random2(pow));
+    }
+	
     if (attacker->is_player() && you.attribute[ATTR_INFESTATION])
     {
         if(!defender->is_summoned() && !(defender->as_monster()->flags & MF_HARD_RESET))
@@ -1431,9 +1439,6 @@ int melee_attack::player_apply_final_multipliers(int damage)
 
     if (you.duration[DUR_WEAK])
         damage = div_rand_round(damage * 3, 4);
-
-    if (you.duration[DUR_CONFUSING_TOUCH] && wpn_skill == SK_UNARMED_COMBAT)
-        return 0;
 
     return damage;
 }

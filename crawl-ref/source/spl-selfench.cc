@@ -493,6 +493,10 @@ int calculate_frozen_mp()
     {
 		frozen_mp += spell_mp_freeze(SPELL_PIERCING_SHOT);
 	}
+    if (you.attribute[ATTR_CONFUSING_TOUCH] > 0)
+    {
+		frozen_mp += spell_mp_freeze(SPELL_CONFUSING_TOUCH);
+	}
     // Forms. Only check for cancelable forms here; uncancellable goodforms shouldn't reserve mp.
     if (you.form && !you.transform_uncancellable)
     {
@@ -611,6 +615,11 @@ void dispel_permanent_buffs(bool evil_only)
     if(you.attribute[ATTR_INFESTATION])
     {
         you.attribute[ATTR_INFESTATION] = 0;
+        dispelled = true;
+    }
+    if(you.attribute[ATTR_CONFUSING_TOUCH])
+    {
+        you.attribute[ATTR_CONFUSING_TOUCH] = 0;
         dispelled = true;
     }
     if(you.attribute[ATTR_PORTAL_PROJECTILE] && !evil_only)

@@ -1413,6 +1413,7 @@ static void _debug_rap_stats(FILE *ostat)
         "ARTP_DDOOR",
         "ARTP_SPECTRAL",
         "ARTP_FORCEBLAST",
+        "ARTP_CONFUSING_TOUCH",
     };
     COMPILE_CHECK(ARRAYSZ(rap_names) == ARTP_NUM_PROPERTIES);
 
