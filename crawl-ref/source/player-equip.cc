@@ -288,13 +288,6 @@ static void _unequip_artefact_effect(item_def &item,
         land_player();
     }
 
-    if (proprt[ARTP_INVISIBLE] != 0
-        && you.duration[DUR_INVIS] > 1
-        && !you.attribute[ATTR_INVIS_UNCANCELLABLE])
-    {
-        you.duration[DUR_INVIS] = 1;
-    }
-
     if (proprt[ARTP_MAGICAL_POWER])
         calc_mp();
 

@@ -222,7 +222,6 @@ static vector<string> _randart_propnames(const item_def& item,
         // Evokable abilities come second
         { ARTP_BLINK,                 PROPN_PLAIN },
         { ARTP_BERSERK,               PROPN_PLAIN },
-        { ARTP_INVISIBLE,             PROPN_PLAIN },
         { ARTP_FLY,                   PROPN_PLAIN },
         { ARTP_FOG,                   PROPN_PLAIN },
         { ARTP_SPIRE,                 PROPN_PLAIN },
@@ -233,14 +232,9 @@ static vector<string> _randart_propnames(const item_def& item,
         { ARTP_CONFUSING_TOUCH,       PROPN_PLAIN },
 
         // Resists, also really important
-        { ARTP_ELECTRICITY,           PROPN_PLAIN },
-        { ARTP_FIRE,                  PROPN_SYMBOLIC },
-        { ARTP_COLD,                  PROPN_SYMBOLIC },
-        { ARTP_NEGATIVE_ENERGY,       PROPN_SYMBOLIC },
         { ARTP_MAGIC_RESISTANCE,      PROPN_SYMBOLIC },
         { ARTP_REGENERATION,          PROPN_SYMBOLIC },
         { ARTP_RMUT,                  PROPN_PLAIN },
-        { ARTP_RCORR,                 PROPN_PLAIN },
 
         // Quantitative attributes
         { ARTP_HP,                    PROPN_NUMERAL },
@@ -416,10 +410,6 @@ static string _randart_descrip(const item_def &item)
         { ARTP_EVASION, "It affects your evasion (%d).", false},
         { ARTP_SLAYING, "It affects your accuracy and damage with ranged "
                         "weapons and melee attacks (%d).", false},
-        { ARTP_FIRE, "fire", true},
-        { ARTP_COLD, "cold", true},
-        { ARTP_ELECTRICITY, "It insulates you from electricity.", false},
-        { ARTP_NEGATIVE_ENERGY, "negative energy", true},
         { ARTP_MAGIC_RESISTANCE, "It affects your resistance to hostile "
                                  "enchantments.", false},
         { ARTP_HP, "It affects your health (%d).", false},
@@ -440,7 +430,6 @@ static string _randart_descrip(const item_def &item)
         { ARTP_RMSL, "It protects you from missiles.", false},
         { ARTP_FOG, "It can be evoked to emit clouds of fog.", false},
         { ARTP_REGENERATION, "It increases your rate of regeneration.", false},
-        { ARTP_RCORR, "It protects you from acid and corrosion.", false},
         { ARTP_RMUT, "It protects you from mutation.", false},
         { ARTP_CORRODE, "It may corrode you when you take damage.", false},
         { ARTP_DRAIN, "It causes draining when unequipped.", false},

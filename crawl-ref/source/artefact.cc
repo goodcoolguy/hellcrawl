@@ -515,26 +515,13 @@ static const artefact_prop_data artp_data[] =
     { "Brand", ARTP_VAL_POS, 0, nullptr, nullptr, 0, 0, false }, // ARTP_BRAND,
     { "AC", ARTP_VAL_ANY, 0, nullptr, nullptr, 0, 0, false}, // ARTP_AC,
     { "EV", ARTP_VAL_ANY, 0, nullptr, nullptr, 0, 0, false }, // ARTP_EVASION,
-    { "rF", ARTP_VAL_ANY, 60,       // ARTP_FIRE,
-        _gen_good_res_artp, _gen_bad_res_artp, 2, 4, false},
-    { "rC", ARTP_VAL_ANY, 60,       // ARTP_COLD,
-        _gen_good_res_artp, _gen_bad_res_artp, 2, 4, false },
-    { "rElec", ARTP_VAL_BOOL, 55,   // ARTP_ELECTRICITY,
-        []() { return 1; }, nullptr, 0, 0, false  },
-    { "rN", ARTP_VAL_ANY, 55,       // ARTP_NEGATIVE_ENERGY,
-        _gen_good_res_artp, nullptr, 2, 4, false },
     { "MR", ARTP_VAL_ANY, 50,       // ARTP_MAGIC_RESISTANCE,
         _gen_good_res_artp, _gen_bad_res_artp, 2, 4, false },
     { "SInv", ARTP_VAL_BOOL, 0,    // ARTP_SEE_INVISIBLE,
         []() { return 1; }, nullptr, 0, 0, false },
-#if TAG_MAJOR_VERSION == 34
-    { "+Inv", ARTP_VAL_BOOL, 0, nullptr, nullptr, 0, 0, false }, //ARTP_INVISIBLE,
-#endif
     { "+Fly", ARTP_VAL_BOOL, 15,    // ARTP_FLY,
-        []() { return 1; }, nullptr, 0, 0, false },
-#if TAG_MAJOR_VERSION > 34
+        []() { return 1; }, nullptr, 0, 0, true },
     { "+Fog", ARTP_VAL_BOOL, 0, nullptr, nullptr, 0, 0, true }, // ARTP_FOG,
-#endif
     { "+Blink", ARTP_VAL_BOOL, 15,  // ARTP_BLINK,
         []() { return 1; }, nullptr, 0, 0, true },
     { "+Rage", ARTP_VAL_BOOL, 15,   // ARTP_BERSERK,
@@ -549,14 +536,8 @@ static const artefact_prop_data artp_data[] =
         nullptr, []() { return 1; }, 0, 0, false },
     { "*Rage", ARTP_VAL_POS, 25,    // ARTP_ANGRY,
         nullptr, []() { return 5; }, 0, 0, false },
-#if TAG_MAJOR_VERSION == 34
-    { "Hungry", ARTP_VAL_POS, 0, nullptr, nullptr, 0, 0, false },// ARTP_METABOLISM,
-#endif
     { "*Contam", ARTP_VAL_POS, 20,   // ARTP_CONTAM
         nullptr, []() { return 1; }, 0, 0, false },
-#if TAG_MAJOR_VERSION == 34
-    { "Acc", ARTP_VAL_ANY, 0, nullptr, nullptr, 0, 0, false }, // ARTP_ACCURACY,
-#endif
     { "Slay", ARTP_VAL_ANY, 30,     // ARTP_SLAYING,
       []() { return 2 + random2(2); },
       []() { return -(2 + random2(3) + random2(3)); }, 3, 2, false },
@@ -572,22 +553,10 @@ static const artefact_prop_data artp_data[] =
     { "BAcc", ARTP_VAL_ANY, 0, nullptr, nullptr, 0, 0, false },  // ARTP_BASE_ACC,
     { "BDam", ARTP_VAL_ANY, 0, nullptr, nullptr, 0, 0, false },  // ARTP_BASE_DAM,
     { "RMsl", ARTP_VAL_BOOL, 0, nullptr, nullptr, 0, 0, false }, // ARTP_RMSL,
-#if TAG_MAJOR_VERSION == 34
-    { "+Fog", ARTP_VAL_BOOL, 0, nullptr, nullptr, 0, 0, true }, // ARTP_FOG,
-#endif
     { "Regen", ARTP_VAL_BOOL, 35,   // ARTP_REGENERATION,
         []() { return 1; }, nullptr, 0, 0, false },
-#if TAG_MAJOR_VERSION == 34
-    { "SustAt", ARTP_VAL_BOOL, 0, nullptr, nullptr, 0, 0, false }, // ARTP_SUSTAT,
-#endif
     { "nupgr", ARTP_VAL_BOOL, 0, nullptr, nullptr, 0, 0, false },// ARTP_NO_UPGRADE,
-    { "rCorr", ARTP_VAL_BOOL, 40,   // ARTP_RCORR,
-        []() { return 1; }, nullptr, 0, 0, false },
     { "rMut", ARTP_VAL_BOOL, 0, nullptr, nullptr, 0, 0, false }, // ARTP_RMUT,
-#if TAG_MAJOR_VERSION == 34
-    { "+Twstr", ARTP_VAL_BOOL, 0,   // ARTP_TWISTER,
-        []() { return 1; }, nullptr, 0, 0, true },
-#endif
     { "*Corrode", ARTP_VAL_BOOL, 25, // ARTP_CORRODE,
         nullptr, []() { return 1; }, 0, 0, false },
     { "*Drain", ARTP_VAL_BOOL, 25, // ARTP_DRAIN,
@@ -657,10 +626,6 @@ static bool _artp_can_go_on_item(artefact_prop_type prop, const item_def &item,
             return item_class != OBJ_WEAPONS; // they already have slaying!
         case ARTP_SEE_INVISIBLE:
             return false;
-        case ARTP_CORRODE:
-            return !extant_props[ARTP_RCORR];
-        case ARTP_RCORR:
-            return item_class == OBJ_ARMOUR && !extant_props[ARTP_CORRODE];
         case ARTP_REGENERATION:
         case ARTP_PREVENT_SPELLCASTING:
             return item_class == OBJ_ARMOUR; // limit availability to armour

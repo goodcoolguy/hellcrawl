@@ -2174,9 +2174,9 @@ bool gives_resistance(const item_def &item)
         return false;
 
     // Check for randart resistances.
-    for (int rap = ARTP_FIRE; rap <= ARTP_BERSERK; rap++)
+    for (int rap = ARTP_MAGIC_RESISTANCE; rap <= ARTP_BERSERK; rap++)
     {
-        if (rap == ARTP_MAGIC_RESISTANCE || rap >= ARTP_INVISIBLE)
+        if (rap == ARTP_MAGIC_RESISTANCE || rap >= ARTP_FLY)
             continue;
 
         if (artefact_property(item, static_cast<artefact_prop_type>(rap)))

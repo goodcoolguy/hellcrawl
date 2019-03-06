@@ -83,38 +83,16 @@ int artefact_value(const item_def &item)
             + 4 * prop[ ARTP_SHIELDING ]
             + 6 * prop[ ARTP_SLAYING ];
 
-    // These resistances have meaningful levels
-    if (prop[ ARTP_FIRE ] > 0)
-        ret += 5 + 5 * (prop[ ARTP_FIRE ] * prop[ ARTP_FIRE ]);
-    else if (prop[ ARTP_FIRE ] < 0)
-        ret -= 10;
-
-    if (prop[ ARTP_COLD ] > 0)
-        ret += 5 + 5 * (prop[ ARTP_COLD ] * prop[ ARTP_COLD ]);
-    else if (prop[ ARTP_COLD ] < 0)
-        ret -= 10;
-
     if (prop[ ARTP_MAGIC_RESISTANCE ] > 0)
         ret += 4 + 4 * prop[ ARTP_MAGIC_RESISTANCE ];
     else if (prop[ ARTP_MAGIC_RESISTANCE ] < 0)
         ret -= 6;
-
-    if (prop[ ARTP_NEGATIVE_ENERGY ] > 0)
-        ret += 3 + 3 * (prop[ARTP_NEGATIVE_ENERGY] * prop[ARTP_NEGATIVE_ENERGY]);
 
     // Discount Stlth-, charge for Stlth+
     ret += 2 * prop[ARTP_STEALTH];
     // Stlth+ costs more than Stlth- cheapens
     if (prop[ARTP_STEALTH] > 0)
         ret += 2 * prop[ARTP_STEALTH];
-
-    // only one meaningful level (hard to get):
-    if (prop[ ARTP_ELECTRICITY ])
-        ret += 10;
-
-    // only one meaningful level (hard to get):
-    if (prop[ ARTP_RCORR ])
-        ret += 8;
 
     // only one meaningful level (hard to get):
     if (prop[ ARTP_RMUT ])

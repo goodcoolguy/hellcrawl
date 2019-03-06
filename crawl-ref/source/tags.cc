@@ -4285,39 +4285,6 @@ void unmarshallItem(reader &th, item_def &item)
             else
                 artefact_set_property(item, ARTP_STEALTH, 1);
         }
-
-        // Remove fast metabolism property
-        if (artefact_property(item, ARTP_METABOLISM))
-        {
-            artefact_set_property(item, ARTP_METABOLISM, 0);
-            artefact_set_property(item, ARTP_STEALTH, -1);
-        }
-    }
-
-    // Combine old rings of slaying (Acc/Dam) to new (Dam).
-    // Also handle the changes to the respective ARTP_.
-    if (th.getMinorVersion() < TAG_MINOR_SLAYRING_PLUSES)
-    {
-        int acc, dam, slay = 0;
-
-        if (item.props.exists(ARTEFACT_PROPS_KEY))
-        {
-            acc = artefact_property(item, ARTP_ACCURACY);
-            dam = artefact_property(item, ARTP_SLAYING);
-            slay = dam < 0 ? dam : max(acc, dam);
-
-            artefact_set_property(item, ARTP_SLAYING, slay);
-        }
-
-        if (item.is_type(OBJ_JEWELLERY, RING_SLAYING))
-        {
-            acc = item.plus;
-            dam = item.plus2;
-            slay = dam < 0 ? dam : max(acc, dam);
-
-            item.plus = slay;
-            item.plus2 = 0; // probably harmless but might as well
-        }
     }
 
     if (th.getMinorVersion() < TAG_MINOR_WEAPON_PLUSES)
@@ -4400,28 +4367,12 @@ void unmarshallItem(reader &th, item_def &item)
         item.quantity = 1;
     }
 
-    if (th.getMinorVersion() < TAG_MINOR_NO_NEGATIVE_VULN
-        && is_artefact(item)
-        && artefact_property(item, ARTP_NEGATIVE_ENERGY))
-    {
-        if (artefact_property(item, ARTP_NEGATIVE_ENERGY) < 0)
-            artefact_set_property(item, ARTP_NEGATIVE_ENERGY, 0);
-    }
-
     if (th.getMinorVersion() < TAG_MINOR_TELEPORTITIS
         && is_artefact(item)
         && artefact_property(item, ARTP_CAUSE_TELEPORTATION) > 1)
     {
         artefact_set_property(item, ARTP_CAUSE_TELEPORTATION, 1);
     }
-
-    if (th.getMinorVersion() < TAG_MINOR_NO_TWISTER
-        && is_artefact(item)
-        && artefact_property(item, ARTP_TWISTER))
-    {
-        artefact_set_property(item, ARTP_TWISTER, 0);
-    }
-
 
     // Monsters could zap wands below zero from 0.17-a0-739-g965e8eb
     // to 0.17-a0-912-g3e33c8f.
