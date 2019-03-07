@@ -44,7 +44,7 @@
 {'f', CMD_FIRE},
 {'g', CMD_PICKUP},
 {'i', CMD_DISPLAY_INVENTORY},
-{'m', CMD_DISPLAY_SKILLS},
+{'m', CMD_MEMORISE_SPELL},
 {'o', CMD_EXPLORE},
 {'p', CMD_PRAY},
 {'q', CMD_QUAFF},
