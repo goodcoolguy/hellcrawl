@@ -1141,30 +1141,7 @@ bool takeoff_armour(int item)
 static vector<equipment_type> _current_ring_types()
 {
     vector<equipment_type> ret;
-    if (you.species == SP_OCTOPODE)
-    {
-        for (int i = 0; i < 8; ++i)
-        {
-            const equipment_type slot = (equipment_type)(EQ_RING_ONE + i);
-
-            if (you.get_mutation_level(MUT_MISSING_HAND)
-                && slot == EQ_RING_EIGHT)
-            {
-                continue;
-            }
-
-            if (get_form()->slot_available(slot))
-                ret.push_back(slot);
-        }
-    }
-    else
-    {
-        if (you.get_mutation_level(MUT_MISSING_HAND) == 0)
-            ret.push_back(EQ_LEFT_RING);
-        ret.push_back(EQ_RIGHT_RING);
-    }
-    if (player_equip_unrand(UNRAND_FINGER_AMULET))
-        ret.push_back(EQ_RING_AMULET);
+     ret.push_back(EQ_GLOVES);
     return ret;
 }
 
@@ -1177,22 +1154,7 @@ static vector<equipment_type> _current_jewellery_types()
 
 static const char _ring_slot_key(equipment_type slot)
 {
-    switch (slot)
-    {
-    case EQ_LEFT_RING:      return '<';
-    case EQ_RIGHT_RING:     return '>';
-    case EQ_RING_AMULET:    return '^';
-    case EQ_RING_ONE:       return '1';
-    case EQ_RING_TWO:       return '2';
-    case EQ_RING_THREE:     return '3';
-    case EQ_RING_FOUR:      return '4';
-    case EQ_RING_FIVE:      return '5';
-    case EQ_RING_SIX:       return '6';
-    case EQ_RING_SEVEN:     return '7';
-    case EQ_RING_EIGHT:     return '8';
-    default:
-        die("Invalid ring slot");
-    }
+    die("Invalid ring slot");
 }
 
 static int _prompt_ring_to_remove(int new_ring)
@@ -1425,13 +1387,6 @@ static equipment_type _choose_ring_slot()
             msg += "</w> or " + ring->name(DESC_INVENTORY);
         else
             msg += "</w> - no ring";
-
-        if (eq == EQ_LEFT_RING)
-            msg += " (left)";
-        else if (eq == EQ_RIGHT_RING)
-            msg += " (right)";
-        else if (eq == EQ_RING_AMULET)
-            msg += " (amulet)";
         mprf_nocap("%s", msg.c_str());
     }
     flush_prev_message();
@@ -1484,7 +1439,7 @@ static bool _can_puton_jewellery(int item_slot)
     const bool is_amulet = jewellery_is_amulet(item);
 
     if (is_amulet && !you_can_wear(EQ_AMULET, true)
-        || !is_amulet && !you_can_wear(EQ_RINGS, true))
+        || !is_amulet && !you_can_wear(EQ_GLOVES, true))
     {
         mpr("You can't wear that in your present form.");
         return false;
@@ -1759,15 +1714,6 @@ bool remove_ring(int slot, bool announce)
     else if (you.melded[hand_used])
     {
         mpr("You can't take that off while it's melded.");
-        return false;
-    }
-    else if (hand_used == EQ_AMULET
-        && you.equip[EQ_RING_AMULET] != -1)
-    {
-        // This can be removed in the future if more ring amulets are added.
-        ASSERT(player_equip_unrand(UNRAND_FINGER_AMULET));
-
-        mpr("The amulet cannot be taken off without first removing the ring!");
         return false;
     }
 

@@ -1731,49 +1731,7 @@ static int _get_monster_jewellery_value(const monster *mon,
 
 bool monster::pickup_jewellery(item_def &item, bool msg, bool force)
 {
-    ASSERT(item.base_type == OBJ_JEWELLERY);
-
-    if (!force && !wants_jewellery(item))
-        return false;
-
-    equipment_type eq = EQ_RINGS;
-
-    const mon_inv_type mslot = equip_slot_to_mslot(eq);
-    if (mslot == NUM_MONSTER_SLOTS)
-        return false;
-
-    int value_new = _get_monster_jewellery_value(this, item);
-
-    // No armour yet -> get this one.
-    if (!mslot_item(mslot) && value_new > 0)
-        return pickup(item, mslot, msg);
-
-    // Simplistic jewellery evaluation (comparing AC and resistances).
-    if (const item_def *existing_jewellery = slot_item(eq, false))
-    {
-        if (!force)
-        {
-            int value_old = _get_monster_jewellery_value(this,
-                                                         *existing_jewellery);
-            if (value_old > value_new)
-                return false;
-
-            if (value_old == value_new)
-            {
-                // If items are of the same value, use shopping
-                // value as a further crude estimate.
-                value_old = item_value(*existing_jewellery, true);
-                value_new = item_value(item, true);
-                if (value_old >= value_new)
-                    return false;
-            }
-        }
-
-        if (!drop_item(mslot, msg))
-            return false;
-    }
-
-    return pickup(item, mslot, msg);
+    return false;
 }
 
 bool monster::pickup_weapon(item_def &item, bool msg, bool force)

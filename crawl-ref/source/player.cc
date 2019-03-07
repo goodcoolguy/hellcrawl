@@ -745,36 +745,11 @@ maybe_bool you_can_wear(equipment_type eq, bool temp)
 
     switch (eq)
     {
-    case EQ_LEFT_RING:
-        if (you.get_mutation_level(MUT_MISSING_HAND))
-            return MB_FALSE;
-        // intentional fallthrough
-    case EQ_RIGHT_RING:
-        return you.species != SP_OCTOPODE ? MB_TRUE : MB_FALSE;
-
-    case EQ_RING_EIGHT:
-        if (you.get_mutation_level(MUT_MISSING_HAND))
-            return MB_FALSE;
-        // intentional fallthrough
-    case EQ_RING_ONE:
-    case EQ_RING_TWO:
-    case EQ_RING_THREE:
-    case EQ_RING_FOUR:
-    case EQ_RING_FIVE:
-    case EQ_RING_SIX:
-    case EQ_RING_SEVEN:
-        return you.species == SP_OCTOPODE ? MB_TRUE : MB_FALSE;
-
     case EQ_WEAPON:
 
-    // You can always wear at least one ring (forms were already handled).
-    case EQ_RINGS:
     case EQ_ALL_ARMOUR:
     case EQ_AMULET:
         return MB_TRUE;
-
-    case EQ_RING_AMULET:
-        return player_equip_unrand(UNRAND_FINGER_AMULET) ? MB_TRUE : MB_FALSE;
 
     default:
         break;
@@ -923,23 +898,6 @@ int player::wearing(equipment_type slot, int sub_type, bool calc_unid) const
         }
         break;
 
-    case EQ_RINGS:
-    case EQ_RINGS_PLUS:
-        for (int slots = EQ_FIRST_JEWELLERY; slots <= EQ_LAST_JEWELLERY; slots++)
-        {
-            if (slots == EQ_AMULET)
-                continue;
-
-            if ((item = slot_item(static_cast<equipment_type>(slots)))
-                && item->sub_type == sub_type
-                && (calc_unid
-                    || item_type_known(*item)))
-            {
-                ret += (slot == EQ_RINGS_PLUS ? item->plus : 1);
-            }
-        }
-        break;
-
     case EQ_ALL_ARMOUR:
         // Doesn't make much sense here... be specific. -- bwr
         die("EQ_ALL_ARMOUR is not a proper slot");
@@ -981,12 +939,8 @@ int player::wearing_ego(equipment_type slot, int special, bool calc_unid) const
         }
         break;
 
-    case EQ_LEFT_RING:
-    case EQ_RIGHT_RING:
     case EQ_AMULET:
     case EQ_STAFF:
-    case EQ_RINGS:
-    case EQ_RINGS_PLUS:
         // no ego types for these slots
         break;
 
@@ -1043,26 +997,8 @@ bool player_equip_unrand(int unrand_index)
         }
         break;
 
-    case EQ_RINGS:
-        for (int slots = EQ_FIRST_JEWELLERY; slots <= EQ_LAST_JEWELLERY; ++slots)
-        {
-            if (slots == EQ_AMULET)
-                continue;
-
-            if ((item = you.slot_item(static_cast<equipment_type>(slots)))
-                && is_unrandom_artefact(*item)
-                && item->unrand_idx == unrand_index)
-            {
-                return true;
-            }
-        }
-        break;
-
     case EQ_NONE:
     case EQ_STAFF:
-    case EQ_LEFT_RING:
-    case EQ_RIGHT_RING:
-    case EQ_RINGS_PLUS:
     case EQ_ALL_ARMOUR:
         // no unrandarts for these slots.
         break;
@@ -1673,10 +1609,7 @@ static int _player_evasion_bonuses()
 {
     int evbonus = 0;
 
-    //if (you.duration[DUR_AGILITY])
-    //    evbonus += AGILITY_BONUS;
-
-    evbonus += you.wearing(EQ_RINGS_PLUS, RING_EVASION);
+    evbonus += you.wearing(EQ_GLOVES, RING_EVASION) * 5;
 
     evbonus += you.scan_artefacts(ARTP_EVASION);
 
@@ -1827,7 +1760,7 @@ int player_armour_shield_spell_penalty()
  */
 int player_wizardry(spell_type spell)
 {
-    return you.wearing(EQ_RINGS, RING_WIZARDRY)
+    return you.wearing(EQ_GLOVES, RING_WIZARDRY)
            + you.wearing(EQ_SHIELD, STAFF_WIZARDRY);
 }
 
@@ -3035,7 +2968,7 @@ int slaying_bonus(bool ranged)
 {
     int ret = 0;
 
-    ret += you.wearing(EQ_RINGS_PLUS, RING_SLAYING);
+    ret += you.wearing(EQ_GLOVES, RING_SLAYING) * 5;
     ret += you.scan_artefacts(ARTP_SLAYING);
     if (you.wearing_ego(EQ_GLOVES, SPARM_ARCHERY) && ranged)
         ret += 4;
@@ -5166,7 +5099,7 @@ int player::armour_class(bool /*calc_unid*/) const
         AC += item.plus * 100;
     }
 
-    AC += wearing(EQ_RINGS_PLUS, RING_PROTECTION) * 100;
+    AC += wearing(EQ_GLOVES, RING_PROTECTION) * 500;
 
     if (wearing_ego(EQ_SHIELD, SPARM_PROTECTION))
         AC += 300;
@@ -5457,7 +5390,7 @@ int player_res_magic(bool calc_unid, bool temp)
                                    calc_unid);
 
     // rings of magic resistance
-    rm += MR_PIP * you.wearing(EQ_RINGS, RING_PROTECTION_FROM_MAGIC, calc_unid);
+    rm += MR_PIP * you.wearing(EQ_GLOVES, RING_PROTECTION_FROM_MAGIC, calc_unid);
 
     // Mutations
     rm += MR_PIP * you.get_mutation_level(MUT_MAGIC_RESISTANCE);

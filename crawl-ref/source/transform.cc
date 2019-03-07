@@ -55,16 +55,10 @@ static const int EQF_LEAR = EQF_STATUE | SLOTF(EQ_HELMET);
 static const int EQF_WEAR = EQF_LEAR | SLOTF(EQ_CLOAK) | SLOTF(EQ_SHIELD);
 // everything but jewellery
 static const int EQF_PHYSICAL = EQF_HANDS | EQF_WEAR;
-// all rings (except for the macabre finger amulet's)
-static const int EQF_RINGS = SLOTF(EQ_LEFT_RING) | SLOTF(EQ_RIGHT_RING)
-                             | SLOTF(EQ_RING_ONE) | SLOTF(EQ_RING_TWO)
-                             | SLOTF(EQ_RING_THREE) | SLOTF(EQ_RING_FOUR)
-                             | SLOTF(EQ_RING_FIVE) | SLOTF(EQ_RING_SIX)
-                             | SLOTF(EQ_RING_SEVEN) | SLOTF(EQ_RING_EIGHT);
 // amulet & pal
-static const int EQF_AMULETS = SLOTF(EQ_AMULET) | SLOTF(EQ_RING_AMULET);
+static const int EQF_AMULETS = SLOTF(EQ_AMULET);
 // everything
-static const int EQF_ALL = EQF_PHYSICAL | EQF_RINGS | EQF_AMULETS;
+static const int EQF_ALL = EQF_PHYSICAL | EQF_AMULETS;
 
 static const FormAttackVerbs DEFAULT_VERBS = FormAttackVerbs(nullptr, nullptr,
                                                              nullptr, nullptr);
@@ -126,8 +120,6 @@ bool Form::slot_available(int slot) const
 {
     if (slot == EQ_ALL_ARMOUR)
         return !all_blocked(EQF_WEAR);
-    if (slot == EQ_RINGS || slot == EQ_RINGS_PLUS)
-        return !all_blocked(EQF_RINGS);
 
     if (slot == EQ_STAFF)
         slot = EQ_SHIELD;
@@ -149,7 +141,7 @@ bool Form::can_wear_item(const item_def& item) const
     {
         if (jewellery_is_amulet(item))
             return slot_available(EQ_AMULET);
-        return !all_blocked(EQF_RINGS);
+        return !(blocked_slots & SLOTF(EQ_GLOVES));
     }
 
     if (is_unrandom_artefact(item, UNRAND_LEAR))
@@ -1078,9 +1070,7 @@ _init_equipment_removal(transformation_type form)
         const equipment_type eq = static_cast<equipment_type>(i);
         const item_def *pitem = you.slot_item(eq, true);
 
-        if (pitem && (get_form(form)->blocked_slots & SLOTF(i)
-                      || (i != EQ_RING_AMULET
-                          && !get_form(form)->can_wear_item(*pitem))))
+        if (pitem && (get_form(form)->blocked_slots & SLOTF(i)))
         {
             result.insert(eq);
         }

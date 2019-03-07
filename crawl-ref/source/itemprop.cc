@@ -1157,10 +1157,13 @@ int armour_acq_weight(const armour_type armour)
 
 equipment_type get_armour_slot(const item_def &item)
 {
-    ASSERT(item.base_type == OBJ_ARMOUR || item.base_type == OBJ_STAVES);
+    ASSERT(item.base_type == OBJ_ARMOUR || item.base_type == OBJ_STAVES || item.base_type == OBJ_JEWELLERY);
 	
     if(item.base_type == OBJ_STAVES)
         return EQ_SHIELD;
+    
+    if(item.base_type == OBJ_JEWELLERY)
+        return EQ_GLOVES;
 
     return Armour_prop[ Armour_index[item.sub_type] ].slot;
 }
@@ -2231,7 +2234,7 @@ equipment_type get_item_slot(object_class_type type, int sub_type)
         return EQ_SHIELD;
 
     case OBJ_JEWELLERY:
-        return jewellery_is_amulet(sub_type) ? EQ_AMULET : EQ_RINGS;
+        return jewellery_is_amulet(sub_type) ? EQ_AMULET : EQ_GLOVES;
 
     default:
         break;

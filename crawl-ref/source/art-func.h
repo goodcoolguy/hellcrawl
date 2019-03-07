@@ -1148,19 +1148,7 @@ static void _MAJIN_unequip(item_def *item, bool *show_msgs)
 
 static int _octorings_worn()
 {
-    int worn = 0;
-
-    for (int i = EQ_LEFT_RING; i < NUM_EQUIP; ++i)
-    {
-        if (you.melded[i] || you.equip[i] == -1)
-            continue;
-
-        item_def& ring = you.inv[you.equip[i]];
-        if (is_unrandom_artefact(ring, UNRAND_OCTOPUS_KING_RING))
-            worn++;
-    }
-
-    return worn;
+    return 0;
 }
 
 static void _OCTOPUS_KING_equip(item_def *item, bool *show_msgs, bool unmeld)

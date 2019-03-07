@@ -270,33 +270,11 @@ string item_def::name(description_level_type descrip, bool terse, bool ident,
                 case EQ_BODY_ARMOUR:
                     buff << " (worn)";
                     break;
-                case EQ_LEFT_RING:
-                case EQ_RIGHT_RING:
-                case EQ_RING_ONE:
-                case EQ_RING_TWO:
-                    buff << " (";
-                    buff << ((eq == EQ_LEFT_RING || eq == EQ_RING_ONE)
-                             ? "left" : "right");
-                    buff << " ";
-                    buff << you.hand_name(false);
-                    buff << ")";
-                    break;
                 case EQ_AMULET:
                     if (you.species == SP_OCTOPODE && form_keeps_mutations())
                         buff << " (around mantle)";
                     else
                         buff << " (around neck)";
-                    break;
-                case EQ_RING_THREE:
-                case EQ_RING_FOUR:
-                case EQ_RING_FIVE:
-                case EQ_RING_SIX:
-                case EQ_RING_SEVEN:
-                case EQ_RING_EIGHT:
-                    buff << " (on tentacle)";
-                    break;
-                case EQ_RING_AMULET:
-                    buff << " (on amulet)";
                     break;
                 default:
                     die("Item in an invalid slot");

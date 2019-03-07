@@ -131,16 +131,6 @@ static void _assert_valid_slot(equipment_type eq, equipment_type slot)
 #ifdef ASSERTS
     if (eq == slot)
         return;
-    ASSERT(eq == EQ_RINGS); // all other slots are unique
-    equipment_type r1 = EQ_LEFT_RING, r2 = EQ_RIGHT_RING;
-    if (you.species == SP_OCTOPODE)
-        r1 = EQ_RING_ONE, r2 = EQ_RING_EIGHT;
-    if (slot >= r1 && slot <= r2)
-        return;
-    if (const item_def* amu = you.slot_item(EQ_AMULET, true))
-        if (is_unrandom_artefact(*amu, UNRAND_FINGER_AMULET) && slot == EQ_RING_AMULET)
-            return;
-    die("ring on invalid slot %d", slot);
 #endif
 }
 

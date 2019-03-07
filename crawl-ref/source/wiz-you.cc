@@ -187,15 +187,6 @@ void wizard_change_species_to(species_type sp)
 	
     update_vision_range(); // for DS with Nightstalker
 
-    if ((old_sp == SP_OCTOPODE) != (sp == SP_OCTOPODE))
-    {
-        _swap_equip(EQ_LEFT_RING, EQ_RING_ONE);
-        _swap_equip(EQ_RIGHT_RING, EQ_RING_TWO);
-        // All species allow exactly one amulet. When (and knowing you guys,
-        // that's "when" not "if") ettins go in, you'll need handle the Macabre
-        // Finger Necklace on neck 2 here.
-    }
-
     // FIXME: this checks only for valid slots, not for suitability of the
     // item in question. This is enough to make assertions happy, though.
     for (int i = EQ_FIRST_EQUIP; i < NUM_EQUIP; ++i)

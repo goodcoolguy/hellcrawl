@@ -237,7 +237,7 @@ void list_jewellery()
     int cols = get_number_of_cols() - 1;
     bool split = you.species == SP_OCTOPODE && cols > 84;
 
-    for (int j = EQ_LEFT_RING; j < NUM_EQUIP; j++)
+    for (int j = EQ_AMULET; j < NUM_EQUIP; j++)
     {
         const equipment_type i = static_cast<equipment_type>(j);
         if (!you_can_wear(i))
@@ -247,19 +247,7 @@ void list_jewellery()
         int       colour       = MSGCOL_BLACK;
 
         const char *slot =
-                 (i == EQ_LEFT_RING)   ? "Left ring" :
-                 (i == EQ_RIGHT_RING)  ? "Right ring" :
-                 (i == EQ_AMULET)      ? "Amulet" :
-                 (i == EQ_RING_ONE)    ? "1st ring" :
-                 (i == EQ_RING_TWO)    ? "2nd ring" :
-                 (i == EQ_RING_THREE)  ? "3rd ring" :
-                 (i == EQ_RING_FOUR)   ? "4th ring" :
-                 (i == EQ_RING_FIVE)   ? "5th ring" :
-                 (i == EQ_RING_SIX)    ? "6th ring" :
-                 (i == EQ_RING_SEVEN)  ? "7th ring" :
-                 (i == EQ_RING_EIGHT)  ? "8th ring" :
-                 (i == EQ_RING_AMULET) ? "Amulet ring"
-                                       : "unknown";
+                 (i == EQ_AMULET)      ? "Amulet" : "unknown";
 
         string item;
         if (you_can_wear(i, true) == MB_FALSE)
@@ -281,13 +269,7 @@ void list_jewellery()
                                         slot, item.c_str()),
                            split && i > EQ_AMULET ? (cols - 1) / 2 : cols);
         item = colour_string(item, colour);
-
-        if (i == EQ_RING_SEVEN && you.species == SP_OCTOPODE &&
-                you.get_mutation_level(MUT_MISSING_HAND))
-        {
-            mprf(MSGCH_EQUIPMENT, "%s", item.c_str());
-        }
-        else if (split && i > EQ_AMULET && (i - EQ_AMULET) % 2)
+        if (split && i > EQ_AMULET && (i - EQ_AMULET) % 2)
             jstr = item + " ";
         else
             mprf(MSGCH_EQUIPMENT, "%s%s", jstr.c_str(), item.c_str());

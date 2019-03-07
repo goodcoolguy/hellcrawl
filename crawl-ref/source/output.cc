@@ -618,10 +618,7 @@ static void _print_stats_temperature(int x, int y)
 static const equipment_type e_order[] =
 {
     EQ_WEAPON, EQ_SHIELD, EQ_BODY_ARMOUR, EQ_HELMET, EQ_CLOAK,
-    EQ_GLOVES, EQ_BOOTS, EQ_AMULET, EQ_LEFT_RING, EQ_RIGHT_RING,
-    EQ_RING_ONE, EQ_RING_TWO, EQ_RING_THREE, EQ_RING_FOUR,
-    EQ_RING_FIVE, EQ_RING_SIX, EQ_RING_SEVEN, EQ_RING_EIGHT,
-    EQ_RING_AMULET,
+    EQ_GLOVES, EQ_BOOTS, EQ_AMULET,
 };
 
 static void _print_stats_equip(int x, int y)
@@ -1931,21 +1928,12 @@ static string _itosym(int level, int max = 1)
 static const char *s_equip_slot_names[] =
 {
     "Weapon", "Cloak",  "Helmet", "Gloves", "Boots",
-    "Shield", "Armour", "Left Ring", "Right Ring", "Amulet",
-    "First Ring", "Second Ring", "Third Ring", "Fourth Ring",
-    "Fifth Ring", "Sixth Ring", "Seventh Ring", "Eighth Ring",
-    "Amulet Ring"
+    "Shield", "Armour", "Amulet"
 };
 
 const char *equip_slot_to_name(int equip)
 {
     COMPILE_CHECK(ARRAYSZ(s_equip_slot_names) == NUM_EQUIP);
-
-    if (equip == EQ_RINGS
-        || equip >= EQ_FIRST_JEWELLERY && equip <= EQ_LAST_JEWELLERY && equip != EQ_AMULET)
-    {
-        return "Ring";
-    }
 
     if (equip == EQ_BOOTS
         && (you.species == SP_NAGA))
@@ -2041,15 +2029,6 @@ static void _print_overview_screen_equip(column_composer& cols,
         {
             continue;
         }
-
-        if (you.species != SP_OCTOPODE
-            && eqslot >= EQ_RING_ONE && eqslot <= EQ_RING_EIGHT)
-        {
-            continue;
-        }
-
-        if (eqslot == EQ_RING_AMULET && !you_can_wear(eqslot))
-            continue;
 
         const string slot_name_lwr = lowercase_string(equip_slot_to_name(eqslot));
 
@@ -2653,9 +2632,6 @@ string mutation_overview()
     {
         mutations.push_back(_annotate_form_based("amphibious",
                                                  !form_likes_water()));
-        mutations.push_back(_annotate_form_based(
-            make_stringf("%d rings", you.has_tentacles(false)),
-            !get_form()->slot_available(EQ_RING_EIGHT)));
         mutations.push_back(_annotate_form_based(
             make_stringf("constrict %d", you.has_tentacles(false)),
             !form_keeps_mutations()));
