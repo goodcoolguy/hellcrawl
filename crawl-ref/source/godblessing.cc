@@ -33,7 +33,6 @@ static int _upgrade_weapon_type(int old_type, bool has_shield, bool highlevel)
 {
     switch (old_type)
     {
-        case WPN_CLUB:
         case WPN_WHIP:
         case WPN_MACE:        return WPN_FLAIL;
         case WPN_FLAIL:       return WPN_MORNINGSTAR;

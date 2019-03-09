@@ -4085,26 +4085,6 @@ void unmarshallItem(reader &th, item_def &item)
     item.plus2       = unmarshallShort(th);
     item.special     = unmarshallInt(th);
     item.quantity    = unmarshallShort(th);
-#if TAG_MAJOR_VERSION == 34
-    // These used to come in stacks in monster inventory as throwing weapons.
-    // Replace said stacks (but not single items) with tomahawks.
-    if (item.quantity > 1 && item.base_type == OBJ_WEAPONS
-        && (item.sub_type == WPN_CLUB || item.sub_type == WPN_HAND_AXE
-            || item.sub_type == WPN_DAGGER || item.sub_type == WPN_SPEAR))
-    {
-        item.base_type = OBJ_MISSILES;
-        item.sub_type = MI_TOMAHAWK;
-        item.plus = item.plus2 = 0;
-        item.brand = SPMSL_NORMAL;
-    }
-
-    // Strip vestiges of distracting gold.
-    if (item.base_type == OBJ_GOLD)
-        item.special = 0;
-
-    if (th.getMinorVersion() < TAG_MINOR_REMOVE_ITEM_COLOUR)
-        /* item.colour = */ unmarshallUByte(th);
-#endif
 
     item.rnd          = unmarshallUByte(th);
 
@@ -4217,13 +4197,6 @@ void unmarshallItem(reader &th, item_def &item)
         item.plus = random_range(5, 15, 2);
     }
 
-    // was spiked flail
-    if (item.is_type(OBJ_WEAPONS, WPN_SPIKED_FLAIL)
-        && th.getMinorVersion() <= TAG_MINOR_FORGOTTEN_MAP)
-    {
-        item.sub_type = WPN_FLAIL;
-    }
-
     if (item.base_type == OBJ_WEAPONS
         && (item.brand == SPWPN_RETURNING
             || item.brand == SPWPN_REACHING
@@ -4318,24 +4291,6 @@ void unmarshallItem(reader &th, item_def &item)
     if (th.getMinorVersion() < TAG_MINOR_RING_PLUSSES)
         if (item.base_type == OBJ_JEWELLERY && item.plus > 6)
             item.plus = 6;
-
-    if (th.getMinorVersion() < TAG_MINOR_BLESSED_WPNS
-        && item.base_type == OBJ_WEAPONS)
-    {
-        const int initial_type = item.sub_type;
-        switch (item.sub_type)
-        {
-        case WPN_BLESSED_FALCHION:     item.sub_type = WPN_RAPIER; break;
-        case WPN_BLESSED_LONG_SWORD:   item.sub_type = WPN_LONG_SWORD; break;
-        case WPN_BLESSED_SCIMITAR:     item.sub_type = WPN_SCIMITAR; break;
-        case WPN_BLESSED_DOUBLE_SWORD: item.sub_type = WPN_DOUBLE_SWORD; break;
-        case WPN_BLESSED_GREAT_SWORD:  item.sub_type = WPN_GREAT_SWORD; break;
-        case WPN_BLESSED_TRIPLE_SWORD: item.sub_type = WPN_TRIPLE_SWORD; break;
-        default:                       break;
-        }
-        if (initial_type != item.sub_type)
-            set_item_ego_type(item, OBJ_WEAPONS, SPWPN_HOLY_WRATH);
-    }
 
     if (th.getMinorVersion() < TAG_MINOR_CONSUM_APPEARANCE)
     {

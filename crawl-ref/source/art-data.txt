@@ -269,7 +269,7 @@ BOOL:    evil, corpse_violating
 NAME:    sword of Cerebov
 APPEAR:  great serpentine sword
 TYPE:    flamberge
-OBJ:     OBJ_WEAPONS/WPN_GREAT_SWORD
+OBJ:     OBJ_WEAPONS/WPN_DOUBLE_SWORD
 BASE_DAM: +1
 BASE_ACC: +1
 PLUS:    +6
@@ -448,7 +448,7 @@ BOOL:    evil
 
 # TAG_MAJOR_VERSION == 34
 NAME:    sword of the Doom Knight
-OBJ:     OBJ_WEAPONS/WPN_GREAT_SWORD
+OBJ:     OBJ_WEAPONS/WPN_TRIPLE_SWORD
 PLUS:    +13
 COLOUR:  BLUE
 TILE:    urand_doom_knight
@@ -537,7 +537,7 @@ BOOL:    nogen
 ENUM:    BLOWGUN_ASSASSIN
 NAME:    blowgun of the Assassin
 INSCRIP: stab,
-OBJ:     OBJ_WEAPONS/WPN_BLOWGUN
+OBJ:     OBJ_WEAPONS/WPN_HAND_CROSSBOW
 PLUS:    +6
 COLOUR:  ETC_DEATH
 TILE:    urand_blowgun
@@ -985,7 +985,7 @@ BRAND:    SPWPN_VORPAL
 
 NAME:     shillelagh "Devastator"
 INSCRIP:  shatter
-OBJ:      OBJ_WEAPONS/WPN_CLUB
+OBJ:      OBJ_WEAPONS/WPN_MACE
 TYPE:     shillelagh
 TILE:     urand_shillelagh
 TILE_EQ:  shillelagh

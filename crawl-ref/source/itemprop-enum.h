@@ -426,28 +426,14 @@ enum stave_type
 
 enum weapon_type
 {
-#if TAG_MAJOR_VERSION == 34
-    WPN_CLUB,
-#endif
     WPN_WHIP,
-#if TAG_MAJOR_VERSION == 34
-    WPN_HAMMER,
-#endif
     WPN_MACE,
     WPN_FLAIL,
     WPN_MORNINGSTAR,
-#if TAG_MAJOR_VERSION == 34
-    WPN_SPIKED_FLAIL,
-    WPN_DIRE_FLAIL,
-    WPN_EVENINGSTAR,
-#endif
     WPN_GREAT_MACE,
 
     WPN_DAGGER,
     WPN_QUICK_BLADE,
-#if TAG_MAJOR_VERSION == 34
-    WPN_SHORT_SWORD,
-#endif
     WPN_RAPIER,
 #if TAG_MAJOR_VERSION > 34
     WPN_CUTLASS,
@@ -456,9 +442,6 @@ enum weapon_type
     WPN_FALCHION,
     WPN_LONG_SWORD,
     WPN_SCIMITAR,
-#if TAG_MAJOR_VERSION == 34
-    WPN_GREAT_SWORD,
-#endif
 
     WPN_HAND_AXE,
     WPN_WAR_AXE,
@@ -471,10 +454,6 @@ enum weapon_type
     WPN_HALBERD,
     WPN_GLAIVE,
     WPN_BARDICHE,
-
-#if TAG_MAJOR_VERSION == 34
-    WPN_BLOWGUN,
-#endif
 
 #if TAG_MAJOR_VERSION > 34
     WPN_HAND_CROSSBOW,
@@ -494,9 +473,6 @@ enum weapon_type
 
     WPN_DEMON_WHIP,
     WPN_GIANT_CLUB,
-#if TAG_MAJOR_VERSION == 34
-    WPN_GIANT_SPIKED_CLUB,
-#endif
 
     WPN_DEMON_BLADE,
     WPN_DOUBLE_SWORD,
@@ -507,23 +483,11 @@ enum weapon_type
 
     WPN_STAFF,          // Just used for the weapon stats for magical staves.
     WPN_QUARTERSTAFF,
-#if TAG_MAJOR_VERSION == 34
-    WPN_LAJATANG,
-#endif
 
 #if TAG_MAJOR_VERSION == 34
     WPN_HUNTING_SLING,
-
-    WPN_BLESSED_FALCHION,
-    WPN_BLESSED_LONG_SWORD,
-    WPN_BLESSED_SCIMITAR,
-    WPN_BLESSED_GREAT_SWORD,
 #endif
     WPN_EUDEMON_BLADE,
-#if TAG_MAJOR_VERSION == 34
-    WPN_BLESSED_DOUBLE_SWORD,
-    WPN_BLESSED_TRIPLE_SWORD,
-#endif
     WPN_SACRED_SCOURGE,
     WPN_TRISHULA,
 
