@@ -134,7 +134,7 @@
        "potion of heal wounds", "potion of haste", "scroll of holy word",
        "manual of hexes", "hat", "helmet" }
 
-      elseif s == "I" then i = { "ring of ice",
+      elseif s == "I" then i = {
        "scroll of immolation", "ice dragon scales", "book of ice",
        "potion of invisibility",
        "wand of iceblast", "manual of invocations",
