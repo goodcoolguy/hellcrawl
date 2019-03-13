@@ -578,6 +578,8 @@ static const artefact_prop_data artp_data[] =
         []() { return 1; }, nullptr, 0, 0, true },
     { "+Confuse", ARTP_VAL_BOOL, 500,  // ARTP_CONFUSING_TOUCH,
         []() { return 1; }, nullptr, 0, 0, true },
+    { "+Englaciate", ARTP_VAL_BOOL, 500,  // ARTP_ENGLACIATE,
+        []() { return 1; }, nullptr, 0, 0, true },
 };
 COMPILE_CHECK(ARRAYSZ(artp_data) == ARTP_NUM_PROPERTIES);
 // weights sum to 1000

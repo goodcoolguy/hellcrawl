@@ -34,7 +34,9 @@ int englaciate(coord_def where, int pow, actor *agent)
         return 0;
     }
 
-    int duration = (roll_dice(3, pow) / 6
+    //need a real formula here. Maybe the power should fall off with distance too?
+    //Would be easy enough to do in an intelligible way I think.
+    int duration = (random2(pow * 5)
                     - random2(victim->get_hit_dice()))
                     * BASELINE_DELAY;
 

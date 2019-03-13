@@ -60,6 +60,7 @@
 #include "spl-damage.h"
 #include "spl-goditem.h"
 #include "spl-miscast.h"
+#include "spl-monench.h"
 #include "spl-other.h"
 #include "spl-selfench.h"
 #include "spl-summoning.h"
@@ -345,6 +346,7 @@ static const ability_def Ability_List[] =
     { ABIL_SPECTRAL_WEAPON, "Spectral Weapon", 4, 0, {{STAT_THAUMATURGY, 1}}, 0, {FAIL_XL, -1}, abflag::NONE },
     { ABIL_FORCEBLAST, "Force Blast", 3, 0, {{STAT_ELEMENTAL, 1}}, 0, {FAIL_XL, -1}, abflag::NONE },
     { ABIL_CONFUSING_TOUCH, "Confusing Touch", 4, 0, {{STAT_THAUMATURGY, 1}}, 0, {FAIL_XL, -1}, abflag::NONE },
+    { ABIL_ENGLACIATE, "Englaciation", 4, 0, {{STAT_ELEMENTAL, 4}}, 0, {FAIL_XL, -1}, abflag::NONE },
     { ABIL_RECHARGING, "Device Recharging",
       1, 0, {}, 0, {FAIL_XL, 45, 2}, abflag::PERMANENT_MP },
 
@@ -1917,6 +1919,10 @@ static spret_type _do_ability(const ability_def& abil, bool fail)
 		
     case ABIL_DDOOR:
         return cast_deaths_door(you.stat(STAT_BLACK_MAGIC), fail);
+        break;
+        
+    case ABIL_ENGLACIATE:
+        return cast_englaciation(you.stat(STAT_ELEMENTAL), fail);
         break;
 		
     case ABIL_SPECTRAL_WEAPON:
@@ -3568,6 +3574,11 @@ vector<talent> your_talents(bool check_confused, bool include_unusable)
 		_add_talent(talents, ABIL_DDOOR, check_confused);
     }
 	
+    if (you.scan_artefacts(ARTP_ENGLACIATE))
+    {
+		_add_talent(talents, ABIL_ENGLACIATE, check_confused);
+    }
+    
     if (you.scan_artefacts(ARTP_SPECTRAL))
     {
 		_add_talent(talents, ABIL_SPECTRAL_WEAPON, check_confused);
