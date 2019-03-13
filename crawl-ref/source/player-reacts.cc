@@ -917,41 +917,14 @@ static void _regenerate_hp_and_mp(int delay)
 
     while (you.hit_points_regeneration >= 100)
     {
-        // at low mp, "mana link" restores mp in place of hp
-        if (you.has_mutation(MUT_MANA_LINK)
-            && !x_chance_in_y(you.magic_points, you.max_magic_points))
-        {
-            inc_mp(1);
-        }
-        else // standard hp regeneration
-            inc_hp(1);
+      // standard hp regeneration
+        inc_hp(1);
         you.hit_points_regeneration -= 100;
     }
 
     ASSERT_RANGE(you.hit_points_regeneration, 0, 100);
 
     update_regen_amulet_attunement();
-
-    // MP Regeneration
-    if (!player_regenerates_mp())
-        return;
-
-    if (you.magic_points < you.max_magic_points)
-    {
-        const int base_val = player_mp_regen();
-        int mp_regen_countup = div_rand_round(base_val * delay, BASELINE_DELAY);
-        you.magic_points_regeneration += mp_regen_countup;
-    }
-
-    while (you.magic_points_regeneration >= 100)
-    {
-        inc_mp(1);
-        you.magic_points_regeneration -= 100;
-    }
-
-    ASSERT_RANGE(you.magic_points_regeneration, 0, 100);
-
-    update_mana_regen_amulet_attunement();
 }
 
 void player_reacts()

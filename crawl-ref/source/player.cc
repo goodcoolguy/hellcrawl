@@ -2061,6 +2061,32 @@ static void _handle_stat_loss(int exp)
         _recover_stat();
 }
 
+/// update mp recovery
+static void _handle_mp_recovery(int exp)
+{
+    if (!player_regenerates_mp())
+        return;
+
+    if (you.magic_points < you.max_magic_points)
+    {
+        const int base_val = player_mp_regen() * exp;
+        // borrowed from the xp evoker code, prob needs more modification.
+        int xp_factor = max(min((int)exp_needed(you.experience_level+1, 0) / 10,
+                             you.experience_level * 425),
+                        you.experience_level + 3) / 10;
+        int mp_regen_countup = div_rand_round(base_val, xp_factor);
+        you.magic_points_regeneration += mp_regen_countup;
+
+        while (you.magic_points_regeneration >= 100)
+        {
+            inc_mp(1);
+            you.magic_points_regeneration -= 100;
+        }
+
+        ASSERT_RANGE(you.magic_points_regeneration, 0, 100);
+    }
+}
+
 /// update xp drain
 static void _handle_xp_drain(int exp)
 {
@@ -2119,6 +2145,7 @@ void gain_exp(unsigned int exp_gained, unsigned int* actual_gain)
     _handle_xp_penance(exp_gained);
     _handle_god_wrath(exp_gained);
     _transfer_knowledge(exp_gained);
+    _handle_mp_recovery(exp_gained);
 
     // evolution mutation timer
     you.attribute[ATTR_EVOL_XP] += exp_gained;
