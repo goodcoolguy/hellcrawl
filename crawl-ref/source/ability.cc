@@ -347,6 +347,7 @@ static const ability_def Ability_List[] =
     { ABIL_FORCEBLAST, "Force Blast", 3, 0, {{STAT_ELEMENTAL, 1}}, 0, {FAIL_XL, -1}, abflag::NONE },
     { ABIL_CONFUSING_TOUCH, "Confusing Touch", 4, 0, {{STAT_THAUMATURGY, 1}}, 0, {FAIL_XL, -1}, abflag::NONE },
     { ABIL_ENGLACIATE, "Englaciation", 4, 0, {{STAT_ELEMENTAL, 4}}, 0, {FAIL_XL, -1}, abflag::NONE },
+    { ABIL_CORPSE_ARMOUR, "Cigotuvi's Embrace", 4, 0, {{STAT_BLACK_MAGIC, 4}}, 0, {FAIL_XL, -1}, abflag::NONE },
     { ABIL_RECHARGING, "Device Recharging",
       1, 0, {}, 0, {FAIL_XL, 45, 2}, abflag::PERMANENT_MP },
 
@@ -1927,6 +1928,10 @@ static spret_type _do_ability(const ability_def& abil, bool fail)
 		
     case ABIL_SPECTRAL_WEAPON:
         return cast_spectral_weapon(&you, you.stat(STAT_THAUMATURGY), GOD_NO_GOD, fail);
+        break;
+    
+    case ABIL_CORPSE_ARMOUR:
+        return corpse_armour(you.stat(STAT_BLACK_MAGIC), fail);
         break;
 		
     case ABIL_CONFUSING_TOUCH:
@@ -3572,6 +3577,11 @@ vector<talent> your_talents(bool check_confused, bool include_unusable)
     if (you.scan_artefacts(ARTP_DDOOR))
     {
 		_add_talent(talents, ABIL_DDOOR, check_confused);
+    }
+    
+    if (you.scan_artefacts(ARTP_CORPSE_ARMOUR))
+    {
+		_add_talent(talents, ABIL_CORPSE_ARMOUR, check_confused);
     }
 	
     if (you.scan_artefacts(ARTP_ENGLACIATE))

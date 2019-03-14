@@ -117,6 +117,9 @@ int artefact_value(const item_def &item)
     if (prop[ ARTP_DDOOR ])
         ret += 10;
     
+    if (prop[ ARTP_CORPSE_ARMOUR ])
+        ret += 10;
+    
     if (prop[ ARTP_ENGLACIATE ])
         ret += 10;
 	

@@ -5025,9 +5025,7 @@ static int _bone_armour_bonus()
     if (!you.attribute[ATTR_BONE_ARMOUR])
         return 0;
 
-    const int power = calc_spell_power(SPELL_CIGOTUVIS_EMBRACE, true);
-    // rounding errors here, but not sure of a good way to avoid that.
-    return you.attribute[ATTR_BONE_ARMOUR] * (50 + power);
+    return you.attribute[ATTR_BONE_ARMOUR] * 100;
 }
 
 /**
