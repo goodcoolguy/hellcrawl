@@ -226,7 +226,7 @@ spret_type cast_swiftness(int power, bool fail)
                                              : "liquid ground");
     }
 
-    you.set_duration(DUR_SWIFTNESS, 12 + random2(power)/2, 30,
+    you.set_duration(DUR_SWIFTNESS, 10 + random2(5 + power * 5), 30,
                      "You feel quick.");
     you.attribute[ATTR_SWIFTNESS] = you.duration[DUR_SWIFTNESS];
 

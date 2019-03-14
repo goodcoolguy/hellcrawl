@@ -348,6 +348,7 @@ static const ability_def Ability_List[] =
     { ABIL_CONFUSING_TOUCH, "Confusing Touch", 4, 0, {{STAT_THAUMATURGY, 1}}, 0, {FAIL_XL, -1}, abflag::NONE },
     { ABIL_ENGLACIATE, "Englaciation", 4, 0, {{STAT_ELEMENTAL, 4}}, 0, {FAIL_XL, -1}, abflag::NONE },
     { ABIL_CORPSE_ARMOUR, "Cigotuvi's Embrace", 4, 0, {{STAT_BLACK_MAGIC, 4}}, 0, {FAIL_XL, -1}, abflag::NONE },
+    { ABIL_SWIFTNESS, "Swiftness", 3, 0, {{STAT_THAUMATURGY, 3}}, 0, {FAIL_XL, -1}, abflag::NONE },
     { ABIL_RECHARGING, "Device Recharging",
       1, 0, {}, 0, {FAIL_XL, 45, 2}, abflag::PERMANENT_MP },
 
@@ -1936,6 +1937,9 @@ static spret_type _do_ability(const ability_def& abil, bool fail)
 		
     case ABIL_CONFUSING_TOUCH:
         return cast_confusing_touch(you.stat(STAT_THAUMATURGY), fail);
+        
+    case ABIL_SWIFTNESS:
+        return cast_swiftness(you.stat(STAT_THAUMATURGY), fail);
 		
     case ABIL_FORCEBLAST:
         return force_blast(you.stat(STAT_THAUMATURGY), fail);
@@ -3602,6 +3606,11 @@ vector<talent> your_talents(bool check_confused, bool include_unusable)
     if (you.scan_artefacts(ARTP_CONFUSING_TOUCH))
     {
 		_add_talent(talents, ABIL_CONFUSING_TOUCH, check_confused);
+    }
+    
+    if (you.scan_artefacts(ARTP_SWIFTNESS))
+    {
+		_add_talent(talents, ABIL_SWIFTNESS, check_confused);
     }
 
     // Find hotkeys for the non-hotkeyed talents.
