@@ -349,6 +349,7 @@ static const ability_def Ability_List[] =
     { ABIL_ENGLACIATE, "Englaciation", 4, 0, {{STAT_ELEMENTAL, 4}}, 0, {FAIL_XL, -1}, abflag::NONE },
     { ABIL_CORPSE_ARMOUR, "Cigotuvi's Embrace", 4, 0, {{STAT_BLACK_MAGIC, 4}}, 0, {FAIL_XL, -1}, abflag::NONE },
     { ABIL_SWIFTNESS, "Swiftness", 3, 0, {{STAT_THAUMATURGY, 3}}, 0, {FAIL_XL, -1}, abflag::NONE },
+    { ABIL_SILENCE, "Silence", 4, 0, {{STAT_THAUMATURGY, 4}}, 0, {FAIL_XL, -1}, abflag::NONE },
     { ABIL_RECHARGING, "Device Recharging",
       1, 0, {}, 0, {FAIL_XL, 45, 2}, abflag::PERMANENT_MP },
 
@@ -1940,6 +1941,9 @@ static spret_type _do_ability(const ability_def& abil, bool fail)
         
     case ABIL_SWIFTNESS:
         return cast_swiftness(you.stat(STAT_THAUMATURGY), fail);
+        
+    case ABIL_SILENCE:
+        return cast_silence(you.stat(STAT_THAUMATURGY), fail);
 		
     case ABIL_FORCEBLAST:
         return force_blast(you.stat(STAT_THAUMATURGY), fail);
@@ -3613,6 +3617,11 @@ vector<talent> your_talents(bool check_confused, bool include_unusable)
 		_add_talent(talents, ABIL_SWIFTNESS, check_confused);
     }
 
+    if (you.scan_artefacts(ARTP_SILENCE))
+    {
+		_add_talent(talents, ABIL_SILENCE, check_confused);
+    }
+    
     // Find hotkeys for the non-hotkeyed talents.
     for (talent &tal : talents)
     {

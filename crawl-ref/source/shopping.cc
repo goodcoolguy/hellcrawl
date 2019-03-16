@@ -134,6 +134,9 @@ int artefact_value(const item_def &item)
     
     if (prop[ ARTP_SWIFTNESS ])
         ret += 10;
+    
+    if (prop[ ARTP_SILENCE ])
+        ret += 10;
 
     if (prop[ ARTP_BERSERK ])
         ret += 5;

@@ -512,6 +512,7 @@ enum ability_type
     ABIL_ENGLACIATE,
     ABIL_CORPSE_ARMOUR,
     ABIL_SWIFTNESS,
+    ABIL_SILENCE,
 
     NUM_ABILITIES
 };
@@ -3957,6 +3958,7 @@ enum artefact_prop_type
     ARTP_ENGLACIATE,
     ARTP_CORPSE_ARMOUR,
     ARTP_SWIFTNESS,
+    ARTP_SILENCE,
     ARTP_NUM_PROPERTIES
 };
 

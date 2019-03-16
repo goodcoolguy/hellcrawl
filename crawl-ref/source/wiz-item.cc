@@ -1387,6 +1387,7 @@ static void _debug_rap_stats(FILE *ostat)
         "ARTP_ENGLACIATE",
         "ARTP_CORPSE_ARMOUR",
         "ARTP_SWIFTNESS",
+        "ARTP_SILENCE",
     };
     COMPILE_CHECK(ARRAYSZ(rap_names) == ARTP_NUM_PROPERTIES);
 

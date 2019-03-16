@@ -584,6 +584,8 @@ static const artefact_prop_data artp_data[] =
         []() { return 1; }, nullptr, 0, 0, true },
     { "+Swift", ARTP_VAL_BOOL, 500,  // ARTP_SWIFTNESS,
         []() { return 1; }, nullptr, 0, 0, true },
+    { "+Silence", ARTP_VAL_BOOL, 500,  // ARTP_SILENCE,
+        []() { return 1; }, nullptr, 0, 0, true },
 };
 COMPILE_CHECK(ARRAYSZ(artp_data) == ARTP_NUM_PROPERTIES);
 // weights sum to 1000
