@@ -1568,6 +1568,55 @@ static void _ignition_square(const actor *agent, bolt beam, coord_def square, bo
         noisy(spell_effect_noise(SPELL_IGNITION),square);
 }
 
+spret_type cast_fireball(const actor *agent, int pow, bool fail)
+{
+    ASSERT(agent->is_player());
+
+    fail_check();
+
+    targetter_los hitfunc(agent, LOS_NO_TRANS);
+
+    // Ignition affects squares that had hostile monsters on them at the time
+    // of casting. This way nothing bad happens when monsters die halfway
+    // through the spell.
+    vector<coord_def> blast_sources;
+
+    for (actor_near_iterator ai(agent->pos(), LOS_NO_TRANS);
+         ai; ++ai)
+    {
+        if (ai->is_monster()
+            && !ai->as_monster()->wont_attack()
+            && !mons_is_firewood(*ai->as_monster())
+            && !mons_is_tentacle_segment(ai->as_monster()->type))
+        {
+            blast_sources.push_back(ai->position);
+        }
+    }
+    
+    if (blast_sources.empty())
+        canned_msg(MSG_NOTHING_HAPPENS);
+    else
+    {
+        
+        coord_def target = blast_sources[random2(blast_sources.size())];
+
+        bolt beam_actual;
+        beam_actual.set_agent(agent);
+        beam_actual.flavour       = BEAM_FIRE;
+        beam_actual.real_flavour  = BEAM_FIRE;
+        beam_actual.damage        = calc_dice(3, 10 + pow/2);
+        beam_actual.name          = "fireball";
+        beam_actual.target        = target;
+        beam_actual.colour        = RED;
+        beam_actual.ex_size       = 1;
+        beam_actual.is_explosion  = true;
+        beam_actual.explode();
+    }
+    
+    return SPRET_SUCCESS;
+    
+}
+
 spret_type cast_ignition(const actor *agent, int pow, bool fail)
 {
     ASSERT(agent->is_player());

@@ -71,6 +71,7 @@ size_t shotgun_beam_count(int pow);
 spret_type cast_scattershot(const actor *caster, int pow, const coord_def &pos,
                             bool fail = false);
 
+spret_type cast_fireball(const actor *agent, int pow, bool fail);
 spret_type cast_ignition(const actor *caster, int pow, bool fail = false);
 
 spret_type force_blast(int pow, bool fail);

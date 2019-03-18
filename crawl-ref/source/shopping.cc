@@ -129,6 +129,9 @@ int artefact_value(const item_def &item)
     if (prop[ ARTP_FORCEBLAST ])
         ret += 10;
     
+    if (prop[ ARTP_FIREBALL ])
+        ret += 10;
+    
     if (prop[ ARTP_CONFUSING_TOUCH ])
         ret += 10;
     

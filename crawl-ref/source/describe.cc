@@ -234,6 +234,7 @@ static vector<string> _randart_propnames(const item_def& item,
         { ARTP_CORPSE_ARMOUR,         PROPN_PLAIN },
         { ARTP_SWIFTNESS,             PROPN_PLAIN },
         { ARTP_SILENCE,               PROPN_PLAIN },
+        { ARTP_FIREBALL,              PROPN_PLAIN },
 
         // Resists, also really important
         { ARTP_MAGIC_RESISTANCE,      PROPN_SYMBOLIC },
@@ -450,6 +451,7 @@ static string _randart_descrip(const item_def &item)
         { ARTP_CORPSE_ARMOUR, "It lets you gain temporary armour by killing living monsters.", false},
         { ARTP_SWIFTNESS, "It lets you briefly increase your movement speed.", false},
         { ARTP_SILENCE, "It lets you silence a small area around you, preventing spellcasting.", false},
+        { ARTP_FIREBALL, "It lets you throw a fireball at a random enemy.", false},
     };
 
     // Give a short description of the base type, for base types with no

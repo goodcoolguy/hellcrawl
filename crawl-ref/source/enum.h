@@ -513,6 +513,7 @@ enum ability_type
     ABIL_CORPSE_ARMOUR,
     ABIL_SWIFTNESS,
     ABIL_SILENCE,
+    ABIL_FIREBALL,
 
     NUM_ABILITIES
 };
@@ -3959,6 +3960,7 @@ enum artefact_prop_type
     ARTP_CORPSE_ARMOUR,
     ARTP_SWIFTNESS,
     ARTP_SILENCE,
+    ARTP_FIREBALL,
     ARTP_NUM_PROPERTIES
 };
 
